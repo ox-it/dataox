@@ -1,0 +1,35 @@
+{% extends "base.html" %}{% load desc %}
+
+{% block title %}Example resources{% endblock %}
+
+{% block body %}
+
+<section>
+  <h1>Example resources</h1>
+  
+  <p>Some datasets list the following example resources as being particularly useful:</p>
+  
+  <table class="sparql-results">
+    <thead>
+      <tr>
+        <th>Dataset</th>
+        <th>Resources</th>
+      </tr>
+    </thead>
+    <tbody>
+{% regroup results by dataset as results_by_dataset %}
+{% for d in results_by_dataset %}
+      <tr class="row-{% cycle "odd" "even" %}">
+        <td>{{ d.grouper|node }}</td>
+        <td>
+          {% for result in d.list %}
+            {{ result.resource|node }}
+            {% if not forloop.last %}<br/>{% endif %}
+          {% endfor %}
+        </td>
+      </tr>
+{% endfor %}
+    </tbody>
+  </table>
+  
+{% endblock %}

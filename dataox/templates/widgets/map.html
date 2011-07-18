@@ -1,0 +1,24 @@
+  <div id="mapdiv" style="width:200px; height:200px"></div>
+  <script src="http://www.openlayers.org/api/OpenLayers.js"></script>
+  <script>
+    map = new OpenLayers.Map("mapdiv", { controls: [] });
+    map.addLayer(new OpenLayers.Layer.OSM());
+    map.addControl(new OpenLayers.Control.Navigation());
+map.addControl(new OpenLayers.Control.KeyboardDefaults());
+map.addControl(new OpenLayers.Control.Attribution("D"));
+ 
+    var lonLat = new OpenLayers.LonLat({{ subject.geo_long }}, {{ subject.geo_lat }})
+          .transform(
+            new OpenLayers.Projection("EPSG:4326"), // transform from WGS 1984
+            map.getProjectionObject() // to Spherical Mercator Projection
+          );
+ 
+    var zoom=7;
+ 
+    var markers = new OpenLayers.Layer.Markers( "Markers" );
+    map.addLayer(markers);
+ 
+    markers.addMarker(new OpenLayers.Marker(lonLat));
+ 
+    map.setCenter (lonLat, zoom);
+  </script>

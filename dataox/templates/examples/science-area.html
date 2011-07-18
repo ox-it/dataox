@@ -1,0 +1,183 @@
+{% extends "base.html" %}
+
+{% block title %}Science Area Map{% endblock %}
+
+{% block extrahead %}
+  <script src="http://code.jquery.com/jquery-1.5.min.js" type="application/javascript"></script>
+  <script src="http://www.openlayers.org/api/OpenLayers.js"></script>
+  <script type="application/javascript">
+    var query = "SELECT DISTINCT ?building ?building_name ?spatial ?unit ?unit_name WHERE {"
+              + "  ?building "//a oxp:Building ;"
+              + "            dcterms:isPartOf+ <http://oxpoints.oucs.ox.ac.uk/id/59030245> ;"
+              + "            dc:title ?building_name ;"
+              + "            dcterms:spatial ?spatial ."
+              + "  FILTER (datatype(?spatial) = <http://www.openlinksw.com/schemas/virtrdf#Geometry>) ."
+              + "  ?unit oxp:occupies/dcterms:isPartOf* ?building ;"
+              + "        dc:title ?unit_name ."
+              + "} ORDER BY ?occupant_name";
+
+    $(function() {
+      $.get('/sparql/', {
+        format: 'srj',
+        query: query,
+        datatype: 'json',
+        common_prefixes: 'on',
+      }, function(data) {
+        map = new OpenLayers.Map("map", {
+          controls: [],
+          projection: new OpenLayers.Projection("EPSG:900913")
+        });
+        
+        map.addControl(new OpenLayers.Control.Navigation());
+        map.addControl(new OpenLayers.Control.KeyboardDefaults());
+        map.addControl(new OpenLayers.Control.Attribution());
+        
+        var vectors = new OpenLayers.Layer.Vector("Buildings");
+map.addLayer(new OpenLayers.Layer.OSM("OSM"));
+myBaseLayer = new OpenLayers.Layer.Google("Google",
+              {'sphericalMercator': true,
+               'maxExtent': new OpenLayers.Bounds(-20037508.34,-20037508.34,20037508.34,20037508.34)
+              });
+//map.addLayer(myBaseLayer);
+map.addLayer(vectors);
+        
+        var proj_from = new OpenLayers.Projection("EPSG:4326");
+        var proj_to = map.getProjectionObject();
+        var wkt = new OpenLayers.Format.WKT({'internalProjection': proj_to, 'externalProjection': proj_from});
+        
+        
+
+        var buildings = {}, units = {};
+        for (i in data.results.bindings) {
+          var binding = data.results.bindings[i];
+          if (buildings[binding.building.value] == undefined) {
+            var geometry = wkt.read(binding.spatial.value);
+            var feature = new OpenLayers.Feature.Vector(geometry);
+            buildings[binding.building.value] = {
+              name: binding.building_name.value,
+              feature: geometry,
+              elements: [],
+              units: []};
+          }
+          if (units[binding.unit.value] == undefined)
+            units[binding.unit.value] = {name: binding.unit_name.value, buildings: []};
+
+          buildings[binding.building.value].units.push(units[binding.unit.value]);
+          units[binding.unit.value].buildings.push(buildings[binding.building.value]);  
+        }
+
+
+
+        
+        for (uri in buildings) {
+          building = buildings[uri];            
+          //alert(typeof(building.feature));
+          vectors.addFeatures(building.feature);
+        }
+        
+        for (uri in units) {
+          unit = units[uri];
+          li = $('<li></li>').text(unit.name);
+          if (unit.buildings.length > 1) {
+            ul = $('<ul/>')
+            li.append(ul);
+            for (i in unit.buildings) {
+              li2 = $('<li/>').text(unit.buildings[i].name);
+              ul.append(li2);
+              unit.buildings[i].elements.push(li2);
+            }
+          } else
+            unit.buildings[0].elements.push(li);
+          $('#units').append(li);
+          
+        }
+
+        var sf = new OpenLayers.Control.SelectFeature(vectors, {
+          hover:true,
+          onSelect: function(e) {
+            for (uri in buildings) {
+              building = buildings[uri];
+              if (building.feature == e) {
+                for (i in building.elements) {
+                  element = building.elements[i];
+                  element.addClass('highlight');
+                }
+              }
+            }
+          },
+          onUnselect: function(e) {
+            for (uri in buildings) {
+              building = buildings[uri];
+              if (building.feature == e) {
+                for (i in building.elements) {
+                  element = building.elements[i];
+                  element.removeClass('highlight');
+                }
+              }
+            }
+          },
+        });
+        map.addControl(sf);
+        sf.activate();
+
+        
+        lonLat = (new OpenLayers.LonLat(	-1.254918 , 51.759575 )).transform(proj_from, proj_to);
+        map.setCenter(lonLat, 16);
+      });
+    });
+  </script>
+  <style type="text/css">
+    ul#units, div#map, section#details {
+      display: block;
+      border:1px solid #aaa;
+      margin-top:0;
+    }
+    ul#units {
+      margin-left:1em;
+    }
+    ul#units li ul {
+      padding-left:2em;
+      list-style:none;
+    }
+    ul#units li {
+      padding:0 2px;
+    }
+    ul#units li.highlight {
+      color:#fff;
+      background-color:#00f;
+    }
+    p#description {
+      margin-top:0;
+      font-size: 10pt;
+    }
+    h1 {
+      margin-bottom: 0;
+    }
+  </style>
+{% endblock %}
+
+{% block body %}
+  
+  <section>
+    <h1>University Science Area Map</h1>
+    
+    <p id="description">A re-imagining of <a href="http://www.ox.ac.uk/visitors_friends/maps_and_directions/science_area.html">the
+       official science area map</a> using OpenStreetMap and OxPoints data.</p>
+    
+    <ul id="units" style="font-size:8pt; width:310px; float:right; list-style:none; padding-left:0; padding:5px;"></ul>
+    <div id="map" style="height:400px; width:580px"></div>
+    
+    <section id="details" style="clear:both; padding:1em;">
+      <h2>Details</h2>
+    <p>This page uses data from two datasets, <a href="http://data.ox.ac.uk/id/dataset/oxpoints">OxPoints</a>
+       and <a href="http://data.ox.ac.uk/id/dataset/oxpoints-osm">a set of geometries drawn from OpenStreetMap</a>.</p>
+       
+    <p>It queries the <strong>data.ox.ac.uk</strong> SPARQL endpoint using AJAX for buildings and their occupants,
+       requesting results in <a href="http://www.w3.org/TR/rdf-sparql-json-res/">a dialect of JSON</a>.</p>
+       
+    <p>Geometries are returned as <a href="http://en.wikipedia.org/wiki/Well-known_text" title="Well-known text">WKT</a>
+       and are displayed on an <a href="http://www.openstreetmap.org/">OpenStreetMap</a> base map using
+       <a href="http://openlayers.org/">OpenLayers</a>.</p>
+    </section>
+  </section>
+{% endblock %}

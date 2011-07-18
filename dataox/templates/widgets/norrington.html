@@ -1,0 +1,37 @@
+{% with subject.fhs_results as data %}
+  {% if data %}
+    <section class="widget">
+
+      <h2>Norrington Table Results</h2>
+    
+      <table class="description">
+        <thead>
+          <tr>
+            <th><abbr title="Year">Yr</abbr></th>
+            <th>1<sup>st</sup></th>
+            <th>2:1</th>
+            <th>2:2</th>
+            <th>3<sup>rd</sup></th>
+            <th><abbr title="Other">O.</abbr></th>
+            <th><abbr title="Total">Tot</abbr></th>
+            <th>Score</th>
+          </tr>
+        </thead>
+        <tbody>
+{% for datum in data %}
+          <tr class="row-{% cycle "odd" "even" %}">
+            <td>'{{ datum.sdmxdim_timePeriod|slice:"2:" }}</td>
+            <td>{{ datum.fhs_first|default:"" }}</td>
+            <td>{{ datum.fhs_two_one|default:"" }}</td>
+            <td>{{ datum.fhs_two_two|default:"" }}</td>
+            <td>{{ datum.fhs_third|default:"" }}</td>
+            <td>{{ datum.fhs_other|default:"" }}</td>
+            <td>{{ datum.fhs_total|default:"" }}</td>
+            <td>{{ datum.fhs_norringtonScore }}</td>
+          </tr>
+{% endfor %}
+        </tbody>
+      </table>
+    </section>
+  {% endif %}
+{% endwith %}

@@ -1,0 +1,144 @@
+{% extends "base.html" %}{% load desc %}
+
+{% block title %}{{ subject.label }}{% endblock %}
+
+{% block body %}
+  <section>
+    {% if subject.foaf_logo %}
+      <img class="logo" src="{{ subject.foaf_logo.uri }}" alt=""/>
+    {% endif %}
+    <h1>
+      {{ subject.label }}
+{% if show_follow_link %}
+      <a href="{{ subject.uri }}" style="text-decoration:none; position:relative; top:2px" title="Follow off-site">
+        <img src="{{ MEDIA_URL }}follow.png" alt="&#10145;" style="border: 0" width="20" height="20"/>
+      </a>
+{% endif %}
+    </h1>
+    
+    {% if subject.foaf_homepage %}
+      <a href="{{ subject.foaf_homepage.uri }}">{{ subject.foaf_homepage.uri }}</a>
+    {% endif %}
+    
+    {% if subject.description %}
+      <p class="description">{{ subject.description|linebreaksbr }}</p>
+    {% endif %}
+    
+    {% if subject.is_image %}
+      <img src="{{ subject.uri }}" style="max-width:900px; border:1px solid #ccc"/>
+    {% endif %}
+    
+    <div style="clear:both"/>
+    
+    <aside>
+      {% if subject.foaf_img %}
+        <img class="depiction" src="{{ subject.foaf_img.uri }}" alt=""/>
+        {% else %}
+          {% if subject.foaf_depiction %}
+            <img class="depiction" src="{{ subject.foaf_depiction.uri }}" alt=""/>
+          {% endif %}
+      {% endif %}
+      
+      {% if subject.geo_lat and subject.geo_long %}
+        {% include "widgets/map.html" %}
+      {% endif %}
+      
+      {% if subject.foaf_account.widget_template %}
+        {% with subject.foaf_account as account %}
+          {% include subject.foaf_account.widget_template %}
+        {% endwith %}
+      {% endif %}
+      
+      {% for thing in subject.things_of_type %}
+        {% if forloop.first %}
+          <section class="page-metadata">
+            <h2>Example instances</h2>
+            <ul style="list-style:none; padding-left:0">
+        {% endif %}
+              <li style="font-size:10pt; margin:3px 0;">{{ thing|node }}</li>
+        {% if forloop.last %}
+            </ul>
+          </section>
+        {% endif %}
+      {% endfor %}
+      
+      <section class="page-metadata">
+        <h2>Toolbox</h2>
+        <ul>
+          <li>
+            <a href="{% url sparql %}?query={{ "SELECT ?subject ?predicate WHERE {  ?subject ?predicate <"|urlencode }}{{ subject.uri|urlencode }}{{ "> } LIMIT 200"|urlencode }}">
+              What links here
+            </a>
+          </li>
+          <li><a href="http://sig.ma/search?q={{ subject.uri|urlencode }}">View at sig.ma</a></li>
+        </ul>
+      </section>
+      
+
+      <section class="page-metadata">
+        <h2>Page metadata</h2>
+      
+        <h3>Applicable licenses</h3>
+{% if licenses %}
+        <p>Portions of data on this page are made available under the following licenses:</p>
+        <ul>
+{% for license in licenses %}
+          <li>{{ license|node }}</li>
+{% endfor %}
+        </ul>
+{% else %}
+        <p>The licensing of these data is unknown.</p>
+{% endif %}
+      
+        <h3>Datasets</h3>
+{% if datasets %}
+        <p>Data for this page was drawn from the following datasets:</p>        
+        <ul>
+{% for dataset in datasets %}
+          <li>{{ dataset|node }}</li>
+{% endfor %}
+        </ul>
+{% else %}
+        <p>This data was not drawn from any datasets.</p>
+{% endif %}
+        
+        <h3>Other formats</h3>
+        
+        <ul>
+{% for format, url in formats %}
+          <li>
+            <a href="{{ url }}">{{ format.name }}</a>
+          </li>
+{% endfor %}
+        </ul>
+        
+      </section>
+        
+    </aside>    
+    
+    <table class="description">
+      <tbody>
+{% for predicate, objects in subject.properties %}
+        <tr class="row-{% cycle "odd" "even" %}">
+          <th>{{ predicate|node }}</th>
+          <td>
+            {% for object in objects %}
+              {{ object|node|linebreaksbr }}
+              {% if not forloop.last %}<br/>{% endif %}
+            {% endfor %}
+          </td>
+        </tr>
+{% endfor %}
+      </tbody>
+    </table>
+    
+    {% comment %}
+    <p>In other formats:</p>
+    <ul>
+{% for %}
+    </ul>
+    {% endcomment %}
+
+    <div style="clear:both"/>
+  </section>
+{% endblock %}

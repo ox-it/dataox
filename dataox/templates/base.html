@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en-GB">
+  <head>
+    <title>{% block title %}Open Data about the University of Oxford{% endblock %} | data.ox.ac.uk</title>
+    <link rel="stylesheet" href="{{ MEDIA_URL }}main.css" type="text/css"/>
+    <link rel="icon" href="{{ MEDIA_URL }}favicon.ico" type="image/x-icon"/>{% if no_index %}
+    <meta name="robots" content="noindex"/>{% endif %}
+    {% block extrahead %}{% endblock %}
+  </head>
+
+  <body>
+    <div class="container">
+    <header>
+      <a href="http://www.ox.ac.uk/">
+        <img src="{{ MEDIA_URL }}brandmark.gif" alt="University of Oxford"/>
+      </a>
+      <p class="title">Open Data about the University of Oxford</p>
+      <p>data.ox.ac.uk</p>
+    </header>
+    
+    <nav>
+      <ul>
+{% block nav %}
+        <li><a href="{% url index %}">home</a></li>
+        <li><a href="{% url datasets %}">datasets</a></li>
+        <li><a href="{% url explore %}">explore</a></li>
+        <li><a href="{% url sparql %}">sparql</a></li>
+        <li><a href="{% url help %}">help</a></li>
+        <li><a href="{% url contact %}">contact</a></li>
+{% endblock %}
+      </ul>
+    </nav>
+
+{% block body %}
+    <section>
+      <h1>Home</h1>
+    </section>
+{% endblock %}
+    </div>
+  </body>
+</html>

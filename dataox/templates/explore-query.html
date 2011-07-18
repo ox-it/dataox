@@ -1,0 +1,36 @@
+{% extends "base.html" %}{% load desc %}
+
+{% block title %}Example resources{% endblock %}
+
+{% block body %}
+
+<section>
+  <h1>Example queries</h1>
+  
+  <p>Some datasets suggest the following example queries as being particularly useful:</p>
+  
+  <table class="sparql-results">
+    <thead>
+      <tr>
+        <th>Dataset</th>
+        <th>Query</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+{% regroup results by dataset as results_by_dataset %}
+{% for d in results_by_dataset %}
+      <tr class="row-{% cycle "odd" "even" %}">
+        <td rowspan="{{ d.list|length }}">{{ d.grouper|node }}</td>
+        {% for result in d.list %}
+          {% if not forloop.first %}<tr>{% endif %}
+          <td><a href="{% url sparql %}?query={{ result.value|urlencode }}">{{ result.label }}</a></td>
+          <td>{{ result.comment|node }}</td>
+          {% if not forloop.last %}</tr>{% endif %}
+        {% endfor %}
+      </tr>
+{% endfor %}
+    </tbody>
+  </table>
+  
+{% endblock %}

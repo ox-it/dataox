@@ -1,0 +1,33 @@
+{% extends "base.html" %}
+
+{% block title %}Explore{% endblock %}
+
+{% block body %}
+<section>
+  <h1>Explore</h1>
+
+  <section>
+    <h2>Starting points</h2>
+  
+    <p>Use these as starting points to dive into the data.</p>
+
+    <dl>
+      <dt><a href="{% url explore-resource %}">Example resources</a></dt>
+      <dt><a href="{% url explore-query %}">Example queries</a></dt>
+    </dl>
+  </section>
+  
+  <section id="examples">
+    <h2>Examples</h2>
+
+    <dl>
+{% for example in examples %}
+      <dt><a href="{% url example-detail example.slug %}">{{ example.name }}</a></dt>
+      <dd>{{ example.description|safe }}</dd>
+{% endfor %}
+    </dl>
+  </section>  
+
+
+</section>
+{% endblock %}

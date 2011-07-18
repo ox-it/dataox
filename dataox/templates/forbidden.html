@@ -1,0 +1,30 @@
+{% extends "base.html" %}
+
+{% block nav %}
+  <li><a href="{% url index %}">home</a></li>
+  <li><a href="mailto:opendata-subscribe@maillist.ox.ac.uk">subscribe to mailing list</a></li>
+{% endblock %}
+
+{% block body %}
+  <section>
+    <h1>Watch this space</h1>
+
+    <p>Unfortunately, <strong>data.ox.ac.uk</strong> is not yet public.</p>
+
+    <h2>What is <strong>data.ox.ac.uk</strong>?</h2>
+
+    <p><strong>data.ox.ac.uk</strong> is a pilot of a service to provide linked open data about the University of Oxford. These data will be provided in machine-readable formats for others to re-use.</p>
+
+    <p>By being part of <a href="http://en.wikipedia.org/wiki/Linked_Data">the linked data web</a>, it will be easy to combine our data with that from other sources, be they <a href="http://data.open.ac.uk/">other</a> <a href="http://data.southampton.ac.uk/">institutions</a>, <a href="http://dbpedia.org/">Wikipedia</a>, <a href="http://derivadow.com/2009/03/31/linking-bbccouk-to-the-linked-data-cloud/">the BBC</a>, <a href="http://richard.cyganiak.de/2007/10/lod/">or anyone else</a>.</p>
+
+    <h2>Preview for University members</h2>
+
+    <p>If you are a member of the University, then you can view the site from the University network. If you are off-site you can do this using <a href="http://www.oucs.ox.ac.uk/network/vpn/">the VPN service</a>.</p>
+
+    <h2>Staying informed</h2>
+
+    <p>For more information, and to keep an eye on what's happening with the University's open data community, you may wish to join our mailing list. You can do so by sending a blank e-mail to <a href="mailto:opendata-subscribe@maillist.ox.ac.uk">opendata-subscribe@maillist.ox.ac.uk</a> and following the instructions.</p>
+
+    <p>You can get in touch with the development team behind <strong>data.ox.ac.uk</strong> by e-mailing <a href="mailto:opendata@oucs.ox.ac.uk">opendata@oucs.ox.ac.uk</a>.</p>
+  </section>
+{% endblock %}

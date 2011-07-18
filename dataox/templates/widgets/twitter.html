@@ -1,0 +1,31 @@
+<script src="http://widgets.twimg.com/j/2/widget.js"></script>
+<script>
+new TWTR.Widget({
+  version: 2,
+  type: 'profile',
+  rpp: 4,
+  interval: 6000,
+  width: 200,
+  height: 200,
+  theme: {
+    shell: {
+      background: '#006699',
+      color: '#ffffff'
+    },
+    tweets: {
+      background: '#fff',
+      color: '#000',
+      links: '#006699'
+    }
+  },
+  features: {
+    scrollbar: false,
+    loop: false,
+    live: false,
+    hashtags: true,
+    timestamp: true,
+    avatars: false,
+    behavior: 'all'
+  }
+}).render().setUser('{{ account.foaf_accountName|escapejs }}').start();
+</script>

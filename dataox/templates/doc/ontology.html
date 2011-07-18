@@ -1,0 +1,97 @@
+{% extends "doc/base.html" %}{% load desc %}
+
+{% block doc_sidebar %}{% endblock %}
+
+{% block doc_detail %}
+
+{{ block.super }}
+
+{% if subject.defined_classes %}
+<h2>Classes</h2>
+
+<table class="description">
+  <thead>
+    <tr>
+      <th>URI</th>
+      <th>Label</th>
+      <th>Comment</th>
+    </tr>
+  </thead>
+  <tbody>
+{% for class in subject.defined_classes %}
+    <tr class="row-{% cycle odd,even %}">
+      <td>
+        <a href="{{ class.doc_url }}"><strong>{{ class.label2 }}</strong></a>
+        {% if class.rdfs_subClassOf %}<br/> <abbr title="sub-class of">&#8838;</abbr>
+          {% for c in class.all.rdfs_subClassOf %}
+            {{ c|node2 }}{% if not forloop.last %}, {% endif %}
+          {% endfor %}
+        {% endif %}
+        {% if class.owl_equivalentClass %}<br/> <abbr title="equivalent class">&#8781;</abbr>
+          {% for c in class.all.owl_equivalentClass %}
+            {{ c|node2 }}{% if not forloop.last %}, {% endif %}
+          {% endfor %}
+        {% endif %}
+        {% if class.owl_disjointWith %}<br/> <abbr title="disjoint with">&#8713;</abbr>
+          {% for c in class.all.owl_disjointWith %}
+            {{ c|node2 }}{% if not forloop.last %}, {% endif %}
+          {% endfor %}
+        {% endif %}
+      </td>
+      <td>
+        {{ class.label }}
+      </td>
+      <td>{{ class|property:"skos:definition,rdfs:comment"|default_if_none:"" }}</td>
+    </tr>
+{% endfor %}
+  </tbody>
+</table>
+
+{% endif %}
+
+{% if subject.defined_properties %}
+<h2>Properties</h2>
+
+<table class="description">
+  <thead>
+    <tr>
+      <th>URI</th>
+      <th>Label</th>
+      <th>Comment</th>
+    </tr>
+  </thead>
+  <tbody>
+{% for property in subject.defined_properties %}
+    <tr class="row-{% cycle odd,even %}">
+      <td>
+        <a href="{{ property.doc_url }}"><strong>{{ property.label2 }}</strong></a>
+        {% if property.rdfs_domain or property.rdfs_range %}<br/>
+          {% if property.rdfs_domain %}{{ property.rdfs_domain|node2 }}</a>{% else %}&#9676;{% endif %}
+          &#8614;
+          {% if property.rdfs_range %}{{ property.rdfs_range|node2 }}{% else %}&#9676;{% endif %}
+        {% endif %}
+
+        {% if property.rdfs_subPropertyOf %}<br/> <abbr title="sub-property of">&#8838;</abbr>
+          {% for p in property.all.rdfs_subPropertyOf %}
+            {{ p|node2 }}{% if not forloop.last %}, {% endif %}
+          {% endfor %}
+        {% endif %}
+        {% if property.owl_equivalentProperty %}<br/> <abbr title="equivalent property">&#8781;</abbr>
+          {% for p in property.all.owl_equivalentProperty %}
+            {{ p|node2 }}{% if not forloop.last %}, {% endif %}
+          {% endfor %}
+        {% endif %}
+      </td>
+      <td>
+        {{ property.label|default_if_none:"" }}
+      </td>
+      <td>{{ property|property:"skos:definition,rdfs:comment"|default_if_none:"" }}</td>
+    </tr>
+{% endfor %}
+  </tbody>
+</table>
+
+{% endif %}
+
+
+{% endblock %}

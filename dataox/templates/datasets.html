@@ -1,0 +1,49 @@
+{% extends "base.html" %}{% load desc %}
+
+{% block title %}Datasets{% endblock %}
+
+{% block body %}
+    <section>
+      <h1>Datasets</h1>
+       
+       {{ t }}
+      
+      <table class="description">
+        <thead>
+          <tr>
+            <th>Name</th>
+            <th>Publisher</th>
+            <th>License</th>
+            <th>Description</th>
+            <th></th>
+          </tr>
+        </thead>
+        <tbody>
+{% for dataset in datasets %}
+          <tr class="row-{% cycle "odd" "even" %}">
+            <td>{{ dataset|node }}</td>
+            <td>
+              {% for publisher in dataset.all.dcterms_publisher %}
+                {{ publisher|node }}{% if not forloop.last %}<br/>{% endif %}
+              {% endfor %}
+            </td>
+            <td>{{ dataset.dcterms_license|node }}</td>
+            <td>{{ dataset.dcterms_description|node|linebreaksbr }}</td>
+            <td class="badges">
+              {% if dataset.dcterms_license.foaf_logo %}
+                <a href="{{ dataset.dcterms_license.doc_url }}">
+                  <img src="{{ dataset.dcterms_license.foaf_logo.uri }}" alt="{{ dataset.dcterms_license }}"/>
+                </a>
+              {% endif %} 
+              {% if dataset.open_data_stars %}
+                <a href="{% url help %}#stars">
+                  <img src="{{ MEDIA_URL }}{{ dataset.open_data_stars.0 }}" alt="{{ dataset.open_data_stars.1 }}"/>
+                </a>
+              {% endif %}
+            </td>
+          </tr>
+{% endfor %}
+        </tbody>
+      </table>
+    </section>
+{% endblock %}

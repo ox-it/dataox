@@ -1,0 +1,213 @@
+{% extends "doc/base.html" %}{% load desc %}
+
+{% block doc_sidebar %}{% endblock %}
+
+{% block doc_intro %}
+  {% if subject.dcterms_license or subject.open_data_stars %}
+    <div class="badges" style="float:right">
+      {% if subject.dcterms_license.foaf_logo %}
+        <a href="{{ subject.dcterms_license.doc_url }}">
+          <img src="{{ subject.dcterms_license.foaf_logo.uri }}" alt="{{ subject.dcterms_license }}"/>
+        </a>
+      {% endif %}
+      {% if subject.open_data_stars %}
+        <a href="{% url help %}#stars">
+          <img src="{{ MEDIA_URL }}{{ subject.open_data_stars.0 }}" alt="{{ subject.open_data_stars.1 }}"/>
+        </a>
+      {% endif %}
+    </div>
+  {% endif %}  
+  {{ block.super }}
+{% endblock %}
+
+{% block doc_detail %}
+
+<p style="text-align:center">
+  <a href="#metadata">Metadata</a> &#8226;
+  <a href="#explore">Explore</a> &#8226;
+  <a href="#data">Data</a>
+</p>
+
+<section id="metadata">
+  <h2>Dataset metadata</h2>
+
+  <table class="description">
+    <tbody>
+      <tr class="row-odd">
+        <th>License:</th>
+        <td>{{ subject.dcterms_license|node }}</td>
+      </tr>
+      <tr class="row-even">
+        <th>Attribution:</th>
+        <td>
+          {% if subject.cc_attributionName and subject.cc_attributionURL %}
+            "{{ subject.cc_attributionName }} ({% for url in subject.all.cc_attributionURL %}<a href="{{ url.uri }}">{{ url.uri }}</a>{% if not forloop.last %}, {% endif %}{% endfor %})"
+            <em>({% if subject.dcterms_license.requires.cc_Attribution %}attribution required{% else %}attribution encouraged{% endif %})</em>
+          {% else %}
+            <em>None specified; <a href="{{ subject.oo_contact.foaf_mbox.uri }}">contact the maintainer for clarification</a>.</em>
+          {% endif %}
+        </td>
+      </tr>
+      <tr class="row-even">
+        <th>Created:</th>
+        <td>{{ subject.dcterms_created|node|default:"<em>unknown</em>" }}</td>
+      </tr>
+      <tr class="row-odd">
+        <th>Modified:</th>
+        <td>{{ subject.dcterms_modified|node|default:"<em>unknown</em>" }}</td>
+      </tr>
+      <tr class="row-even">
+        <th>Publisher:</th>
+        <td>
+          {% for publisher in subject.all.dcterms_publisher %}
+            {{ publisher|node }}
+            {% if not forloop.last %}<br/>{% endif %}
+          {% empty %}
+            <em>unknown</em>
+          {% endfor %}
+        </td>
+      </tr>
+      <tr class="row-odd">
+        <th>Maintainer:</th>
+        <td>
+          {% for maintainer in subject.all.dcterms_maintainer %}
+            {{ maintainer|node }}
+            {% if not forloop.last %}<br/>{% endif %}
+          {% empty %}
+            <em>unknown</em>
+          {% endfor %}
+        </td>
+      </tr>
+      <tr class="row-even">
+        <th>Rights holder:</th>
+        <td>
+          {% for rightsHolder in subject.all.dcterms_rightsHolder %}
+            {{ rightsHolder|node }}
+            {% if not forloop.last %}<br/>{% endif %}
+          {% empty %}
+            <em>unknown</em>
+          {% endfor %}
+        </td>
+      </tr>
+      <tr class="row-odd">
+        <th>Contact:</th>
+        <td>
+          {% if subject.oo_contact %}
+            <a href="{{ subject.oo_contact.foaf_mbox.uri }}">{{ subject.oo_contact.label }}</a>
+          {% else %}
+            <em>unknown</em>
+          {% endif %}
+        </td>
+      </tr>
+      
+    </tbody>
+  </table>
+</section>
+
+<section id="explore">
+  <h2>Explore this dataset</h2>
+  
+  <table class="description">
+    <tbody>
+      <tr class="row-odd">
+        <th>Example resources:</th>
+        <td>
+          {% for resource in subject.all.void_exampleResource %}
+            {{ resource|node }}
+            {% if not forloop.last %}<br/>{% endif %}
+          {% empty %}
+            <em>None specified</em>
+          {% endfor %}
+        </td>
+      </tr>
+      <tr class="row-even">
+        <th>Example queries:</th>
+        <td>
+          {% for query in subject.all.oo_exampleQuery %}
+            <a href="{% url sparql %}?query={{ query.rdf_value|urlencode }}">{{ query.label }}</a>
+            {% if not forloop.last %}<br/>{% endif %}
+          {% empty %}
+            <em>None specified</em>
+          {% endfor %}
+        </td>
+      </tr>
+      <tr class="row-odd">
+        <th>Vocabularies in use:</th>
+        <td>
+          {% for vocabulary in subject.all.void_vocabulary %}
+            {{ vocabulary|node }}
+            {% if not forloop.last %}<br/>{% endif %}
+          {% empty %}
+            <em>None specified</em>
+          {% endfor %}
+        </td>
+      </tr>
+      
+      <tr class="row-even">
+        <th>Classes in use:</th>
+        <td>
+          {% for class in subject.used_classes %}
+            <a href="{% url sparql %}?query={{ "SELECT ?subject WHERE { GRAPH ?g { ?subject a "|urlencode }}{{ class.uri.n3|urlencode }}{{ " . ?g void:inDataset "|urlencode }}{{ subject.uri.n3|urlencode }}{{ " } } LIMIT 200"|urlencode }}&amp;common_prefixes=on">{{ class.label }}</a>
+            {{ cls|node }}
+            {% if not forloop.last %}&#8226;{% endif %}
+          {% empty %}
+            <em>None</em>
+          {% endfor %}
+        </td>
+      </tr>
+
+      <tr class="row-odd">
+        <th>Predicates in use:</th>
+        <td>
+          {% for predicate in subject.used_predicates %}
+            <a href="{% url sparql %}?query={{ "SELECT ?subject ?object WHERE { GRAPH ?g { ?subject "|urlencode }}{{ predicate.uri.n3|urlencode }}{{ " ?object . ?g void:inDataset "|urlencode }}{{ subject.uri.n3|urlencode }}{{ " } } LIMIT 200"|urlencode }}&amp;common_prefixes=on">{{ predicate.label }}</a>
+            {% if not forloop.last %}&#8226;{% endif %}
+          {% empty %}
+            <em>None</em>
+          {% endfor %}
+        </td>
+      </tr>
+    </tbody>
+  </table>
+  
+</section>
+
+<section id="data">
+  <h2>Get the data!</h2>
+  <table class="description">
+    <tbody>
+      <tr class="row-odd">
+        <th>Dataset homepage:</th>
+        <td>{{ subject.foaf_homepage|node|default:"<em>None</em>" }}</td>
+      </tr>
+      <tr class="row-even">
+        <th>Source data:</th>
+        <td>
+          {% for source in subject.all.dcterms_source %}
+            <a href="{{ source.uri }}">{{ source.label }}</a>{% if source.dc_format %} ({{ source.dc_format }}){% endif %}
+            {% if not forloop.last %}<br/>{% endif %}
+          {% empty %}
+            <em>
+              No source data referenced.<br/>
+              {% if subject.oo_contact %}<a href="{{ subject.oo_contact.foaf_mbox.uri }}">Contact the publisher for more information.</a>{% endif %}
+            </em>
+          {% endfor %}
+        </td>
+      </tr>
+      <tr class="row-odd">
+        <th>As RDF:</th>
+        <td>
+         {% for document in subject.all.void_inDataset_inv %}
+           {{ document|node }}
+           {% if not forloop.last %}&#8226;{% endif %}
+         {% empty %}
+           <em>This dataset is not available as RDF through <strong>data.ox.ac.uk</strong>.</em>
+         {% endfor %}
+        </td>
+      </tr>
+      </tr>
+    </tbody>
+  </table>
+</section>
+
+{% endblock %}

@@ -1,0 +1,62 @@
+{% extends "base.html" %}
+
+{% block title %}Help{% endblock %}
+
+{% block body %}
+
+<section>
+  <h1>Help</h1>
+  
+  <section id="contents">
+    <ul style="list-style:none; padding-left:0">
+      <li>
+        What is…
+        <ul>
+          <li><a href="#rdf">RDF?</a></li>
+          <li><a href="#sparql">SPARQL?</a></li>
+          <li><a href="#opendata">open data?</a></li>
+        </ul>
+      </li>
+      <li>
+        <a href="#stars">What do the stars mean?</a>
+      </li>
+      <li>
+        <a href="#contribute">How do I contribute a dataset?</a>
+      </li>
+    </ul>
+  </section>
+  
+  <section id="rdf">
+    <h2>What is RDF?</h2>
+    
+    <p>RDF is a data model in which facts are represented as a set of triples,
+       each comprising a subject, predicate (verb), and object. Each element
+       is either a URI (which, being uniquely identifying, allows everyone
+       to talk about the same concept), an anonymous node, or a literal value.
+       For example, "Alice knows Bob" might be expressed as:
+       <code>&lt;http://example.org/alice&gt; foaf:knows &lt;http://example.org/bob&gt;</code>.</p>
+    
+    <p>Predicates are always URIs and are usually drawn from
+       commonly-understood <em>vocabularies</em>. By reusing vocabularies,
+       information represented as RDF can be understood without 
+    
+    <code>
+      <http://example.org/alice> 
+    </code>
+  </section> 
+  
+  <section id="sparql">
+    <h2>What is SPARQL?</h2>
+    
+    <p>SPARQL is a query language for RDF, just as SQL is a query language for
+       relational databases. Each query works by matching graph patterns to data held</p>
+  </section>
+  
+  <section id="stars">
+    <h2>What do the stars mean?</h2>
+    
+    <p>The stars represent the extent to which a dataset is part of the linked open data web.</p>
+  </section>
+</section>
+
+{% endblock %}

@@ -1,0 +1,235 @@
+body {
+    background-color: #E8E8E8;
+    font-family: "Liberation Sans", Arial, sans-serif;
+}
+
+div.container {
+    max-width: 960px;
+    margin-left:auto;
+    margin-right:auto;
+}
+
+header {
+    margin: 1em 0;
+    display: block;
+}
+
+header img {
+    float:left;
+    border: 0;
+}
+
+header p {
+    margin: 0;
+    margin-left: 200px;
+}
+
+header p.title {
+    font-size:24px;
+}
+
+nav ul {
+    background-color: #000;
+    -webkit-border-radius: 5px;
+    -moz-border-radius: 5px;
+    border-radius: 5px;
+    height: 40px;
+    line-height: 30px;
+    padding: 0;
+    list-style: none;
+    font-size: 16px;
+}
+
+nav li {
+    display: inline;
+}
+
+nav li a {
+    color: #fff;
+    text-decoration: none;
+    display: inline-block;
+    height: 30px;
+    padding: 5px 1.5em;
+}
+
+nav li:first-child a {
+  	border-top-left-radius: 5px;
+	-moz-border-radius-topleft: 5px;
+	-webkit-border-top-left-radius: 5px;
+	border-bottom-left-radius: 5px;
+	-moz-border-radius-bottomleft: 5px;
+	-webkit-border-bottom-left-radius: 5px;
+}
+
+nav li a:hover, nav li.selected a {
+    background-color: #006699
+}
+
+/*h1, h2, p, dl {
+    margin-top:0.7em;
+    margin-bottom:0;
+}*/
+
+h1 {
+    color: #006699;
+    font-size: 24px;
+    margin-bottom: 0.333em;
+    margin-top:0;
+    font-weight: normal;
+}
+
+h2 {
+    color: #000305;
+    margin-top: 0;
+    margin-bottom: 0.333em;
+    font-size:14pt;
+    font-weight: normal;
+}
+
+section.page-metadata h2 + h3, section.widget h2 + h3, section.widget h2 + table.description{
+	margin-top: 0;
+}
+
+img.logo {
+    float:right;
+    margin:0 0 0.5em 0.5em;
+    
+}
+
+div.container > section {
+    display: block;
+    padding:20px;
+    background-color: #fff;
+    -webkit-border-radius: 10px;
+    -moz-border-radius: 10px;
+    border-radius: 10px;
+}
+
+table.description {
+    /*border:1px solid #fff;
+    border-collapse: collapse;*/
+    margin-top: 10px;
+}
+
+tr.row-odd {
+    background-color: #ddd;
+}
+
+tr.row-even {
+    background-color: #eee;
+}
+
+table.description td, table.sparql-results td {
+    padding:2px;
+}
+
+img.icon {
+    border:0;
+}
+
+aside {
+    display: block;
+    width:200px;
+    margin-top:10px;
+}
+
+aside.toolbox {
+    float:left;
+    margin-right:0px;
+}
+
+aside.sidebar, aside.toolbox {
+    float:right;
+    margin-left:10px;
+}
+
+aside img.depiction {
+    max-width: 200px;
+}
+
+a img {
+	border: 0;
+}
+
+div.olControlAttribution {
+    font-size:10px;
+    background-color: rgba(255, 255, 255, 0.6);
+    position:absolute;
+    bottom:0;
+    right:0;
+    padding:2px;
+}
+
+table.sparql-results, table.description {
+    font-size:10pt;
+    margin-bottom: 1em;
+    border:1px solid #ccc;
+}
+
+form table {
+    width: 100%;
+}
+
+form th, form td {
+    border-top: 1px solid #ddd;
+}
+
+form tr:first-child th, form tr:first-child td {
+    border:0
+}
+
+form table th {
+    width: 200px;
+    vertical-align:top;
+    text-align:left;
+}
+
+form table textarea {
+    width: 100%;
+}
+
+section.page-metadata h2, section.widget h2 {
+    font-size:11pt;
+    color: #006699;
+    margin: 0.5em 0 0 0;
+    font-weight: bold;
+}
+
+section.page-metadata h2:first-child, section.widget h2:first-child {
+    margin:0;
+}
+
+section.page-metadata h3, section.widget h3 {
+    font-size:10pt;
+    color: #333;
+    margin:0.5em 0 0 0;
+}
+
+section.page-metadata p, section.widget p {
+    color: #888;
+    font-size:9pt;
+    margin:0;
+    text-align: justify;
+}
+
+section.page-metadata ul, section.widget ul {
+    margin:0;
+    list-style: none;
+    padding-left: 0;
+    font-size:10pt;
+}
+
+hr {
+	height:1px;
+	color:#888;
+	background-color:#888;
+	/*border:1px solid #888;*/
+}
+
+.badges {
+	text-align: center;
+}
+
+.badges img {
+	margin:2px;
+}

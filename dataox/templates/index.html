@@ -1,0 +1,28 @@
+{% extends "base.html" %}
+
+{% block body %}
+    <section>
+      <h1>Home</h1>
+      
+      <p>Welcome to <strong>data.ox.ac.uk</strong>, the <a href="http://www.ox.ac.uk/">University of Oxford</a>'s institutional linked open data store.</p>
+
+      <h2>Aims</h2>
+
+      <p>The site aims to collect data from around the University and make it available for reuse as <a href="http://en.wikipedia.org/wiki/Linked_Data">linked data</a> under open licenses.</p>
+
+      <h2>Exploring the data</h2>      
+      
+      <p>To get started, have a look at our <a href="{% url datasets %}">datasets</a> or use the <a href="{% url explore %}">explore page</a> to get a flavour of what's available.</p>
+
+      <p>All data are also available through <a href="{% url sparql %}">our SPARQL endpoint</a>. The site also supports <a href="http://en.wikipedia.org/wiki/Content_negotiation">content negotiation</a>, allowing you to request data in a variety of RDF serializations.</p>
+
+      <h2>Getting involved</h2>
+
+      <p>Are you are a data owner within the University with data you'd like to publish? We can help with transforming your data into RDF and automating the publishing of your data on the <strong>data.ox.ac.uk</strong> infrastructure. For more information, feel free to <a href="mailto:opendata@oucs.ox.ac.uk">e-mail the team</a>.</p>
+
+      <p>If you've got an example of something produced using data from this site then we'd be delighted to hear from you so we can include it in our <a href="{% url explore %}#examples">list of examples</a>.</p>
+
+
+      
+    </section>
+{% endblock %}
