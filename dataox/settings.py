@@ -8,16 +8,14 @@ GRAPH_URL = 'http://localhost:3030/dataset/data'
 SERVED_DOMAINS = ('data.ox.ac.uk',)
 
 INSTALLED_APPS += (
-    'humfrey.dataox',
-    'humfrey.pingback',
+    'dataox.core',
 )
 
-ROOT_URLCONF = 'humfrey.urls.dataox'
-MEDIA_ROOT = os.path.join(os.path.dirname(__file__), '..', 'dataox', 'media')
+ROOT_URLCONF = 'dataox.urls.empty'
+MEDIA_ROOT = os.path.join(os.path.dirname(__file__), 'media')
 
-MIDDLEWARE_CLASSES += (
-    'humfrey.pingback.middleware.PingbackMiddleware',
-)
+ROOT_HOSTCONF = 'dataox.hosts'
+DEFAULT_HOST = 'empty'
 
 CACHE_BACKEND = 'memcached://127.0.0.1:3031/'
 
@@ -28,4 +26,8 @@ EMAIL_HOST_PASSWORD = config.get('email', 'password')
 SERVER_EMAIL = 'dataox@opendata.nsms.ox.ac.uk'
 DEFAULT_FROM_EMAIL = 'opendata@oucs.ox.ac.uk'
 
-RESIZED_IMAGE_CACHE_DIR = os.path.join(os.path.dirname(__file__), '..', '..', '..', 'external_images')
+RESIZED_IMAGE_CACHE_DIR = os.path.join(os.path.dirname(__file__), '..', 'external_images')
+
+TEMPLATE_DIRS = (
+    os.path.join(os.path.dirname(__file__), 'templates'),
+) + TEMPLATE_DIRS
