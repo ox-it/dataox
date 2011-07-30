@@ -66,6 +66,7 @@ setup(
                  'Topic :: Internet :: WWW/HTTP :: Dynamic Content'],
     keywords=['sparql', 'linked data', 'RDF', 'REST', 'University of Oxford', 'dataox', 'open data'],
     data_files=data_files,
+    install_requires=['humfrey'],
 )
 
 
