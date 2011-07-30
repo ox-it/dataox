@@ -9,6 +9,7 @@ SERVED_DOMAINS = ('data.ox.ac.uk',)
 
 INSTALLED_APPS += (
     'dataox.core',
+    'dataox.resource',
 )
 
 ROOT_URLCONF = 'dataox.urls.empty'

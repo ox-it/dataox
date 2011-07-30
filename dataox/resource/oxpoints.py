@@ -1,3 +1,5 @@
+from humfrey.utils.resource import Resource, register
+from humfrey.utils.namespaces import NS
 
 class CollegeHall(object):
     @classmethod
