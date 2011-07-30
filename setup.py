@@ -48,6 +48,17 @@ for dirpath, dirnames, filenames in os.walk('dataox'):
 # END borrowed from Django      #
 #################################
 
+
+# Idea borrowed from http://cburgmer.posterous.com/pip-requirementstxt-and-setuppy
+install_requires, dependency_links = [], []
+for line in open('requirements.txt'):
+    line = line.strip()
+    if line.startswith('-e'):
+        dependency_links.append(line[2:].strip())
+    elif line:
+        install_requires.append(line)
+
+
 setup(
     name='dataox',
     description="The frontend to the University of Oxford's institutional data site.",
@@ -66,7 +77,8 @@ setup(
                  'Topic :: Internet :: WWW/HTTP :: Dynamic Content'],
     keywords=['sparql', 'linked data', 'RDF', 'REST', 'University of Oxford', 'dataox', 'open data'],
     data_files=data_files,
-    dependency_links=['git://github.com/oucs/dataox.git'],
+    install_requires=install_requires,
+    dependency_links=dependency_links,
 )
 
 
