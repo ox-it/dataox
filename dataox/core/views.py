@@ -1,13 +1,9 @@
 from __future__ import division
 
-from django.http import Http404, HttpResponse
-from django.conf import settings
 
-import rdflib, hashlib, os, urllib
-
-from humfrey.linkeddata.views import EndpointView, RDFView, ResultSetView
+from humfrey.linkeddata.views import RDFView, ResultSetView
 from humfrey.utils.namespaces import NS
-from humfrey.utils.resource import Resource, expand
+from humfrey.utils.resource import Resource
 from humfrey.utils.views import BaseView
 from humfrey.utils.cache import cached_view
 
