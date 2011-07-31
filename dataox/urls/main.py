@@ -23,7 +23,7 @@ urlpatterns = patterns('',
     (r'^contact/$', direct_to_template, {'template': 'contact.html'}, 'contact'),
     (r'^help/$', direct_to_template, {'template': 'help.html'}, 'help'),
 
-    (r'^forbidden/$', direct_to_template, {'template': 'forbidden.html'}, 'forbidden'),
+    (r'^forbidden/$', SimpleView(template_name='forbidden', context={'status_code': 403}), {}, 'forbidden'),
 
     (r'^explore/$', ExploreView(), {}, 'explore'),
     (r'^explore/resources/$', ExampleResourceView(), {}, 'explore-resource'),
@@ -37,8 +37,8 @@ urlpatterns = patterns('',
     (r'^external-image/$', ResizedImageView(), {}, 'resized-image'),    
 )
 
-handler404 = SimpleView(template_name='404-main.html', context={'status_code':404})
-handler500 = SimpleView(template_name='500.html', context={'status_code':500})
+handler404 = SimpleView(template_name='404-main', context={'status_code':404})
+handler500 = SimpleView(template_name='500', context={'status_code':500})
 
 if settings.DEBUG:
     urlpatterns += patterns('',
