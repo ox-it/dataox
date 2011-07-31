@@ -12,6 +12,10 @@ INSTALLED_APPS += (
     'dataox.resource',
 )
 
+ADMINS = (
+    (config.get('admin:name'), config.get('admin:email'),
+)
+
 ROOT_URLCONF = 'dataox.urls.empty'
 MEDIA_ROOT = os.path.join(os.path.dirname(__file__), 'media')
 
