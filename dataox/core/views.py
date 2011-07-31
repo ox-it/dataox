@@ -9,7 +9,7 @@ from humfrey.utils.cache import cached_view
 
 class DatasetView(RDFView):
     _QUERY = """
-        DESCRIBE ?dataset ?license WHERE {
+        DESCRIBE ?dataset ?license ?publisher WHERE {
             ?dataset a void:Dataset ;
                      dcterms:license ?license ;
                      dcterms:publisher ?publisher .
