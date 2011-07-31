@@ -32,3 +32,5 @@ RESIZED_IMAGE_CACHE_DIR = os.path.join(os.path.dirname(__file__), '..', 'externa
 TEMPLATE_DIRS = (
     os.path.join(os.path.dirname(__file__), 'templates'),
 ) + TEMPLATE_DIRS
+
+THUMBNAIL_WIDTHS = (200, 400)

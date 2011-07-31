@@ -36,6 +36,7 @@ nav ul {
     height: 40px;
     line-height: 30px;
     padding: 0;
+    margin-left: 0;
     list-style: none;
     font-size: 16px;
 }
@@ -96,7 +97,7 @@ img.logo {
     
 }
 
-div.container > section {
+div.container > article {
     display: block;
     padding:20px;
     background-color: #fff;

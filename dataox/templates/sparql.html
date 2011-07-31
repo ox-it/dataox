@@ -3,50 +3,58 @@
 {% block title %}SPARQL{% endblock %}
 
 {% block body %}
+<article>
+  <h1>SPARQL</h1>
+    
+{% if results.fields or result or subjects %}
   <section>
-    <h1>SPARQL</h1>
+    <h2>Results</h2>
+{% else %}
+    <p>New to SPARQL? <a href="{% url help %}#sparql">Find out more…</a></p>
+{% endif %}
     
-    {% if results.fields or result or subjects %}
-      <h2>Results</h2>
-    {% else %}
-      <p>New to SPARQL? <a href="{% url help %}#sparql">Find out more…</a></p>
-    {% endif %}
-    
-    {% if results.fields %}
-      <table class="sparql-results">
-        <thead>
-          <tr>
+{% if results.fields %}
+    <table class="sparql-results">
+      <thead>
+        <tr>
 {% for field in results.fields %}
-            <th>{{ field }}</th>
+          <th>{{ field }}</th>
 {% endfor %}
-          </tr>
-        </thead>
-        <tbody>
+        </tr>
+      </thead>
+      <tbody>
 {% for result in results %}
-          <tr class="row-{% cycle "odd" "even" %}">
+        <tr class="row-{% cycle "odd" "even" %}">
 {% for cell in result %}
-            <td>{{ cell|node|default_if_none:"" }}</td>
+          <td>{{ cell|node|default_if_none:"" }}</td>
 {% endfor %}
-          </tr>
+        </tr>
 {% empty %}
-          <tr>
-            <td colspan="{{ results.fields|length }}">No results found</td>
-          </tr>
+        <tr>
+          <td colspan="{{ results.fields|length }}">No results found</td>
+        </tr>
 {% endfor %}
-        </tbody>
-      </table>
-    {% endif %}
+      </tbody>
+    </table>
+{% endif %}
 
-    {% if result %}
-      {{ result|yesno:"True,False" }}
-    {% endif %}
+{% if result %}
+    {{ result|yesno:"True,False" }}
+{% endif %}
     
-    {% if error %}
+{% if results.fields or result or subjects %}
+  </section>
+{% endif %}
+    
+{% if error %}
+  <section>
     <h2>Query error</h2>
-    
+
     <pre>{{ error }}</pre>
-    {% endif %}
+  </section>
+{% endif %}
     
+  <section>
     <h2>Query</h2>
 
     <form method="get" action="{% url sparql %}">
@@ -61,6 +69,7 @@
         </tfoot>
       </table>
     </form>
-  
   </section>
+
+</article>
 {% endblock %}

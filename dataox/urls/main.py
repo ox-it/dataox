@@ -4,7 +4,7 @@ from django.views.generic.simple import redirect_to, direct_to_template
 
 from humfrey.desc.views import IdView, DocView, DescView, SparqlView
 from humfrey.images.views import ResizedImageView
-from humfrey.misc.views import FeedView
+from humfrey.misc.views import FeedView, SimpleView
 
 from dataox.core.views import DatasetView, ExploreView, ExampleDetailView, ExampleResourceView, ExampleQueryView
 
@@ -37,8 +37,8 @@ urlpatterns = patterns('',
     (r'^external-image/$', ResizedImageView(), {}, 'resized-image'),    
 )
 
-handler404 = lambda request: direct_to_tempate(request, template='404-main.html')
-handler500 = lambda request: direct_to_tempate(request, template='500.html')
+handler404 = SimpleView(template_name='404-main.html', context={'status_code':404})
+handler500 = SimpleView(template_name='500.html', context={'status_code':500})
 
 if settings.DEBUG:
     urlpatterns += patterns('',

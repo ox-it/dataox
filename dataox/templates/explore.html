@@ -1,9 +1,9 @@
-{% extends "base.html" %}
+{% extends "base.html" %}{% load hosts %}
 
 {% block title %}Explore{% endblock %}
 
 {% block body %}
-<section>
+<article>
   <h1>Explore</h1>
 
   <section>
@@ -12,8 +12,8 @@
     <p>Use these as starting points to dive into the data.</p>
 
     <dl>
-      <dt><a href="{% url explore-resource %}">Example resources</a></dt>
-      <dt><a href="{% url explore-query %}">Example queries</a></dt>
+      <dt><a href="{% host_url explore-resource on data %}">Example resources</a></dt>
+      <dt><a href="{% host_url explore-query on data %}">Example queries</a></dt>
     </dl>
   </section>
   
@@ -22,12 +22,12 @@
 
     <dl>
 {% for example in examples %}
-      <dt><a href="{% url example-detail example.slug %}">{{ example.name }}</a></dt>
+      <dt><a href="{% host_url example-detail example.slug on data %}">{{ example.name }}</a></dt>
       <dd>{{ example.description|safe }}</dd>
 {% endfor %}
     </dl>
   </section>  
 
 
-</section>
+</article>
 {% endblock %}

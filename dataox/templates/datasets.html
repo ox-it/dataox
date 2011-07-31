@@ -1,9 +1,9 @@
-{% extends "base.html" %}{% load humfrey_desc %}
+{% extends "base.html" %}{% load humfrey_desc %}{% load hosts %}
 
 {% block title %}Datasets{% endblock %}
 
 {% block body %}
-    <section>
+    <article>
       <h1>Datasets</h1>
        
        {{ t }}
@@ -36,7 +36,7 @@
                 </a>
               {% endif %} 
               {% if dataset.open_data_stars %}
-                <a href="{% url help %}#stars">
+                <a href="{% host_url help on data %}#stars">
                   <img src="{{ MEDIA_URL }}{{ dataset.open_data_stars.0 }}" alt="{{ dataset.open_data_stars.1 }}"/>
                 </a>
               {% endif %}
@@ -45,5 +45,5 @@
 {% endfor %}
         </tbody>
       </table>
-    </section>
+    </article>
 {% endblock %}

@@ -4,7 +4,7 @@
 
 {% block body %}
 
-<section>
+<article>
   <h1>Example queries</h1>
   
   <p>Some datasets suggest the following example queries as being particularly useful:</p>
@@ -24,7 +24,7 @@
         <td rowspan="{{ d.list|length }}">{{ d.grouper|node }}</td>
         {% for result in d.list %}
           {% if not forloop.first %}<tr>{% endif %}
-          <td><a href="{% url sparql %}?query={{ result.value|urlencode }}">{{ result.label }}</a></td>
+          <td><a href="{% host_url sparql on data %}?query={{ result.value|urlencode }}">{{ result.label }}</a></td>
           <td>{{ result.comment|node }}</td>
           {% if not forloop.last %}</tr>{% endif %}
         {% endfor %}
@@ -32,5 +32,5 @@
 {% endfor %}
     </tbody>
   </table>
-  
+</article>
 {% endblock %}
