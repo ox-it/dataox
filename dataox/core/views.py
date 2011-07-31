@@ -11,7 +11,8 @@ class DatasetView(RDFView):
     _QUERY = """
         DESCRIBE ?dataset ?license WHERE {
             ?dataset a void:Dataset ;
-                     dcterms:license ?license
+                     dcterms:license ?license ;
+                     dcterms:publisher ?publisher .
         }"""
         
     def initial_context(self, request):
