@@ -1,4 +1,4 @@
-{% extends "doc/base.html" %}{% load humfrey_desc %}
+{% extends "doc/base.html" %}{% load humfrey_desc %}{% load hosts %}
 
 {% block doc_sidebar %}{% endblock %}
 
@@ -11,7 +11,7 @@
         </a>
       {% endif %}
       {% if subject.open_data_stars %}
-        <a href="{% url help %}#stars">
+        <a href="{% host_url help on data %}#stars">
           <img src="{{ MEDIA_URL }}{{ subject.open_data_stars.0 }}" alt="{{ subject.open_data_stars.1 }}"/>
         </a>
       {% endif %}

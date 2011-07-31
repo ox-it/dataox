@@ -1,4 +1,4 @@
-{% extends "base.html" %}{% load humfrey_desc %}
+{% extends "base.html" %}{% load humfrey_desc %}{% load hosts %}
 
 {% block title %}{{ subject.label }}{% endblock %}
 
@@ -41,7 +41,7 @@
         <h2>Toolbox</h2>
         <ul>
           <li>
-            <a href="{% url sparql %}?query={{ "SELECT ?subject ?predicate WHERE {  ?subject ?predicate <"|urlencode }}{{ subject.uri|urlencode }}{{ "> } LIMIT 200"|urlencode }}">
+            <a href="{% host_url sparql on data %}?query={{ "SELECT ?subject ?predicate WHERE {  ?subject ?predicate <"|urlencode }}{{ subject.uri|urlencode }}{{ "> } LIMIT 200"|urlencode }}">
               What links here
             </a>
           </li>
@@ -49,7 +49,7 @@
             <li>
               Other things of type:
               {% for type in subject.all.rdf_type %}  
-                <a href="{% url sparql %}?query={{ "SELECT ?subject WHERE {  ?subject a <"|urlencode }}{{ type.uri|urlencode }}{{ "> } LIMIT 200"|urlencode }}">
+                <a href="{% host_url sparql on data %}?query={{ "SELECT ?subject WHERE {  ?subject a <"|urlencode }}{{ type.uri|urlencode }}{{ "> } LIMIT 200"|urlencode }}">
                   {{ type.label }}</a>{% if not forloop.last %}, {% endif %}
               {% endfor %}
             </li>
@@ -105,7 +105,7 @@
           <img class="depiction" src="{% url resized-image %}?url={{ subject.foaf_img.uri|urlencode }}&amp;width=200" alt=""/>
         </a>
       {% endif %}
-      {% for depiction in subject|property_all:"foaf:depiction,crm:P138i_has_representation" %}
+      {% for depiction in subject.depictions %}
         <a href="{{ depiction.doc_url }}">
           <img class="depiction" src="{% url resized-image %}?url={{ depiction.uri|urlencode }}&amp;width=200" alt=""/>
         </a>
@@ -119,11 +119,11 @@
         {% include "widgets/map.html" %}
       {% endif %}
       
-      {% for widget_template in subject.foaf_account.widget_templates %}
+      {% for widget_template in subject.foaf_account.widget_templates %}{% if widget_template %}
         {% with subject.foaf_account as account %}
           {% include widget_template %}
         {% endwith %}
-      {% endfor %}
+      {% endif %}{% endfor %}
       
       {% for thing in subject.things_of_type %}
         {% if forloop.first %}
