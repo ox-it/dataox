@@ -13,7 +13,7 @@ INSTALLED_APPS += (
 )
 
 ADMINS = (
-    (config.get('admin:name'), config.get('admin:email'),
+    (config.get('admin:name'), config.get('admin:email')),
 )
 
 ROOT_URLCONF = 'dataox.urls.empty'
