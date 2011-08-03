@@ -48,8 +48,8 @@ map.addLayer(vectors);
         
 
         var buildings = {}, units = {};
-        for (i in data.results) {
-          var binding = data.results[i];
+        for (i in data.results.bindings) {
+          var binding = data.results.bindings[i];
           if (buildings[binding.building.value] == undefined) {
             var geometry = wkt.read(binding.spatial.value);
             var feature = new OpenLayers.Feature.Vector(geometry);
