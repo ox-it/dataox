@@ -41,4 +41,5 @@ THUMBNAIL_WIDTHS = (200, 400)
 
 ID_MAPPING = (
     ('http://data.ox.ac.uk/id/', 'http://data.ox.ac.uk/doc/', True),
+    ('http://oxpoints.oucs.ox.ac.uk/id/', 'http://data.ox.ac.uk/doc:oxpoints/', False),
 )
