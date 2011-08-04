@@ -37,9 +37,10 @@ EXAMPLES = (
        + 'rea map</a> using OpenStreetMap and OxPoints data.'},
     {'slug': 'openmeters',
      'name': 'OpenMeters',
-     'description': 'A re-imagining of <a href="http://www.ox.ac.uk/visitors_f'
-       + 'riends/maps_and_directions/science_area.html">the official science a'
-       + 'rea map</a> using OpenStreetMap and OxPoints data.'},
+     'description': 'Graphical representations of the University of Oxford's electricity usage.'},
+    {'slug': 'vacancy-treemap',
+     'name': 'Vacancy Treemap',
+     'description': 'The distribution of job vacancies across the University.'},
 )
 
 class ExploreView(BaseView):

@@ -1,0 +1,175 @@
+{% extends "base.html" %}
+
+{% block title %}Vacancy Treemap{% endblock %}
+
+{% block extrahead %}
+	<script src="http://code.jquery.com/jquery-1.5.min.js" type="application/javascript"></script>
+    <script type="text/javascript" src="https://www.google.com/jsapi"></script>
+    <script type="text/javascript">
+			
+	  google.load("visualization", "1", {packages:["treemap"]});
+      google.setOnLoadCallback(drawChart);
+  
+      function drawChart() {
+	 
+	  window.googledata = new google.visualization.DataTable();
+	      window.googledata.addColumn('string', 'Region');
+          window.googledata.addColumn('string', 'Parent');
+          window.googledata.addColumn('number', 'Market trade volume (size)');
+		  
+          // Create and populate the data table.
+
+		var query = "PREFIX vacancy: <http://purl.org/openorg/vacancy/>" 
+			+ "SELECT ?dept ?dept_name ?parent ?parent_name (count(?vac) as ?novacs) WHERE {" 
+			+ "?vac vacancy:within ?dept ." 
+			+ "?dept skos:prefLabel ?dept_name ."
+			+ "?vac a vacancy:Vacancy ."
+			+ "OPTIONAL{  ?dept dcterms:isPartOf ?parent . ?parent skos:prefLabel ?parent_name . }" 
+			+ "} GROUP BY ?dept ?parent ?dept_name ?parent_name"
+		
+		$(function() {
+      $.get('http://data.ox.ac.uk/sparql/', 
+	        {format: 'srj', query: query, datatype: 'json', common_prefixes: 'on',}, 
+			function(data) {
+        
+		  // Create and draw the visualization.
+        window.tree = new google.visualization.TreeMap(document.getElementById('visualization'));
+		google.visualization.events.addListener(tree, 'onmouseover', treeMouseOver);
+		function treeMouseOver(e) {
+		  // alert(e);
+		}
+
+		//nasty hacks
+		if (data.head == undefined) data = $.parseJSON(data);
+		if (data.results.bindings != undefined) {data.results = data.results.bindings}
+		
+		window.parentsadded = {};
+		
+		function addparents(uri, uri_name){
+			var parentquery = "SELECT ?parent ?parent_name WHERE {"
+							  + "<" + uri + ">" + " dcterms:isPartOf ?parent . ?parent skos:prefLabel ?parent_name . }"
+			if (uri in window.parentsadded) {} else{
+			$.ajax({async: false,
+			        url:'http://data.ox.ac.uk/sparql/', 
+					data: {format: 'srj', query: parentquery, datatype: 'json', common_prefixes: 'on',}, 
+					success: function(data) {
+								if (data.head == undefined) data = $.parseJSON(data);
+								if (data.results.bindings != undefined) {data.results = data.results.bindings}
+								
+								if (data.results.length == 0)
+								{
+									//ie the uri has no parent!
+									window.googledata.addRows([[ uri_name,"Oxford",0]]);
+									window.parentsadded[uri] = '';
+								}else{
+								for (i in data.results) {
+									var parent = data.results[i].parent;
+									var parent_name = data.results[i].parent_name;
+									addparents(parent.value, parent_name.value);
+									window.googledata.addRows([[uri_name, parent_name.value,0]]);
+									window.parentsadded[uri] = '';
+								}
+								}
+							
+							} });
+			}
+		}
+				
+        for (i in data.results) {
+          var binding = data.results[i];
+		  if (binding.parent != undefined)
+		  {
+				if (binding.parent_name.value == "Department of Physics") {
+					var a = 1;
+				}
+				addparents(binding.parent.value, binding.parent_name.value);
+		  }
+        }
+	    for (i in data.results) {
+          var binding = data.results[i];
+		  // if the entry is a parent the we add with *itself* as parent, otherwise we add it to its real parent 
+		  if (binding.parent != undefined){
+			if (binding.dept.value in window.parentsadded){
+			window.googledata.addRows([
+				[ binding.dept_name.value + " (itself)",binding.dept_name.value,parseInt(binding.novacs.value)]]);
+			}else{
+			window.googledata.addRows([
+				[ binding.dept_name.value,binding.parent_name.value,parseInt(binding.novacs.value)]]);
+			}
+		  }else{
+			window.googledata.addRows([
+				[ binding.dept_name.value,"Oxford",parseInt(binding.novacs.value)]]);
+		  }
+        }	
+		
+		window.tree.draw(window.googledata, {
+            minColor: '#f00',
+            midColor: '#ddd',
+            maxColor: '#0d0',
+			maxDepth: 6,
+            headerHeight: 15,
+            fontColor: 'black',
+            showScale: false});
+		var a = 5;
+	   
+      });
+    });		
+          googledata.addRows([
+            ["Oxford",null,0]
+          ]);
+      }
+    </script>
+  <style type="text/css">
+    ul#units, div#map, section#details {
+      display: block;
+      border:1px solid #aaa;
+      margin-top:0;
+    }
+    ul#units {
+      margin-left:1em;
+    }
+    ul#units li ul {
+      padding-left:2em;
+      list-style:none;
+    }
+    ul#units li {
+      padding:0 2px;
+    }
+    ul#units li.highlight {
+      color:#fff;
+      background-color:#00f;
+    }
+    p#description {
+      margin-top:0;
+      font-size: 10pt;
+    }
+    h1 {
+      margin-bottom: 0;
+    }
+    
+    #loading {
+      padding:4em;
+      margin:4em;
+      text-align:center;
+      font-size:30px;
+      
+    }
+  </style>
+{% endblock %}
+
+{% block body %}
+  
+  <section>
+    <h1>Vacancy Treemap</h1>
+       
+    <div id="visualization" style="width: 920px; height: 550px;"></div>
+
+    <section id="details" style="clear:both; padding:1em; margin-top:1em">
+		<h2>Details</h2> 
+      <p>This shows a breakdown (by department) of the vacancies currently available on the University of Oxford's <a href="http://www.recruit.ox.ac.uk">recruitment website</a>.</p>
+	  <p>Left-click on a department to see the breakdown of vacancies within that department. Right-click to move to its parent department.</p>
+	  <p>The Treemap is powered by the <a href="http://code.google.com/apis/chart/">Google Chart Tools</a>.</p>
+    </section>
+    
+  </section>
+{% endblock %}
