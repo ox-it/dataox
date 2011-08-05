@@ -31,8 +31,6 @@ EMAIL_HOST_PASSWORD = config.get('email', 'password')
 SERVER_EMAIL = 'dataox@opendata.nsms.ox.ac.uk'
 DEFAULT_FROM_EMAIL = 'opendata@oucs.ox.ac.uk'
 
-RESIZED_IMAGE_CACHE_DIR = os.path.join(os.path.dirname(__file__), '..', 'external_images')
-
 TEMPLATE_DIRS = (
     os.path.join(os.path.dirname(__file__), 'templates'),
 ) + TEMPLATE_DIRS
