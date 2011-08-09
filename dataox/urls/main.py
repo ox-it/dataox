@@ -5,6 +5,7 @@ from django.views.generic.simple import redirect_to, direct_to_template
 from humfrey.desc.views import IdView, DocView, DescView, SparqlView
 from humfrey.images.views import ResizedImageView
 from humfrey.misc.views import FeedView, SimpleView
+from humfrey.graphviz.views import GraphVizView
 
 from dataox.core.views import DatasetView, ExploreView, ExampleDetailView, ExampleResourceView, ExampleQueryView
 
@@ -34,7 +35,9 @@ urlpatterns = patterns('',
 
     (r'^pingback/', include('humfrey.pingback.urls')),
 
-    (r'^external-image/$', ResizedImageView(), {}, 'resized-image'),    
+    (r'^external-image/$', ResizedImageView(), {}, 'resized-image'),
+
+    (r'^graphviz/$', GraphVizView(), {}, 'graphviz'),
 )
 
 handler404 = SimpleView(template_name='404-main', context={'status_code':404})

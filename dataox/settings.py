@@ -10,6 +10,7 @@ SERVED_DOMAINS = ('data.ox.ac.uk',)
 INSTALLED_APPS += (
     'dataox.core',
     'dataox.resource',
+    'humfrey.graphviz',
 )
 
 ADMINS = (
