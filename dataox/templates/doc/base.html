@@ -86,9 +86,9 @@
         <h3>Other formats</h3>
         
         <ul>
-{% for format, url in formats %}
+{% for format in formats %}
           <li>
-            <a href="{{ url }}">{{ format.name }}</a>
+            <a href="{{ format.url }}">{{ format.name }}</a>
           </li>
 {% endfor %}
         </ul>
