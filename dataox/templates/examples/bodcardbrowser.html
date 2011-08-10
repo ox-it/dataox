@@ -308,43 +308,43 @@
     <h1>Vacancy Treemap</h1>
        
     <div id="measures" style="width:700px; height:100px;">
-	<table style="width:100%;">
-		<tr><td rowspan=2>Divide by</td>
-			<td><input type="checkbox" onChange="update()" id="colldivide" checked >College:</td>
-			<td>
-				<select id="college_id">
-					<option value="">Show All</option>
-				</select>
-			</td>
-		</tr>
-  		<tr><td><input type="checkbox" onChange="update()" id="deptdivide" >Department:</td>
-			<td>
-				<select id="department_id" disabled>
-					<option value="">Show All</option>
-				</select>
-			</td>
-		</tr> 
-		<tr><td colspan=2>Date:</td>
-			<td style="width:515px;">
-				<select id="date_id" onChange="update()">
-				</select>
-			</td>
-		</tr> 
-		<tr><td colspan=2>View as:</td>
-			<td><input type="radio" onChange="update()" name="graphtype" id="spreadsheet" value="spreadsheet" checked="checked"> Spreadsheet
-				<input type="radio" onChange="update()" name="graphtype" id="pie" value="pie" > Pie Chart
-				<input type="radio" onChange="update()" name="graphtype" id = "bar" value="bar"> Bar Chart
-			</td>
-		</tr>
-	</table>
+		<table style="width:100%;">
+			<tr><td rowspan=2>Divide by</td>
+				<td><input type="checkbox" onChange="update()" id="colldivide" checked >College:</td>
+				<td>
+					<select id="college_id">
+						<option value="">Show All</option>
+					</select>
+				</td>
+			</tr>
+			<tr><td><input type="checkbox" onChange="update()" id="deptdivide" >Department:</td>
+				<td>
+					<select id="department_id" disabled>
+						<option value="">Show All</option>
+					</select>
+				</td>
+			</tr> 
+			<tr><td colspan=2>Date:</td>
+				<td style="width:515px;">
+					<select id="date_id" onChange="update()">
+					</select>
+				</td>
+			</tr> 
+			<tr><td colspan=2>View as:</td>
+				<td><input type="radio" onChange="update()" name="graphtype" id="spreadsheet" value="spreadsheet" checked="checked"> Spreadsheet
+					<input type="radio" onChange="update()" name="graphtype" id="pie" value="pie" > Pie Chart
+					<input type="radio" onChange="update()" name="graphtype" id = "bar" value="bar"> Bar Chart
+				</td>
+			</tr>
+		</table>
 	<br/>
-	<div id="graph"><div style="text-align:center; width:100%; height:100px;"><br/><br/><img src="loader.gif"/></div></div>
+	</div>
+		<div id="graph"><div style="text-align:center; width:100%; height:100px;"><br/><br/><img src="loader.gif"/></div></div>
 
-    <section id="details" style="clear:both; padding:1em; margin-top:1em">
-		<h2>Details</h2> 
-      <p>This is a tool for easily accessing the Bod Card (the University of Oxford's university card) statistics stored in data.ox.</p>
-	  <p>Please note that undergraduates' bod cards are, in general, only associated with their college and not with their department.</p>
-    </section>
-    
+		<section id="details" style="clear:both; padding:1em; margin-top:1em">
+			<h2>Details</h2> 
+		  <p>This is a tool for easily accessing the Bod Card (the University of Oxford's university card) statistics stored in data.ox.</p>
+		  <p>Please note that undergraduates' bod cards are, in general, only associated with their college and not with their department.</p>
+		</section>
   </article>
 {% endblock %}
