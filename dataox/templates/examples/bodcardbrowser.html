@@ -177,10 +177,14 @@
 			query = query 	+ "{?obs rdfs:about ?org . ?org skos:prefLabel ?org_name. \n" ;
 			query = query + "\nFILTER (?org = <" + department + ">)\n}" ;
 			}else{
-			if (college && college_divide){
-				query = query 	+ "OPTIONAL{?obs rdfs:about ?org . ?org skos:prefLabel ?org_name. \n FILTER (?org != ?coll)}" ;
+			if (college_divide){
+				if (college){
+					query = query 	+ "OPTIONAL{?obs rdfs:about ?org . ?org skos:prefLabel ?org_name. \n FILTER (?org != ?coll)}" ;
+				}else{
+					query = query 	+ "OPTIONAL{?obs rdfs:about ?org . ?org skos:prefLabel ?org_name. \n FILTER (?org != ?coll)}" ;
+				}
 			}else{
-				query = query 	+ "?obs rdfs:about ?org . ?org skos:prefLabel ?org_name. \n FILTER (?coll != ?org)" ;
+				query = query 	+ "?obs rdfs:about ?org . ?org skos:prefLabel ?org_name. \n" ;
 			}
 			}
 		}
@@ -188,6 +192,7 @@
 		{
 			query = query 	+ "OPTIONAL {?obs rdfs:about ?org . ?org skos:prefLabel ?org_name. \n FILTER (?coll!=?org) }" ;
 		}
+
 		query = query + "}";
 		var group_by = ""
 		if (college_divide) {group_by = group_by + "?coll ?coll_name ";}
