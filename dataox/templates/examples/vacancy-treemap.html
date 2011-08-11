@@ -209,11 +209,14 @@
 								if (data.head == undefined) data = $.parseJSON(data);
 								if (data.results.bindings != undefined) {data.results = data.results.bindings}
 							
-		
+		                                                if (data.results.length  > 0){
 								for (i in data.results)
 								{
 									binding = data.results[i];
 									joblist = $("#jobslist > tbody").html($("#jobslist > tbody").html() + "<tr style=\"border-width: 1 1 1 1\"><td width=500>" + binding.vac_title.value + "</td><td width=150 style=\"text-align:center;\"> Grade: "+ binding.vac_salary.value + "</td><td width=150 style=\"text-align:center;\">" + binding.vac_closing.value + "</td><td width=100 style=\"text-align:center;\">link</td></tr>");
+								}
+								}else{
+									$("#jobslist > tbody").html("<tr><td colspan=4>Please click on a individual department to view the vacancies within it.</td></tr>");
 								}
 								}
 							
@@ -303,7 +306,7 @@
 				/* ]]> */
 			</style>
 			<table width=920 id="jobslist" style="padding-left:5px;">
-				<tr><td colspan=4>Please click on a department to view the vacancies within it.</td></tr>
+				<tr><td colspan=4>Please click on an individual department to view the vacancies within it.</td></tr>
 			</table>
 		</div>
 
