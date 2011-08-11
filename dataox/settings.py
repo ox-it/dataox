@@ -11,6 +11,7 @@ INSTALLED_APPS += (
     'dataox.core',
     'dataox.resource',
     'humfrey.graphviz',
+    'openorg_timeseries',
 )
 
 ADMINS = (
@@ -19,6 +20,10 @@ ADMINS = (
 
 ROOT_URLCONF = 'dataox.urls.empty'
 MEDIA_ROOT = os.path.join(os.path.dirname(__file__), 'media')
+
+TIMESERIES_PATH = relative_path(config.get('timeseries:path'))
+
+MEDIA_URL = 'http://data.ox.ac.uk/site-media/'
 
 ROOT_HOSTCONF = 'dataox.hosts'
 DEFAULT_HOST = 'empty'
