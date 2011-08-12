@@ -1,32 +1,31 @@
 from __future__ import division
 
+from django_conneg.views import HTMLView
 
+from humfrey.utils.views import CachedView
 from humfrey.linkeddata.views import RDFView, ResultSetView
 from humfrey.utils.namespaces import NS
 from humfrey.utils.resource import Resource
-from humfrey.utils.views import BaseView
-from humfrey.utils.cache import cached_view
 
-class DatasetView(RDFView):
+class DatasetView(RDFView, HTMLView, CachedView):
     _QUERY = """
         DESCRIBE ?dataset ?license ?publisher WHERE {
             ?dataset a void:Dataset ;
                      dcterms:license ?license ;
                      dcterms:publisher ?publisher .
         }"""
-        
-    def initial_context(self, request):
+
+    def get(self, request):
         graph = self.endpoint.query(self._QUERY)
         datasets = graph.subjects(NS['rdf'].type, NS['void'].Dataset)
         datasets = [Resource(uri, graph, self.endpoint) for uri in datasets]
         datasets.sort(key=lambda ds:unicode(ds.label))
-        return {
+
+        context = {
             'graph': graph,
             'datasets': datasets,
         }
-    
-    @cached_view
-    def handle_GET(self, request, context):
+
         return self.render(request, context, 'datasets')
 
 EXAMPLES = (
@@ -43,33 +42,27 @@ EXAMPLES = (
      'description': 'The distribution of job vacancies across the University.'},
 )
 
-class ExploreView(BaseView):
-    def initial_context(self, request):
-        return {
+class ExploreView(HTMLView, CachedView):
+    def get(self, request):
+        context = {
             'examples': EXAMPLES,
         }
-
-    @cached_view
-    def handle_GET(self, request, context):
         return self.render(request, context, 'explore')
 
-
-class ExampleResourceView(ResultSetView):
+class ExampleResourceView(ResultSetView, HTMLView, CachedView):
     _QUERY = """
         SELECT ?resource ?dataset WHERE {
             ?dataset void:exampleResource ?resource .
         } ORDER BY ?dataset ?resource"""
 
-    def initial_context(self, request):
-        return {
+    def get(self, request):
+        context = {
             'results': self.endpoint.query(self._QUERY),
         }
 
-    @cached_view
-    def handle_GET(self, request, context):
         return self.render(request, context, 'explore-resource')
 
-class ExampleQueryView(ResultSetView):
+class ExampleQueryView(ResultSetView, HTMLView, CachedView):
     _QUERY = """
         SELECT ?dataset ?value ?label ?comment WHERE {
             ?dataset oo:exampleQuery [
@@ -77,23 +70,21 @@ class ExampleQueryView(ResultSetView):
                 rdfs:label ?label ;
                 rdfs:comment ?comment ]
         }"""
-    def initial_context(self, request):
-        return {
+
+    def get(self, request):
+        context = {
             'results': self.endpoint.query(self._QUERY),
         }
-    @cached_view
-    def handle_GET(self, request, context):
+
         return self.render(request, context, 'explore-query') 
 
-class ExampleDetailView(BaseView):
-    @cached_view
-    def handle_GET(self, request, context, slug):
-        return self.render(request, context, 'examples/%s' % slug)
+class ExampleDetailView(HTMLView, CachedView):
+    def get(self, request, slug):
+        return self.render(request, {}, 'examples/%s' % slug)
 
-class ForbiddenView(BaseView):
-    @cached_view
-    def handle_GET(self, request, context):
-        context['status_code'] = 403
+class ForbiddenView(HTMLView, CachedView):
+    def get(self, request):
+        context = {
+            'status_code': 403,
+        }
         return self.render(request, context, 'forbidden')
-
-        

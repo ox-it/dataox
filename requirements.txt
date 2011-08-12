@@ -1,2 +1,3 @@
 -e git://github.com/oucs/dataox.git
 feedparser
+django-conneg>=1.1.2
