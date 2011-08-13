@@ -8,6 +8,7 @@ GRAPH_URL = 'http://localhost:3030/dataset/data'
 SERVED_DOMAINS = ('data.ox.ac.uk',)
 
 INSTALLED_APPS += (
+    'humfrey.longliving',
     'dataox.core',
     'dataox.resource',
     'humfrey.graphviz',
