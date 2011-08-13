@@ -41,8 +41,8 @@ urlpatterns = patterns('',
     (r'^graphviz/$', GraphVizView.as_view(), {}, 'graphviz'),
 )
 
-handler404 = SimpleView(template_name='404-main', context={'status_code':404})
-handler500 = SimpleView(template_name='500', context={'status_code':500})
+handler404 = SimpleView.as_view(template_name='404-main', context={'status_code':404})
+handler500 = SimpleView.as_view(template_name='500', context={'status_code':500})
 
 if settings.DEBUG:
     urlpatterns += patterns('',
