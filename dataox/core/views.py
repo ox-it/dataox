@@ -3,7 +3,7 @@ from __future__ import division
 from django_conneg.views import HTMLView
 
 from humfrey.utils.views import CachedView
-from humfrey.linkeddata.views import RDFView, ResultSetView
+from humfrey.results.views.standard import RDFView, ResultSetView
 from humfrey.utils.namespaces import NS
 from humfrey.utils.resource import Resource
 
