@@ -234,3 +234,11 @@ hr {
 .badges img {
 	margin:2px;
 }
+
+ul.used-query-list {
+    list-style: none;
+}
+
+li.used-query code {
+    white-space: pre;
+}
