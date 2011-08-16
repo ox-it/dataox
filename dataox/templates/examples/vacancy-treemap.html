@@ -198,7 +198,7 @@
 				document.getElementById("jobslist").deleteRow(i -1);
 			}
 			
-			$("#jobslist > tbody").html("<tr><td width=500><b>Jobs in " + department_name.replace(' ', '&nbsp;') + "</b></td><td width=150 style=\"text-align:center;\"><b>Salary</b></td><td width=150 style=\"text-align:center;\"><b>Closing Date</b></td><td width=100></td></tr>");
+			$("#jobslist > tbody").html("<tr><td width=500><b>Jobs in " + department_name.replace(' ', '&nbsp;') + "</b></td><td width=150 style=\"text-align:center;\"><b>Salary</b></td><td width=150 style=\"text-align:center;\"><b>Closing Date</b></td></tr>");
 			
 			q = deptQuery.replace("DEPARTMENT", department_name);
 					$.ajax({async: false,
@@ -209,23 +209,31 @@
 								if (data.results.bindings != undefined) {data.results = data.results.bindings}
 							
 		                                                if (data.results.length  > 0){
-								for (i in data.results)
-								{
-									binding = data.results[i];
-									
-									joblist = $("#jobslist > tbody").html($("#jobslist > tbody").html() + "<tr style=\"border-width: 1 1 1 1\"><td width=500>" + binding.vac_title.value + "</td><td width=150 style=\"text-align:center;\">");
-									if (binding.vac_salary):
-										$("#jobslist > tbody").html($("#jobslist > tbody").html() + " Grade: "+ binding.vac_salary.value);
-									else:
-										$("#jobslist > tbody").html($("#jobslist > tbody").html()  + "</td><td width=150 style=\"text-align:center;\">");
-									$("#jobslist > tbody").html($("#jobslist > tbody").html()  + binding.vac_closing.value + "</td><td width=100 style=\"text-align:center;\">link</td></tr>");
-								}
+
+                                                                for (i in data.results)
+                                                                {
+                                                                        binding = data.results[i];
+
+                                                                        var jobRow = "<tr style=\"border-width: 1 1 1 1\"><td width=500>" + binding.vac_title.value + "</td><td width=150 style=\"text-align:center;\">";
+                                                                        if (binding.vac_salary != undefined)
+                                                                        {
+                                                                                jobRow = jobRow  + " Grade: "+ binding.vac_salary.value;
+                                                                        }
+									jobRow = jobRow + "</td><td width=150 style=\"text-align:center;\">";
+
+                                                                        if (binding.vac_closing != undefined){
+                                                                                jobRow = jobRow  + binding.vac_closing.value;
+                                                                        }
+                                                                        jobRow  + "</td><td width=100 style=\"text-align:center;\">link</td></tr>";
+                                                                        $("#jobslist > tbody").html($("#jobslist > tbody").html() + jobRow);
+                                                                }
+
 								}else{
 									$("#jobslist > tbody").html("<tr><td colspan=4>Please click on a individual department to view the vacancies within it.</td></tr>");
 								}
-								}
+								
 							
-							} );
+							}} );
 				
 		}
 		
