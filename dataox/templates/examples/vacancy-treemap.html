@@ -31,7 +31,8 @@
 		var deptQuery = "PREFIX vacancy: <http://purl.org/openorg/vacancy/>"
 						+ "SELECT ?vac_title ?vac_desc ?vac_salary ?vac_closing ?vac_link WHERE {"
 						  + "?vac a vacancy:Vacancy ."
-						  + "?vac rdfs:label ?vac_title ."						  
+						  + "?vac rdfs:label ?vac_title ."
+						  + "?vac vacancy:description ?vac_desc ."
 						  + "OPTIONAL {?vac vacancy:description ?vac_desc . }"
 						  + "OPTIONAL {?vac vacancy:salary_grade ?vac_salary . }"
 						  + "OPTIONAL {?vac vacancy:closingDate ?vac_closing . }"
@@ -211,7 +212,13 @@
 								for (i in data.results)
 								{
 									binding = data.results[i];
-									joblist = $("#jobslist > tbody").html($("#jobslist > tbody").html() + "<tr style=\"border-width: 1 1 1 1\"><td width=500>" + binding.vac_title.value + "</td><td width=150 style=\"text-align:center;\"> Grade: "+ binding.vac_salary.value + "</td><td width=150 style=\"text-align:center;\">" + binding.vac_closing.value + "</td><td width=100 style=\"text-align:center;\">link</td></tr>");
+									
+									joblist = $("#jobslist > tbody").html($("#jobslist > tbody").html() + "<tr style=\"border-width: 1 1 1 1\"><td width=500>" + binding.vac_title.value + "</td><td width=150 style=\"text-align:center;\">");
+									if (binding.vac_salary):
+										$("#jobslist > tbody").html($("#jobslist > tbody").html() + " Grade: "+ binding.vac_salary.value);
+									else:
+										$("#jobslist > tbody").html($("#jobslist > tbody").html()  + "</td><td width=150 style=\"text-align:center;\">");
+									$("#jobslist > tbody").html($("#jobslist > tbody").html()  + binding.vac_closing.value + "</td><td width=100 style=\"text-align:center;\">link</td></tr>");
 								}
 								}else{
 									$("#jobslist > tbody").html("<tr><td colspan=4>Please click on a individual department to view the vacancies within it.</td></tr>");
