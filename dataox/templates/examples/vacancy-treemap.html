@@ -41,7 +41,7 @@
 						+ "} ORDER BY ASC(?vac_closing)" ;
 		
 		$(function() {
-      $.get('http://127.0.0.1:8000/sparql/', 
+      $.get('http://data.ox.ac.uk/sparql/', 
 	        {format: 'srj', query: query, datatype: 'json', common_prefixes: 'on',}, 
 			function(data) {
         

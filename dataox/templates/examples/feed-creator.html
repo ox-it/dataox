@@ -20,7 +20,7 @@
 						
 		$(function() {
 			$.ajax({async: false,
-					url:'http://127.0.0.1:8000/sparql/',
+					url:'http://data.ox.ac.uk/sparql/',
 					data: {format: 'srj', query: deptQuery, datatype: 'json', common_prefixes: 'on',},
 					success: addDepts})});
 					
