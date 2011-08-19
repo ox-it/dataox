@@ -41,8 +41,8 @@ EXAMPLES = (
      'name': 'Vacancy Treemap',
      'description': 'The distribution of job vacancies across the University.'},
 	{'slug': 'bodcardbrowser',
-     'name': 'Bod Card Explorer',
-     'description': 'A tool for exploring statistics about the Oxford\'s bod (university) cards.'},
+     'name': 'University Card Statistics Explorer',
+     'description': 'A tool for exploring monthly statistics about the Oxford\'s University (Bod) Cards.'},
 )
 
 class ExploreView(HTMLView, CachedView):
