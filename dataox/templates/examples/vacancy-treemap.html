@@ -41,7 +41,7 @@
 						+ "} ORDER BY ASC(?vac_closing)" ;
 		
 		$(function() {
-      $.get('http://data.ox.ac.uk/sparql/', 
+      $.get('http://127.0.0.1:8000/sparql/', 
 	        {format: 'srj', query: query, datatype: 'json', common_prefixes: 'on',}, 
 			function(data) {
         
@@ -65,7 +65,7 @@
 			if (uri in window.parentsadded) {} else{
 					
 			$.ajax({async: false,
-			        url:'http://data.ox.ac.uk/sparql/', 
+			        url:'http://127.0.0.1:8000/sparql/', 
 					data: {format: 'srj', query: parentquery, datatype: 'json', common_prefixes: 'on',}, 
 					success: function(data) {
 								if (data.head == undefined) data = $.parseJSON(data);
@@ -202,7 +202,7 @@
 			
 			q = deptQuery.replace("DEPARTMENT", department_name);
 					$.ajax({async: false,
-			        url:'http://data.ox.ac.uk/sparql/', 
+			        url:'http://127.0.0.1:8000/sparql/', 
 					data: {format: 'srj', query: q, datatype: 'json', common_prefixes: 'on',}, 
 					success: function(data) {
 								if (data.head == undefined) data = $.parseJSON(data);

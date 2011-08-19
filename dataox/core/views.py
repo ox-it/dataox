@@ -40,9 +40,12 @@ EXAMPLES = (
     {'slug': 'vacancy-treemap',
      'name': 'Vacancy Treemap',
      'description': 'The distribution of job vacancies across the University.'},
-	{'slug': 'bodcardbrowser',
-     'name': 'University Card Statistics Explorer',
-     'description': 'A tool for exploring monthly statistics about the Oxford\'s University (Bod) Cards.'},
+	{'slug': 'unicard-explorer',
+     'name': 'University Card Explorer',
+     'description': 'A tool for exploring statistics about the Oxford\'s bod (university) cards.'},
+    {'slug': 'feed-creator',
+     'name': 'Feed Creator',
+     'description': 'Create your own feed (eg RSS, Atom) of data in data.ox!'},
 )
 
 class ExploreView(HTMLView, CachedView):

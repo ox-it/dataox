@@ -1,0 +1,356 @@
+{% extends "base.html" %}
+
+{% block title %}University Card Statistics Explorer{% endblock %}
+
+{% block extrahead %}
+	<script src="http://code.jquery.com/jquery-1.5.min.js" type="application/javascript"></script>
+    <script type="text/javascript" src="https://www.google.com/jsapi"></script>
+    <script type="text/javascript">
+			
+	  google.load('visualization', '1', {packages: ['table']});
+	  google.load('visualization', '1', {packages: ['corechart']});
+	  
+      google.setOnLoadCallback(loadDataBlank);
+      
+	  var collegeQuery = "SELECT DISTINCT ?coll ?coll_name WHERE {"
+							+ "{?coll a oxp:College . "
+							+ "?coll skos:prefLabel ?coll_name .}"
+							+ "UNION {?coll a oxp:Hall . ?coll skos:prefLabel ?coll_name .}"
+							+ "} ORDER BY ?coll_name" ;
+	  
+	  var deptQuery = "SELECT DISTINCT ?org ?org_name WHERE {"
+							+ "?org_type rdfs:subClassOf* org:Organization ."
+							+ "?org rdf:type ?org_type ; skos:prefLabel ?org_name ."
+
+							+ "} ORDER BY ?org_name" ;
+	  
+	  var dateQuery = "PREFIX sdmxdim: <http://purl.org/linked-data/sdmx/2009/dimension#>"
+						+ "SELECT DISTINCT ?date WHERE"
+						+ "{?reading qb:dataset <http://data.ox.ac.uk/id/dataset/bodcards> ."
+						+ "?reading sdmxdim:timePeriod ?date . }"
+	  
+	  $(function() {
+	  $.ajax({async: false,
+					url:'http://data.ox.ac.uk/sparql/',
+					data: {format: 'srj', query: collegeQuery, datatype: 'json', common_prefixes: 'on',},
+					success: addColleges})});
+	 	   
+	  function addColleges(data) {
+	    if (data.head == undefined) data = $.parseJSON(data);
+		if (data.results.bindings != undefined) {data.results = data.results.bindings}	
+        var a = 1;
+		var select = $('#college_id');
+		for (i in data.results) {
+          var binding = data.results[i];
+          select.append($('<option/>').val(binding.coll.value).text(binding.coll_name.value));
+        }
+		select.change(update);
+      };
+	    
+	  $(function() {
+	  $.ajax({async: false,
+					url:'http://data.ox.ac.uk/sparql/',
+					data: {format: 'srj', query: deptQuery, datatype: 'json', common_prefixes: 'on',},
+					success: addDepts})});
+					
+	  function addDepts(data) {
+	    if (data.head == undefined) data = $.parseJSON(data);
+		if (data.results.bindings != undefined) {data.results = data.results.bindings}	
+        var a = 1;
+		var select = $('#department_id');
+		for (i in data.results) {
+          var binding = data.results[i];
+          select.append($('<option/>').val(binding.org.value).text(binding.org_name.value));
+        }
+		select.change(update);
+      };
+
+	  
+	  $(function() {
+	  $.ajax({async: false,
+					url:'http://data.ox.ac.uk/sparql/',
+					data: {format: 'srj', query: dateQuery, datatype: 'json', common_prefixes: 'on',},
+					success: addDates})});
+					
+	  function addDates(data) {
+	    if (data.head == undefined) data = $.parseJSON(data);
+		if (data.results.bindings != undefined) {data.results = data.results.bindings}	
+        var a = 1;
+		var select = $('#date_id');
+		for (i in data.results) {
+          var binding = data.results[i];
+          select.append($('<option/>').val(binding.date.value).text(binding.date.value));
+        }
+		select.change(update);
+      };
+	  
+	  
+	  
+	  
+	  function update(e) {
+
+      college = $('#college_id').val();
+      department = $('#department_id').val();
+	  
+	  college_divide = $('#colldivide').is(':checked');
+	  department_divide = $('#deptdivide').is(':checked');
+	  
+	  if (!college_divide)
+	  {
+		document.getElementById("college_id").value = "";
+		document.getElementById("college_id").disabled = true;
+	  }else{
+		document.getElementById("college_id").disabled = false;
+	  }
+	  if (!department_divide)
+	  {
+		document.getElementById("department_id").value = "";
+		document.getElementById("department_id").disabled = true;
+	  }else{
+		document.getElementById("department_id").disabled = false;
+	  }
+	  
+	  //if ((college_divide || department_divide) && (!(college && department) || (!college  !department)))
+	  if ((!college_divide && !department_divide) || 
+		 (department_divide && !department && !college_divide) ||
+		 (college_divide && !college && !department_divide) ||
+		 (college_divide && department_divide && (!(college && department) && ! (!college && !department))))	 
+		{
+			document.getElementById("bar").disabled = false;
+			document.getElementById("pie").disabled = false;
+		}else{
+			document.getElementById("bar").disabled = true;
+			document.getElementById("pie").disabled = true;	
+			document.getElementById("spreadsheet").checked = true;
+		}
+	  
+      graph = document.getElementById('graph');
+	  graph.innerHTML = "<div style=\"text-align:center; width:100%; height:100px;\"><br/><br/><img src=\"/site-media/loader.gif\"/></div>";
+
+	  var date = document.getElementById("date_id").options[document.getElementById("date_id").selectedIndex].value ;
+      loadData(college, department, college_divide, department_divide, date);
+
+	  }
+	  
+	  function loadDataBlank(){
+			var date = document.getElementById("date_id").options[document.getElementById("date_id").selectedIndex].value ;
+			loadData("","", true, false, date);
+	  }
+	  
+      function loadData(college, department, college_divide, department_divide, date) {
+	  
+		var query = "PREFIX sdmxmeasure: <http://purl.org/linked-data/sdmx/2009/measure#>\n" 
+			+ "PREFIX sdmxdimension: <http://purl.org/linked-data/sdmx/2009/dimension#>\n"
+			+ "SELECT ?org ?org_name ?coll ?coll_name (SUM(?org_card_count) as ?card_count) WHERE \n{\n" 
+			+ "GRAPH <http://data.ox.ac.uk/graph/bodcards>\n {\n"
+			+ "?obs sdmxmeasure:obsValue ?org_card_count .\n"
+		    + "?obs sdmxdimension:timePeriod \"" ;
+		query = query + date;
+		query = query + "\"^^xsd:gYearMonth .}\n" ;
+
+		if (college_divide)
+		{
+			if (department && department_divide)
+			{ 
+				if (college)
+				{
+				query = query + "\n \n?obs rdfs:about ?coll . {?coll a oxp:College}UNION{?coll a oxp:Hall}. ?coll skos:prefLabel ?coll_name . \n\n";
+				}else{
+				query = query + "\n OPTIONAL {\n?obs rdfs:about ?coll . {?coll a oxp:College}UNION{?coll a oxp:Hall}. ?coll skos:prefLabel ?coll_name . \n\n}";
+				}	
+			}
+			else
+			{
+				query = query + "\n?obs rdfs:about ?coll . {?coll a oxp:College}UNION{?coll a oxp:Hall}. ?coll skos:prefLabel ?coll_name . \n\n" ;
+			}
+			
+			if  (college) { query = query + "FILTER (?coll = <" + college + ">)\n" }
+		}
+		else
+		{
+			query = query + "\nOPTIONAL \n{\n?obs rdfs:about ?coll . {?coll a oxp:College}UNION{?coll a oxp:Hall}. ?coll skos:prefLabel ?coll_name FILTER (!bound(?coll) || !bound(?org) || ?coll!=?org) . \n}\n" ;
+		}
+
+		if (department_divide)
+		{
+			if (department){
+			query = query 	+ "{?obs rdfs:about ?org . ?org skos:prefLabel ?org_name. \n" ;
+			query = query + "\nFILTER (?org = <" + department + ">)\n}" ;
+			}else{
+			if (college_divide){
+				if (college){
+					query = query 	+ "OPTIONAL{?obs rdfs:about ?org . ?org skos:prefLabel ?org_name. \n FILTER (?org != ?coll)}" ;
+				}else{
+					query = query 	+ "OPTIONAL{?obs rdfs:about ?org . ?org skos:prefLabel ?org_name. \n FILTER (?org != ?coll)}" ;
+				}
+			}else{
+				query = query 	+ "?obs rdfs:about ?org . ?org skos:prefLabel ?org_name. \n" ;
+			}
+			}
+		}
+		else
+		{
+			query = query 	+ "OPTIONAL {?obs rdfs:about ?org . ?org skos:prefLabel ?org_name. \n FILTER (?coll!=?org) }" ;
+		}
+
+		query = query + "}";
+		var group_by = ""
+		if (college_divide) {group_by = group_by + "?coll ?coll_name ";}
+		if (department_divide) {group_by = group_by + "?org ?org_name ";}
+	    
+		if (group_by != "")
+			query = query + " GROUP BY" + group_by ;
+		query = query + "ORDER BY DESC(?card_count)"
+
+		window.googledata = new google.visualization.DataTable();
+	    window.googledata.addColumn('string', 'Department');
+		window.googledata.addColumn('string', 'College');
+        window.googledata.addColumn('number', 'Bod Cards');
+		  
+          // Create and populate the data table.
+		
+		$(function() {
+      $.get('http://data.ox.ac.uk/sparql/', 
+	        {format: 'srj', query: query, datatype: 'json', common_prefixes: 'on',}, 
+			function(data) {
+        
+		if (data.head == undefined) data = $.parseJSON(data);
+		if (data.results.bindings != undefined) {data.results = data.results.bindings}	
+		if (data.results[0].card_count) {
+			for (i in data.results) {
+			  var binding = data.results[i];
+			  coll_name = "None/Unrecognised"
+			  org_name = "None/Unrecognised"
+			  if (binding.coll_name)
+				coll_name = binding.coll_name.value;
+			  if (binding.org_name)
+				org_name = binding.org_name.value;
+				
+			  if (!college_divide)
+				coll_name = "Any" ;
+			  if (!department_divide)
+				org_name = "Any" ;
+			  
+			  window.googledata.addRows([[ org_name, coll_name, parseInt(binding.card_count.value)]]);
+			}	
+		} 
+		
+		
+		graph = $("input[name=graphtype]:checked").val()
+		if (graph == "spreadsheet"){
+			var table1 = new google.visualization.Table(document.getElementById('graph'));
+			table1.draw(window.googledata, null);
+			 $('.google-visualization-table-th:contains(Department)').css('width', 300);
+			 $('.google-visualization-table-th:contains(College)').css('width', 300);
+			 $('.google-visualization-table-th:contains(Bod)').css('width', 100);
+		}
+		else {
+			var dataView = new google.visualization.DataView(window.googledata);
+			if (college_divide && department_divide)
+				if (college == "")
+					dataView.setColumns([1, 2]);
+				if (department == "")
+					dataView.setColumns([0,2]);
+			if (department_divide && !college_divide)
+				dataView.setColumns([0, 2]);	
+			if (!department_divide && college_divide)
+				dataView.setColumns([1, 2]);					
+			if (graph == "pie")
+			{
+				piechart = new google.visualization.PieChart(document.getElementById('graph'));
+				piechart.draw(dataView, {width:700, height:500});
+			}else if (graph="bar")
+			{
+			 barchart = new google.visualization.ColumnChart(document.getElementById('graph'));
+			 barchart.draw(dataView, {width: 700, height: 500, legend:'none', hAxis: {textPosition:'none'}});
+			}
+		}
+      });
+    });		
+      }
+    </script>
+  <style type="text/css">
+    ul#units, div#map, section#details {
+      display: block;
+      border:1px solid #aaa;
+      margin-top:0;
+    }
+    ul#units {
+      margin-left:1em;
+    }
+    ul#units li ul {
+      padding-left:2em;
+      list-style:none;
+    }
+    ul#units li {
+      padding:0 2px;
+    }
+    ul#units li.highlight {
+      color:#fff;
+      background-color:#00f;
+    }
+    p#description {
+      margin-top:0;
+      font-size: 10pt;
+    }
+    h1 {
+      margin-bottom: 0;
+    }
+    
+    #loading {
+      padding:4em;
+      margin:4em;
+      text-align:center;
+      font-size:30px;
+      
+    }
+  </style>
+{% endblock %}
+
+{% block body %}
+  
+  <article>
+    <h1>University Card Statistics Explorer</h1>
+       <br/>
+    <div id="measures" style="width:750px;">
+		<table style="width:100%;">
+			<tr><td rowspan=2>Divide by</td>
+				<td><input type="checkbox" onChange="update()" id="colldivide" checked >College:</td>
+				<td>
+					<select id="college_id">
+						<option value="">Show All</option>
+					</select>
+				</td>
+			</tr>
+			<tr><td><input type="checkbox" onChange="update()" id="deptdivide" >Department:</td>
+				<td>
+					<select id="department_id" disabled>
+						<option value="">Show All</option>
+					</select>
+				</td>
+			</tr> 
+			<tr><td colspan=2>Date:</td>
+				<td style="width:515px;">
+					<select id="date_id" onChange="update()">
+					</select>
+				</td>
+			</tr> 
+			<tr><td colspan=2>View as:</td>
+				<td><input type="radio" onChange="update()" name="graphtype" id="spreadsheet" value="spreadsheet" checked="checked"> Spreadsheet
+					<input type="radio" onChange="update()" name="graphtype" id="pie" value="pie" > Pie Chart
+					<input type="radio" onChange="update()" name="graphtype" id = "bar" value="bar"> Bar Chart
+				</td>
+			</tr>
+		</table>
+	<br/>
+     </div>
+     <div id="graph"><div style="text-align:center; width:100%; height:100px;"><br/><br/><img src="/site-media/loader.gif"/></div></div>
+
+		<section id="details" style="clear:both; padding:1em; margin-top:1em">
+			<h2>Details</h2> 
+		  <p>This is a tool for easily accessing the University of Oxford's university card statistics stored in data.ox.</p>
+                  <p>Each university card is associated with at most one department (eg 'Department of Physics') and at most one college (eg 'Oriel College'). This tool allows you to browse our bod card data by filtering by department and/or by college.</p>
+		  <p>Please note that undergraduates' bod cards are generally only associated with a college and not with a department- this is why colleges colleges have a lot of bod cards with an 'None/Unrecognised' department.</p>
+		</section>
+  </article>
+{% endblock %}
