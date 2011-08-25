@@ -1,0 +1,115 @@
+{% extends "base.html" %}
+
+{% block title %}Feed Generator{% endblock %}
+
+{% block extrahead %}
+	<script src="http://code.jquery.com/jquery-1.5.min.js" type="application/javascript"></script>
+    <script type="text/javascript" src="https://www.google.com/jsapi"></script>
+    <script type="text/javascript">
+		var deptQuery = "SELECT DISTINCT ?org ?org_name WHERE {"
+						+ "?org_type rdfs:subClassOf* org:Organization ."
+						+ "?org rdf:type ?org_type ; skos:prefLabel ?org_name ."
+
+						+ "} ORDER BY ?org_name" ;
+						
+		var vacancyQuery =  "PREFIX vacancy: <http://purl.org/openorg/vacancy/>"
+							+ "DESCRIBE ?vac WHERE"
+							+ "{?vac a vacancy:Vacancy . "
+							+ "?vac vacancy:within <DEPARTMENT>. "
+							+ "}"
+						
+		$(function() {
+			$.ajax({async: false,
+					url:'http://data.ox.ac.uk/sparql/',
+					data: {format: 'srj', query: deptQuery, datatype: 'json', common_prefixes: 'on',},
+					success: addDepts})});
+					
+		function addDepts(data) {
+			if (data.head == undefined) data = $.parseJSON(data);
+			if (data.results.bindings != undefined) {data.results = data.results.bindings}	
+			var select = $('#vacancyDepartments');
+			for (i in data.results) {select.append($('<option/>').val(data.results[i].org.value).text(data.results[i].org_name.value));}
+			select.change(update);
+		};
+		
+		var baseVacancyResultHTML = "<table>"
+								+ "<tr><td><img src=\"/site-media/rss.png\" /></td>"
+								+ "<td>Please select which feed you would like: <a href=\"RSS09URL\">RSS0.9</a>, <a href=\"RSS201URL\">RSS2.01</a>, <a href=\"ATOMURL\">Atom</a></td>"
+								+ "</tr></table>"
+								
+		function updateVacancyFeeds() {
+			$("#vacancyResults").html("<img src=\"/site-media/loader.gif\"/>");
+			var department = $('#vacancyDepartments').val();
+			var department_name = $('#vacancyDepartments option:selected').text();
+			var query = vacancyQuery.replace("DEPARTMENT", department);
+			var base_url = "http://data.ox.ac.uk/sparql/";
+			var parameters = {query: query, format: 'rss2', common_prefixes: 'on',feeddescription: "as found on Oxford's Recruitment website (www.recruit.ox.ac.uk) and Jobs.ac.uk", feedtitle: "Vacancies within " + department_name };
+			var vacancyResultHTML = baseVacancyResultHTML.replace("RSS201URL", base_url + "?" + $.param(parameters));
+			parameters['format'] = 'atom';
+			vacancyResultHTML = vacancyResultHTML.replace("ATOMURL", base_url + "?" + $.param(parameters));
+			parameters['format'] = 'rss1';
+			vacancyResultHTML = vacancyResultHTML.replace("RSS09URL", base_url + "?" + $.param(parameters));
+			$("#vacancyResults").html(vacancyResultHTML);
+		}
+    </script>
+
+  <style type="text/css">
+    ul#units, div#map, section#details {
+      display: block;
+      border:1px solid #aaa;
+      margin-top:0;
+    }
+    ul#units {
+      margin-left:1em;
+    }
+    ul#units li ul {
+      padding-left:2em;
+      list-style:none;
+    }
+    ul#units li {
+      padding:0 2px;
+    }
+    ul#units li.highlight {
+      color:#fff;
+      background-color:#00f;
+    }
+    p#description {
+      margin-top:0;
+      font-size: 10pt;
+    }
+    h1 {
+      margin-bottom: 0;
+    }
+    
+    #loading {
+      padding:4em;
+      margin:4em;
+      text-align:center;
+      font-size:30px;
+      
+    }
+  </style>
+{% endblock %}
+
+{% block body %}
+  
+  <article>
+    <h1>Feed Generator</h1>
+    
+		<p>This tool allows you to create RSS feeds of data in data.ox.</p>
+		
+
+    
+    <section id="details" style="clear:both; padding:1em; margin-top:1em">
+		<h2>Vacancies</h2><br/>
+		I would like a feed describing the vacancies within: 
+			<select id="vacancyDepartments" onChange="updateVacancyFeeds()">
+			<option></option>
+			</select> 	<br/><br />
+			<div id="vacancyResults">
+				
+			</div>
+    </section>
+    
+  </article>
+{% endblock %}
