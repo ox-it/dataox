@@ -29,13 +29,15 @@
 			+ "} GROUP BY ?dept ?parent ?dept_name ?parent_name"
 		
 		var deptQuery = "PREFIX vacancy: <http://purl.org/openorg/vacancy/>"
-						+ "SELECT ?vac_title ?vac_desc ?vac_salary ?vac_closing ?vac_link WHERE {"
+						+ "SELECT ?vac_title ?vac_desc ?vac_salary_lower ?vac_salary_upper ?vac_closing ?vac_link WHERE {"
 						  + "?vac a vacancy:Vacancy ."
 						  + "?vac rdfs:label ?vac_title ."
 						  + "?vac vacancy:description ?vac_desc ."
 						  + "OPTIONAL {?vac vacancy:description ?vac_desc . }"
-						  + "OPTIONAL {?vac vacancy:salary_grade ?vac_salary . }"
 						  + "OPTIONAL {?vac vacancy:closingDate ?vac_closing . }"
+						  + "OPTIONAL {?vac vacancy:salaryLower ?vac_salary_lower . }"
+						  +	"OPTIONAL {?vac vacancy:salaryUpper ?vac_salary_upper . }"
+						  + "OPTIONAL {?vac rdfs:seeAlso ?vac_link . }"
 						  + "?vac vacancy:within ?org ."
 						  + "?org skos:prefLabel \"DEPARTMENT\"^^xsd:string ."
 						+ "} ORDER BY ASC(?vac_closing)" ;
@@ -198,7 +200,7 @@
 				document.getElementById("jobslist").deleteRow(i -1);
 			}
 			
-			$("#jobslist > tbody").html("<tr><td width=500><b>Jobs in " + department_name.replace(' ', '&nbsp;') + "</b></td><td width=150 style=\"text-align:center;\"><b>Salary</b></td><td width=150 style=\"text-align:center;\"><b>Closing Date</b></td></tr>");
+			$("#jobslist > thead").html("<tr><td width=500><b>Jobs in " + department_name.replace(' ', '&nbsp;') + "</b></td><td width=150 style=\"text-align:center;\"><b>Salary</b></td><td width=150 style=\"text-align:center;\"><b>Closing Date</b></td></tr>");
 			
 			q = deptQuery.replace("DEPARTMENT", department_name);
 					$.ajax({async: false,
@@ -213,11 +215,19 @@
                                                                 for (i in data.results)
                                                                 {
                                                                         binding = data.results[i];
-
-                                                                        var jobRow = "<tr style=\"border-width: 1 1 1 1\"><td width=500>" + binding.vac_title.value + "</td><td width=150 style=\"text-align:center;\">";
-                                                                        if (binding.vac_salary != undefined)
+																		var rowLink = ""
+																		if (binding.vac_link != undefined)
+																		{
+																			rowLink = "style=\"border-width: 1 1 1 1; cursor: pointer;\" onclick=\"window.location.href = '" + binding.vac_link.value + "'\"";
+																		}
+																		else
+																		{
+																			rowLink = " style=\"border-width: 1 1 1 1\"";
+																		}
+                                                                        var jobRow = "<tr " + rowLink + "><td width=500>" + binding.vac_title.value + "</td><td width=150 style=\"text-align:center;\">";
+                                                                        if (binding.vac_salary_lower != undefined && binding.vac_salary_upper)
                                                                         {
-                                                                                jobRow = jobRow  + " Grade: "+ binding.vac_salary.value;
+                                                                                jobRow = jobRow  + "&pound;" + binding.vac_salary_lower.value + " - " + "&pound;" + binding.vac_salary_upper.value ;
                                                                         }
 									jobRow = jobRow + "</td><td width=150 style=\"text-align:center;\">";
 
@@ -280,8 +290,23 @@
       margin:4em;
       text-align:center;
       font-size:30px;
-      
-    }
+	}
+	
+    table#jobslist tbody tr:hover {
+	background-color:#f66;
+	}
+	
+	table#jobslist, td
+	{
+		border-color: #666;
+		border-style: solid;
+	}
+
+	table#jobslist
+	{
+		background-color: #FFC;
+	}
+    
   </style>
 {% endblock %}
 
@@ -295,12 +320,6 @@
 			<style type="text/css">
 				/* <![CDATA[ */
 
-				table, td
-				{
-					border-color: #666;
-					border-style: solid;
-				}
-
 				table
 				{
 					border-width: 0 0 0px 0px;
@@ -313,13 +332,13 @@
 					margin: 0;
 					padding: 4px;
 					border-width: 2 0 2 0;
-					background-color: #FFC;
 				}
 
 				/* ]]> */
 			</style>
 			<table width=900 id="jobslist" style="padding-left:5px;">
-				<tr><td colspan=4>Please click on an individual department to view the vacancies within it.</td></tr>
+				<thead><tr><td colspan=4>Please click on an individual department to view the vacancies within it.</td></tr></thead>
+				<tbody></tbody>
 			</table>
 		</div>
 
@@ -328,6 +347,7 @@
       <p>This shows a breakdown (by department) of the vacancies currently available on the University of Oxford's <a href="http://www.recruit.ox.ac.uk">recruitment website</a> and/or <a href="http://www.jobs.ac.uk">www.jobs.ac.uk</a>.</p>
 	  <p>Left-click on a department to see the breakdown of vacancies within that department if it has any subdepartments. Right-click to move to its parent department.</p>
 	  <p>The Treemap is powered by the <a href="http://code.google.com/apis/chart/">Google Chart Tools</a>.</p>
+	  <p>Note: some RSS feeders (eg Outlook) convert URLs to lowercase before subscribing, yet URLs are case sensitive. In this situation, please use a service such as <a href="http://bit.ly">http://bit.ly</a> to change one of our links to a lower-case URL.</p>
     </section>
     
   </article>
