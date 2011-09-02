@@ -3,7 +3,7 @@
 {% block title %}Vacancy Treemap{% endblock %}
 
 {% block extrahead %}
-	<script src="http://code.jquery.com/jquery-1.5.min.js" type="application/javascript"></script>
+	<script src="http://code.jquery.com/jquery-1.5.min.js" type="text/javascript"></script>
     <script type="text/javascript" src="https://www.google.com/jsapi"></script>
       <script type="text/javascript">
 			
@@ -43,7 +43,7 @@
 						+ "} ORDER BY ASC(?vac_closing)" ;
 		
 		$(function() {
-      $.get('http://data.ox.ac.uk/sparql/', 
+      $.get('http://127.0.0.1:8000/sparql/', 
 	        {format: 'srj', query: query, datatype: 'json', common_prefixes: 'on',}, 
 			function(data) {
         
@@ -67,7 +67,7 @@
 			if (uri in window.parentsadded) {} else{
 					
 			$.ajax({async: false,
-			        url:'http://data.ox.ac.uk/sparql/', 
+			        url:'http://127.0.0.1:8000/sparql/', 
 					data: {format: 'srj', query: parentquery, datatype: 'json', common_prefixes: 'on',}, 
 					success: function(data) {
 								if (data.head == undefined) data = $.parseJSON(data);
@@ -106,11 +106,6 @@
         }
 	    for (i in data.results) {
           var binding = data.results[i];
-		  // if the entry is a parent the we add with *itself* as parent, otherwise we add it to its real parent 
-		  	if (binding.dept.value == "http://oxpoints.oucs.ox.ac.uk/id/23232740")
-			{
-				var a = 1;
-			}
 			
 		  if (binding.parent != undefined){
 			if (binding.dept.value in window.parentsadded){
@@ -200,11 +195,11 @@
 				document.getElementById("jobslist").deleteRow(i -1);
 			}
 			
-			$("#jobslist > thead").html("<tr><td width=500><b>Jobs in " + department_name.replace(' ', '&nbsp;') + "</b></td><td width=150 style=\"text-align:center;\"><b>Salary</b></td><td width=150 style=\"text-align:center;\"><b>Closing Date</b></td></tr>");
+			$("#jobslist > thead").html("<tr><td width=500><b>Jobs in " + (department_name).replace('A', '&#913;').replace(' ', '&nbsp;') + "</b></td><td width=150 style=\"text-align:center;\"><b>Salary</b></td><td width=150 style=\"text-align:center;\"><b>Closing Date</b></td></tr>");
 			
 			q = deptQuery.replace("DEPARTMENT", department_name);
 					$.ajax({async: false,
-			        url:'http://data.ox.ac.uk/sparql/', 
+			        url:'http://127.0.0.1:8000/sparql/', 
 					data: {format: 'srj', query: q, datatype: 'json', common_prefixes: 'on',}, 
 					success: function(data) {
 								if (data.head == undefined) data = $.parseJSON(data);
@@ -224,7 +219,7 @@
 																		{
 																			rowLink = " style=\"border-width: 1 1 1 1\"";
 																		}
-                                                                        var jobRow = "<tr " + rowLink + "><td width=500>" + binding.vac_title.value + "</td><td width=150 style=\"text-align:center;\">";
+                                                                        var jobRow = "<tr " + rowLink + "><td width=600>" + binding.vac_title.value + "</td><td width=150 style=\"text-align:center;\">";
                                                                         if (binding.vac_salary_lower != undefined && binding.vac_salary_upper)
                                                                         {
                                                                                 jobRow = jobRow  + "&pound;" + binding.vac_salary_lower.value + " - " + "&pound;" + binding.vac_salary_upper.value ;
