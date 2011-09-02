@@ -106,18 +106,22 @@
         }
 	    for (i in data.results) {
           var binding = data.results[i];
-			
+		  var deptName = binding.dept_name.value;
+			if (deptName.indexOf("Department of ") ==0)
+				deptName = deptName.substring("Department of ".length) + " (Department of)";	
+			if (deptName.indexOf("Faculty of ") ==0)
+				deptName = deptName.substring("Faculty of ".length) + " (Faculty of)";	
 		  if (binding.parent != undefined){
 			if (binding.dept.value in window.parentsadded){
 			window.googledata.addRows([
-				[ binding.dept_name.value + " (itself)",binding.dept_name.value,parseInt(binding.novacs.value),0]]);
+				[ deptName + " (itself)",binding.dept_name.value,parseInt(binding.novacs.value),0]]);
 			}else{
 			window.googledata.addRows([
-				[ binding.dept_name.value,binding.parent_name.value,parseInt(binding.novacs.value),0]]);
+				[deptName,binding.parent_name.value,parseInt(binding.novacs.value),0]]);
 			}
 		  }else{
 			window.googledata.addRows([
-				[ binding.dept_name.value,"Oxford",parseInt(binding.novacs.value),0]]);
+				[ deptName,"Oxford",parseInt(binding.novacs.value),0]]);
 		  }
         }	
 		
@@ -189,6 +193,11 @@
 		function selectHandler(e) {
 			department_name = window.googledata.getValue(window.tree.getSelection()[0].row,0);
 			department_name = department_name.replace(" (itself)", "");
+			if (department_name.indexOf("(Department of)") >= 0)
+				department_name = "Department of " + department_name.substring(0, department_name.length - "(Department of)".length-1);	
+			var x = deptName.indexOf("Faculty of ");
+			if (department_name.indexOf("(Faculty of)") >= 0)
+				department_name = "Faculty of " + department_name.substring(0, department_name.length - "(Faculty of)".length-1);	
 			// $("#department_text").html(dept);
 			for(var i = document.getElementById("jobslist").rows.length; i > 0;i--)
 			{
