@@ -3,10 +3,13 @@
 {% block title %}OpenMeters{% endblock %}
 
 {% block extrahead %}
-  <script src="http://code.jquery.com/jquery-1.5.min.js" type="application/javascript"></script>
+  <script src="http://code.jquery.com/jquery-1.5.min.js" type="text/javascript"></script>
   <script language="javascript" type="text/javascript" src="http://infodev.oucs.ox.ac.uk/openmeters/demo/jquery.flot.js"></script>
 
-  <script type="application/javascript">
+   <!--[if IE]><script src="excanvas.js"></script><![endif]-->
+
+
+  <script type="text/javascript">
     var measure_query  = "PREFIX meter: <http://purl.org/meter/>"
                        + "PREFIX oxp: <http://ns.ox.ac.uk/namespace/oxpoints/2009/02/owl#>"
                        + "PREFIX dc: <http://purl.org/dc/elements/1.1/>"
@@ -30,7 +33,7 @@
                       + "} ORDER BY ?ts";
 
     $(function() {
-      $.get('http://data.ox.ac.uk/sparql/', {
+      $.get('/sparql/', {
         format: 'srj',
         query: measure_query,
         dataType: 'json',
@@ -61,7 +64,7 @@
 
     function loadData(measure, interval) {
       $('#plot').html('<span id="loading">Loading&hellip;</span>')
-      $.get('http://data.ox.ac.uk/sparql/', {
+      $.get('/sparql/', {
         format: 'srj',
         query: reading_query.replace('INTERVAL', interval).replace('MEASURE', measure),
         dataType: 'json',
