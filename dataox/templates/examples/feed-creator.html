@@ -9,7 +9,6 @@
 		var deptQuery = "SELECT DISTINCT ?org ?org_name WHERE {"
 						+ "?org_type rdfs:subClassOf* org:Organization ."
 						+ "?org rdf:type ?org_type ; skos:prefLabel ?org_name ."
-
 						+ "} ORDER BY ?org_name" ;
 						
 		var vacancyQuery =  "PREFIX vacancy: <http://purl.org/openorg/vacancy/>"
@@ -17,10 +16,16 @@
 							+ "{?vac a vacancy:Vacancy . "
 							+ "?vac vacancy:within <DEPARTMENT>. "
 							+ "}"
-						
+							
+		var vacancySubDeptQuery = "PREFIX vacancy: <http://purl.org/openorg/vacancy/>"
+									+ "DESCRIBE ?vac WHERE"
+									+ "{?vac a vacancy:Vacancy . "
+									+ "?vac vacancy:within ?dept . ?dept org:subOrganizationOf* <DEPARTMENT> ."
+									+ "}"
+								
 		$(function() {
 			$.ajax({async: false,
-					url:'http://data.ox.ac.uk/sparql/',
+					url:'/sparql/',
 					data: {format: 'srj', query: deptQuery, datatype: 'json', common_prefixes: 'on',},
 					success: addDepts})});
 					
@@ -41,7 +46,10 @@
 			$("#vacancyResults").html("<img src=\"/site-media/loader.gif\"/>");
 			var department = $('#vacancyDepartments').val();
 			var department_name = $('#vacancyDepartments option:selected').text();
-			var query = vacancyQuery.replace("DEPARTMENT", department);
+			query = vacancyQuery;
+			if ( $('#includeSubdepartments')[0].checked)
+				query = vacancySubDeptQuery;
+			query = query.replace("DEPARTMENT", department);
 			var base_url = "http://data.ox.ac.uk/sparql/";
 			var parameters = {query: query, format: 'rss2', common_prefixes: 'on',feeddescription: "as found on Oxford's Recruitment website (www.recruit.ox.ac.uk) and Jobs.ac.uk", feedtitle: "Vacancies within " + department_name };
 			var vacancyResultHTML = baseVacancyResultHTML.replace("RSS201URL", base_url + "?" + $.param(parameters));
@@ -106,6 +114,10 @@
 			<select id="vacancyDepartments" onChange="updateVacancyFeeds()">
 			<option></option>
 			</select> 	<br/><br />
+		Please check this box if you wish to include subdepartments:
+			<input type="checkbox" onChange="updateVacancyFeeds()" id="includeSubdepartments" value="Yes" />
+			<br /><br />
+			
 			<div id="vacancyResults">
 				
 			</div>

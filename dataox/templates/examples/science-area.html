@@ -3,9 +3,12 @@
 {% block title %}Science Area Map{% endblock %}
 
 {% block extrahead %}
-  <script src="http://code.jquery.com/jquery-1.5.min.js" type="application/javascript"></script>
+  <script src="http://code.jquery.com/jquery-1.5.min.js" type="text/javascript"></script>
   <script src="http://www.openlayers.org/api/OpenLayers.js"></script>
-  <script type="application/javascript">
+  <style type="text/css">
+  li { cursor:pointer}
+  </style>
+  <script type="text/javascript">
     var query = "SELECT DISTINCT ?building ?building_name ?spatial ?unit ?unit_name WHERE {"
               + "  ?building "//a oxp:Building ;"
               + "            dcterms:isPartOf+ <http://oxpoints.oucs.ox.ac.uk/id/59030245> ;"
@@ -15,7 +18,45 @@
               + "  ?unit oxp:occupies/dcterms:isPartOf* ?building ;"
               + "        dc:title ?unit_name ."
               + "} ORDER BY ?occupant_name";
-
+	
+	function highlightBuilding(e, lielement)
+		{
+			lielement.className = 'highlight';	
+			for (b in lielement.buildings)
+			{
+				lielement.buildings[b].feature.renderIntent = "select";
+				lielement.buildings[b].feature.layer.redraw();
+			}
+			if (window.event) 
+			{
+				window.event.cancelBubble = true;
+			}
+			else 
+			{
+				e.stopPropagation();
+			}
+			return false;
+		}		
+		
+	function unHighlightBuilding(e, lielement)
+		{
+			lielement.className = '';
+			for (b in lielement.buildings)
+			{
+				lielement.buildings[b].feature.renderIntent = "";
+				lielement.buildings[b].feature.layer.redraw();
+			}
+			if (window.event) 
+			{
+				window.event.cancelBubble = true;
+			}
+			else 
+			{
+				e.stopPropagation();
+			}
+			return false;		
+		}		
+			  
     $(function() {
       $.get('/sparql/', {
         format: 'srj',
@@ -23,37 +64,36 @@
         datatype: 'json',
         common_prefixes: 'on',
       }, function(data) {
-        map = new OpenLayers.Map("map", {
-          controls: [],
-          projection: new OpenLayers.Projection("EPSG:900913")
-        });
+        var map = new OpenLayers.Map("map", {
+				  controls: [],
+				  projection: new OpenLayers.Projection("EPSG:900913")
+				});
         
         map.addControl(new OpenLayers.Control.Navigation());
         map.addControl(new OpenLayers.Control.KeyboardDefaults());
         map.addControl(new OpenLayers.Control.Attribution());
-        
-        var vectors = new OpenLayers.Layer.Vector("Buildings");
-map.addLayer(new OpenLayers.Layer.OSM("OSM"));
-myBaseLayer = new OpenLayers.Layer.Google("Google",
-              {'sphericalMercator': true,
-               'maxExtent': new OpenLayers.Bounds(-20037508.34,-20037508.34,20037508.34,20037508.34)
-              });
-//map.addLayer(myBaseLayer);
-map.addLayer(vectors);
+        var highlight_style = { fillColor:'#99CCFF', strokeColor:'#3399FF', fillOpacity:0.7 };
+        window.vectors = new OpenLayers.Layer.Vector("Buildings");
+		map.addLayer(new OpenLayers.Layer.OSM("OSM"));
+		myBaseLayer = new OpenLayers.Layer.Google("Google",
+				  {'sphericalMercator': true,
+				   'maxExtent': new OpenLayers.Bounds(-20037508.34,-20037508.34,20037508.34,20037508.34)
+				  });
+		//map.addLayer(myBaseLayer);
+		map.addLayer(window.vectors);
         
         var proj_from = new OpenLayers.Projection("EPSG:4326");
         var proj_to = map.getProjectionObject();
         var wkt = new OpenLayers.Format.WKT({'internalProjection': proj_to, 'externalProjection': proj_from});
-        
-        
 
-        var buildings = {}, units = {};
+        window.buildings = {};
+		var units = {};
         for (i in data.results.bindings) {
           var binding = data.results.bindings[i];
-          if (buildings[binding.building.value] == undefined) {
+          if (window.buildings[binding.building.value] == undefined) {
             var geometry = wkt.read(binding.spatial.value);
             var feature = new OpenLayers.Feature.Vector(geometry);
-            buildings[binding.building.value] = {
+            window.buildings[binding.building.value] = {
               name: binding.building_name.value,
               feature: geometry,
               elements: [],
@@ -62,41 +102,42 @@ map.addLayer(vectors);
           if (units[binding.unit.value] == undefined)
             units[binding.unit.value] = {name: binding.unit_name.value, buildings: []};
 
-          buildings[binding.building.value].units.push(units[binding.unit.value]);
-          units[binding.unit.value].buildings.push(buildings[binding.building.value]);  
+          window.buildings[binding.building.value].units.push(units[binding.unit.value]);
+          units[binding.unit.value].buildings.push(window.buildings[binding.building.value]);  
         }
 
-
-
-        
-        for (uri in buildings) {
-          building = buildings[uri];            
+        for (uri in window.buildings) {
+          building = window.buildings[uri];            
           //alert(typeof(building.feature));
-          vectors.addFeatures(building.feature);
+          window.vectors.addFeatures(building.feature);
         }
         
         for (uri in units) {
           unit = units[uri];
-          li = $('<li></li>').text(unit.name);
+
           if (unit.buildings.length > 1) {
+			li = $('<li onmouseover="highlightBuilding(event, this)" onMouseOut="unHighlightBuilding(event, this);"></li>').text(unit.name);
             ul = $('<ul/>')
             li.append(ul);
+			li[0].buildings = unit.buildings;
             for (i in unit.buildings) {
-              li2 = $('<li/>').text(unit.buildings[i].name);
+              li2 = $('<li onmouseover="highlightBuilding(event, this)" onMouseOut="unHighlightBuilding(event, this);"></li>').text(unit.buildings[i].name);
               ul.append(li2);
+			  li2[0].buildings = [];
               unit.buildings[i].elements.push(li2);
+			  li2[0].buildings.push(unit.buildings[i]);
             }
           } else
+			li = $('<li onmouseover="highlightBuilding(event, this)" onMouseOut="unHighlightBuilding(event, this);" </li>').text(unit.name);
+			li[0].buildings = unit.buildings;
             unit.buildings[0].elements.push(li);
-          $('#units').append(li);
-          
+			$('#units').append(li);
         }
-
-        var sf = new OpenLayers.Control.SelectFeature(vectors, {
+        var sf = new OpenLayers.Control.SelectFeature(window.vectors, {
           hover:true,
           onSelect: function(e) {
-            for (uri in buildings) {
-              building = buildings[uri];
+            for (uri in window.buildings) {
+              building = window.buildings[uri];
               if (building.feature == e) {
                 for (i in building.elements) {
                   element = building.elements[i];
@@ -106,8 +147,8 @@ map.addLayer(vectors);
             }
           },
           onUnselect: function(e) {
-            for (uri in buildings) {
-              building = buildings[uri];
+            for (uri in window.buildings) {
+              building = window.buildings[uri];
               if (building.feature == e) {
                 for (i in building.elements) {
                   element = building.elements[i];
