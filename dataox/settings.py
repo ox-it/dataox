@@ -47,3 +47,5 @@ ID_MAPPING = (
     ('http://data.ox.ac.uk/id/', 'http://data.ox.ac.uk/doc/', True),
     ('http://oxpoints.oucs.ox.ac.uk/id/', 'http://data.ox.ac.uk/doc:oxpoints/', False),
 )
+
+TIME_SERIES_URI_BASE = "http://data.ox.ac.uk/id/time-series/"
