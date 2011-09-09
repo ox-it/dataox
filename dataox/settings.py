@@ -49,3 +49,5 @@ ID_MAPPING = (
 )
 
 TIME_SERIES_URI_BASE = "http://data.ox.ac.uk/id/time-series/"
+TIME_SERIES_PORT = 4545
+TIME_SERIES_PATH = relative_path(config.get('timeseries:path'))
