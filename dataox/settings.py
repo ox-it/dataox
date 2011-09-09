@@ -10,6 +10,7 @@ INSTALLED_APPS += (
     'humfrey.longliving',
     'dataox.core',
     'dataox.resource',
+    'humfrey.update',
     'humfrey.graphviz',
 )
 
@@ -41,4 +42,8 @@ THUMBNAIL_WIDTHS = (200, 400)
 ID_MAPPING = (
     ('http://data.ox.ac.uk/id/', 'http://data.ox.ac.uk/doc/', True),
     ('http://oxpoints.oucs.ox.ac.uk/id/', 'http://data.ox.ac.uk/doc:oxpoints/', False),
+)
+
+UPDATE_DEFINITION_DIRECTORIES += (
+    os.path.abspath(os.path.join(os.path.dirname(__file__), 'datasets')),
 )
