@@ -1,0 +1,123 @@
+{% extends "base.html" %}
+
+{% block title %}Privacy policy, terms of use, and legal statement{% endblock %}
+
+{% block body %}
+<article>
+  <h1>Privacy policy, terms of use, and legal statement</h1>
+  
+  <p>This site is operated by <a href="http://www.oucs.ox.ac.uk/">the
+     Computing Services</a> at the <a href="http://www.ox.ac.uk/">the
+     University of Oxford</a>.</p>
+     
+  <section>
+    <h2>Table of contents</h2>
+    
+    <ul>
+      <li><a href="#data-protection">Data protection and privacy</a></li>
+      <li><a href="#terms-of-use">Terms of use</a>
+        <ul>
+          <li><a href="#licensing">Licensing</a></li>
+          <li><a href="#excessive-use">Excessive use</a></li>
+          <li><a href="#use-of-data">Use of data</a></li>
+        </ul>
+      </li>
+      <li><a href="#legal-statement">Legal statement</a></li>
+    </ul>
+  </section>
+  
+  <section id="data-protection">
+    <h2>Data protection and privacy</h2>
+    
+    <p>For each page requested, the web site minimally records:</p>
+    
+    <ul>
+      <li>Your <a href="http://en.wikipedia.org/wiki/IP_address">IP address</a></li>
+      <li>The date and time of visit</li>
+      <li>Details of your <a href="http://en.wikipedia.org/wiki/User_agent">user agent</a></li>
+      <li>The URL of the page requested</li>
+      <li>The <a href="http://en.wikipedia.org/wiki/Referrer">referer</a></li>
+    </ul>
+    
+    <p>If you supply your e-mail address (for example, by signing up to the
+       mailing list or corresponding with the webmaster) it will only be used
+       for the purpose for which it was supplied.</p>
+    
+    <p>We will not pass on your
+       e-mail address or any other personally identifying information about
+       you to any party external to the University of Oxford.</p>
+  </section>
+  
+  <section id="terms-of-use">
+    <h2>Terms of use</h2>
+    
+    <section id="licensing">
+      <h3>Licensing</h3>
+      
+      <p>The site content (excluding data) is made available under the terms
+         of the
+         <a href="http://creativecommons.org/licenses/by-sa/2.0/uk/">Creative
+         Commons Attribution-ShareAlike 2.0 UK: England & Wales 2.0</a>.</p>
+      
+      <p>The site's source code is available
+         <a href="https://github.com/oucs/dataox">on GitHub</a> under the
+         terms of the <a href="http://www.opensource.org/licenses/BSD-3-Clause">Modified BSD license</a>.</p>
+      
+      <p>The data exposed through this site are made available under the
+         licenses attached to their respective datasets.</p>
+         
+      <p>If in doubt, contact the dataset's contact address or
+         <a href="mailto:opendata@oucs.ox.ac.uk">the open data team</a> for
+         clarification.</p>
+    </section>
+    
+    <section id="excessive-use">
+      <h3>Excessive use</h3>
+
+    <p>Users of the site are required to be considerate in their use. This
+       means that:</p>
+    
+    <ul>
+      <li>You shall not perform excessively intensive or frequent queries
+          against the SPARQL endpoint.</li>
+      <li>Where you are using a non-browser user-agent, the User-Agent header
+          should include details of your application, including contact details
+          (e.g. an e-mail or web address), so that we can contact you if we
+          feel you are — intentionally or otherwise — being excessive in your
+          use of the site.</li>
+      <li>Where you distribute software that makes requests of the site, you
+          should be confident that the software will not perform excessive
+          requests.</li>
+    </ul>
+    
+    <p>We understand that our use of <em>excessive</em> is rather vague. We
+       reserve the right to rate-limit or block clients that we determine to
+       be excessive, or are having a detrimental effect on the service
+       provided to other users.</p>
+       
+    </section>
+    
+    <section id="use-of-data">
+      <h3>Use of data</h3>
+      
+      <p>You are free to use the data provided by this site for whatever
+         purpose, provided you honour the terms of any licenses under which
+         the data is made available.</p>
+      
+      <p>Where you are unsure of the interpretation of data distributed
+         through this site, we encourage you to seek clarification from the
+         respective dataset maintainer or
+         <a href="mailto:opendata@oucs.ox.ac.uk">the open data team</a>.</p>
+    </section>
+  </section>
+  
+  <section id="#legal-statement">
+    <h2>Legal statement</h2>
+    
+    <p><a href="http://www.ox.ac.uk/copyright.html">The statement on ownership,
+       liability and use</a> on the main University website applies — in
+       addition to the above statements — to this site and all sites made
+       available through its subdomains.</p>
+  </section>
+</article>
+{% endblock %}
