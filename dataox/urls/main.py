@@ -25,6 +25,8 @@ urlpatterns = patterns('',
     (r'^contact/$', direct_to_template, {'template': 'contact.html'}, 'contact'),
     (r'^help/$', direct_to_template, {'template': 'help.html'}, 'help'),
 
+    (r'^legal-and-privacy/$', direct_to_template, {'template': 'legal.html'}, 'legal'),
+
     (r'^forbidden/$', SimpleView.as_view(template_name='forbidden', context={'status_code': 403}), {}, 'forbidden'),
 
     (r'^explore/$', ExploreView.as_view(), {}, 'explore'),

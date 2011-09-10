@@ -28,7 +28,8 @@ header p.title {
     font-size:24px;
 }
 
-nav ul {
+nav ul, footer {
+    display:block;
     background-color: #000;
     -webkit-border-radius: 5px;
     -moz-border-radius: 5px;
@@ -39,6 +40,18 @@ nav ul {
     margin-left: 0;
     list-style: none;
     font-size: 16px;
+}
+
+footer {
+    color: #fff;
+    margin-top:1em;
+    padding: 5px 1.5em;
+    height: 30px;
+    text-align:center;
+}
+
+footer a {
+    color: #fff;
 }
 
 nav li {
@@ -85,6 +98,11 @@ h2 {
     margin-bottom: 0.333em;
     font-size:14pt;
     font-weight: normal;
+}
+
+h3 {
+    /*font-weight: normal;*/
+    font-size:12pt;
 }
 
 section.page-metadata h2 + h3, section.widget h2 + h3, section.widget h2 + table.description{
