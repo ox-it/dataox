@@ -41,6 +41,13 @@
       <h1>Home</h1>
     </article>
 {% endblock %}
+
+      <footer>{% block footer %}
+        Site © University of Oxford •
+        <a href="http://creativecommons.org/licenses/by-sa/2.0/uk/" title="Attribution-ShareAlike 2.0 UK: England & Wales">CC-BY-SA 2.0</a> •
+        <a href="{% host_url legal on data %}">Legal and privacy</a> •
+        <a href="https://github.com/oucs/dataox">Source</a>
+      {% endblock %}</footer>
     </div>
   </body>
 </html>
