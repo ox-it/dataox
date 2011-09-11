@@ -3,79 +3,124 @@
 {% block title %}OpenMeters{% endblock %}
 
 {% block extrahead %}
-  <script src="http://code.jquery.com/jquery-1.5.min.js" type="text/javascript"></script>
-  <script language="javascript" type="text/javascript" src="http://infodev.oucs.ox.ac.uk/openmeters/demo/jquery.flot.js"></script>
+<script src="http://code.jquery.com/jquery-1.5.min.js"
+	type="text/javascript"></script>
+<script language="javascript" type="text/javascript"
+	src="http://infodev.oucs.ox.ac.uk/openmeters/demo/jquery.flot.js"></script>
 
-   <!--[if IE]><script src="excanvas.js"></script><![endif]-->
+<!--[if IE]><script src="excanvas.js"></script><![endif]-->
 
 
-  <script type="text/javascript">
-    var measure_query  = "PREFIX meter: <http://purl.org/meter/>"
-                       + "PREFIX oxp: <http://ns.ox.ac.uk/namespace/oxpoints/2009/02/owl#>"
-                       + "PREFIX dc: <http://purl.org/dc/elements/1.1/>"
-                       + "SELECT ?measure ?identifier ?title WHERE {"
-                       + "  ?measure a meter:Measure ;"
-                       + "    oxp:measureIdentifier ?identifier ;"
-//                       + "    meter:supplies [ dc:title ?title ] ."
-                       + "} ORDER BY ?identifier";
+<script type="text/javascript">
+    var meterpoint_query  = "PREFIX meter: <http://purl.org/metering/>\n"
+                          + "PREFIX timeseries: <http://purl.org/NET/time-series/>\n"
+                          + "PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>\n"
+                          + "PREFIX skos: <http://www.w3.org/2004/02/skos/core#>\n"
+                          + "SELECT * WHERE {\n"
+                          + "  ?meterPoint a meter:MeterPoint ;\n"
+                          + "    timeseries:timeseries ?timeseries ;\n"
+                          + "    rdfs:label ?label ;\n"
+                          + "    meter:pertainsTo ?place .\n"
+                          + "  ?timeseries a timeseries:TimeSeries ;\n"
+                          + "    timeseries:seriesName ?seriesName ;\n"
+                          + "    timeseries:endpoint ?endpoint .\n"
+                          + "  ?place skos:prefLabel ?placeName .\n"
+                          + "} ORDER BY ?label\n";
     
-    var reading_query = "PREFIX meter: <http://purl.org/meter/>"
-                      + "PREFIX qb: <http://purl.org/linked-data/cube#>"
-                      + "PREFIX sdmx-dimension: <http://purl.org/linked-data/sdmx/2009/dimension#>"
-                      + "SELECT ?ts ?val WHERE {"
-                      + "  ?obs"
-                      + "    meter:atInterval <http://dbpedia.org/resource/INTERVAL> ;"
-                      + "    meter:measure <MEASURE> ;"
-                      + "    qb:dataset <http://data.ox.ac.uk/id/dataset/openmeters> ;"
-                      + "    a qb:Observation ;"
-                      + "    sdmx-dimension:timePeriod ?ts ;"
-                      + "    meter:energyNet ?val"
-                      + "} ORDER BY ?ts";
+    var samples_query = "PREFIX meter: <http://purl.org/metering/>\n"
+                      + "PREFIX timeseries: <http://purl.org/NET/time-series/>\n"
+                      + "SELECT * WHERE {\n"
+                      + "  <TIMESERIES>\n"
+                      + "    timeseries:resolution ?resolution ;\n"
+                      + "    timeseries:sampling ?sampling .\n"
+                      + "  ?sampling a timeseries:Sampling ;\n"
+                      + "    timeseries:resolution ?sampleResolution .\n"
+                      + "}\n";
+    
+    var meterpoints = {};
 
     $(function() {
       $.get('/sparql/', {
         format: 'srj',
-        query: measure_query,
+        query: meterpoint_query,
         dataType: 'json',
       }, function (data) {
         // For some reason jQuery doesn't parse the return value as JSON, so
         // we'll get it parsed if it hasn't been already.
         if (data.head == undefined) data = $.parseJSON(data);
         
-        var select = $('#measure_id');
-        for (i in data.results.bindings) {
+        var select = $('#meterpoint_id');
+        for (var i in data.results.bindings) {
           var binding = data.results.bindings[i];
-          select.append($('<option/>').val(binding.measure.value).text(binding.identifier.value));
+          meterpoints[binding.meterPoint.value] = binding;
+          select.append($('<option/>').val(binding.meterPoint.value).text(binding.label.value));
         }
         
         select.change(update);
-        $('#interval_id').change(update);
+        $('#sample_id').change(update);
       });
     });
 
     function update(e) {
-      measure = $('#measure_id').val();
-      interval = $('#interval_id').val();
+      var meterpoint = $('#meterpoint_id').val();
+      var sample = $('#sample_id').val();
+      
+      if (meterpoint && meterpoints[meterpoint].samples == undefined) {
+    	$.get('/sparql/', {
+    	      format: 'srj',
+    	      query: samples_query.replace('TIMESERIES', meterpoints[meterpoint].timeseries.value),
+    	      dataType: 'json',
+    	      }, function (data) {
+                if (data.head == undefined) data = $.parseJSON(data);
+                meterpoints[meterpoint].samples = {};
+                for (var i in data.results.bindings) {
+                	var sample = data.results.bindings[i];
+                	meterpoints[meterpoint].samples[sample.sampling.value] = sample;
+                }
+                updateSamples();
+                loadData();
+    	      });
+    	return;
+      }
 
-      if (measure)
-        loadData(measure, interval);
+      if (meterpoint && sample)
+        loadData();
+    }
+    
+    function updateSamples() {
+      var meterpoint = $('#meterpoint_id').val();
+      var samples = $('#sample_id').empty();
+      for (var i in meterpoints[meterpoint].samples) {
+    	  var sample = meterpoints[meterpoint].samples[i];
+    	  samples.append($('<option/>').val(sample.sampling.value).text(sample.sampleResolution.value));
+      }
     }
 
 
-    function loadData(measure, interval) {
+    function loadData() {
+      var meterpoint = $('#meterpoint_id').val();
+      var sample = $('#sample_id').val();
+      
+      meterpoint = meterpoints[meterpoint];
+      sample = meterpoint.samples[sample];
+      
       $('#plot').html('<span id="loading">Loading&hellip;</span>')
-      $.get('/sparql/', {
-        format: 'srj',
-        query: reading_query.replace('INTERVAL', interval).replace('MEASURE', measure),
-        dataType: 'json',
+      $.get(meterpoint.endpoint.value, {
+        format: 'json',
+        action: 'fetch',
+        series: meterpoint.seriesName.value,
+        resolution: sample.sampleResolution.value,
+        type: 'average',
+        startTime: '2008-02-14 04:00:00',
+        endTime: '2008-02-16 06:00:00',
       }, function(data) {
         // For some reason jQuery doesn't parse the return value as JSON, so
         // we'll get it parsed if it hasn't been already.
         if (data.results == undefined) data = $.parseJSON(data);
 
         var options = {
-          lines: { show: true },
-          points: { show: true },
+          lines: { show: true, lineWidth: 1, fill: true, fillColor: '#B8CCD7' },
+          points: { show: true, radius: 2 },
           xaxis: { 
             mode: "time", // first coord has to be a _javascript timestamp_ ie epoch in milliseconds
 /*          min: (new Date(yesterday)).getTime(),
@@ -89,22 +134,20 @@
             clickable: true,
             hoverable: true 
           },
-          colors: ["#919733", "#d18b2c", "#dba255"],
+          colors: ["#006699", "#d18b2c", "#dba255"],
         };
         
         var series = [];
-        var lastBinding = null;
+        var lastDatum = null;
 
         // Values returned from data.ox are cumulative, so we take the differences
-        for (i in data.results.bindings) {
-          var binding = data.results.bindings[i];
-          if (lastBinding != null) {
-              var period = (Date.parse(binding.ts.value) - Date.parse(lastBinding.ts.value));
-              var center = (Date.parse(binding.ts.value) + Date.parse(lastBinding.ts.value)) / 2;
-              var consumption = parseInt(binding.val.value) - parseInt(lastBinding.val.value);
-              series.push([center, consumption * (3600*1000) / period]);
+        for (var i in data.series[meterpoint.seriesName.value].data) {
+          var datum = data.series[meterpoint.seriesName.value].data[i];
+          if (lastDatum != null && datum.val != null) {
+              var center = (datum.ts + lastDatum.ts) / 2;
+              series.push([center, datum.val]);
           }
-          lastBinding = binding
+          lastDatum = datum;
         }
         
         $('#plot').html('')
@@ -113,69 +156,74 @@
       });
     }
   </script>
-  <style type="text/css">
-    ul#units, div#map, section#details {
-      display: block;
-      border:1px solid #aaa;
-      margin-top:0;
-    }
-    ul#units {
-      margin-left:1em;
-    }
-    ul#units li ul {
-      padding-left:2em;
-      list-style:none;
-    }
-    ul#units li {
-      padding:0 2px;
-    }
-    ul#units li.highlight {
-      color:#fff;
-      background-color:#00f;
-    }
-    p#description {
-      margin-top:0;
-      font-size: 10pt;
-    }
-    h1 {
-      margin-bottom: 0;
-    }
-    
-    #loading {
-      padding:4em;
-      margin:4em;
-      text-align:center;
-      font-size:30px;
-      
-    }
-  </style>
+<style type="text/css">
+ul#units,div#map,section#details {
+	display: block;
+	border: 1px solid #aaa;
+	margin-top: 0;
+}
+
+ul#units {
+	margin-left: 1em;
+}
+
+ul#units li ul {
+	padding-left: 2em;
+	list-style: none;
+}
+
+ul#units li {
+	padding: 0 2px;
+}
+
+ul#units li.highlight {
+	color: #fff;
+	background-color: #00f;
+}
+
+p#description {
+	margin-top: 0;
+	font-size: 10pt;
+}
+
+h1 {
+	margin-bottom: 0;
+}
+
+#loading {
+	padding: 4em;
+	margin: 4em;
+	text-align: center;
+	font-size: 30px;
+}
+</style>
 {% endblock %}
 
 {% block body %}
-  
-  <article>
-    <h1>OpenMeters</h1>
-    
-    <div id="measures">
-      <select id="measure_id">
-        <option value=""></option>
-      </select>
-      <select id="interval_id">
-        <option value="Month">by month</option>
-        <option value="Week">by week</option>
-        <option value="Day">by day</option>
-      </select>
-    </div>
-    
-    <div id="plot" style="width:100%; height:400px"></div>
 
-    <section id="details" style="clear:both; padding:1em; margin-top:1em">
-      <h2>How it works</h2>
+<article>
+	<h1>OpenMeters</h1>
 
-      <p>This graph shows average power demand for the selected meter in kW.</p>
-      
-      <p>Please note that we do not have data for some meters listed. If you don't get anything on your graph, try again with another.</p>
-    </section>
-    
-  </article>
+	<div id="measures">
+		<select id="meterpoint_id">
+			<option value=""></option>
+		</select> <select id="sample_id">
+			<option value=""></option>
+		</select>
+	</div>
+
+	<div id="plot" style="width: 100%; height: 400px"></div>
+
+	<section id="details"
+		style="clear: both; padding: 1em; margin-top: 1em">
+		<h2>How it works</h2>
+
+		<p>This graph shows average power demand for the selected meter in
+			kW.</p>
+
+		<p>Please note that we do not have data for some meters listed. If
+			you don't get anything on your graph, try again with another.</p>
+	</section>
+
+</article>
 {% endblock %}
