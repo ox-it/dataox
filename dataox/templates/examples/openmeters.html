@@ -111,8 +111,8 @@
         series: meterpoint.seriesName.value,
         resolution: sample.sampleResolution.value,
         type: 'average',
-        startTime: '2008-02-14 04:00:00',
-        endTime: '2008-02-16 06:00:00',
+        startTime: '2011-07-01 00:00:00',
+        //endTime: '2008-03-30 06:00:00',
       }, function(data) {
         // For some reason jQuery doesn't parse the return value as JSON, so
         // we'll get it parsed if it hasn't been already.
@@ -120,7 +120,7 @@
 
         var options = {
           lines: { show: true, lineWidth: 1, fill: true, fillColor: '#B8CCD7' },
-          points: { show: true, radius: 2 },
+          points: { show: true, radius: 1 },
           xaxis: { 
             mode: "time", // first coord has to be a _javascript timestamp_ ie epoch in milliseconds
 /*          min: (new Date(yesterday)).getTime(),
