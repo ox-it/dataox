@@ -1,0 +1,12 @@
+{% extends "base.html" %}{% load hosts %}
+
+{% block header_text %}
+<p class="title">Time-series data for the University of Oxford</p>
+<p>time-series.data.ox.ac.uk <i>(part of <a href="{% host_url index on data %}">data.ox.ac.uk</a>)</i></p>
+{% endblock %}
+
+{% block nav %}
+  <li><a href="{% url timeseries:index %}">home</a></li>
+  <li><a href="{% url timeseries:doc %}">documentation</a></li>
+  <li><a href="{% host_url contact on data %}">contact</a></li>
+{% endblock %}

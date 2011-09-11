@@ -11,6 +11,7 @@ INSTALLED_APPS += (
     'dataox.core',
     'dataox.resource',
     'humfrey.graphviz',
+    'openorg_timeseries',
 )
 
 ADMINS = (
@@ -53,3 +54,4 @@ TIME_SERIES_URI_BASE = "http://data.ox.ac.uk/id/time-series/"
 TIME_SERIES_PORT = 4545
 TIME_SERIES_PATH = relative_path(config.get('timeseries:path'))
 LONGLIVING_CLASSES.add('openorg_timeseries.longliving.rrdtool.RRDThread')
+
