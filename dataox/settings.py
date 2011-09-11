@@ -21,8 +21,6 @@ ADMINS = (
 ROOT_URLCONF = 'dataox.urls.empty'
 MEDIA_ROOT = os.path.join(os.path.dirname(__file__), 'media')
 
-TIMESERIES_PATH = relative_path(config.get('timeseries:path'))
-
 MEDIA_URL = 'http://data.ox.ac.uk/site-media/'
 
 ROOT_HOSTCONF = 'dataox.hosts'
@@ -48,6 +46,12 @@ ID_MAPPING = (
     ('http://oxpoints.oucs.ox.ac.uk/id/', 'http://data.ox.ac.uk/doc:oxpoints/', False),
 )
 
+UPDATE_DEFINITION_DIRECTORIES += (
+    os.path.abspath(os.path.join(os.path.dirname(__file__), 'datasets')),
+)
+
 TIME_SERIES_URI_BASE = "http://data.ox.ac.uk/id/time-series/"
 TIME_SERIES_PORT = 4545
 TIME_SERIES_PATH = relative_path(config.get('timeseries:path'))
+LONGLIVING_CLASSES.add('openorg_timeseries.longliving.rrdtool.RRDThread')
+
