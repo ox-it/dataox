@@ -116,7 +116,7 @@
       }, function(data) {
         // For some reason jQuery doesn't parse the return value as JSON, so
         // we'll get it parsed if it hasn't been already.
-        if (data.results == undefined) data = $.parseJSON(data);
+        if (data.series == undefined) data = $.parseJSON(data);
 
         var options = {
           lines: { show: true, lineWidth: 1, fill: true, fillColor: '#B8CCD7' },
