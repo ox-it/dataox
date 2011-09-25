@@ -63,7 +63,7 @@ class OxGarageConverter(object):
             request = urllib2.Request(conversion_url, body)
             request.headers['Content-type'] = request_mimetype
             response = urllib2.urlopen(request)
-            return response.read().decode('utf-8')
+            return response.read().decode('utf-8', 'ignore')
         except urllib2.HTTPError:
             logger.exception("Couldn't convert %r using OxGarage", file_path)
             return ""
@@ -74,7 +74,7 @@ class PDFConverter(object):
             return NotImplemented
         pdftotext = subprocess.Popen(['pdftotext', file_path, '-'], stdout=subprocess.PIPE)
         pdftotext.wait()
-        return pdftotext.stdout.read().decode('utf-8')
+        return pdftotext.stdout.read().decode('utf-8', 'ignore')
 
 class VacancyFileHandler(object):
     TEXT_HASH = 'dataox:transform:vacancies:file-texts'
