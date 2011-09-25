@@ -76,7 +76,7 @@ class Vacancy(object):
 
         if self.salary:
             locale_code = settings.LANGUAGE_CODE
-            locale.setlocale(locale.LC_ALL, '%s_%s' % ((locale_code[:2].lower(), locale_code[3:].upper()), 'UTF8'))
+            locale.setlocale(locale.LC_ALL, ('%s_%s' % (locale_code[:2].lower(), locale_code[3:].upper()), 'UTF8'))
             label = u'Grade %s' % self.salary['grade']
             if self.salary.get('lower'):
                 label += u': £' + locale.format('%d', self.salary['lower'], grouping=True)
