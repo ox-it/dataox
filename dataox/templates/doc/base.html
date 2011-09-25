@@ -23,7 +23,7 @@
     {% endif %}
     
     {% if subject.description %}
-      <p class="description">{{ subject.description|linebreaksbr }}</p>
+      <p class="description">{{ subject.description|node }}</p>
     {% endif %}
     
     {% if subject.is_image %}
