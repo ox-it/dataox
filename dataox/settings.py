@@ -62,10 +62,22 @@ TIME_SERIES_PATH = relative_path(config.get('timeseries:path'))
 
 LONGLIVING_CLASSES.add('openorg_timeseries.longliving.rrdtool.RRDThread')
 
+SOURCE_DIRECTORY = relative_path(config.get('update:source_directory'))
+
 try:
     imp.find_module('openmeters')
 except ImportError:
     pass
 else:
-    LONGLIVING_CLASSES |= set(['openmeters.ion.DiscoveryThread',
-                               'openmeters.ion.PollThread'])
+    pass
+    #LONGLIVING_CLASSES |= set(['openmeters.ion.DiscoveryThread',
+    #                           'openmeters.ion.PollThread'])
+
+UPDATE_TRANSFORMS += (
+    'dataox.datasets.vacancies.RetrieveVacancies',
+)
+
+ADDITIONAL_NAMESPACES.update({
+    'vacancy': 'http://purl.org/openorg/vacancy/',
+    'salary': 'http://purl.org/openorg/salary/',
+})

@@ -20,27 +20,25 @@
 		  
           // Create and populate the data table.
 
-		var query = "PREFIX vacancy: <http://purl.org/openorg/vacancy/>" 
-			+ "SELECT ?dept ?dept_name ?parent ?parent_name (count(?vac) as ?novacs) WHERE {" 
-			+ "?vac vacancy:within ?dept ." 
-			+ "?dept skos:prefLabel ?dept_name ."
-			+ "?vac a vacancy:Vacancy ."
-			+ "OPTIONAL{  ?dept dcterms:isPartOf ?parent . ?parent skos:prefLabel ?parent_name . }" 
-			+ "} GROUP BY ?dept ?parent ?dept_name ?parent_name"
+		var query = "PREFIX vacancy: <http://purl.org/openorg/vacancy/>\n" 
+                  + "SELECT ?dept ?dept_name ?parent ?parent_name (count(?vac) as ?novacs) WHERE {\n" 
+                  + "  ?vac vacancy:organizationalUnit ?dept .\n" 
+                  + "  ?dept skos:prefLabel ?dept_name .\n"
+                  + "  ?vac a vacancy:Vacancy .\n"
+                  + "  OPTIONAL{  ?dept org:subOrganizationOf ?parent . ?parent skos:prefLabel ?parent_name . }\n" 
+                  + "} GROUP BY ?dept ?parent ?dept_name ?parent_name\n";
 		
-		var deptQuery = "PREFIX vacancy: <http://purl.org/openorg/vacancy/>"
-						+ "SELECT ?vac_title ?vac_desc ?vac_salary_lower ?vac_salary_upper ?vac_closing ?vac_link WHERE {"
-						  + "?vac a vacancy:Vacancy ."
-						  + "?vac rdfs:label ?vac_title ."
-						  + "?vac vacancy:description ?vac_desc ."
-						  + "OPTIONAL {?vac vacancy:description ?vac_desc . }"
-						  + "OPTIONAL {?vac vacancy:closingDate ?vac_closing . }"
-						  + "OPTIONAL {?vac vacancy:salaryLower ?vac_salary_lower . }"
-						  +	"OPTIONAL {?vac vacancy:salaryUpper ?vac_salary_upper . }"
-						  + "OPTIONAL {?vac rdfs:seeAlso ?vac_link . }"
-						  + "?vac vacancy:within ?org ."
-						  + "?org skos:prefLabel \"DEPARTMENT\"^^xsd:string ."
-						+ "} ORDER BY ASC(?vac_closing)" ;
+		var deptQuery = "PREFIX vacancy: <http://purl.org/openorg/vacancy/>\n"
+                      + "SELECT ?vacancy ?title ?description ?salary ?closing ?homepage WHERE {\n"
+                      + "  ?vacancy a vacancy:Vacancy ;\n"
+                      + "    rdfs:label ?title .\n"
+                      + "  OPTIONAL {?vacancy rdfs:label ?description . }\n"
+                      + "  OPTIONAL {?vacancy vacancy:applicationClosingDate ?closing . }\n"
+                      + "  OPTIONAL {?vacancy vacancy:salary/rdfs:label ?salary . }\n"
+                      + "  OPTIONAL {?vacancy foaf:homepage ?homepage . }\n"
+                      + "  ?vacancy vacancy:organizationalUnit ?org .\n"
+                      + "  ?org skos:prefLabel \"DEPARTMENT\"^^xsd:string .\n"
+                      + "} ORDER BY ASC(?closing)\n";
 		
 		$(function() {
       $.get('/sparql/', 
@@ -216,31 +214,30 @@
 					data: {format: 'srj', query: q, datatype: 'json', common_prefixes: 'on',}, 
 					success: function(data) {
 								if (data.head == undefined) data = $.parseJSON(data);
-								if (data.results.bindings != undefined) {data.results = data.results.bindings}
 							
-		                                                if (data.results.length  > 0){
+		                                                if (data.results.bindings.length  > 0){
 
-                                                                for (i in data.results)
+                                                                for (i in data.results.bindings)
                                                                 {
-                                                                        binding = data.results[i];
+                                                                        binding = data.results.bindings[i];
 																		var rowLink = ""
 																		if (binding.vac_link != undefined)
 																		{
-																			rowLink = "style=\"border-width: 1 1 1 1; cursor: pointer;\" onclick=\"window.location.href = '" + binding.vac_link.value + "'\"";
+																			rowLink = "style=\"border-width: 1 1 1 1; cursor: pointer;\" onclick=\"window.location.href = '" + binding.vacancy.value + "'\"";
 																		}
 																		else
 																		{
 																			rowLink = " style=\"border-width: 1 1 1 1\"";
 																		}
-                                                                        var jobRow = "<tr " + rowLink + "><td width=600>" + binding.vac_title.value + "</td><td width=150 style=\"text-align:center;\">";
-                                                                        if (binding.vac_salary_lower != undefined && binding.vac_salary_upper)
+                                                                        var jobRow = "<tr " + rowLink + "><td width=600><a href=\"" + binding.vacancy.value + "\">" + binding.title.value + "</a></td><td width=150 style=\"text-align:center;\">";
+                                                                        if (binding.salary != undefined)
                                                                         {
-                                                                                jobRow = jobRow  + "&pound;" + binding.vac_salary_lower.value + " - " + "&pound;" + binding.vac_salary_upper.value ;
+                                                                                jobRow = jobRow  + binding.salary.value ;
                                                                         }
 									jobRow = jobRow + "</td><td width=150 style=\"text-align:center;\">";
 
-                                                                        if (binding.vac_closing != undefined){
-                                                                                jobRow = jobRow  + binding.vac_closing.value;
+                                                                        if (binding.closing != undefined){
+                                                                                jobRow = jobRow  + binding.closing.value;
                                                                         }
                                                                         jobRow  + "</td><td width=100 style=\"text-align:center;\">link</td></tr>";
                                                                         $("#jobslist > tbody").html($("#jobslist > tbody").html() + jobRow);
