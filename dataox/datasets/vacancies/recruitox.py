@@ -105,7 +105,7 @@ class RecruitOxScraper(Scraper):
             vacancy.salary['upper'] = vacancy.salary['upper'] or vacancy.salary['lower']
         else:
             vacancy.salary = None
-        if meta[2][1].startswith('Grade '):
+        if meta[2][1].startswith('Grade') or meta[2][1].startswith('Salary'):
             if not vacancy.salary:
                 logger.warning("Couldn't parse salary for %s: %r", vacancy_id, meta[2][1])
             meta[2:3] = []
