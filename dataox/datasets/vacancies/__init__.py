@@ -69,10 +69,10 @@ class RetrieveVacancies(Transform):
 
             self.file_handler.retrieve_files(transform_manager, vacancy)
 
-        removed_vacancies = []
+        removed_vacancies = {}
         for vacancy_id in client.hkeys(self.VACANCY_HASH):
             if vacancy_id not in current_vacancies:
-                removed_vacancies.append(self.unpack(client.hget(self.VACANCY_HASH, vacancy_id)))
+                removed_vacancies[vacancy_id] = self.unpack(client.hget(self.VACANCY_HASH, vacancy_id))
 
         onward_transforms = [(current_vacancies, self.current_transform, True),
                              (removed_vacancies, self.removed_transform, False)]
