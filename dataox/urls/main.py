@@ -37,6 +37,7 @@ urlpatterns = patterns('',
     (r'^explore/example:(?P<slug>[a-z\d-]+)/$', redirect_to, {'url': '/explore/%(slug)s/'}),
 
     (r'^pingback/', include('humfrey.pingback.urls')),
+    (r'^update/', include('humfrey.update.urls')),
 
     (r'^external-image/$', ResizedImageView.as_view(), {}, 'resized-image'),
 
