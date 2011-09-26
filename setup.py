@@ -67,6 +67,7 @@ setup(
     version='0.1',
     packages=packages,
     license='BSD',
+    url='http://data.ox.ac.uk/',
     long_description=open('README.rst').read(),
     classifiers=['Development Status :: 4 - Beta',
                  'Framework :: Django',
