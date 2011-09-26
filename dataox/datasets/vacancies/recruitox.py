@@ -60,13 +60,13 @@ class RecruitOxScraper(Scraper):
             except Exception:
                 logger.exception("Unable to parse vacancy %r", vacancy_id)
 
-
-    def get_html(self, url, params):
+    @classmethod
+    def get_html(cls, url, params):
         url = '%s?%s' % (url, urllib.urlencode(params))
         request = urllib2.Request(url)
-        request.headers['User-agent'] = self.user_agent
-        if self.crawl_delay:
-            time.sleep(self.crawl_delay)
+        request.headers['User-agent'] = cls.user_agent
+        if cls.crawl_delay:
+            time.sleep(cls.crawl_delay)
         return etree.parse(urllib2.urlopen(request), parser=etree.HTMLParser(encoding="WINDOWS-1252"))
 
     def get_vacancy_identifiers(self):

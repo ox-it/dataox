@@ -75,6 +75,7 @@ else:
 
 UPDATE_TRANSFORMS += (
     'dataox.datasets.vacancies.RetrieveVacancies',
+    'dataox.datasets.vacancies.checker.RetrieveVacanciesChecker',
 )
 
 ADDITIONAL_NAMESPACES.update({
