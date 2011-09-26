@@ -88,8 +88,4 @@ class RetrieveVacancies(Transform):
                 graph += vacancy.triples(self.vacancy_base_uri)
             with open(transform_manager('rdf'), 'w') as output:
                 graph.serialize(output)
-            with open('/home/alex/test.rdf', 'w') as f:
-                graph.serialize(f)
             transform.execute(transform_manager, output.name)
-
-
