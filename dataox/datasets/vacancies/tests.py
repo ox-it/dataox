@@ -35,7 +35,7 @@ class LocationTestCase(unittest2.TestCase):
     def testSimple(self):
         guesser = TestLocationGuesser()
 
-        for location, expected in guesser.get_expected().iteritems():
+        for location, expected in sorted(guesser.get_expected().iteritems()):
             if expected == 'failure':
                 continue
 

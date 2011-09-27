@@ -104,6 +104,12 @@ class LocationGuesser(object):
         for term in list(terms):
             if term.startswith('The '):
                 terms.add(term[4:])
+            if term.startswith('Department ') and not term.lower().startswith("department of"):
+                terms.add("Department of " + term[11:])
+            if term.startswith("Bodleian ") and term.lower().endswith(" library"):
+                terms.add(term[9:])
+                
+        terms.discard("Oxford")
 
         results = lambda name, terms: \
             reduce(operator.or_, (self.query_results[name].get(term, set()) for term in terms))
@@ -114,11 +120,16 @@ class LocationGuesser(object):
         # Try again, but correct any spelling mistakes
         yield results('org-name', map(self.correct_spelling, terms)), False
 
-        # Something like "Dept of Foo, Bar and Baz, University of Oxford"
         match = re.search('and|And|&', location)
         if match:
+            # Something like "Dept of Foo, Bar and Baz, University of Oxford"
             term = location[:location.find(',', match.start())]
             yield self.query_results['org-name'].get(term), False
+            
+            # Or a "Dept of Foo and Dept of Bar"
+            new_terms = reduce(operator.or_, (set(t.strip() for t in re.split('and|And|&', term)) for term in terms))
+            yield results('org-name', new_terms), False
+            
 
         # What if they've used hyphens for delimiters?
         hyphenated_terms = [' '.join(term.split()) for term in location.split('-')]
