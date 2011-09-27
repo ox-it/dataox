@@ -83,7 +83,10 @@ class LocationGuesser(object):
             if guesses:
                 break
         else:
-            return set(), set()
+            if 'Bodleian' in location:
+                guesses, uniquify = set(['http://oxpoints.oucs.ox.ac.uk/id/23233598']), False
+            else:
+                return set(), set()
 
         guesses -= set(itertools.chain(*[self.get_ancestors(g)[1:] for g in guesses]))
         if len(guesses) > 1:
