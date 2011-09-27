@@ -1,0 +1,5 @@
+recursive-include dataox/templates
+recursive-include dataox/resources
+recursive-include dataox/tests/data
+include requirements.txt
+include README.rst
