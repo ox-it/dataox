@@ -92,9 +92,21 @@
           </li>
 {% endfor %}
         </ul>
-        
+
+        <h3>Queries</h3>
+
+        <p>This page was generated using the following queries:</p>
+
+        <ul>
+{% for query in queries %}
+          <li>
+            <a href="{% host_url sparql on data %}?query={{ query|urlencode }}">{{ query }}</a>
+          </li>
+{% endfor %}
+        </ul>
+
       </section>
-        
+
     </aside>    
     {% endblock %}
     
