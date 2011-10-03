@@ -21,5 +21,19 @@ class CollegeHall(object):
 
     def widget_templates(self):
         return ['widgets/norrington.html'] + super(CollegeHall, self).widget_templates()
-
 register(CollegeHall, 'oxp:Hall', 'oxp:College')
+
+class Place(object):
+    @classmethod
+    def _get_construct_patterns(cls):
+        return [
+            '%(meterPoint)s meter:pertainsTo %(uri) ; timeseries:timeSeries ?timeSeries',
+            '%(meterPoint)s meter:pertainsTo %(uri)',
+        ]
+
+    @classmethod
+    def _get_describe_patterns(cls):
+        return [
+            '%(uri)s ^meter:pertainsTo/timeseries:timeSeries ?timeSeries . OPTIONAL { ?timeSeries timeseries:include|timeseries:exclude ?subTimeSeries }',
+        ]
+register(Place, 'oxp:Building', 'oxp:Site', 'oxp:Space', 'oxp:Room')
