@@ -30,7 +30,7 @@
       <img src="{{ subject.uri }}" style="max-width:900px; border:1px solid #ccc"/>
     {% endif %}
     
-    <div style="clear:both"/>
+    <div style="clear:both"></div>
     {% endblock %}
     
 
@@ -100,7 +100,7 @@
         <ul>
 {% for query in queries %}
           <li>
-            <a href="{% host_url sparql on data %}?common_prefixes=on&query={{ query|urlencode }}">{{ query|truncatewords:10 }}</a>
+            <a href="{% host_url sparql on data %}?common_prefixes=on&amp;query={{ query|urlencode }}">{{ query|truncatewords:10 }}</a>
           </li>
 {% endfor %}
         </ul>
@@ -177,6 +177,6 @@
     </ul>
     {% endcomment %}
 
-    <div style="clear:both"/>
+    <div style="clear:both"></div>
   </article>
 {% endblock %}
