@@ -57,13 +57,24 @@ class ExploreView(HTMLView, CachedView):
 
 class ExampleResourceView(ResultSetView, HTMLView, CachedView):
     _QUERY = """
-        SELECT ?resource ?dataset WHERE {
-            ?dataset void:exampleResource ?resource .
-        } ORDER BY ?dataset ?resource"""
+        CONSTRUCT {
+            ?dataset a void:Dataset ;
+              rdfs:label ?datasetLabel ;
+              void:exampleResource ?resource .
+            ?resource ?p ?resourceLabel .
+        } WHERE {
+            ?dataset a void:Dataset ;
+              rdfs:label ?datasetLabel ;
+              void:exampleResource ?resource .
+            ?resource ?p ?resourceLabel .
+            FILTER (?p in (rdfs:label, dc:title, dcterms:title, foaf:name)) .
+        }"""
 
     def get(self, request):
+        graph = self.endpoint.query(self._QUERY)
         context = {
-            'results': self.endpoint.query(self._QUERY),
+            'graph': graph,
+            'subjects': [Resource(uri, graph, self.endpoint) for uri in graph.subjects(NS.rdf.type, NS.void.Dataset)],
         }
 
         return self.render(request, context, 'explore-resource')

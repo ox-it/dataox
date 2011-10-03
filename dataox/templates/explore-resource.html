@@ -17,13 +17,12 @@
       </tr>
     </thead>
     <tbody>
-{% regroup results by dataset as results_by_dataset %}
-{% for d in results_by_dataset %}
+{% for subject in subjects %}
       <tr class="row-{% cycle "odd" "even" %}">
-        <td>{{ d.grouper|node }}</td>
+        <td>{{ subject|node }}</td>
         <td>
-          {% for result in d.list %}
-            {{ result.resource|node }}
+          {% for resource in subject.all.void_exampleResource %}
+            {{ resource|node }}
             {% if not forloop.last %}<br/>{% endif %}
           {% endfor %}
         </td>
