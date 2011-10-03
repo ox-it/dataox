@@ -1,0 +1,27 @@
+{% if subject.get_time_series %}
+<section class="widget">
+<h2>Recent electricity consumption (kW)</h2>
+<div id="meterWidget" style="width:200px; height:150px; font-size:9pt; margin-bottom:1em;"></div>
+<script type="text/javascript">{% with subject.get_time_series as timeSeries %}
+  $(function() {
+    var series = {{% for timeSeries in subject.get_all_time_series %}
+      "{{ timeSeries.uri|escapejs }}": {
+        "uri": "{{ timeSeries.uri|escapejs }}",
+        "endpoint": "{{ timeSeries.timeseries_endpoint|escapejs }}",
+        "seriesName": "{{ timeSeries.timeseries_seriesName|escapejs }}",
+        "samplings": [{% for sampling in timeSeries.all.timeseries_sampling %}
+          {"type": "{{ sampling.timeseries_samplingType|slice:"32:"|escapejs }}",
+           "resolution": "{{ sampling.timeseries_resolution|escapejs }}"}{% if not forloop.last %},{% endif %}{% endfor %}]
+      }{% if not forloop.last %},{% endif %}{% endfor %}
+    };
+{% if timeSeries.timeseries_sampling %}
+    var include = ["{{ timeSeries.uri|escapejs }}"];
+    var exclude = [];{% else %}
+    var include = [{% for ts in timeSeries.all.timeseries_include %}"{{ ts.uri|escapejs }}"{% if not forloop.last %}, {% endif %}{% endfor %}];
+    var exclude = [{% for ts in timeSeries.all.timeseries_exclude %}"{{ ts.uri|escapejs }}"{% if not forloop.last %}, {% endif %}{% endfor %}];
+{% endif %}
+    widgetOpenMeters("meterWidget", series, include, exclude);
+  });
+{% endwith %}</script>
+</section>
+{% endif %}
