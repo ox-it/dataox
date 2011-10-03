@@ -3,7 +3,7 @@ from humfrey.utils.namespaces import NS
 
 class CollegeHall(object):
     @classmethod
-    def _get_describe_patterns(cls):
+    def _describe_patterns(cls):
         return [
             '%(observation)s fhs:institution %(uri)s ; qb:dataset <http://data.ox.ac.uk/id/dataset/norrington>',
         ]
@@ -25,15 +25,14 @@ register(CollegeHall, 'oxp:Hall', 'oxp:College')
 
 class Place(object):
     @classmethod
-    def _get_construct_patterns(cls):
+    def _construct_patterns(cls):
         return [
-            '%(meterPoint)s meter:pertainsTo %(uri) ; timeseries:timeSeries ?timeSeries',
-            '%(meterPoint)s meter:pertainsTo %(uri)',
+            '%(meterPoint)s meter:pertainsTo %(uri)s ; timeseries:timeSeries ?timeSeries',
         ]
 
     @classmethod
-    def _get_describe_patterns(cls):
+    def _describe_patterns(cls):
         return [
-            '%(uri)s ^meter:pertainsTo/timeseries:timeSeries ?timeSeries . OPTIONAL { ?timeSeries timeseries:include|timeseries:exclude ?subTimeSeries }',
+            '%(uri)s ^meter:pertainsTo/timeseries:timeSeries %(timeSeries)s . OPTIONAL { %(timeSeries)s timeseries:include|timeseries:exclude %(subTimeSeries)s }',
         ]
 register(Place, 'oxp:Building', 'oxp:Site', 'oxp:Space', 'oxp:Room')
