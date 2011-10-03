@@ -81,4 +81,7 @@ UPDATE_TRANSFORMS += (
 ADDITIONAL_NAMESPACES.update({
     'vacancy': 'http://purl.org/openorg/vacancy/',
     'salary': 'http://purl.org/openorg/salary/',
+    'meter': 'http://purl.org/metering/',
+    'timeseries': 'http://purl.org/NET/time-series/',
+
 })
