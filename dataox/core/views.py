@@ -81,8 +81,10 @@ class ExampleResourceView(ResultSetView, HTMLView, CachedView):
 
 class ExampleQueryView(ResultSetView, HTMLView, CachedView):
     _QUERY = """
-        SELECT ?dataset ?value ?label ?comment WHERE {
-            ?dataset oo:exampleQuery [
+        SELECT ?dataset ?datasetLabel ?value ?label ?comment WHERE {
+            ?dataset a void:Dataset ;
+              rdfs:label ?datasetLabel ;
+              oo:exampleQuery [
                 rdf:value ?value ;
                 rdfs:label ?label ;
                 rdfs:comment ?comment ]

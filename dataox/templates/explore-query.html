@@ -21,7 +21,7 @@
 {% regroup results by dataset as results_by_dataset %}
 {% for d in results_by_dataset %}
       <tr class="row-{% cycle "odd" "even" %}">
-        <td rowspan="{{ d.list|length }}">{{ d.grouper|node }}</td>
+        <td rowspan="{{ d.list|length }}"><a href="{{ d.grouper.doc_url }}">{{ d.list.0.datasetLabel }}</a></td>
         {% for result in d.list %}
           {% if not forloop.first %}<tr>{% endif %}
           <td><a href="{% host_url sparql on data %}?query={{ result.value|urlencode }}">{{ result.label }}</a></td>
