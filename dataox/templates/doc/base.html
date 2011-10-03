@@ -100,7 +100,7 @@
         <ul>
 {% for query in queries %}
           <li>
-            <a href="{% host_url sparql on data %}?query={{ query|urlencode }}">{{ query }}</a>
+            <a href="{% host_url sparql on data %}?common_prefixes=on&query={{ query|urlencode }}">{{ query }}</a>
           </li>
 {% endfor %}
         </ul>
