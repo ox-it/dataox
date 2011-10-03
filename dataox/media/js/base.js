@@ -10,12 +10,15 @@ function widgetMap(elementID, longitude, latitude) {
                map.getProjectionObject() // to Spherical Mercator Projection
               );
  
-  var zoom=7;
+  var zoom=11;
  
   var markers = new OpenLayers.Layer.Markers( "Markers" );
   map.addLayer(markers);
  
-  markers.addMarker(new OpenLayers.Marker(lonLat));
+  var size = new OpenLayers.Size(21,25);
+  var offset = new OpenLayers.Pixel(-(size.w/2), -size.h);
+  var icon = new OpenLayers.Icon('/site-media/marker.png', size, offset);
+  markers.addMarker(new OpenLayers.Marker(lonLat), icon);
  
   map.setCenter (lonLat, zoom);
 }
