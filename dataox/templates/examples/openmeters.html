@@ -5,7 +5,7 @@
 {% block extrahead %}
 
 <script type="text/javascript">
-    var meterpoint_query  = "PREFIX meter: <http://purl.org/metering/>\n"
+    var meterpoint_query  = "PREFIX meter: <http://purl.org/meter/>\n"
                           + "PREFIX timeseries: <http://purl.org/NET/time-series/>\n"
                           + "PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>\n"
                           + "PREFIX skos: <http://www.w3.org/2004/02/skos/core#>\n"
@@ -20,7 +20,7 @@
                           + "  ?place skos:prefLabel ?placeName .\n"
                           + "} ORDER BY ?label\n";
     
-    var samples_query = "PREFIX meter: <http://purl.org/metering/>\n"
+    var samples_query = "PREFIX meter: <http://purl.org/meter/>\n"
                       + "PREFIX timeseries: <http://purl.org/NET/time-series/>\n"
                       + "SELECT * WHERE {\n"
                       + "  <TIMESERIES>\n"
