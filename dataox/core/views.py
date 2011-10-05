@@ -11,9 +11,9 @@ from humfrey.utils.resource import Resource
 class DatasetView(RDFView, HTMLView, CachedView):
     _QUERY = """
         DESCRIBE ?dataset ?license ?publisher WHERE {
-            ?dataset a void:Dataset ;
-                     dcterms:license ?license ;
-                     dcterms:publisher ?publisher .
+            ?dataset a void:Dataset .
+            OPTIONAL { ?dataset dcterms:license ?license } .
+            OPTIONAL { ?dataset dcterms:publisher ?publisher } .
         }"""
 
     def get(self, request):
