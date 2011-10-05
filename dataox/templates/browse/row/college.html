@@ -1,0 +1,12 @@
+{% load humfrey_desc %}
+<td><a href="{{ result.uri|doc_url }}">{{ result.label }}</a></td>
+<td>
+  {% if result.homepage %}
+    <a href="{{ result.homepage }}">{{ result.homepage }}</a>
+  {% endif %}
+</td>
+<td>
+  {% if result.logo %}
+    <img src="{{ result.logo }}" alt="{{ result.label }} Crest"/>
+  {% endif %}
+</td>

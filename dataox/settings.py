@@ -15,6 +15,7 @@ INSTALLED_APPS += (
     'dataox.resource',
     'humfrey.update',
     'humfrey.graphviz',
+    'humfrey.browse',
     'openorg_timeseries',
 )
 
@@ -85,3 +86,26 @@ ADDITIONAL_NAMESPACES.update({
     'timeseries': 'http://purl.org/NET/time-series/',
 
 })
+
+BROWSE_LISTS = [
+    {'id': 'college',
+     'name': 'Colleges of the University of Oxford',
+     'row_template': 'browse/row/college.html',
+     'query': """SELECT ?uri ?label ?homepage ?logo WHERE {
+                   ?uri a oxp:College ;
+                     skos:prefLabel ?label .
+                   OPTIONAL { ?uri foaf:homepage ?homepage } .
+                   OPTIONAL { ?uri foaf:logo ?logo } .
+                 }"""},
+    {'id': 'unit',
+     'name': 'Units of the University of Oxford',
+     'row_template': 'browse/row/unit.html',
+     'query': """SELECT ?uri ?label ?homepage ?division ?division_label WHERE {
+                   ?uri rdf:type/rdfs:subClassOf* foaf:Organization ;
+                     skos:prefLabel ?label .
+                   OPTIONAL { ?uri foaf:homepage ?homepage } .
+                   OPTIONAL { ?uri org:subOrganizationOf* ?division .
+                              ?division a oxp:Division ;
+                                skos:prefLabel ?division_label } .
+                 }"""},
+]
