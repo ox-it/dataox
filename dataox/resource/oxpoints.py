@@ -44,5 +44,8 @@ class Place(object):
     def get_all_time_series(self):
         return [Resource(uri, self._graph, self._endpoint) for uri in self._graph.subjects(NS.rdf.type, NS.timeseries.TimeSeries)]
     def get_time_series(self):
-        return self.meter_pertainsTo_inv.timeseries_timeSeries
+        try:
+            return self.meter_pertainsTo_inv.timeseries_timeSeries
+        except AttributeError:
+            return None
 register(Place, 'oxp:Building', 'oxp:Site', 'oxp:Space', 'oxp:Room')
