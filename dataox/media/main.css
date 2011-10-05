@@ -260,3 +260,18 @@ ul.used-query-list {
 li.used-query code {
     white-space: pre;
 }
+
+div.pagination {
+    text-align: center;
+    font-size: 12pt;
+    margin:1em;
+}
+
+a.sort-header, a.sort-header:visited {
+    color: #00f;
+}
+
+a.current-sort {
+    color: #f00 !important;
+}
+

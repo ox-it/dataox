@@ -6,6 +6,20 @@
 <article>
   <h1>Explore</h1>
 
+  <p>Not sure where to start? This page contains some handy pointers, and some examples of how to play with the data.</p>
+
+  <section>
+    <h2>Browse</h2>
+
+    <p>Find resources by browsing through one of the following pre-prepared lists:</p>
+
+    <ul>
+{% for list in lists %}
+      <li><a href="{% url browse:list list.id %}">{{ list.name }}</a></li>
+{% endfor %}
+    </ul>
+  </section>
+
   <section>
     <h2>Starting points</h2>
   

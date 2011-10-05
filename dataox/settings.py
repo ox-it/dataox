@@ -45,6 +45,7 @@ TEMPLATE_DIRS = (
 ) + TEMPLATE_DIRS
 
 THUMBNAIL_WIDTHS = (200, 400)
+THUMBNAIL_HEIGHTS = (80,)
 
 ID_MAPPING = (
     ('http://data.ox.ac.uk/id/', 'http://data.ox.ac.uk/doc/', True),
@@ -90,22 +91,67 @@ ADDITIONAL_NAMESPACES.update({
 BROWSE_LISTS = [
     {'id': 'college',
      'name': 'Colleges of the University of Oxford',
-     'row_template': 'browse/row/college.html',
-     'query': """SELECT ?uri ?label ?homepage ?logo WHERE {
+     'template_name': 'browse/list/college',
+     'initial_sort': 'sortLabel',
+     'query': """SELECT ?uri (SAMPLE(?label) as ?label) (COALESCE(?sortLabel, ?label) as ?sortLabel) (SAMPLE(?homepage) as ?homepage) (SAMPLE(?logo) as ?logo) (SAMPLE(?depiction) as ?depiction) WHERE {
                    ?uri a oxp:College ;
                      skos:prefLabel ?label .
                    OPTIONAL { ?uri foaf:homepage ?homepage } .
                    OPTIONAL { ?uri foaf:logo ?logo } .
-                 }"""},
+                   OPTIONAL { ?uri foaf:depiction ?depiction }
+                 } GROUP BY ?label ?uri"""},
     {'id': 'unit',
      'name': 'Units of the University of Oxford',
-     'row_template': 'browse/row/unit.html',
-     'query': """SELECT ?uri ?label ?homepage ?division ?division_label WHERE {
-                   ?uri rdf:type/rdfs:subClassOf* foaf:Organization ;
+     'template_name': 'browse/list/unit',
+     'initial_sort': 'sortLabel',
+     'query': """SELECT ?uri ?label (COALESCE(?sortLabel, ?label) as ?sortLabel) ?homepage ?division ?division_label ?oucs ?finance WHERE {
+                   ?uri rdf:type/rdfs:subClassOf* oxp:Unit ;
                      skos:prefLabel ?label .
+                   OPTIONAL { ?uri ov:sortLabel ?sortLabel } .
                    OPTIONAL { ?uri foaf:homepage ?homepage } .
+                   OPTIONAL { ?uri oxp:hasOUCSCode ?oucs } .
+                   OPTIONAL { ?uri oxp:hasFinanceCode ?finance } .
                    OPTIONAL { ?uri org:subOrganizationOf* ?division .
                               ?division a oxp:Division ;
                                 skos:prefLabel ?division_label } .
-                 }"""},
+                 } ORDER BY ?label ?uri"""},
+    {'id': 'current-vacancy',
+     'name': 'Current vacancies',
+     'template_name': 'browse/list/current-vacancy',
+     'initial_sort': 'label',
+     'per_page': 50,
+     'group': ['unit'],
+     'query': """SELECT ?uri ?label ?unit ?unit_label ?salary ?description ?opening ?closing WHERE {
+                   GRAPH <http://data.ox.ac.uk/graph/vacancies/current> {
+                   ?uri a vacancy:Vacancy ;
+                     rdfs:label ?label ;
+                     vacancy:applicationClosingDate ?closing .
+                   } .
+                   FILTER (?closing > now()) .
+                   OPTIONAL { ?uri vacancy:organizationalUnit ?unit . ?unit skos:prefLabel ?unit_label } .
+                   OPTIONAL { ?uri vacancy:salary/rdfs:label ?salary } .
+                   OPTIONAL { ?uri rdfs:comment ?description } .
+                   OPTIONAL { ?uri vacancy:applicationOpeningDate ?opening } .
+                   ?uri vacancy:applicationClosingDate ?closing
+                   FILTER ( datatype(?description) != xtypes:Fragment-XHTML ) .
+                 } ORDER BY ?label ?uri"""},
+    {'id': 'building',
+     'name': 'Buildings',
+     'template_name': 'browse/list/building',
+     'initial_sort': 'label',
+     'per_page': 50,
+     'group': ['occupant', 'depiction'],
+     'query': """SELECT ?uri ?label ?long ?lat ?extendedAddress ?streetAddress ?locality ?postalCode ?estates ?occupant ?occupant_label ?depiction WHERE {
+                   ?uri a oxp:Building ;
+                     skos:prefLabel ?label .
+                   OPTIONAL { ?uri geo:long ?long ; geo:lat ?lat } .
+                   OPTIONAL { ?uri oxp:hasOBNCode ?estates } .
+                   OPTIONAL { ?occupant org:hasSite ?uri ; skos:prefLabel ?occupant_label } .
+                   OPTIONAL { ?uri foaf:depiction ?depiction } .
+                   OPTIONAL { ?uri v:adr ?adr .
+                                OPTIONAL { ?adr v:extended-address ?extendedAddress } .
+                                OPTIONAL { ?adr v:street-address ?streetAddress } .
+                                OPTIONAL { ?adr v:locality ?locality } .
+                                OPTIONAL { ?adr v:postal-code ?postalCode } } .
+                 } ORDER BY ?label ?uri"""},
 ]

@@ -117,5 +117,4 @@ function widgetOpenMetersData(elementID, series, seriesData, include, exclude) {
   };
     $('#'+elementID).html("");
     $.plot($('#'+elementID), [data], options);
-  
 }

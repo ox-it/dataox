@@ -1,0 +1,19 @@
+{% extends "browse/list.html" %}{% load humfrey_desc %}
+
+{% block browse_headers %}
+  <th>{% with field="label" name="Name" %}{% include "browse/sort_header.html" %}{% endwith %}</th>
+  <th>{% with field="unit_label" name="Unit" %}{% include "browse/sort_header.html" %}{% endwith %}</th>
+  <th>{% with field="salary" name="Salary" %}{% include "browse/sort_header.html" %}{% endwith %}</th>
+  <th>Description</th>
+{% endblock %}
+
+{% block browse_item %}
+<td><a href="{{ result.uri|doc_url }}">{{ result.label }}</a></td>
+<td>
+  {% for unit in result.unit %}
+    <a href="{{ unit.uri|doc_url }}">{{ unit.label }}</a>{% if not forloop.last %}<br/>{% endif %}
+  {% endfor %}
+</td>
+<td>{{ result.salary|default:"" }}</td>
+<td>{{ result.description|default:""|truncatewords:20 }}</td>
+{% endblock %}

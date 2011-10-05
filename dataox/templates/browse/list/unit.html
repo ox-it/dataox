@@ -1,0 +1,25 @@
+{% extends "browse/list.html" %}{% load humfrey_desc %}
+
+{% block browse_headers %}
+  <th>{% with field="sortLabel" name="Name" %}{% include "browse/sort_header.html" %}{% endwith %}</th>
+  <th>{% with field="homepage" name="Home page" %}{% include "browse/sort_header.html" %}{% endwith %}</th>
+  <th>{% with field="division_label" name="Division" %}{% include "browse/sort_header.html" %}{% endwith %}</th>
+  <th>{% with field="oucs" name="OUCS code" %}{% include "browse/sort_header.html" %}{% endwith %}</th>
+  <th>{% with field="finance" name="Finance Code" %}{% include "browse/sort_header.html" %}{% endwith %}</th>
+{% endblock %}
+
+{% block browse_item %}
+<td><a href="{{ result.uri|doc_url }}">{{ result.label }}</a></td>
+<td>
+  {% if result.homepage %}
+    <a href="{{ result.homepage }}">{{ result.homepage }}</a>
+  {% endif %}
+</td>
+<td>
+  {% if result.division %}
+    <a href="{{ result.division|doc_url }}">{{ result.division_label }}</a>
+  {% endif %}
+</td>
+<td>{{ result.oucs|default:"" }}</td>
+<td>{{ result.finance|default:"" }}</td>
+{% endblock %}

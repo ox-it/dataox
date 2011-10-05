@@ -2,7 +2,8 @@ from __future__ import division
 
 from django_conneg.views import HTMLView
 
-from humfrey.utils.views import CachedView
+from humfrey.utils.views import CachedView, RedisView
+from humfrey.browse import views as browse_views
 from humfrey.results.views.standard import RDFView, ResultSetView
 from humfrey.utils.namespaces import NS
 from humfrey.utils.resource import Resource
@@ -48,10 +49,11 @@ EXAMPLES = (
      'description': 'Create your own feed (eg RSS, Atom) of data in data.ox!'},
 )
 
-class ExploreView(HTMLView, CachedView):
+class ExploreView(HTMLView, CachedView, RedisView):
     def get(self, request):
         context = {
             'examples': EXAMPLES,
+            'lists': self.unpack(self.get_redis_client().get(browse_views.IndexView.LIST_META)),
         }
         return self.render(request, context, 'explore')
 
