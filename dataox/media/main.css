@@ -275,3 +275,12 @@ a.current-sort {
     color: #f00 !important;
 }
 
+header {
+  position:relative;
+}
+
+img#beta-badge {
+    position:absolute;
+    bottom:-45px;
+    right:20px;
+}
