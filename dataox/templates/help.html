@@ -19,13 +19,20 @@
       <li>
         What is…
         <ul>
+          <li><a href="#opendata">open data?</a></li>
           <li><a href="#rdf">RDF?</a></li>
           <li><a href="#sparql">SPARQL?</a></li>
-          <li><a href="#opendata">open data?</a></li>
+          <li><a href="#beta">this "βήτα" thing?</a></li>
         </ul>
       </li>
       <li>
         <a href="#stars">What do the stars mean?</a>
+      </li>
+      <li>
+        <a href="#access">How do I access the data?</a>
+      </li>
+      <li>
+        <a href="#formats">What formats do you publish data in?</a>
       </li>
       <li>
         <a href="#contribute">How do I contribute a dataset?</a>
@@ -36,27 +43,8 @@
 	<h2>What is Open Data?</h2>
 
 	<p>Open Data is the idea that data across the web should be published as freely and as openly as is possible to enable others to reuse and republish as they wish.</p>
-	<p>data.ox is the University of Oxford's hub for Open Data. Currently departments often publish data on their own websites independently- the aim of data.ox is to centralise this (and other) data and to release it to a Five-Star standard!</p>
+	<p>data.ox.ac.uk is the University of Oxford's hub for Open Data. Currently departments often publish data on their own websites independently- the aim of data.ox.ac.uk is to centralise this (and other) data and to release it to a Five-Star standard!</p>
    </section>
-   
-   <section id="stars">
-    <h2>What do the stars mean?</h2>
-    
-    <p>The stars represent the extent to which a dataset is part of the linked open data web. These were the definitions used by Tim Berners-Lee during his <a href="http://www.youtube.com/watch?v=ga1aSJXCFe0">Gov 2.0 talk</a> in 2010, and have since become universally accepted.</p>
-	<table id="startable">
-	<tr><td><img src="/site-media/stars/data-badge-1.png" /></td>
-		<td id="text">One Star - Put your data on the web (in any format)</td></tr>
-	<tr><td><img src="/site-media/stars/data-badge-2.png" /></td>
-		<td id="text">Two Stars - Make it available in a machine readable format (i.e. no image scans!)</td></tr>
-	<tr><td><img src="/site-media/stars/data-badge-3.png" /></td>
-		<td id="text">Three Stars - Use a open, standard format (eg JSON)</td></tr>
-	<tr><td><img src="/site-media/stars/data-badge-4.png" /></td>
-		<td id="text">Four Stars - Use an open, linked data format (URIs for everything so people can point to your data)</td></tr>
-	<tr><td><img src="/site-media/stars/data-badge-5.png" /></td>
-		<td id="text">Five Stars - Link your data to other people’s data</td></tr>
-	</table>
-	<p>We aim to release all data on data.ox to a Five-Star standard (usually in RDF+XML, see below). However, it can be a long process to convert data into this format so we may release data to a lower standard in the hope of raising it in the future.</p>
-  </section>
   
 	<section id="rdf">
 		<h2>What is RDF?</h2>
@@ -76,20 +64,14 @@
 		
 		<p>Here, we have used <a href="http://www.dbpedia.org">DBpedia</a>'s URI for Oxford instead of ours. We have also taken our "based_near" predicate from the FOAF <em>vocabulary</em>. Predicates should (almost) always be drawn from commonly-understood <em>vocabularies</em>, in this case the <a href="http://xmlns.com/foaf/spec/">FOAF vocabulary</a>.
 		
-		<p>Data represented in RDF can be written down (serialised) in a variety of ways. The most common way is using XML which is how most of data.ox's data is stored. Other ways include Notation3 and Turtle.</p>
+		<p>Data represented in RDF can be written down (serialised) in a variety of ways. The most common way is using XML which is how most of data.ox.ac.uk's data is stored. Other ways include Notation3 and Turtle.</p>
 	</section> 
-   
-	<section id="access">
-		<h2>How do I access the data?</h2>
-		<p>The easiest way to access the raw data stored in data.ox is through our SPARQL Endpoint, available <a href="/sparql">here</a>. This can output the data in a variety of formats (see below).
-			However, we have also created a variety of Apps (available <a href="/explore">here</a>) to visualise this data and make accessing it even easier!</p>
-	</section>
 	
 	<section id="sparql">
 		<h2>What is SPARQL?</h2>
 		
 		<p>SPARQL is a query language for RDF, just as SQL is a query language for
-		   relational databases. Each query works by matching graph patterns to data held by data.ox. For example, if we run this query:</p>
+		   relational databases. Each query works by matching graph patterns to data held by data.ox.ac.uk. For example, if we run this query:</p>
 		  
 		<code>PREFIX foaf: &lt;http://xmlns.com/foaf/0.1/&gt;</code><br/>
 		<code>SELECT ?person WHERE</code><br/>
@@ -99,7 +81,40 @@
 		
 		<p>on our dataset from "What is RDF?", then <code>&lt;http://example.com/employees/Alice&gt;</code> will be returned to us. </p/>
 		
-		<p>If you are new to SPARQL and wish to make complicated queries to data.ox in SPARQL then you it may be best to read external resources such as <a href="http://en.wikipedia.org/wiki/SPARQL">Wikipedia</a>. You can also consult out "Example Queries" page, found <a href="http://data.ox.ac.uk/explore/queries/">here</a>.</p>
+		<p>If you are new to SPARQL and wish to make complicated queries to data.ox.ac.uk in SPARQL then you it may be best to read external resources such as <a href="http://en.wikipedia.org/wiki/SPARQL">Wikipedia</a>. You can also consult out "Example Queries" page, found <a href="http://data.ox.ac.uk/explore/queries/">here</a>.</p>
+	</section>
+	
+	<section id="beta">
+	  <h2>What is this "βήτα" thing?</h2>
+	  
+	  <p>data.ox.ac.uk is currently offered on a best-efforts basis as a beta service. This means that we'll do our best to keep it up and running, but make no guarantees.</p>
+	  
+	  <p>We hope that data.ox.ac.uk will become a supported service in the not-too-distant future. Watch this space!</p>
+	</section>
+   
+   <section id="stars">
+    <h2>What do the stars mean?</h2>
+    
+    <p>The stars represent the extent to which a dataset is part of the linked open data web. These were the definitions used by Tim Berners-Lee during his <a href="http://www.youtube.com/watch?v=ga1aSJXCFe0">Gov 2.0 talk</a> in 2010, and have since become universally accepted.</p>
+	<table id="startable">
+	<tr><td><img src="/site-media/stars/data-badge-1.png" /></td>
+		<td id="text">One Star - Put your data on the web (in any format)</td></tr>
+	<tr><td><img src="/site-media/stars/data-badge-2.png" /></td>
+		<td id="text">Two Stars - Make it available in a machine readable format (i.e. no image scans!)</td></tr>
+	<tr><td><img src="/site-media/stars/data-badge-3.png" /></td>
+		<td id="text">Three Stars - Use a open, standard format (eg JSON)</td></tr>
+	<tr><td><img src="/site-media/stars/data-badge-4.png" /></td>
+		<td id="text">Four Stars - Use an open, linked data format (URIs for everything so people can point to your data)</td></tr>
+	<tr><td><img src="/site-media/stars/data-badge-5.png" /></td>
+		<td id="text">Five Stars - Link your data to other people’s data</td></tr>
+	</table>
+	<p>We aim to release all data on data.ox.ac.uk to a Five-Star standard. However, it can be a long process to convert data into this format so we may release data to a lower standard in the hope of raising it in the future.</p>
+  </section>
+   
+	<section id="access">
+		<h2>How do I access the data?</h2>
+		<p>The easiest way to access the raw data stored in data.ox.ac.uk is through our SPARQL Endpoint, available <a href="/sparql">here</a>. This can output the data in a variety of formats (see below).
+			However, we have also created a variety of Apps (available <a href="/explore">here</a>) to visualise this data and make accessing it even easier!</p>
 	</section>
 	
    <section id="formats">
@@ -120,7 +135,7 @@
       
     <section id="contribute">
     <h2>How do I contribute a dataset?</h2>
-	<p>We would be very happy to incorporate your datasets into data.ox. Please contact us on <a href="mailto:opendata@oucs.ox.ac.uk">opendata@oucs.ox.ac.uk</a>.</p>
+	<p>We would be very happy to incorporate your datasets into data.ox.ac.uk. Please contact us on <a href="mailto:opendata@oucs.ox.ac.uk">opendata@oucs.ox.ac.uk</a>.</p>
    </section>
   
 
