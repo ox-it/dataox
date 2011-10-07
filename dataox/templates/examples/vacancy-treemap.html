@@ -8,26 +8,26 @@
   <script type="text/javascript">
     var endpointURL = 'http://data.ox.ac.uk/sparql/';
 
-	var query = "SELECT ?unit (SAMPLE(?unitLabel) as ?unitLabel) (count(?vacancy) as ?vacancies) ?parent (SAMPLE(?parentLabel) as ?parentLabel) ?ancestor (SAMPLE(?ancestorLabel) as ?ancestorLabel) WHERE {\n"
+	var query = "SELECT ?unit (SAMPLE(?unitLabel_) as ?unitLabel) (count(?vacancy) as ?vacancies) ?parent (SAMPLE(?parentLabel_) as ?parentLabel) ?ancestor (SAMPLE(?ancestorLabel_) as ?ancestorLabel) WHERE {\n"
               + "  GRAPH <http://data.ox.ac.uk/graph/vacancies/current> {\n" 
               + "    ?vacancy a vacancy:Vacancy ;\n"
               + "      vacancy:organizationalUnit ?unit ;\n"
               + "      vacancy:applicationClosingDate ?closes .\n"
               + "    FILTER (?closes > now()) .\n"
               + "  } .\n"
-              + "  ?unit skos:prefLabel ?unitLabel .\n"
-              + "  OPTIONAL { ?unit org:subOrganizationOf* ?parent . ?parent skos:prefLabel ?parentLabel ."
-              + "             OPTIONAL {?parent org:subOrganizationOf ?ancestor . ?ancestor skos:prefLabel ?ancestorLabel } }\n"
+              + "  ?unit skos:prefLabel ?unitLabel_ .\n"
+              + "  OPTIONAL { ?unit org:subOrganizationOf* ?parent . ?parent skos:prefLabel ?parentLabel_ ."
+              + "             OPTIONAL {?parent org:subOrganizationOf ?ancestor . ?ancestor skos:prefLabel ?ancestorLabel_ } }\n"
               + "} GROUP BY ?unit ?parent ?ancestor ORDER BY ?unit ?parent\n";
 
 
-	var vacancyQuery = "SELECT ?vacancy (SAMPLE(?label) as ?label) (SAMPLE(?description) as ?description) (SAMPLE(?closing) as ?closing) (SAMPLE(?salary) as ?salary) (SAMPLE(?homepage) as ?homepage) WHERE {\n"
+	var vacancyQuery = "SELECT ?vacancy (SAMPLE(?label_) as ?label) (SAMPLE(?description_) as ?description) (SAMPLE(?closing_) as ?closing) (SAMPLE(?salary_) as ?salary) (SAMPLE(?homepage_) as ?homepage) WHERE {\n"
 	                 + "  ?vacancy vacancy:organizationalUnit <UNIT> ;\n"
-                     + "    rdfs:label ?label .\n"
-                     + "  OPTIONAL {?vacancy rdfs:comment ?description . FILTER ( datatype(?description) != xtypes:Fragment-XHTML ) }\n"
-                     + "  OPTIONAL {?vacancy vacancy:applicationClosingDate ?closing . }\n"
-                     + "  OPTIONAL {?vacancy vacancy:salary/rdfs:label ?salary . }\n"
-                     + "  OPTIONAL {?vacancy foaf:homepage ?homepage . }\n"
+                     + "    rdfs:label ?label_ .\n"
+                     + "  OPTIONAL {?vacancy rdfs:comment ?description_ . FILTER ( datatype(?description_) != xtypes:Fragment-XHTML ) }\n"
+                     + "  OPTIONAL {?vacancy vacancy:applicationClosingDate ?closing_ . }\n"
+                     + "  OPTIONAL {?vacancy vacancy:salary/rdfs:label ?salary_ . }\n"
+                     + "  OPTIONAL {?vacancy foaf:homepage ?homepage_ . }\n"
                      + "} GROUP BY ?vacancy ORDER BY ASC(?closing)\n";
 
     google.load("visualization", "1", {packages:["treemap"]});
