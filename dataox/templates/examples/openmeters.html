@@ -11,10 +11,10 @@
                           + "PREFIX skos: <http://www.w3.org/2004/02/skos/core#>\n"
                           + "SELECT * WHERE {\n"
                           + "  ?meterPoint a meter:MeterPoint ;\n"
-                          + "    timeseries:timeseries ?timeseries ;\n"
+                          + "    timeseries:timeSeries ?timeSeries ;\n"
                           + "    rdfs:label ?label ;\n"
                           + "    meter:pertainsTo ?place .\n"
-                          + "  ?timeseries a timeseries:TimeSeries ;\n"
+                          + "  ?timeSeries a timeseries:TimeSeries ;\n"
                           + "    timeseries:seriesName ?seriesName ;\n"
                           + "    timeseries:endpoint ?endpoint .\n"
                           + "  ?place skos:prefLabel ?placeName .\n"
@@ -38,10 +38,6 @@
         query: meterpoint_query,
         dataType: 'json',
       }, function (data) {
-        // For some reason jQuery doesn't parse the return value as JSON, so
-        // we'll get it parsed if it hasn't been already.
-        if (data.head == undefined) data = $.parseJSON(data);
-        
         var select = $('#meterpoint_id');
         for (var i in data.results.bindings) {
           var binding = data.results.bindings[i];
@@ -51,7 +47,7 @@
         
         select.change(update);
         $('#sample_id').change(update);
-      });
+      }, "json");
     });
 
     function update(e) {
@@ -61,7 +57,7 @@
       if (meterpoint && meterpoints[meterpoint].samples == undefined) {
     	$.get('/sparql/', {
     	      format: 'srj',
-    	      query: samples_query.replace('TIMESERIES', meterpoints[meterpoint].timeseries.value),
+    	      query: samples_query.replace('TIMESERIES', meterpoints[meterpoint].timeSeries.value),
     	      dataType: 'json',
     	      }, function (data) {
                 if (data.head == undefined) data = $.parseJSON(data);
