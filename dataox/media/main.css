@@ -75,7 +75,8 @@ footer {
 
 footer a,
 footer a:link {
-    color: #fff;
+    color: #fff !important;
+    text-decoration: underline !important;
 }
 
 nav li {
