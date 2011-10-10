@@ -43,10 +43,7 @@ EXAMPLES = (
      'description': 'The distribution of job vacancies across the University.'},
 	{'slug': 'unicard-explorer',
      'name': 'University Card Explorer',
-     'description': 'A tool for exploring statistics about the Oxford\'s bod (university) cards.'},
-    {'slug': 'feed-creator',
-     'name': 'Feed Creator',
-     'description': 'Create your own feed (eg RSS, Atom) of data in data.ox!'},
+     'description': 'A tool for exploring statistics about University Card holders.'},
 )
 
 class ExploreView(HTMLView, CachedView, RedisView):
