@@ -94,28 +94,28 @@ BROWSE_LISTS = [
      'name': 'Colleges of the University of Oxford',
      'template_name': 'browse/list/college',
      'initial_sort': 'sortLabel',
-     'query': """SELECT ?uri (SAMPLE(?label) as ?label) (COALESCE(?sortLabel, ?label) as ?sortLabel) (SAMPLE(?homepage) as ?homepage) (SAMPLE(?logo) as ?logo) (SAMPLE(?depiction) as ?depiction) WHERE {
+     'query': """SELECT ?uri (SAMPLE(?label_) as ?label) (SAMPLE(?homepage_) as ?homepage) (SAMPLE(?logo_) as ?logo) (SAMPLE(?depiction_) as ?depiction) WHERE {
                    ?uri a oxp:College ;
-                     skos:prefLabel ?label .
-                   OPTIONAL { ?uri foaf:homepage ?homepage } .
-                   OPTIONAL { ?uri foaf:logo ?logo } .
-                   OPTIONAL { ?uri foaf:depiction ?depiction }
-                 } GROUP BY ?label ?uri"""},
+                     skos:prefLabel ?label_ .
+                   OPTIONAL { ?uri foaf:homepage ?homepage_ } .
+                   OPTIONAL { ?uri foaf:logo ?logo_ } .
+                   OPTIONAL { ?uri foaf:depiction ?depiction_ }
+                 } GROUP BY ?uri"""},
     {'id': 'unit',
      'name': 'Units of the University of Oxford',
      'template_name': 'browse/list/unit',
      'initial_sort': 'sortLabel',
-     'query': """SELECT ?uri ?label (COALESCE(?sortLabel, ?label) as ?sortLabel) ?homepage ?division ?division_label ?oucs ?finance WHERE {
+     'query': """SELECT ?uri (SAMPLE(?label_) as ?label) (SAMPLE(?homepage_) as ?homepage) (COALESCE(SAMPLE(?sortLabel_), SAMPLE(?label_)) as ?sortLabel) ?division ?division_label (SAMPLE(?oucs_) as ?oucs) (SAMPLE(?finance_) as ?finance) WHERE {
                    ?uri rdf:type/rdfs:subClassOf* oxp:Unit ;
-                     skos:prefLabel ?label .
-                   OPTIONAL { ?uri ov:sortLabel ?sortLabel } .
-                   OPTIONAL { ?uri foaf:homepage ?homepage } .
-                   OPTIONAL { ?uri oxp:hasOUCSCode ?oucs } .
-                   OPTIONAL { ?uri oxp:hasFinanceCode ?finance } .
+                     skos:prefLabel ?label_ .
+                   OPTIONAL { ?uri ov:sortLabel ?sortLabel_ } .
+                   OPTIONAL { ?uri foaf:homepage ?homepage_ } .
+                   OPTIONAL { ?uri oxp:hasOUCSCode ?oucs_ } .
+                   OPTIONAL { ?uri oxp:hasFinanceCode ?finance_ } .
                    OPTIONAL { ?uri org:subOrganizationOf* ?division .
                               ?division a oxp:Division ;
                                 skos:prefLabel ?division_label } .
-                 } ORDER BY ?label ?uri"""},
+                 } GROUP BY ?uri ?division ?division_label"""},
     {'id': 'current-vacancy',
      'name': 'Current vacancies',
      'template_name': 'browse/list/current-vacancy',
