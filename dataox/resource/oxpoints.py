@@ -20,8 +20,17 @@ class CollegeHall(object):
         return data
 
     def widget_templates(self):
-        return ['widgets/norrington.html'] + super(CollegeHall, self).widget_templates()
+        return [('widgets/norrington.html', self)] + super(CollegeHall, self).widget_templates()
 register(CollegeHall, 'oxp:Hall', 'oxp:College')
+
+class Organization(object):
+    def widget_templates(self):
+        widgets = super(Organization, self).widget_templates()
+        for account in self.all.foaf_account:
+            widgets.extend(account.widget_templates())
+        return widgets
+register(Organization, 'oxp:College', 'oxp:Hall', 'oxp:Faculty', 'oxp:Unit', 'oxp:Department',
+                       'oxp:Library', 'oxp:University', 'org:Organization')
 
 class Place(object):
     @classmethod
@@ -39,7 +48,7 @@ class Place(object):
         ]
     
     def widget_templates(self):
-        return ('widgets/openmeters.html',)
+        return [('widgets/openmeters.html', self),]
     
     def get_all_time_series(self):
         return [Resource(uri, self._graph, self._endpoint) for uri in self._graph.subjects(NS.rdf.type, NS.timeseries.TimeSeries)]

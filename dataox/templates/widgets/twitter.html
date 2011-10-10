@@ -27,5 +27,5 @@ new TWTR.Widget({
     avatars: false,
     behavior: 'all'
   }
-}).render().setUser('{{ account.foaf_accountName|escapejs }}').start();
+}).render().setUser('{{ subject.foaf_accountName|escapejs }}').start();
 </script>
