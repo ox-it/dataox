@@ -136,19 +136,28 @@ class VacancyView(FeedView, RDFView):
           ?vacancy a vacancy:Vacancy ;
             vacancy:organizationalUnit ?unit ;
             vacancy:salary ?salary ;
-            vacancy:applicationClosingDate ?closes .
+            vacancy:applicationClosingDate ?closes ;
+            rdfs:label ?label ;
+            rdfs:comment ?description .
           FILTER (?closes != now()) .
         } .
         GRAPH <http://data.ox.ac.uk/graph/oxpoints> {
           ?unit org:subOrganizationOf%(cardinality)s %%(unit)s
-        }
+        } .
+        %%(filter)s
       }
 
     }""" % {'cardinality': '*' if self.all else '{0}'}
 
     def get(self, request, oxpoints_id, format=None):
+        filter = []
+        if 'keyword' in request.GET:
+            keyword = rdflib.Literal(request.GET['keyword']).n3()
+            filter.append("FILTER (regex(?label, %(keyword)s, 'i') || regex(?description, %(keyword)s, 'i'))" % {'keyword': keyword})
+        filter = ' .\n      '.join(filter)
         self.unit = rdflib.URIRef('http://oxpoints.oucs.ox.ac.uk/id/%s' % oxpoints_id)
-        self.graph = self.endpoint.query(self.query % {'unit': self.unit.n3()})
+
+        self.graph = self.endpoint.query(self.query % {'unit': self.unit.n3(), 'filter': filter})
         if not self.graph:
             raise Http404
 
@@ -158,13 +167,16 @@ class VacancyView(FeedView, RDFView):
                                         'format': renderer.format,
                                         'name': renderer.name,
                                         'mimetypes': renderer.mimetypes}
+            if request.META['QUERY_STRING']:
+                formats[renderer.format]['url'] += '?' + request.META['QUERY_STRING']
 
         
         self.context = {'unit': Resource(self.unit, self.graph, self.endpoint),
                         'graph': self.graph,
                         'formats': formats.values(),
                         'format_mapping': formats,
-                        'all': self.all,}
+                        'all': self.all,
+                        'keyword': request.GET.get('keyword')}
         
         return super(VacancyView, self).get(request, oxpoints_id=oxpoints_id, format=format)
         

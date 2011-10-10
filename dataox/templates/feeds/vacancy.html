@@ -17,10 +17,18 @@
         <li><a href="{{ format.url }}">{{ format.name }}</a></li>{% endfor %}
       </ul>
     </section>
+    <section class="page-metadata">
+      <h2>Filter</h2>
+      <form method="get" action="">
+        <label for="keyword">Enter a keyword by which to filter:</label>
+        <input id="keyword" name="keyword" value="{{ keyword|default:"" }}"/>
+        <input type="submit" value="Go!"/>
+      </form>
+    </section>
   </aside>
   
   {% if items %}
-  <p>There are currently {{ items|length }} vacancies within {{ unit.label }}:</p>
+  <p>There are currently {{ items|length }} vacancies within {{ unit.label }}{% if keyword %} that mention '<strong>{{ keyword }}</strong>'{% endif %}:</p>
   
   <table class="sparql-results">
     <thead>
@@ -39,7 +47,7 @@
     </tbody>
   </table>
   {% else %}
-  <p>There are not currently any vacancies within {{ unit.label }}.</p>
+  <p>There are not currently any vacancies within {{ unit.label }}{% if keyword %} that mention '<strong>{{ keyword }}</strong>'{% endif %}.</p>
   {% endif %}
   
 
