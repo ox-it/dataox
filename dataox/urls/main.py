@@ -39,6 +39,7 @@ urlpatterns = patterns('',
     (r'^browse/', include('humfrey.browse.urls', 'browse')),
     (r'^pingback/', include('humfrey.pingback.urls', 'pingback')),
     (r'^update/', include('humfrey.update.urls', 'update')),
+    (r'^feeds/', include('dataox.feeds.urls', 'feeds')),
 
     (r'^external-image/$', images_views.ResizedImageView.as_view(), {}, 'resized-image'),
 

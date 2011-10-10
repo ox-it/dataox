@@ -13,6 +13,7 @@ INSTALLED_APPS += (
     'humfrey.longliving',
     'dataox.core',
     'dataox.resource',
+    'dataox.feeds',
     'humfrey.update',
     'humfrey.graphviz',
     'humfrey.browse',
