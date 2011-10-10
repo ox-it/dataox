@@ -76,40 +76,36 @@
         loadData();
     }
     
-    function updateSamples() {
+    function updateSamples() {/*
       var meterpoint = $('#meterpoint_id').val();
       var samples = $('#sample_id').empty();
       for (var i in meterpoints[meterpoint].samples) {
     	  var sample = meterpoints[meterpoint].samples[i];
     	  samples.append($('<option/>').val(sample.sampling.value).text(sample.sampleResolution.value));
       }
-    }
+    */}
 
 
     function loadData() {
       var meterpoint = $('#meterpoint_id').val();
-      var sample = $('#sample_id').val();
+      var sample = 86400; //$('#sample_id').val();
       
       meterpoint = meterpoints[meterpoint];
-      sample = meterpoint.samples[sample];
+      //sample = meterpoint.samples[sample];
       
       $('#plot').html('<span id="loading">Loading&hellip;</span>')
       $.get(meterpoint.endpoint.value, {
         format: 'json',
         action: 'fetch',
         series: meterpoint.seriesName.value,
-        resolution: sample.sampleResolution.value,
+        resolution: sample, //sample.sampleResolution.value,
         type: 'average',
-        startTime: '2011-07-01 00:00:00',
+        startTime: '2001-07-01T00:00:00',
         //endTime: '2008-03-30 06:00:00',
       }, function(data) {
-        // For some reason jQuery doesn't parse the return value as JSON, so
-        // we'll get it parsed if it hasn't been already.
-        if (data.series == undefined) data = $.parseJSON(data);
-
         var options = {
-          lines: { show: true, lineWidth: 1, fill: true, fillColor: '#B8CCD7' },
-          points: { show: true, radius: 1 },
+          lines: { show: false, lineWidth: 1, fill: true, fillColor: '#B8CCD7' },
+          points: { show: true, radius: 3 },
           xaxis: { 
             mode: "time", // first coord has to be a _javascript timestamp_ ie epoch in milliseconds
 /*          min: (new Date(yesterday)).getTime(),
@@ -142,7 +138,7 @@
         $('#plot').html('')
         $.plot($('#plot'), [series], options);
 
-      });
+      }, "json");
     }
   </script>
 <style type="text/css">
@@ -196,8 +192,8 @@ h1 {
 	<div id="measures">
 		<select id="meterpoint_id">
 			<option value=""></option>
-		</select> <select id="sample_id">
-			<option value=""></option>
+		</select><!-- <select id="sample_id">
+			<option value=""></option> -->
 		</select>
 	</div>
 
