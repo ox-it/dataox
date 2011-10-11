@@ -93,7 +93,7 @@ BROWSE_LISTS = [
     {'id': 'college',
      'name': 'Colleges of the University of Oxford',
      'template_name': 'browse/list/college',
-     'initial_sort': 'sortLabel',
+     'initial_sort': 'label',
      'query': """SELECT ?uri (SAMPLE(?label_) as ?label) (SAMPLE(?homepage_) as ?homepage) (SAMPLE(?logo_) as ?logo) (SAMPLE(?depiction_) as ?depiction) WHERE {
                    ?uri a oxp:College ;
                      skos:prefLabel ?label_ .
