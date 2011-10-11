@@ -155,4 +155,24 @@ BROWSE_LISTS = [
                                 OPTIONAL { ?adr v:locality ?locality } .
                                 OPTIONAL { ?adr v:postal-code ?postalCode } } .
                  } ORDER BY ?label ?uri"""},
+    {'id': 'electricity-meter',
+     'name': 'Electricity meters',
+     'template_name': 'browse/list/meter',
+     'initial_sort': 'label',
+     'per_page': 100,
+     'group': ['place', 'include', 'exclude'],
+     'query': """SELECT ?uri ?type ?meterPoint ?label ?place ?place_label ?place_lat ?place_long ?place_type ?seriesName ?include ?include_seriesName ?exclude ?exclude_seriesName WHERE {
+                   ?uri a ?type .
+                   FILTER (?type in (timeseries:TimeSeries, timeseries:VirtualTimeSeries)) .
+                   ?meterPoint timeseries:timeSeries ?uri .
+                   OPTIONAL { ?meterPoint rdfs:label ?label } .
+                   OPTIONAL { ?uri timeseries:seriesName ?seriesName } .
+                   OPTIONAL { ?uri timeseries:include ?include . ?include timeseries:seriesName ?include_seriesName } .
+                   OPTIONAL { ?uri timeseries:exclude ?exclude . ?exclude timeseries:seriesName ?exclude_seriesName } .
+                   OPTIONAL { ?meterPoint meter:pertainsTo ?place .
+                              ?place a ?place_type ;
+                                 skos:prefLabel ?place_label .
+                              OPTIONAL { ?place geo:lat ?place_lat ;
+                                           geo:long ?place_long } }
+                 }"""},
 ]
