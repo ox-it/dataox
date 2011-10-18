@@ -13,6 +13,7 @@ INSTALLED_APPS += (
     'humfrey.longliving',
     'dataox.core',
     'dataox.resource',
+    'dataox.feeds',
     'humfrey.update',
     'humfrey.graphviz',
     'humfrey.browse',
@@ -45,6 +46,7 @@ TEMPLATE_DIRS = (
 ) + TEMPLATE_DIRS
 
 THUMBNAIL_WIDTHS = (200, 400)
+THUMBNAIL_HEIGHTS = (80,)
 
 ID_MAPPING = (
     ('http://data.ox.ac.uk/id/', 'http://data.ox.ac.uk/doc/', True),
@@ -90,22 +92,87 @@ ADDITIONAL_NAMESPACES.update({
 BROWSE_LISTS = [
     {'id': 'college',
      'name': 'Colleges of the University of Oxford',
-     'row_template': 'browse/row/college.html',
-     'query': """SELECT ?uri ?label ?homepage ?logo WHERE {
+     'template_name': 'browse/list/college',
+     'initial_sort': 'label',
+     'query': """SELECT ?uri (SAMPLE(?label_) as ?label) (SAMPLE(?homepage_) as ?homepage) (SAMPLE(?logo_) as ?logo) (SAMPLE(?depiction_) as ?depiction) WHERE {
                    ?uri a oxp:College ;
-                     skos:prefLabel ?label .
-                   OPTIONAL { ?uri foaf:homepage ?homepage } .
-                   OPTIONAL { ?uri foaf:logo ?logo } .
-                 }"""},
+                     skos:prefLabel ?label_ .
+                   OPTIONAL { ?uri foaf:homepage ?homepage_ } .
+                   OPTIONAL { ?uri foaf:logo ?logo_ } .
+                   OPTIONAL { ?uri foaf:depiction ?depiction_ }
+                 } GROUP BY ?uri"""},
     {'id': 'unit',
      'name': 'Units of the University of Oxford',
-     'row_template': 'browse/row/unit.html',
-     'query': """SELECT ?uri ?label ?homepage ?division ?division_label WHERE {
-                   ?uri rdf:type/rdfs:subClassOf* foaf:Organization ;
-                     skos:prefLabel ?label .
-                   OPTIONAL { ?uri foaf:homepage ?homepage } .
+     'template_name': 'browse/list/unit',
+     'initial_sort': 'sortLabel',
+     'query': """SELECT ?uri (SAMPLE(?label_) as ?label) (SAMPLE(?homepage_) as ?homepage) (COALESCE(SAMPLE(?sortLabel_), SAMPLE(?label_)) as ?sortLabel) ?division ?division_label (SAMPLE(?oucs_) as ?oucs) (SAMPLE(?finance_) as ?finance) WHERE {
+                   ?uri rdf:type/rdfs:subClassOf* oxp:Unit ;
+                     skos:prefLabel ?label_ .
+                   OPTIONAL { ?uri ov:sortLabel ?sortLabel_ } .
+                   OPTIONAL { ?uri foaf:homepage ?homepage_ } .
+                   OPTIONAL { ?uri oxp:hasOUCSCode ?oucs_ } .
+                   OPTIONAL { ?uri oxp:hasFinanceCode ?finance_ } .
                    OPTIONAL { ?uri org:subOrganizationOf* ?division .
                               ?division a oxp:Division ;
                                 skos:prefLabel ?division_label } .
+                 } GROUP BY ?uri ?division ?division_label"""},
+    {'id': 'current-vacancy',
+     'name': 'Current vacancies',
+     'template_name': 'browse/list/current-vacancy',
+     'initial_sort': 'label',
+     'per_page': 50,
+     'group': ['unit'],
+     'query': """SELECT ?uri ?label ?unit ?unit_label ?salary ?description ?opening ?closing WHERE {
+                   GRAPH <http://data.ox.ac.uk/graph/vacancies/current> {
+                   ?uri a vacancy:Vacancy ;
+                     rdfs:label ?label ;
+                     vacancy:applicationClosingDate ?closing .
+                   } .
+                   FILTER (?closing > now()) .
+                   OPTIONAL { ?uri vacancy:organizationalUnit ?unit . ?unit skos:prefLabel ?unit_label } .
+                   OPTIONAL { ?uri vacancy:salary/rdfs:label ?salary } .
+                   OPTIONAL { ?uri rdfs:comment ?description } .
+                   OPTIONAL { ?uri vacancy:applicationOpeningDate ?opening } .
+                   ?uri vacancy:applicationClosingDate ?closing
+                   FILTER ( datatype(?description) != xtypes:Fragment-XHTML ) .
+                 } ORDER BY ?label ?uri"""},
+    {'id': 'building',
+     'name': 'Buildings',
+     'template_name': 'browse/list/building',
+     'initial_sort': 'label',
+     'per_page': 50,
+     'group': ['occupant', 'depiction'],
+     'query': """SELECT ?uri ?label ?long ?lat ?extendedAddress ?streetAddress ?locality ?postalCode ?estates ?occupant ?occupant_label ?depiction WHERE {
+                   ?uri a oxp:Building ;
+                     skos:prefLabel ?label .
+                   OPTIONAL { ?uri geo:long ?long ; geo:lat ?lat } .
+                   OPTIONAL { ?uri oxp:hasOBNCode ?estates } .
+                   OPTIONAL { ?occupant org:hasSite ?uri ; skos:prefLabel ?occupant_label } .
+                   OPTIONAL { ?uri foaf:depiction ?depiction } .
+                   OPTIONAL { ?uri v:adr ?adr .
+                                OPTIONAL { ?adr v:extended-address ?extendedAddress } .
+                                OPTIONAL { ?adr v:street-address ?streetAddress } .
+                                OPTIONAL { ?adr v:locality ?locality } .
+                                OPTIONAL { ?adr v:postal-code ?postalCode } } .
+                 } ORDER BY ?label ?uri"""},
+    {'id': 'electricity-meter',
+     'name': 'Electricity meters',
+     'template_name': 'browse/list/meter',
+     'initial_sort': 'label',
+     'per_page': 100,
+     'group': ['place', 'include', 'exclude'],
+     'query': """SELECT ?uri ?type ?meterPoint ?label ?place ?place_label ?place_lat ?place_long ?place_type ?seriesName ?include ?include_seriesName ?exclude ?exclude_seriesName WHERE {
+                   ?uri a ?type .
+                   FILTER (?type in (timeseries:TimeSeries, timeseries:VirtualTimeSeries)) .
+                   ?meterPoint timeseries:timeSeries ?uri .
+                   OPTIONAL { ?meterPoint rdfs:label ?label } .
+                   OPTIONAL { ?uri timeseries:seriesName ?seriesName } .
+                   OPTIONAL { ?uri timeseries:include ?include . ?include timeseries:seriesName ?include_seriesName } .
+                   OPTIONAL { ?uri timeseries:exclude ?exclude . ?exclude timeseries:seriesName ?exclude_seriesName } .
+                   OPTIONAL { ?meterPoint meter:pertainsTo ?place .
+                              ?place a ?place_type ;
+                                 skos:prefLabel ?place_label .
+                              OPTIONAL { ?place geo:lat ?place_lat ;
+                                           geo:long ?place_long } }
                  }"""},
 ]

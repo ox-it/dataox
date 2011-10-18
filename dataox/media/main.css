@@ -1,6 +1,7 @@
 body {
     background-color: #E8E8E8;
-    font-family: "Liberation Sans", Arial, sans-serif;
+    font: 14px/1.5 "Liberation Sans", Arial, sans-serif;
+    color:#444;
 }
 
 div.container {
@@ -9,23 +10,45 @@ div.container {
     margin-right:auto;
 }
 
+/* Links */
+/* line 10, ../sass/style.sass */
+a,
+a:link {
+  text-decoration: none;
+  color: #0066AA;
+  word-wrap: break-word;
+}
+
+a:visited {
+ color: #336699;
+}
+
+/* line 15, ../sass/style.sass */
+a:hover, a:active {
+}
+
+
+
 header {
-    margin: 1em 0;
+    margin: 20px 0;
     display: block;
 }
 
 header img {
+   
     float:left;
     border: 0;
 }
 
 header p {
-    margin: 0;
-    margin-left: 200px;
+    padding:0;
+    margin: 0 0 0 176px;
+    line-height:1em;
 }
 
 header p.title {
-    font-size:24px;
+    font-size:2em;
+    margin-bottom: 0.25em;
 }
 
 nav ul, footer {
@@ -50,8 +73,10 @@ footer {
     text-align:center;
 }
 
-footer a {
-    color: #fff;
+footer a,
+footer a:link {
+    color: #fff !important;
+    text-decoration: underline !important;
 }
 
 nav li {
@@ -65,6 +90,9 @@ nav li a {
     height: 30px;
     padding: 5px 1.5em;
 }
+nav li a, nav li a:link, nav li a:visited {
+    color: #fff;
+}
 
 nav li:first-child a {
   	border-top-left-radius: 5px;
@@ -76,7 +104,7 @@ nav li:first-child a {
 }
 
 nav li a:hover, nav li.selected a {
-    background-color: #006699
+    background-color: #0066AA
 }
 
 /*h1, h2, p, dl {
@@ -85,19 +113,19 @@ nav li a:hover, nav li.selected a {
 }*/
 
 h1 {
-    color: #006699;
-    font-size: 24px;
-    margin-bottom: 0.333em;
+    color: #000000;
+    font-size: 2em;
+    margin-bottom: 0.5em;
     margin-top:0;
-    font-weight: normal;
+    font-weight: 500;
 }
 
 h2 {
-    color: #000305;
+    color: #000000;
     margin-top: 0;
-    margin-bottom: 0.333em;
-    font-size:14pt;
-    font-weight: normal;
+    margin-bottom: 0.5em;
+    font-size:1.5em;
+    font-weight: 400;
 }
 
 h3 {
@@ -137,11 +165,14 @@ tr.row-odd {
 tr.row-even {
     background-color: #eee;
 }
-
+td {
+padding: 0.75em 1em;
+}
+/*
 table.description td, table.sparql-results td {
     padding:2px;
 }
-
+*/
 img.icon {
     border:0;
 }
@@ -206,12 +237,15 @@ form table th {
 form table textarea {
     width: 100%;
 }
-
+aside.toolbox {
+  background:#FAFAFA;
+  padding:1em;
+}
 section.page-metadata h2, section.widget h2 {
-    font-size:11pt;
-    color: #006699;
-    margin: 0.5em 0 0 0;
-    font-weight: bold;
+    font-size:1.25em;
+    color: #000;
+    margin: 0.5em 0;
+    font-weight: 600;
 }
 
 section.page-metadata h2:first-child, section.widget h2:first-child {
@@ -219,9 +253,10 @@ section.page-metadata h2:first-child, section.widget h2:first-child {
 }
 
 section.page-metadata h3, section.widget h3 {
-    font-size:10pt;
+    font-size:1em;
     color: #333;
     margin:0.5em 0 0 0;
+    font-weight: 500;
 }
 
 section.page-metadata p, section.widget p {
@@ -232,7 +267,7 @@ section.page-metadata p, section.widget p {
 }
 
 section.page-metadata ul, section.widget ul {
-    margin:0;
+    margin:0.5em 0 1em 0;
     list-style: none;
     padding-left: 0;
     font-size:10pt;
@@ -259,4 +294,29 @@ ul.used-query-list {
 
 li.used-query code {
     white-space: pre;
+}
+
+
+div.pagination {
+    text-align: center;
+    font-size: 12pt;
+    margin:1em;
+}
+
+a.sort-header, a.sort-header:visited {
+    color: #00f;
+}
+
+a.current-sort {
+    color: #f00 !important;
+}
+
+header {
+  position:relative;
+}
+
+img#beta-badge {
+    position:absolute;
+    bottom:-45px;
+    right:20px;
 }

@@ -1,0 +1,15 @@
+{% extends "base.html" %}
+
+{% block title %}Feeds{% endblock %}
+
+{% block body %}
+<article>
+  <h1>Feeds</h1>
+  
+  <p><b>data.ox.ac.uk</b> currently provides the following types of feeds:</p>
+  
+  <ul>
+    <li><a href="{% url feeds:vacancies-index %}">Vacancies</a></li>
+  </ul>
+</article>
+{% endblock %}

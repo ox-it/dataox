@@ -1,0 +1,64 @@
+{% extends "feeds/base.html" %}{% load humfrey_desc %}
+
+{% block extrahead %}
+<link rel="alternate" type="application/rss+xml" href="{{ format_mapping.rss.url }}" title="Vacancies within {{ unit.label }}"/>
+{% endblock %}
+
+{% block title %}Vacancies within {{ unit.label }}{% endblock %}
+
+{% block body %}
+<article>
+  <h1>{% if all %}All v{% else %}V{% endif %}acancies within {{ unit|node }}</h1>
+  
+    <aside class="toolbox">
+    <section class="page-metadata">
+      <h2>Other formats</h2>
+      <ul>{% for format in formats %}
+        <li><a href="{{ format.url }}">{{ format.name }}</a></li>{% endfor %}
+      </ul>
+    </section>
+    <section class="page-metadata">
+      <h2>Filter</h2>
+      <form method="get" action="">
+        <label for="keyword">Enter a keyword by which to filter:</label>
+        <input id="keyword" name="keyword" value="{{ keyword|default:"" }}"/>
+        <input type="submit" value="Go!"/>
+      </form>
+    </section>
+  </aside>
+  
+  {% if items %}
+  <p>There are currently {{ items|length }} vacancies within {{ unit.label }}{% if keyword %} that mention '<strong>{{ keyword }}</strong>'{% endif %}:</p>
+  
+  <table class="sparql-results">
+    <thead>
+      <tr>
+        <th>Title</th>
+        <th>Closes</th>
+        <th>Salary</th>
+      </tr>
+    </thead>
+    <tbody>{% for vacancy in items %}
+      <tr class="row-{% cycle "odd" "even" %}">
+        <td><a href="#vacancy-{{ vacancy.resource.hexhash }}">{{ vacancy.title }}</a></td>
+        <td>{{ vacancy.pubdate }}</td>
+        <td>{{ vacancy.resource.vacancy_salary.label|default:"not specified" }}</td>
+      </tr>{% endfor %}
+    </tbody>
+  </table>
+  {% else %}
+  <p>There are not currently any vacancies within {{ unit.label }}{% if keyword %} that mention '<strong>{{ keyword }}</strong>'{% endif %}.</p>
+  {% endif %}
+  
+
+{% for vacancy in items %}
+<section id="vacancy-{{ vacancy.resource.hexhash }}">
+  <h2><a href="{{ vacancy.link }}">{{ vacancy.title }}</a></h2>
+  <p>Closes: <strong>{{ vacancy.pubdate }}</strong>; salary: <strong>{{ vacancy.resource.vacancy_salary.label|default:"not specified" }}</strong></p>
+  {{ vacancy.description|sanitize_html }}
+</section>
+{% endfor %}
+
+<div style="clear:both"></div>
+</article>
+{% endblock %}

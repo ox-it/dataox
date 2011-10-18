@@ -122,20 +122,13 @@
           <img class="depiction" src="{% url resized-image %}?url={{ depiction.uri|urlencode }}&amp;width=200" alt=""/>
         </a>
       {% endfor %}
-      
-      {% for widget_template in subject.widget_templates %}
+      {% for widget_template, subject in subject.widget_templates %}
         {% include widget_template %}
       {% endfor %}
       
       {% if subject.geo_lat and subject.geo_long %}
         {% include "widgets/map.html" %}
       {% endif %}
-      
-      {% for widget_template in subject.foaf_account.widget_templates %}{% if widget_template %}
-        {% with subject.foaf_account as account %}
-          {% include widget_template %}
-        {% endwith %}
-      {% endif %}{% endfor %}
       
       {% for thing in subject.things_of_type %}
         {% if forloop.first %}

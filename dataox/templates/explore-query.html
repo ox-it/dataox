@@ -14,18 +14,16 @@
       <tr>
         <th>Dataset</th>
         <th>Query</th>
-        <th>Description</th>
       </tr>
     </thead>
     <tbody>
 {% regroup results by dataset as results_by_dataset %}
 {% for d in results_by_dataset %}
-      <tr class="row-{% cycle "odd" "even" %}">
+      <tr class="row-{% cycle "odd" "even" as order %}">
         <td rowspan="{{ d.list|length }}"><a href="{{ d.grouper.doc_url }}">{{ d.list.0.datasetLabel }}</a></td>
         {% for result in d.list %}
-          {% if not forloop.first %}<tr>{% endif %}
+          {% if not forloop.first %}<tr class="row-{{ order }}">{% endif %}
           <td><a href="{% host_url sparql on data %}?query={{ result.value|urlencode }}">{{ result.label }}</a></td>
-          <td>{{ result.comment|node }}</td>
           {% if not forloop.last %}</tr>{% endif %}
         {% endfor %}
       </tr>

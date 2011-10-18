@@ -2,7 +2,8 @@ from __future__ import division
 
 from django_conneg.views import HTMLView
 
-from humfrey.utils.views import CachedView
+from humfrey.utils.views import CachedView, RedisView
+from humfrey.browse import views as browse_views
 from humfrey.results.views.standard import RDFView, ResultSetView
 from humfrey.utils.namespaces import NS
 from humfrey.utils.resource import Resource
@@ -10,9 +11,9 @@ from humfrey.utils.resource import Resource
 class DatasetView(RDFView, HTMLView, CachedView):
     _QUERY = """
         DESCRIBE ?dataset ?license ?publisher WHERE {
-            ?dataset a void:Dataset ;
-                     dcterms:license ?license ;
-                     dcterms:publisher ?publisher .
+            ?dataset a void:Dataset .
+            OPTIONAL { ?dataset dcterms:license ?license } .
+            OPTIONAL { ?dataset dcterms:publisher ?publisher } .
         }"""
 
     def get(self, request):
@@ -42,16 +43,14 @@ EXAMPLES = (
      'description': 'The distribution of job vacancies across the University.'},
 	{'slug': 'unicard-explorer',
      'name': 'University Card Explorer',
-     'description': 'A tool for exploring statistics about the Oxford\'s bod (university) cards.'},
-    {'slug': 'feed-creator',
-     'name': 'Feed Creator',
-     'description': 'Create your own feed (eg RSS, Atom) of data in data.ox!'},
+     'description': 'A tool for exploring statistics about University Card holders.'},
 )
 
-class ExploreView(HTMLView, CachedView):
+class ExploreView(HTMLView, CachedView, RedisView):
     def get(self, request):
         context = {
             'examples': EXAMPLES,
+            'lists': self.unpack(self.get_redis_client().get(browse_views.IndexView.LIST_META)),
         }
         return self.render(request, context, 'explore')
 

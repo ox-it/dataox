@@ -1,0 +1,34 @@
+{% extends "browse/list.html" %}{% load humfrey_desc %}
+
+{% block browse_headers %}
+  <th>{% with field="label" name="Name" %}{% include "browse/sort_header.html" %}{% endwith %}</th>
+  <th>{% with field="estates" name="Estates code" %}{% include "browse/sort_header.html" %}{% endwith %}</th>
+  <th>Location</th>
+  <th>Occupants</th>
+  <th>Address</th>
+  <th>{% with field="postalCode" name="Post code" %}{% include "browse/sort_header.html" %}{% endwith %}</th>
+  <th>Image</th>
+{% endblock %}
+
+{% block browse_item %}
+<td><a href="{{ result.uri|doc_url }}">{{ result.label }}</a></td>
+<td>{{ result.estates|default:"" }}</td>
+<td>{{ result.lat|default:"" }} {{ result.long|default:"" }}</td>
+<td>
+  {% for occupant in result.occupant %}
+    <a href="{{ occupant.uri|doc_url }}">{{ occupant.label }}</a>{% if not forloop.last %}<br/>{% endif %}
+  {% endfor %}</td>
+<td>
+  {{ result.extendedAddress|default:"" }}{% if result.extendedAddress %}<br/>{% endif %}
+  {{ result.streetAddress|default:"" }}{% if result.streetAddress %}<br/>{% endif %}
+  {{ result.locality|default:"" }}
+</td>
+<td>{{ result.postalCode|default:"" }}</td>
+<td style="text-align:center">
+  {% if result.depiction %}
+    <a href="{{ result.depiction.0.uri|doc_url }}">
+      <img src="{% url resized-image %}?url={{ result.depiction.0.uri|urlencode }}&amp;height=80" alt=""/>
+    </a>
+  {% endif %}
+</td>
+{% endblock %}
