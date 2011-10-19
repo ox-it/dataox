@@ -176,3 +176,10 @@ BROWSE_LISTS = [
                                            geo:long ?place_long } }
                  }"""},
 ]
+
+
+CKAN_PATTERNS = {'name': 'ox-ac-uk-%s',
+                 'title': '%s (University of Oxford)',
+                 'author': '%s, University of Oxford',
+                 'maintainer': '%s, University of Oxford'}
+CKAN_GROUPS = ('university-of-oxford',)
