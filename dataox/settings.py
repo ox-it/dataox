@@ -181,4 +181,6 @@ CKAN_PATTERNS = {'name': 'ox-ac-uk-%s',
                  'title': '%s (University of Oxford)',
                  'author': '%s, University of Oxford',
                  'maintainer': '%s, University of Oxford'}
-CKAN_GROUPS = ('university-of-oxford',)
+CKAN_GROUPS |= set(['university-of-oxford'])
+CKAN_TAGS |= set(['oxford', 'university'])
+
