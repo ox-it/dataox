@@ -62,7 +62,7 @@ TIME_SERIES_URI_BASE = "http://data.ox.ac.uk/id/time-series/"
 TIME_SERIES_PORT = 4545
 TIME_SERIES_PATH = relative_path(config.get('timeseries:path'))
 
-LONGLIVING_CLASSES.add('openorg_timeseries.longliving.rrdtool.RRDThread')
+LONGLIVING_CLASSES.add('openorg_timeseries.longliving.database.DatabaseThread')
 
 SOURCE_DIRECTORY = relative_path(config.get('update:source_directory'))
 
@@ -160,8 +160,8 @@ BROWSE_LISTS = [
      'initial_sort': 'label',
      'per_page': 100,
      'group': ['place', 'include', 'exclude'],
-     'query': """SELECT ?uri ?type ?meterPoint ?label ?place ?place_label ?place_lat ?place_long ?place_type ?seriesName ?include ?include_seriesName ?exclude ?exclude_seriesName WHERE {
-                   ?uri a ?type .
+     'query': """SELECT ?uri ?type ?meterPoint ?label ?place ?place_label ?place_lat ?place_long ?place_type ?seriesName ?include ?include_seriesName ?exclude ?exclude_seriesName ?endpoint WHERE {
+                   ?uri a ?type ; timeseries:endpoint ?endpoint .
                    FILTER (?type in (timeseries:TimeSeries, timeseries:VirtualTimeSeries)) .
                    ?meterPoint timeseries:timeSeries ?uri .
                    OPTIONAL { ?meterPoint rdfs:label ?label } .
