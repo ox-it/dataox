@@ -160,8 +160,8 @@ BROWSE_LISTS = [
      'initial_sort': 'label',
      'per_page': 100,
      'group': ['place', 'include', 'exclude'],
-     'query': """SELECT ?uri ?type ?meterPoint ?label ?place ?place_label ?place_lat ?place_long ?place_type ?seriesName ?include ?include_seriesName ?exclude ?exclude_seriesName WHERE {
-                   ?uri a ?type .
+     'query': """SELECT ?uri ?type ?meterPoint ?label ?place ?place_label ?place_lat ?place_long ?place_type ?seriesName ?include ?include_seriesName ?exclude ?exclude_seriesName ?endpoint WHERE {
+                   ?uri a ?type ; timeseries:endpoint ?endpoint .
                    FILTER (?type in (timeseries:TimeSeries, timeseries:VirtualTimeSeries)) .
                    ?meterPoint timeseries:timeSeries ?uri .
                    OPTIONAL { ?meterPoint rdfs:label ?label } .
