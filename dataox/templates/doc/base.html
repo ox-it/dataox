@@ -41,7 +41,7 @@
         <h2>Toolbox</h2>
         <ul>
           <li>
-            <a href="{% host_url sparql on data %}?query={{ "SELECT ?subject ?predicate WHERE {  ?subject ?predicate <"|urlencode }}{{ subject.uri|urlencode }}{{ "> } LIMIT 200"|urlencode }}">
+            <a href="{% host_url sparql:endpoint on data %}?query={{ "SELECT ?subject ?predicate WHERE {  ?subject ?predicate <"|urlencode }}{{ subject.uri|urlencode }}{{ "> } LIMIT 200"|urlencode }}">
               What links here
             </a>
           </li>
@@ -49,7 +49,7 @@
             <li>
               Other things of type:
               {% for type in subject.all.rdf_type %}  
-                <a href="{% host_url sparql on data %}?query={{ "SELECT ?subject WHERE {  ?subject a <"|urlencode }}{{ type.uri|urlencode }}{{ "> } LIMIT 200"|urlencode }}">
+                <a href="{% host_url sparql:endpoint on data %}?query={{ "SELECT ?subject WHERE {  ?subject a <"|urlencode }}{{ type.uri|urlencode }}{{ "> } LIMIT 200"|urlencode }}">
                   {{ type.label }}</a>{% if not forloop.last %}, {% endif %}
               {% endfor %}
             </li>
@@ -100,7 +100,7 @@
         <ul>
 {% for query in queries %}
           <li>
-            <a href="{% host_url sparql on data %}?common_prefixes=on&amp;query={{ query|urlencode }}">{{ query|truncatewords:10 }}</a>
+            <a href="{% host_url sparql:endpoint on data %}?common_prefixes=on&amp;query={{ query|urlencode }}">{{ query|truncatewords:10 }}</a>
           </li>
 {% endfor %}
         </ul>
