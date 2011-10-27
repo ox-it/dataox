@@ -9,7 +9,7 @@
 {% endblock %}
 
 {% block browse_item %}
-<td><a href="{{ result.uri|doc_url }}">{% if result.label == "None" %}{{ result.seriesName }}{% else %}{{ result.label|default:result.seriesName }}{% endif %}</a></td>
+<td><a href="{{ result.uri|doc_url }}">{{ result.seriesName }}</a></td>
 <td>{% if result.type|slice:"-17:" != "VirtualTimeSeries" %}normal{% else %}virtual{% endif %}</td>
 {% if result.place %}{% with result.place.0 as place %}
   <td><a href="{{ place.uri|doc_url }}">{{ place.label }}</a></td>
