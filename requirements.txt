@@ -2,4 +2,5 @@
 pyenchant
 feedparser
 django-conneg>=0.2.2
+django-longliving
 redis>=2.4.9

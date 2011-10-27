@@ -42,19 +42,15 @@ class Place(object):
     @classmethod
     def _describe_patterns(cls):
         return [
-            """%(uri)s ^meter:pertainsTo/timeseries:timeSeries %(timeSeries)s .
-               OPTIONAL { %(timeSeries)s timeseries:sampling %(sampling)s } .
-               OPTIONAL { %(timeSeries)s timeseries:include|timeseries:exclude %(subTimeSeries)s . %(subTimeSeries)s timeseries:sampling %(subSampling)s }""",
+            "%(timeSeries)s meter:pertainsTo %(uri)s",
         ]
-    
+
     def widget_templates(self):
-        return [('widgets/openmeters.html', self),]
-    
+        return ('widgets/openmeters.html',)
+
     def get_all_time_series(self):
         return [Resource(uri, self._graph, self._endpoint) for uri in self._graph.subjects(NS.rdf.type, NS.timeseries.TimeSeries)]
     def get_time_series(self):
-        try:
+        if self.meter_pertainsTo_inv:
             return self.meter_pertainsTo_inv.timeseries_timeSeries
-        except AttributeError:
-            return None
 register(Place, 'oxp:Building', 'oxp:Site', 'oxp:Space', 'oxp:Room')

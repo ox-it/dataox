@@ -12,25 +12,17 @@
                           + "SELECT * WHERE {\n"
                           + "  ?meterPoint a meter:MeterPoint ;\n"
                           + "    timeseries:timeSeries ?timeSeries ;\n"
-                          + "    rdfs:label ?label ;\n"
                           + "    meter:pertainsTo ?place .\n"
-                          + "  ?timeSeries a timeseries:TimeSeries ;\n"
-                          + "    timeseries:seriesName ?seriesName ;\n"
-                          + "    timeseries:endpoint ?endpoint .\n"
-                          + "  ?place skos:prefLabel ?placeName .\n"
+                          + "  ?place skos:prefLabel ?placeLabel .\n"
                           + "} ORDER BY ?label\n";
     
-    var samples_query = "PREFIX meter: <http://purl.org/meter/>\n"
-                      + "PREFIX timeseries: <http://purl.org/NET/time-series/>\n"
-                      + "SELECT * WHERE {\n"
-                      + "  <TIMESERIES>\n"
-                      + "    timeseries:resolution ?resolution ;\n"
-                      + "    timeseries:sampling ?sampling .\n"
-                      + "  ?sampling a timeseries:Sampling ;\n"
-                      + "    timeseries:resolution ?sampleResolution .\n"
-                      + "}\n";
+    var allTimeSeries = {};
     
-    var meterpoints = {};
+    var currentTimeSeries = null;
+    var currentData = {};
+    var currentMetadata = {};
+    
+    var requiredResolutions = {'day': 86400, 'yoy': 604800, 'weekly-profile': 1800};
 
     $(function() {
       $.get('/sparql/', {
@@ -38,78 +30,135 @@
         query: meterpoint_query,
         dataType: 'json',
       }, function (data) {
-        var select = $('#meterpoint_id');
+        if (data.head == undefined) data = $.parseJSON(data);
+        
+        var select = $('#timeSeries');
         for (var i in data.results.bindings) {
           var binding = data.results.bindings[i];
-          meterpoints[binding.meterPoint.value] = binding;
-          select.append($('<option/>').val(binding.meterPoint.value).text(binding.label.value));
+          allTimeSeries[binding.timeSeries.value] = binding;
+          select.append($('<option/>').val(binding.timeSeries.value).text(binding.placeLabel.value));
         }
         
         select.change(update);
-        $('#sample_id').change(update);
-      }, "json");
+        $('#settings input[name=graphType]').change(update);
+      }, 'json');
     });
 
     function update(e) {
-      var meterpoint = $('#meterpoint_id').val();
-      var sample = $('#sample_id').val();
+      var timeSeries = allTimeSeries[$('#timeSeries').val()].timeSeries.value;
+      var graphType = $('#settings input[name=graphType]:checked').val();
       
-      if (meterpoint && meterpoints[meterpoint].samples == undefined) {
-    	$.get('/sparql/', {
-    	      format: 'srj',
-    	      query: samples_query.replace('TIMESERIES', meterpoints[meterpoint].timeSeries.value),
-    	      dataType: 'json',
-    	      }, function (data) {
-                if (data.head == undefined) data = $.parseJSON(data);
-                meterpoints[meterpoint].samples = {};
-                for (var i in data.results.bindings) {
-                	var sample = data.results.bindings[i];
-                	meterpoints[meterpoint].samples[sample.sampling.value] = sample;
-                }
-                updateSamples();
-                loadData();
-    	      });
-    	return;
+      $('#settings *').attr('disabled', 'disabled');
+      
+      if (currentTimeSeries != timeSeries) {
+        $('#status').text('Fetching metadata…');
+        getTimeSeriesMetaData(timeSeries, function(metadata) {
+          currentMetadata = metadata;
+          currentData = {};
+          currentTimeSeries = timeSeries;
+          updateData(timeSeries, graphType);
+        });
+      } else {
+        updateData(timeSeries, graphType);
       }
-
-      if (meterpoint && sample)
-        loadData();
     }
     
-    function updateSamples() {/*
-      var meterpoint = $('#meterpoint_id').val();
-      var samples = $('#sample_id').empty();
-      for (var i in meterpoints[meterpoint].samples) {
-    	  var sample = meterpoints[meterpoint].samples[i];
-    	  samples.append($('<option/>').val(sample.sampling.value).text(sample.sampleResolution.value));
+    function updateData(timeSeries, graphType) {
+      if (!(requiredResolutions[graphType] in currentData)) {
+        $('#status').text('Fetching reading data…');
+        getTimeSeriesData(currentMetadata, "average", requiredResolutions[graphType], "2000", null, function(data) {
+          currentData[requiredResolutions[graphType]] = data;
+          updateGraph(timeSeries, graphType, data);
+        });
+      } else {
+        updateGraph(timeSeries, graphType, currentData[requiredResolutions[graphType]]);
       }
-    */}
+    }
+    
+    function updateGraph(timeSeries, graphType, data) {
+      $('#status').text('Plotting graph…');
+      window.setTimeout(function() {
 
+        // Data are for previous period, so centre them.
+        var newData = [];
+        var lastDatum = null;
+        for (var i in data) {
+          var datum = data[i];
+          if (lastDatum != null && datum[1] != null) {
+            var center = (datum[0] + lastDatum[0]) / 2;
+            newData.push([center, datum[1]]);
+          }
+          lastDatum = datum;
+        }
+        data = newData;
 
-    function loadData() {
-      var meterpoint = $('#meterpoint_id').val();
-      var sample = 86400; //$('#sample_id').val();
-      
-      meterpoint = meterpoints[meterpoint];
-      //sample = meterpoint.samples[sample];
-      
-      $('#plot').html('<span id="loading">Loading&hellip;</span>')
-      $.get(meterpoint.endpoint.value, {
-        format: 'json',
-        action: 'fetch',
-        series: meterpoint.seriesName.value,
-        resolution: sample, //sample.sampleResolution.value,
-        type: 'average',
-        startTime: '2001-07-01T00:00:00',
-        //endTime: '2008-03-30 06:00:00',
-      }, function(data) {
+        var series = null;
+        var xMin = undefined; var xMax = undefined;
+
+        // Bounds for this year and the previous year.
+        var c = new Date();                                     c = c.getTime();
+        var b = new Date(); b.setFullYear(b.getFullYear() - 1); b = b.getTime();
+        var a = new Date(); a.setFullYear(a.getFullYear() - 2); a = a.getTime();
+        
+        if (graphType == 'day') {
+          series = [data];
+        } else if (graphType == 'yoy') {
+          
+          var lastYear = [];
+          var thisYear = [];
+          
+          for (i in data) {
+            var datum = data[i];
+            if (datum[0] >= b) thisYear.push(datum); 
+            if (datum[0] >= a) {
+              var ts = new Date(datum[0]); ts.setFullYear(ts.getFullYear() + 1);
+              lastYear.push([ts.getTime(), datum[1]]);
+            }
+          }
+          
+          xMin = b; xMax = c;
+          
+          series = [{label: "This year",
+                     data: thisYear},
+                    {label: "Last year",
+                     data: lastYear}]; 
+        } else if (graphType == 'weekly-profile') {
+          var thisYear = []; var lastYear = [];
+          for (var i = 0; i < 336; i++) {
+            thisYear.push([i, 0, 0]);
+            lastYear.push([i, 0, 0]);
+          }
+          
+          for (var i in data) {
+            var datum = data[i];
+            if (datum[0] < a) continue;
+            var year = (datum[0] > b) ? thisYear : lastYear;
+            var ts = new Date(datum[0]);
+            var pos = Math.floor(ts.getDay() * 48 + ts.getHours() * 2 + ts.getMinutes()/30);
+            year[pos][1] += datum[1];
+            year[pos][2] += 1;
+          }
+          
+          for (var i = 0; i < 336; i++) {
+            thisYear[i] = [thisYear[i][0], thisYear[i][1] / thisYear[i][2]];
+            lastYear[i] = [lastYear[i][0], lastYear[i][1] / lastYear[i][2]];
+          }
+          
+          series = [{label: "This year",
+                     data: thisYear},
+                    {label: "Last year",
+                     data: lastYear}]; 
+        }
+        
+        
+        
         var options = {
-          lines: { show: false, lineWidth: 1, fill: true, fillColor: '#B8CCD7' },
-          points: { show: true, radius: 3 },
+          lines: { show: true, lineWidth: 1, fill: false, fillColor: '#B8CCD7' },
+          points: { show: true, radius: 2 },
           xaxis: { 
             mode: "time", // first coord has to be a _javascript timestamp_ ie epoch in milliseconds
-/*          min: (new Date(yesterday)).getTime(),
-            max: (new Date(today)).getTime() */
+            min: xMin,
+            max: xMax,
           },
           yaxis: {
             min: 0,
@@ -121,24 +170,12 @@
           },
           colors: ["#006699", "#d18b2c", "#dba255"],
         };
-        
-        var series = [];
-        var lastDatum = null;
 
-        // Values returned from data.ox are cumulative, so we take the differences
-        for (var i in data.series[meterpoint.seriesName.value].data) {
-          var datum = data.series[meterpoint.seriesName.value].data[i];
-          if (lastDatum != null && datum.val != null) {
-              var center = (datum.ts + lastDatum.ts) / 2;
-              series.push([center, datum.val]);
-          }
-          lastDatum = datum;
-        }
-        
-        $('#plot').html('')
-        $.plot($('#plot'), [series], options);
 
-      }, "json");
+        $.plot($('#plot').html(''), series, options);
+        $('#status').text('');
+        $('#settings *').removeAttr('disabled');
+      }, 10);
     }
   </script>
 <style type="text/css">
@@ -190,11 +227,23 @@ h1 {
 	<h1>OpenMeters</h1>
 
 	<div id="measures">
-		<select id="meterpoint_id">
+      <span style="float:right;" id="status"></span>
+	  <form id="settings">
+		<select id="timeSeries">
 			<option value=""></option>
-		</select><!-- <select id="sample_id">
-			<option value=""></option>
-		</select>-->
+		</select>
+		
+		<div id="graphType">
+		  <input type="radio" name="graphType" value="day" id="graphTypeDay" checked="checked"/>
+		  <label for="graphTypeDay">Daily average</label>
+		  
+		  <input type="radio" name="graphType" value="yoy" id="graphTypeYoY"/>
+		  <label for="graphTypeYoY">Year-on-year</label>
+		  
+		  <input type="radio" name="graphType" value="weekly-profile" id="graphTypeWeeklyProfile"/>
+		  <label for="graphTypeWeeklyProfile">Weekly profile</label>
+		</div>
+      </form>
 	</div>
 
 	<div id="plot" style="width: 100%; height: 400px"></div>

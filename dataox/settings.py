@@ -10,7 +10,6 @@ GRAPH_URL = 'http://localhost:3030/dataset/data'
 SERVED_DOMAINS = ('data.ox.ac.uk',)
 
 INSTALLED_APPS += (
-    'humfrey.longliving',
     'dataox.core',
     'dataox.resource',
     'dataox.feeds',
@@ -176,3 +175,12 @@ BROWSE_LISTS = [
                                            geo:long ?place_long } }
                  }"""},
 ]
+
+
+CKAN_PATTERNS = {'name': 'ox-ac-uk-%s',
+                 'title': '%s (University of Oxford)',
+                 'author': '%s, University of Oxford',
+                 'maintainer': '%s, University of Oxford'}
+CKAN_GROUPS |= set(['university-of-oxford'])
+CKAN_TAGS |= set(['oxford', 'university'])
+

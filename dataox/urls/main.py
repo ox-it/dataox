@@ -6,7 +6,6 @@ from humfrey.desc import views as desc_views
 from humfrey.images import views as images_views
 from humfrey.misc import views as misc_views
 from humfrey.graphviz import views as graphviz_views
-from humfrey.sparql import views as sparql_views
 
 from dataox.core.views import DatasetView, ExploreView, ExampleDetailView, ExampleResourceView, ExampleQueryView
 
@@ -22,7 +21,6 @@ urlpatterns = patterns('',
 
 
     (r'^datasets/$', DatasetView.as_view(), {}, 'datasets'),
-    (r'^sparql/$', sparql_views.SparqlView.as_view(), {}, 'sparql'),
 
     (r'^contact/$', misc_views.SimpleView.as_view(template_name='contact'), {}, 'contact'),
     (r'^help/$', misc_views.SimpleView.as_view(template_name='help'), {}, 'help'),
@@ -36,6 +34,7 @@ urlpatterns = patterns('',
     (r'^explore/(?P<slug>[a-z\d-]+)/$', ExampleDetailView.as_view(), {}, 'example-detail'),
     (r'^explore/example:(?P<slug>[a-z\d-]+)/$', redirect_to, {'url': '/explore/%(slug)s/'}),
 
+    (r'^sparql/', include('humfrey.sparql.urls', 'sparql')),
     (r'^browse/', include('humfrey.browse.urls', 'browse')),
     (r'^pingback/', include('humfrey.pingback.urls', 'pingback')),
     (r'^update/', include('humfrey.update.urls', 'update')),
