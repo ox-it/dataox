@@ -44,6 +44,9 @@ urlpatterns = patterns('',
     (r'^external-image/$', images_views.ResizedImageView.as_view(), {}, 'resized-image'),
 
     (r'^graphviz/$', graphviz_views.GraphVizView.as_view(), {}, 'graphviz'),
+
+    # as per http://www.w3.org/TR/void/#well-known
+    (r'^.well-known/void$', redirect_to, {'url': '/datasets/', 'permanent': False}),
 )
 
 handler404 = misc_views.SimpleView.as_view(template_name='404-main', context={'status_code':404})
