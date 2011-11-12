@@ -1,0 +1,16 @@
+{% extends "base.html" %}{% load hosts %}
+
+{% block header_text %}
+  <p class="title">Open Data Service Administration</p>
+  <p>admin.data.ox.ac.uk <i>(part of <a href="{% host_url index on data %}">data.ox.ac.uk</a>)</i></p>
+{% endblock %}
+
+{% block nav %}
+  <li><a href="{% url index %}">Home</a></li>
+  <li><a href="{% url update:index %}">Dataset updater</a></li>{% if user.is_authenticated %}
+  <li><a href="{% url logout %}">Log out ({{ user.username }})</a></li>{% endif %}
+{% endblock %}
+
+{% block title %}Administration{% endblock %}
+
+{% block content %}{% endblock %}

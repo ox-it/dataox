@@ -17,7 +17,15 @@ INSTALLED_APPS += (
     'humfrey.graphviz',
     'humfrey.browse',
     'openorg_timeseries',
+    'django_webauth',
 )
+
+DATABASES = {
+    'default': {
+        'ENGINE': 'django.db.backends.postgresql_psycopg2',
+        'NAME': 'dataox',
+    }
+}
 
 ADMINS = (
     (config.get('admin:name'), config.get('admin:email')),
@@ -39,6 +47,11 @@ EMAIL_HOST_USER = config.get('email', 'user')
 EMAIL_HOST_PASSWORD = config.get('email', 'password')
 SERVER_EMAIL = 'dataox@opendata.nsms.ox.ac.uk'
 DEFAULT_FROM_EMAIL = 'opendata@oucs.ox.ac.uk'
+
+AUTHENTICATION_BACKENDS = (
+    'django.contrib.auth.backends.ModelBackend',
+    'django_webauth.backends.WebauthBackend',
+)
 
 TEMPLATE_DIRS = (
     os.path.join(os.path.dirname(__file__), 'templates'),
@@ -184,3 +197,9 @@ CKAN_PATTERNS = {'name': 'ox-ac-uk-%s',
 CKAN_GROUPS |= set(['university-of-oxford'])
 CKAN_TAGS |= set(['oxford', 'university'])
 
+ARCHIVE_PATH = relative_path(config.get('archive:path'))
+
+LOGIN_URL = '//admin.data.ox.ac.uk/login/'
+LOGOUT_URL = '//admin.data.ox.ac.uk/logout/'
+LOGIN_REDIRECT_URL = '//admin.data.ox.ac.uk/'
+SESSION_COOKIE_SECURE = not DEBUG
