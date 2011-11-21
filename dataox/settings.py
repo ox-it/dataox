@@ -16,8 +16,10 @@ INSTALLED_APPS += (
     'humfrey.update',
     'humfrey.graphviz',
     'humfrey.browse',
+    'humfrey.manage',
     'openorg_timeseries',
     'django_webauth',
+    'django.contrib.admin',
 )
 
 DATABASES = {
@@ -64,12 +66,6 @@ ID_MAPPING = (
     ('http://data.ox.ac.uk/id/', 'http://data.ox.ac.uk/doc/', True),
     ('http://oxpoints.oucs.ox.ac.uk/id/', 'http://data.ox.ac.uk/doc:oxpoints/', False),
 )
-
-UPDATE_DEFINITION_DIRECTORIES += (
-    os.path.abspath(os.path.join(os.path.dirname(__file__), 'datasets')),
-)
-if 'update:definitions' in config:
-    UPDATE_DEFINITION_DIRECTORIES += (relative_path(config['update:definitions']),)
 
 TIME_SERIES_URI_BASE = "http://data.ox.ac.uk/id/time-series/"
 TIME_SERIES_PORT = 4545

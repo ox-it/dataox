@@ -1,4 +1,4 @@
-{% extends "admin/base.html" %}
+{% extends "manage/base.html" %}
 
 {% block title %}Log in{% endblock %}
 
@@ -8,7 +8,7 @@
   
   <p><a href="{% url webauth:login %}">Log in using WebAuth</a></p>
   
-  <form method="post" action="">
+  <form method="post" action="">{% csrf_token %}
     <table>
       <tbody>{{ form }}</tbody>
       <tfoot>
