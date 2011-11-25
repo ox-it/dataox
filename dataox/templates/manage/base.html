@@ -4,15 +4,3 @@
   <p class="title">Open Data Service Administration</p>
   <p>admin.data.ox.ac.uk <i>(part of <a href="{% host_url index on data %}">data.ox.ac.uk</a>)</i></p>
 {% endblock %}
-
-{% block nav %}
-  <li><a href="{% url index %}">home</a></li>{% if perms.pingback.admin %}
-  <li><a href="{% url pingback:moderation %}">pingbacks</a>{% endif %}{% if perms.update.admin %}
-  <li><a href="{% url update:index %}">dataset updater</a></li>{% endif %}{% if user.is_staff %}
-  <li><a href="{% url admin:index %}">admin</a></li>{% endif %}{% if user.is_authenticated %}
-  <li><a href="{% url logout %}">log out <small>({{ user.username }})</small></a></li>{% endif %}
-{% endblock %}
-
-{% block title %}Administration{% endblock %}
-
-{% block content %}{% endblock %}
