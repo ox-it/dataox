@@ -18,7 +18,6 @@ INSTALLED_APPS += (
     'humfrey.browse',
     'humfrey.manage',
     'openorg_timeseries',
-    'django_webauth',
     'django.contrib.admin',
 )
 
@@ -52,7 +51,12 @@ DEFAULT_FROM_EMAIL = 'opendata@oucs.ox.ac.uk'
 
 AUTHENTICATION_BACKENDS = (
     'django.contrib.auth.backends.ModelBackend',
-    'django_webauth.backends.WebauthBackend',
+    'dataox.auth.backends.WebauthLDAPBackend',
+)
+
+MIDDLEWARE_CLASSES += (
+    'django.contrib.auth.middleware.RemoteUserMiddleware',
+    'django_conneg.support.middleware.BasicAuthMiddleware',
 )
 
 TEMPLATE_DIRS = (
@@ -83,6 +87,7 @@ else:
     pass
     #LONGLIVING_CLASSES |= set(['openmeters.ion.DiscoveryThread',
     #                           'openmeters.ion.PollThread'])
+
 
 UPDATE_TRANSFORMS += (
     'dataox.datasets.vacancies.RetrieveVacancies',
