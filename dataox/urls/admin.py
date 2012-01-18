@@ -1,18 +1,21 @@
 from django.conf.urls.defaults import patterns, include, url
+from django.views.generic.simple import redirect_to
 from django.contrib import admin
+from django.contrib.auth import views as auth_views
 
-from humfrey.manage import views as manage_views
 from humfrey.misc import views as misc_views
 
 admin.autodiscover()
 
 urlpatterns = patterns('',
-    url(r'^$', misc_views.AuthenticatedSimpleView.as_view(template_name='manage/index'), name='index'),
+    url(r'^$', misc_views.SimpleView.as_view(template_name='manage/index'), name='index'),
     url(r'^pingback/', include('humfrey.pingback.urls.admin', 'pingback')),
     url(r'^update/', include('humfrey.update.urls', 'update')),
-    url(r'^login/', manage_views.LoginView.as_view(), name='login'),
-    url(r'^logout/', manage_views.LogoutView.as_view(), name='logout'),
-    url(r'^webauth/', include('django_webauth.urls', 'webauth')),
+    url(r'^time-series/', include('openorg_timeseries.urls.admin', 'timeseries-admin')),
+    url(r'^login/', auth_views.login, name='login'),
+    url(r'^logout/', auth_views.logout, name='logout'),
+    url(r'^webauth/login/$', redirect_to, name='webauth-login'),
+    url(r'^webauth/logout/$', redirect_to, name='webauth-logout'),
     url(r'^admin/', admin.site.urls),
 )
 
