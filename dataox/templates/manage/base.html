@@ -4,3 +4,10 @@
   <p class="title">Open Data Service Administration</p>
   <p>admin.data.ox.ac.uk <i>(part of <a href="{% host_url index on data %}">data.ox.ac.uk</a>)</i></p>
 {% endblock %}
+
+{% block nav %}
+  <li><a href="{% url index %}">home</a></li>
+  <li><a href="{% url update:index %}">dataset updates</a></li>
+  <li><a href="{% url timeseries-admin:index %}">time-series</a></li>
+  <li><a href="{% url admin:index %}">admin</a></li>
+{% endblock %}

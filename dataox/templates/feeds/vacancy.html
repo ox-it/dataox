@@ -1,13 +1,12 @@
 {% extends "feeds/base.html" %}{% load humfrey_desc %}
 
-{% block extrahead %}
+{% block extra_head %}
 <link rel="alternate" type="application/rss+xml" href="{{ format_mapping.rss.url }}" title="Vacancies within {{ unit.label }}"/>
 {% endblock %}
 
 {% block title %}Vacancies within {{ unit.label }}{% endblock %}
 
-{% block body %}
-<article>
+{% block content %}
   <h1>{% if all %}All v{% else %}V{% endif %}acancies within {{ unit|node }}</h1>
   
     <aside class="toolbox">
@@ -60,5 +59,4 @@
 {% endfor %}
 
 <div style="clear:both"></div>
-</article>
 {% endblock %}

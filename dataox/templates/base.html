@@ -14,9 +14,10 @@
     <script type="text/javascript" src="{{ MEDIA_URL }}js/OpenLayers.js"></script>
     <script type="text/javascript" src="{{ MEDIA_URL }}js/jquery.flot.js"></script>
     <script type="text/javascript" src="{{ MEDIA_URL }}js/base.js"></script>
-    {% block extrahead %}{% endblock %}
+    {% block extra_head %}{% endblock %}
   </head>
 
+{% block body %}
   <body>
     <div class="container">
     <header>
@@ -43,11 +44,9 @@
       </ul>
     </nav>
 
-{% block body %}
-    <article>
+    <article>{% block content %}
       <h1>Home</h1>
-    </article>
-{% endblock %}
+    {% endblock %}</article>
 
       <footer>{% block footer %}
         Site © University of Oxford •
@@ -57,4 +56,5 @@
       {% endblock %}</footer>
     </div>
   </body>
+{% endblock %}
 </html>
