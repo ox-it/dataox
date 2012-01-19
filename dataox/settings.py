@@ -35,7 +35,14 @@ ADMINS = (
 ROOT_URLCONF = 'dataox.urls.empty'
 MEDIA_ROOT = os.path.join(os.path.dirname(__file__), 'media')
 
-MEDIA_URL = 'http://data.ox.ac.uk/site-media/'
+# django.contrib.staticfiles
+STATIC_URL = 'http://data.ox.ac.uk/static/'
+STATIC_ROOT = relative_path(config['main:static_root'])
+STATICFILES_DIRS = (
+    os.path.join(os.path.dirname(__file__), 'static'),
+)
+
+
 
 ROOT_HOSTCONF = 'dataox.hosts'
 DEFAULT_HOST = 'empty'
