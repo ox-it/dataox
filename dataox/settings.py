@@ -36,7 +36,7 @@ ROOT_URLCONF = 'dataox.urls.empty'
 MEDIA_ROOT = os.path.join(os.path.dirname(__file__), 'media')
 
 # django.contrib.staticfiles
-STATIC_URL = 'http://data.ox.ac.uk/static/'
+STATIC_URL = '/static/'
 STATIC_ROOT = relative_path(config['main:static_root'])
 STATICFILES_DIRS = (
     os.path.join(os.path.dirname(__file__), 'static'),

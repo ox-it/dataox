@@ -2,6 +2,7 @@ from django.conf.urls.defaults import patterns, include, url
 from django.views.generic.simple import redirect_to
 from django.contrib import admin
 from django.contrib.auth import views as auth_views
+from django.contrib.staticfiles.urls import staticfiles_urlpatterns
 
 from humfrey.misc import views as misc_views
 
@@ -17,7 +18,7 @@ urlpatterns = patterns('',
     url(r'^webauth/login/$', redirect_to, name='webauth-login'),
     url(r'^webauth/logout/$', redirect_to, name='webauth-logout'),
     url(r'^admin/', admin.site.urls),
-)
+) + staticfiles_urlpatterns()
 
 handler404 = misc_views.SimpleView.as_view(template_name='404-empty', context={'status_code':404})
 handler500 = misc_views.SimpleView.as_view(template_name='500', context={'status_code':500})
