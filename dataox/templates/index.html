@@ -1,7 +1,6 @@
 {% extends "base.html" %}{% load hosts %}
 
-{% block body %}
-  <article>
+{% block content %}
     <h1>Welcome</h1>
       
     <p>Welcome to <strong>data.ox.ac.uk</strong>, the
@@ -48,5 +47,4 @@
          our <a href="{% host_url explore on data %}#examples">list of
          examples</a>.</p>
     </section>
-  </article>
 {% endblock %}

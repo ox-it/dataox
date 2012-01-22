@@ -2,7 +2,7 @@
 
 {% block title %}OpenMeters{% endblock %}
 
-{% block extrahead %}
+{% block extra_head %}
 
 <script type="text/javascript">
     var meterpoint_query  = "PREFIX meter: <http://purl.org/meter/>\n"
@@ -221,9 +221,7 @@ h1 {
 </style>
 {% endblock %}
 
-{% block body %}
-
-<article>
+{% block content %}
 	<h1>OpenMeters</h1>
 
 	<div id="measures">
@@ -258,6 +256,4 @@ h1 {
 		<p>Please note that we do not have data for some meters listed. If
 			you don't get anything on your graph, try again with another.</p>
 	</section>
-
-</article>
 {% endblock %}

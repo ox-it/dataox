@@ -12,7 +12,7 @@
       {% endif %}
       {% if subject.open_data_stars %}
         <a href="{% host_url help on data %}#stars">
-          <img src="{{ MEDIA_URL }}{{ subject.open_data_stars.0 }}" alt="{{ subject.open_data_stars.1 }}"/>
+          <img src="{{ STATIC_URL }}desc/{{ subject.open_data_stars.0 }}" alt="{{ subject.open_data_stars.1 }}"/>
         </a>
       {% endif %}
     </div>
@@ -124,7 +124,7 @@
         <th>Example queries:</th>
         <td>
           {% for query in subject.all.oo_exampleQuery %}
-            <a href="{% url sparql %}?query={{ query.rdf_value|urlencode }}">{{ query.label }}</a>
+            <a href="{% url sparql:endpoint %}?query={{ query.rdf_value|urlencode }}">{{ query.label }}</a>
             {% if not forloop.last %}<br/>{% endif %}
           {% empty %}
             <em>None specified</em>

@@ -2,7 +2,7 @@
 
 {% block title %}University Card Statistics Explorer{% endblock %}
 
-{% block extrahead %}
+{% block extra_head %}
 	<script src="http://code.jquery.com/jquery-1.5.min.js" type="application/javascript"></script>
     <script type="text/javascript" src="https://www.google.com/jsapi"></script>
     <script type="text/javascript">
@@ -307,9 +307,7 @@
   </style>
 {% endblock %}
 
-{% block body %}
-  
-  <article>
+{% block content %}
     <h1>University Card Statistics Explorer</h1>
        <br/>
     <div id="measures" style="width:750px;">
@@ -352,5 +350,4 @@
                   <p>Each university card is associated with at most one department (eg 'Department of Physics') and at most one college (eg 'Oriel College'). This tool allows you to browse our bod card data by filtering by department and/or by college.</p>
 		  <p>Please note that undergraduates' bod cards are generally only associated with a college and not with a department- this is why colleges colleges have a lot of bod cards with an 'None/Unrecognised' department.</p>
 		</section>
-  </article>
 {% endblock %}

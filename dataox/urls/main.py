@@ -1,6 +1,7 @@
 from django.conf.urls.defaults import *
 from django.conf import settings
 from django.views.generic.simple import redirect_to
+from django.contrib.staticfiles.urls import staticfiles_urlpatterns
 
 from humfrey.desc import views as desc_views
 from humfrey.images import views as images_views
@@ -45,15 +46,8 @@ urlpatterns = patterns('',
 
     # as per http://www.w3.org/TR/void/#well-known
     (r'^.well-known/void$', redirect_to, {'url': '/datasets/', 'permanent': False}),
-)
+) + staticfiles_urlpatterns()
 
 handler404 = misc_views.SimpleView.as_view(template_name='404-main', context={'status_code':404})
 handler500 = misc_views.SimpleView.as_view(template_name='500', context={'status_code':500})
-
-if settings.DEBUG:
-    urlpatterns += patterns('',
-        url(r'^site-media/(?P<path>.*)$', 'django.views.static.serve', {
-            'document_root': settings.MEDIA_ROOT,
-        }),
-   )
 

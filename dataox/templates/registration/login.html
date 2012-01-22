@@ -2,11 +2,10 @@
 
 {% block title %}Log in{% endblock %}
 
-{% block body %}
-<article>
+{% block content %}
   <h1>Log in</h1>
   
-  <p><a href="{% url webauth:login %}">Log in using WebAuth</a></p>
+  <p><a href="{% url webauth-login %}">Log in using WebAuth</a></p>
   
   <form method="post" action="">{% csrf_token %}
     <table>
@@ -20,5 +19,4 @@
       </tfoot>
     </table>
   </form>
-</article>
 {% endblock %}

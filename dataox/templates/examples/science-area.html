@@ -2,7 +2,7 @@
 
 {% block title %}Science Area Map{% endblock %}
 
-{% block extrahead %}
+{% block extra_head %}
   <script src="http://code.jquery.com/jquery-1.5.min.js" type="text/javascript"></script>
   <script src="http://www.openlayers.org/api/OpenLayers.js"></script>
   <style type="text/css">
@@ -197,9 +197,7 @@
   </style>
 {% endblock %}
 
-{% block body %}
-  
-  <article>
+{% block content %}
     <h1>University Science Area Map</h1>
     
     <p id="description">A re-imagining of <a href="http://www.ox.ac.uk/visitors_friends/maps_and_directions/science_area.html">the
@@ -220,5 +218,4 @@
        and are displayed on an <a href="http://www.openstreetmap.org/">OpenStreetMap</a> base map using
        <a href="http://openlayers.org/">OpenLayers</a>.</p>
     </section>
-  </article>
 {% endblock %}

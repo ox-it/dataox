@@ -1,0 +1,6 @@
+.tox
+reports
+MANIFEST
+.project
+.settings
+.pydevproject

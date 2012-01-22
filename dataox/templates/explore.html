@@ -2,8 +2,7 @@
 
 {% block title %}Explore{% endblock %}
 
-{% block body %}
-<article>
+{% block content %}
   <h1>Explore</h1>
 
   <p>Not sure where to start? This page contains some handy pointers, and some examples of how to play with the data.</p>
@@ -42,8 +41,5 @@
       <dd>{{ example.description|safe }}</dd>
 {% endfor %}
     </dl>
-  </section>  
-
-
-</article>
+  </section>
 {% endblock %}

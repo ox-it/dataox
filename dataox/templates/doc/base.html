@@ -2,9 +2,7 @@
 
 {% block title %}{{ subject.label }}{% endblock %}
 
-{% block body %}
-  <article>
-
+{% block content %}
     {% block doc_intro %}
     {% if subject.foaf_logo %}
       <img class="logo" src="{{ subject.foaf_logo.uri }}" alt=""/>
@@ -171,5 +169,4 @@
     {% endcomment %}
 
     <div style="clear:both"></div>
-  </article>
 {% endblock %}

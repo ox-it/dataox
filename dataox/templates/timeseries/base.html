@@ -5,8 +5,12 @@
 <p>time-series.data.ox.ac.uk <i>(part of <a href="{% host_url index on data %}">data.ox.ac.uk</a>)</i></p>
 {% endblock %}
 
+{% block extra_head %}{{ block.super }}
+  <link rel="stylesheet" type="text/css" href="{{ STATIC_URL }}timeseries/base.css"/>
+{% endblock %}
+
 {% block nav %}
-  <li><a href="{% url timeseries:index %}">home</a></li>
-  <li><a href="{% url timeseries:documentation %}">documentation</a></li>
+  <li><a href="{% url timeseries-endpoint:index %}">home</a></li>
+  <li><a href="{% url timeseries-endpoint:documentation %}">documentation</a></li>
   <li><a href="{% host_url contact on data %}">contact</a></li>
 {% endblock %}

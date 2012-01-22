@@ -18,7 +18,6 @@ INSTALLED_APPS += (
     'humfrey.browse',
     'humfrey.manage',
     'openorg_timeseries',
-    'django_webauth',
     'django.contrib.admin',
     'object_permissions',
 )
@@ -37,7 +36,14 @@ ADMINS = (
 ROOT_URLCONF = 'dataox.urls.empty'
 MEDIA_ROOT = os.path.join(os.path.dirname(__file__), 'media')
 
-MEDIA_URL = 'http://data.ox.ac.uk/site-media/'
+# django.contrib.staticfiles
+STATIC_URL = '/static/'
+STATIC_ROOT = relative_path(config['main:static_root'])
+STATICFILES_DIRS = (
+    os.path.join(os.path.dirname(__file__), 'static'),
+)
+
+
 
 ROOT_HOSTCONF = 'dataox.hosts'
 DEFAULT_HOST = 'empty'
@@ -53,8 +59,13 @@ DEFAULT_FROM_EMAIL = 'opendata@oucs.ox.ac.uk'
 
 AUTHENTICATION_BACKENDS = (
     'django.contrib.auth.backends.ModelBackend',
-    'django_webauth.backends.WebauthBackend',
     'object_permissions.backend.ObjectPermBackend',
+    'dataox.auth.backends.WebauthLDAPBackend',
+)
+
+MIDDLEWARE_CLASSES += (
+    'django.contrib.auth.middleware.RemoteUserMiddleware',
+    'django_conneg.support.middleware.BasicAuthMiddleware',
 )
 
 TEMPLATE_DIRS = (
@@ -86,6 +97,7 @@ else:
     pass
     #LONGLIVING_CLASSES |= set(['openmeters.ion.DiscoveryThread',
     #                           'openmeters.ion.PollThread'])
+
 
 UPDATE_TRANSFORMS += (
     'dataox.datasets.vacancies.RetrieveVacancies',
