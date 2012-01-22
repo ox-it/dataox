@@ -1,10 +1,13 @@
-from django.conf.urls.defaults import *
+from django.conf.urls.defaults import patterns, url, include
 from django.conf import settings
 
 from humfrey.misc.views import SimpleView
 urlpatterns = patterns('',
-    (r'^', include('openorg_timeseries.urls', 'timeseries')),
-    (r'^forbidden/$', SimpleView.as_view(template_name='forbidden', context={'status_code': 403}), {}, 'forbidden'),
+    url(r'^',
+        include('openorg_timeseries.urls.endpoint', 'timeseries')),
+    url(r'^forbidden/$',
+        SimpleView.as_view(template_name='forbidden', context={'status_code': 403}),
+        name='forbidden'),
 )
 
 handler404 = SimpleView.as_view(template_name='404-main', context={'status_code':404})

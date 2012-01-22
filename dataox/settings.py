@@ -20,6 +20,7 @@ INSTALLED_APPS += (
     'openorg_timeseries',
     'django_webauth',
     'django.contrib.admin',
+    'object_permissions',
 )
 
 DATABASES = {
@@ -53,6 +54,7 @@ DEFAULT_FROM_EMAIL = 'opendata@oucs.ox.ac.uk'
 AUTHENTICATION_BACKENDS = (
     'django.contrib.auth.backends.ModelBackend',
     'django_webauth.backends.WebauthBackend',
+    'object_permissions.backend.ObjectPermBackend',
 )
 
 TEMPLATE_DIRS = (
@@ -68,7 +70,8 @@ ID_MAPPING = (
 )
 
 TIME_SERIES_URI_BASE = "http://data.ox.ac.uk/id/time-series/"
-TIME_SERIES_PORT = 4545
+TIME_SERIES_SERVER_ARGS = {'address': ('localhost', 4545),
+                           'authkey': config.get('timeseries.authkey')}
 TIME_SERIES_PATH = relative_path(config.get('timeseries:path'))
 
 LONGLIVING_CLASSES.add('openorg_timeseries.longliving.database.DatabaseThread')
