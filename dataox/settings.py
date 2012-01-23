@@ -104,6 +104,8 @@ UPDATE_TRANSFORMS += (
     'dataox.datasets.vacancies.checker.RetrieveVacanciesChecker',
 )
 
+UPDATE_FILES_DIRECTORY = os.path.join(MEDIA_ROOT, 'update-files')
+
 ADDITIONAL_NAMESPACES.update({
     'vacancy': 'http://purl.org/openorg/vacancy/',
     'salary': 'http://purl.org/openorg/salary/',
