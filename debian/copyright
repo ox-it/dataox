@@ -1,0 +1,9 @@
+Format-Specification: http://anonscm.debian.org/viewvc/dep/web/deps/dep5/copyright-format.xml?revision=248
+Upstream-Contact: Oxford University Computing Services <infodev@oucs.ox.ac.uk>
+Source: https://github.com/oucs/humfrey
+
+Files: *
+Copyright: 2012, University of Oxford <infodev@oucs.ox.ac.uk>
+License: BSD
+
+
