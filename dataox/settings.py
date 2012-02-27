@@ -104,6 +104,8 @@ UPDATE_TRANSFORMS += (
     'dataox.datasets.vacancies.checker.RetrieveVacanciesChecker',
 )
 
+UPDATE_FILES_DIRECTORY = os.path.join(MEDIA_ROOT, 'update-files')
+
 ADDITIONAL_NAMESPACES.update({
     'vacancy': 'http://purl.org/openorg/vacancy/',
     'salary': 'http://purl.org/openorg/salary/',
@@ -201,12 +203,13 @@ BROWSE_LISTS = [
 ]
 
 
-CKAN_PATTERNS = {'name': 'ox-ac-uk-%s',
-                 'title': '%s (University of Oxford)',
-                 'author': '%s, University of Oxford',
-                 'maintainer': '%s, University of Oxford'}
-CKAN_GROUPS |= set(['university-of-oxford'])
-CKAN_TAGS |= set(['oxford', 'university'])
+if config.get('ckan:enabled') == 'true':
+    CKAN_PATTERNS = {'name': 'ox-ac-uk-%s',
+                     'title': '%s (University of Oxford)',
+                     'author': '%s, University of Oxford',
+                     'maintainer': '%s, University of Oxford'}
+    CKAN_GROUPS |= set(['university-of-oxford'])
+    CKAN_TAGS |= set(['oxford', 'university'])
 
 ARCHIVE_PATH = relative_path(config.get('archive:path'))
 
