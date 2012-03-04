@@ -10,6 +10,7 @@ import subprocess
 import time
 import urllib
 import urllib2
+import urlparse
 
 from django.conf import settings
 import pytz
@@ -91,7 +92,7 @@ class VacancyFileHandler(object):
 
     def retrieve_files(self, transform_manager, vacancy):
         file_path_base = os.path.join(settings.SOURCE_DIRECTORY, 'vacancies')
-        file_url_base = transform_manager.parameters['file-url']
+        file_url_base = urlparse.urljoin(settings.SOURCE_URL, 'vacancies/')
 
         for file in vacancy.files:
             filename = file['url'].split('/')[-1]
