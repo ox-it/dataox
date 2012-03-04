@@ -17,6 +17,7 @@ Architecture: all
 Depends: ${misc:Depends},
          ${python:Depends},
          python-django-humfrey,
+         python-django-webauth,
          python-feedparser,
          python-django-openorg-timeseries
 Description: Additional code for Oxford's data.ox.ac.uk service.

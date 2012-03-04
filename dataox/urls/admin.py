@@ -16,8 +16,7 @@ urlpatterns = patterns('',
     url(r'^time-series/', include('openorg_timeseries.urls.admin', 'timeseries-admin')),
     url(r'^login/', auth_views.login, name='login'),
     url(r'^logout/', auth_views.logout, name='logout'),
-    url(r'^webauth/login/$', redirect_to, name='webauth-login'),
-    url(r'^webauth/logout/$', redirect_to, name='webauth-logout'),
+    url(r'^webauth/', include('django_webauth.urls', 'webauth')),
     url(r'^admin/', admin.site.urls),
 ) + staticfiles_urlpatterns()
 

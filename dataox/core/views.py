@@ -2,13 +2,13 @@ from __future__ import division
 
 from django_conneg.views import HTMLView
 
-from humfrey.utils.views import CachedView, RedisView
+from humfrey.utils.views import RedisView
 from humfrey.browse import views as browse_views
 from humfrey.results.views.standard import RDFView, ResultSetView
 from humfrey.utils.namespaces import NS
 from humfrey.utils.resource import Resource
 
-class DatasetView(RDFView, HTMLView, CachedView):
+class DatasetView(RDFView, HTMLView):
     _QUERY = """
         DESCRIBE ?dataset ?license ?publisher WHERE {
             ?dataset a void:Dataset .
@@ -46,7 +46,7 @@ EXAMPLES = (
      'description': 'A tool for exploring statistics about University Card holders.'},
 )
 
-class ExploreView(HTMLView, CachedView, RedisView):
+class ExploreView(HTMLView, RedisView):
     def get(self, request):
         context = {
             'examples': EXAMPLES,
@@ -54,7 +54,7 @@ class ExploreView(HTMLView, CachedView, RedisView):
         }
         return self.render(request, context, 'explore')
 
-class ExampleResourceView(ResultSetView, HTMLView, CachedView):
+class ExampleResourceView(ResultSetView, HTMLView):
     _QUERY = """
         CONSTRUCT {
             ?dataset a void:Dataset ;
@@ -78,7 +78,7 @@ class ExampleResourceView(ResultSetView, HTMLView, CachedView):
 
         return self.render(request, context, 'explore-resource')
 
-class ExampleQueryView(ResultSetView, HTMLView, CachedView):
+class ExampleQueryView(ResultSetView, HTMLView):
     _QUERY = """
         SELECT ?dataset ?datasetLabel ?value ?label ?comment WHERE {
             ?dataset a void:Dataset ;
@@ -96,11 +96,11 @@ class ExampleQueryView(ResultSetView, HTMLView, CachedView):
 
         return self.render(request, context, 'explore-query') 
 
-class ExampleDetailView(HTMLView, CachedView):
+class ExampleDetailView(HTMLView):
     def get(self, request, slug):
         return self.render(request, {}, 'examples/%s' % slug)
 
-class ForbiddenView(HTMLView, CachedView):
+class ForbiddenView(HTMLView):
     def get(self, request):
         context = {
             'status_code': 403,

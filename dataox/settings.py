@@ -20,6 +20,7 @@ INSTALLED_APPS += (
     'openorg_timeseries',
     'django.contrib.admin',
     'object_permissions',
+    'django_webauth',
 )
 
 DATABASES = {
@@ -61,11 +62,10 @@ DEFAULT_FROM_EMAIL = 'opendata@oucs.ox.ac.uk'
 AUTHENTICATION_BACKENDS = (
     'django.contrib.auth.backends.ModelBackend',
     'object_permissions.backend.ObjectPermBackend',
-    'dataox.auth.backends.WebauthLDAPBackend',
+    'django_webauth.backends.WebauthBackend',
 )
 
 MIDDLEWARE_CLASSES += (
-    'django.contrib.auth.middleware.RemoteUserMiddleware',
     'django_conneg.support.middleware.BasicAuthMiddleware',
 )
 

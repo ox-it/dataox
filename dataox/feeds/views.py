@@ -8,13 +8,13 @@ from django.utils.feedgenerator import RssUserland091Feed, Rss201rev2Feed, Atom1
 
 from django_conneg.decorators import renderer
 from django_conneg.views import HTMLView, JSONPView, ContentNegotiatedView
-from humfrey.utils.views import CachedView, EndpointView
+from humfrey.utils.views import EndpointView
 from humfrey.utils.namespaces import NS
 from humfrey.utils.resource import Resource
 from humfrey.results.views.standard import RDFView
 from humfrey.misc.views import CannedQueryView
 
-class IndexView(HTMLView, CachedView):
+class IndexView(HTMLView):
     def get(self, request):
         return self.render(request, {}, 'feeds/index')
 
