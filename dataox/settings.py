@@ -41,6 +41,7 @@ STATIC_URL = '/static/'
 STATIC_ROOT = relative_path(config['main:static_root'])
 STATICFILES_DIRS = (
     os.path.join(os.path.dirname(__file__), 'static'),
+    os.path.join(imp.find_module('humfrey')[1], 'static'),
 )
 
 
@@ -88,6 +89,7 @@ TIME_SERIES_PATH = relative_path(config.get('timeseries:path'))
 LONGLIVING_CLASSES.add('openorg_timeseries.longliving.database.DatabaseThread')
 
 SOURCE_DIRECTORY = relative_path(config.get('update:source_directory'))
+SOURCE_URL = config.get('update:source_url')
 
 try:
     imp.find_module('openmeters')
