@@ -219,3 +219,5 @@ LOGIN_URL = '//admin.data.ox.ac.uk/login/'
 LOGOUT_URL = '//admin.data.ox.ac.uk/logout/'
 LOGIN_REDIRECT_URL = '//admin.data.ox.ac.uk/'
 SESSION_COOKIE_SECURE = not DEBUG
+
+LONGLIVING_PUBSUB_WATCHERS += ('humfrey.elasticsearch.pubsub.update_search_indexes',)
