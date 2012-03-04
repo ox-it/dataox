@@ -81,6 +81,8 @@ ID_MAPPING = (
     ('http://oxpoints.oucs.ox.ac.uk/id/', 'http://data.ox.ac.uk/doc:oxpoints/', False),
 )
 
+LONGLIVING_PUBSUB_WATCHERS += ('humfrey.elasticsearch.pubsub.update_search_indexes',)
+
 TIME_SERIES_URI_BASE = "http://data.ox.ac.uk/id/time-series/"
 TIME_SERIES_SERVER_ARGS = {'address': ('localhost', 4545),
                            'authkey': config.get('timeseries.authkey')}
@@ -116,11 +118,13 @@ ADDITIONAL_NAMESPACES.update({
 
 })
 
-BROWSE_LISTS = [
+ELASTICSEARCH_SERVER = {'host': 'localhost',
+                        'port': 9200}
+ELASTICSEARCH_INDEXES = [
     {'id': 'college',
      'name': 'Colleges of the University of Oxford',
      'template_name': 'browse/list/college',
-     'initial_sort': 'label',
+     'reindex_on_change': ['oxpoints'],
      'query': """SELECT ?uri (SAMPLE(?label_) as ?label) (SAMPLE(?homepage_) as ?homepage) (SAMPLE(?logo_) as ?logo) (SAMPLE(?depiction_) as ?depiction) WHERE {
                    ?uri a oxp:College ;
                      skos:prefLabel ?label_ .
@@ -131,7 +135,7 @@ BROWSE_LISTS = [
     {'id': 'unit',
      'name': 'Units of the University of Oxford',
      'template_name': 'browse/list/unit',
-     'initial_sort': 'sortLabel',
+     'reindex_on_change': ['oxpoints'],
      'query': """SELECT ?uri (SAMPLE(?label_) as ?label) (SAMPLE(?homepage_) as ?homepage) (COALESCE(SAMPLE(?sortLabel_), SAMPLE(?label_)) as ?sortLabel) ?division ?division_label (SAMPLE(?oucs_) as ?oucs) (SAMPLE(?finance_) as ?finance) WHERE {
                    ?uri rdf:type/rdfs:subClassOf* oxp:Unit ;
                      skos:prefLabel ?label_ .
@@ -146,9 +150,9 @@ BROWSE_LISTS = [
     {'id': 'current-vacancy',
      'name': 'Current vacancies',
      'template_name': 'browse/list/current-vacancy',
-     'initial_sort': 'label',
      'per_page': 50,
      'group': ['unit'],
+     'reindex_on_change': ['oxpoints', 'vacancies'],
      'query': """SELECT ?uri ?label ?unit ?unit_label ?salary ?description ?opening ?closing WHERE {
                    GRAPH <http://data.ox.ac.uk/graph/vacancies/current> {
                    ?uri a vacancy:Vacancy ;
@@ -166,9 +170,9 @@ BROWSE_LISTS = [
     {'id': 'building',
      'name': 'Buildings',
      'template_name': 'browse/list/building',
-     'initial_sort': 'label',
      'per_page': 50,
      'group': ['occupant', 'depiction'],
+     'reindex_on_change': ['oxpoints'],
      'query': """SELECT ?uri ?label ?long ?lat ?extendedAddress ?streetAddress ?locality ?postalCode ?estates ?occupant ?occupant_label ?depiction WHERE {
                    ?uri a oxp:Building ;
                      skos:prefLabel ?label .
@@ -185,9 +189,9 @@ BROWSE_LISTS = [
     {'id': 'electricity-meter',
      'name': 'Electricity meters',
      'template_name': 'browse/list/meter',
-     'initial_sort': 'label',
      'per_page': 100,
      'group': ['place', 'include', 'exclude'],
+     'reindex_on_change': ['oxpoints', 'openmeters'],
      'query': """SELECT ?uri ?type ?meterPoint ?label ?place ?place_label ?place_lat ?place_long ?place_type ?seriesName ?include ?include_seriesName ?exclude ?exclude_seriesName ?endpoint WHERE {
                    ?uri a ?type ; timeseries:endpoint ?endpoint .
                    FILTER (?type in (timeseries:TimeSeries, timeseries:VirtualTimeSeries)) .
@@ -204,6 +208,7 @@ BROWSE_LISTS = [
                  }"""},
 ]
 
+UPDATE_FILES_DIRECTORY = os.path.join(MEDIA_ROOT, 'update-files')
 
 if config.get('ckan:enabled') == 'true':
     CKAN_PATTERNS = {'name': 'ox-ac-uk-%s',
@@ -219,5 +224,3 @@ LOGIN_URL = '//admin.data.ox.ac.uk/login/'
 LOGOUT_URL = '//admin.data.ox.ac.uk/logout/'
 LOGIN_REDIRECT_URL = '//admin.data.ox.ac.uk/'
 SESSION_COOKIE_SECURE = not DEBUG
-
-LONGLIVING_PUBSUB_WATCHERS += ('humfrey.elasticsearch.pubsub.update_search_indexes',)
