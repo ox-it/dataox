@@ -4,8 +4,11 @@ os.environ['HUMFREY_CONFIG_FILE'] = os.path.join(os.path.dirname(__file__), 'dat
 
 from dataox.settings import *
 
+DATABASES = {'default': {'ENGINE': 'django.db.backends.sqlite3'}}
+
 INSTALLED_APPS += (
     'django_jenkins',
+    'humfrey.elasticsearch',
 )
 
 JENKINS_TEST_RUNNER = 'humfrey.tests.HumfreyJenkinsTestSuiteRunner'
