@@ -49,7 +49,7 @@ class RecruitOxScraper(Scraper):
                      'p_form_profile_detail': '',
                      'p_display_apply_ind': 'Y',
                      'p_refresh_search': 'Y'}
-    detail_salary_re = re.compile(ur'^(Grade|Salary)[^\dA-Z]+(?P<grade>[^:]+)[-:][^£]*£(?P<lower>[\d,]+)(?:[^£]*£(?P<upper>[\d,]+)(?:[^£]+£(?P<discretionary>[\d,]+))?)?')
+    detail_salary_re = re.compile(ur'^(Grade|Salary)[^\dA-Z]+(?P<grade>[^:]+)[-:][^£]*£ ?(?P<lower>[\d,]+)(?:[^£]*£ ?(?P<upper>[\d,]+)(?:[^£]+£(?P<discretionary>[\d,]+))?)?')
 
     def get_vacancies(self, current_vacancies):
         vacancy_identifiers = self.get_vacancy_identifiers()

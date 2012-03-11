@@ -6,6 +6,7 @@ import email.utils
 import logging
 import os
 import pickle
+import re
 import subprocess
 import time
 import urllib
@@ -126,7 +127,9 @@ class VacancyFileHandler(object):
                 for converter in self.converters:
                     text = converter.convert_to_text(file_path, file['mimetype'])
                     if text is not NotImplemented:
-                        file['text'] = text.replace(u'\x0c', '') # Form-feeds are Baf
+                        for x in u'\x04\x05\x0c':
+                            text = text.replace(x, '')
+                        file['text'] = text
                         break
                 else:
                     file['text'] = None
