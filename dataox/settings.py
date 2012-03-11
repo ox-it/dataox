@@ -226,3 +226,7 @@ LOGIN_URL = '//admin.data.ox.ac.uk/login/'
 LOGOUT_URL = '//admin.data.ox.ac.uk/logout/'
 LOGIN_REDIRECT_URL = '//admin.data.ox.ac.uk/'
 SESSION_COOKIE_SECURE = not DEBUG
+
+VOCABULARY_URL_OVERRIDES = {
+    'oxp': 'http://oxpoints.oucs.ox.ac.uk/ns.ttl',
+}
