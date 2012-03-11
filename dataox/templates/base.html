@@ -18,7 +18,7 @@
   </head>
 
 {% block body %}
-  <body>
+  <body class="{% block body_class %}{% endblock %}">
     <div class="container">
     <header>
       <a href="http://www.ox.ac.uk/">
@@ -42,6 +42,13 @@
         <li><a href="{% host_url contact on data  %}">contact</a></li>
 {% endblock %}
       </ul>
+      <div class="search-form">
+        <form method="get" action="{% host_url search on data %}" style="display:inline;">
+          <label for="search-query">Search&hellip;</label>
+          <input id="search-query" name="q" style="width:100px"/>
+          <input class="search-submit" type="submit" value="Search"/>
+        </form>
+      </div>
     </nav>
 
     <article>{% block content %}

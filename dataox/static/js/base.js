@@ -200,3 +200,19 @@ function widgetOpenMeters(elementID, timeSeries) {
     });
   });
 }
+
+$(function() {
+	$('input.search-submit').css('display', 'none');
+	$('.search-form label').click(function () {
+		$(this).hide();
+		$('#search-query').focus();
+	});
+	if (!$('#search-query').val())
+		$('.search-form label').show();
+	$('#search-query').focus(function () {
+		$('.search-form label').hide();
+	}).blur(function () {
+		if (!$(this).val())
+		  $('.search-form label').show()
+	})
+});

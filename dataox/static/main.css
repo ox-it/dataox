@@ -53,7 +53,7 @@ header p.title {
 
 nav ul, footer {
     display:block;
-    background-color: #000;
+    background-color: #002147;
     -webkit-border-radius: 5px;
     -moz-border-radius: 5px;
     border-radius: 5px;
@@ -63,6 +63,14 @@ nav ul, footer {
     margin-left: 0;
     list-style: none;
     font-size: 16px;
+    background: #002e63; /* Old browsers */
+    background: -moz-linear-gradient(top,  #002e63 0%, #002147 100%); /* FF3.6+ */
+    background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,#002e63), color-stop(100%,#002147)); /* Chrome,Safari4+ */
+    background: -webkit-linear-gradient(top,  #002e63 0%,#002147 100%); /* Chrome10+,Safari5.1+ */
+    background: -o-linear-gradient(top,  #002e63 0%,#002147 100%); /* Opera 11.10+ */
+    background: -ms-linear-gradient(top,  #002e63 0%,#002147 100%); /* IE10+ */
+    background: linear-gradient(top,  #002e63 0%,#002147 100%); /* W3C */
+    filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#002e63', endColorstr='#002147',GradientType=0 ); /* IE6-9 */
 }
 
 footer {
@@ -77,6 +85,10 @@ footer a,
 footer a:link {
     color: #fff !important;
     text-decoration: underline !important;
+}
+
+nav {
+    position: relative;
 }
 
 nav li {
@@ -104,7 +116,14 @@ nav li:first-child a {
 }
 
 nav li a:hover, nav li.selected a {
-    background-color: #0066AA
+    background: #439bff; /* Old browsers */
+    background: -moz-linear-gradient(top,  #439bff 0%, #3593ff 100%); /* FF3.6+ */
+    background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,#439bff), color-stop(100%,#3593ff)); /* Chrome,Safari4+ */
+    background: -webkit-linear-gradient(top,  #439bff 0%,#3593ff 100%); /* Chrome10+,Safari5.1+ */
+    background: -o-linear-gradient(top,  #439bff 0%,#3593ff 100%); /* Opera 11.10+ */
+    background: -ms-linear-gradient(top,  #439bff 0%,#3593ff 100%); /* IE10+ */
+    background: linear-gradient(top,  #439bff 0%,#3593ff 100%); /* W3C */
+    filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#439bff', endColorstr='#3593ff',GradientType=0 ); /* IE6-9 */
 }
 
 /*h1, h2, p, dl {
@@ -319,4 +338,41 @@ img#beta-badge {
     position:absolute;
     bottom:-45px;
     right:20px;
+    z-index: 5;
+}
+div.search-form {
+    position:absolute;
+    top:5px;
+    right: 120px;
+}
+
+div.search-form label {
+    position:absolute;
+    display: none;
+    left: 30px;
+    top: 6px;
+    width: 150px;
+    font-size:12px;
+}
+
+div.search-form input#search-query {
+    -moz-border-bottom-colors: none;
+    -moz-border-image: none;
+    -moz-border-left-colors: none;
+    -moz-border-right-colors: none;
+    -moz-border-top-colors: none;
+    background: url("search.png") no-repeat scroll white;
+    border-color: #CDCDCD #DDDDDD #DDDDDD;
+    border-right: 1px solid #DDDDDD;
+    border-style: solid;
+    border-width: 1px;
+    box-shadow: 0 1px 0 #F1F1F1, 0 1px 1px #E0E0E0 inset;
+    color: #999999;
+    float: left;
+    font-size: 12px;
+    padding: 5px 5px 5px 30px;
+    width: 150px;
+    border-radius: 5px;
+    -moz-border-radius: 5px;
+    -webkit-border-radius: 5px;
 }

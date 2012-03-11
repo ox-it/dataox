@@ -17,6 +17,7 @@ INSTALLED_APPS += (
     'humfrey.graphviz',
     'humfrey.browse',
     'humfrey.manage',
+    'humfrey.elasticsearch',
     'openorg_timeseries',
     'django.contrib.admin',
     'object_permissions',
@@ -74,7 +75,7 @@ TEMPLATE_DIRS = (
 ) + TEMPLATE_DIRS
 
 THUMBNAIL_WIDTHS = (200, 400)
-THUMBNAIL_HEIGHTS = (80,)
+THUMBNAIL_HEIGHTS = (120, 80,)
 
 ID_MAPPING = (
     ('http://data.ox.ac.uk/id/', 'http://data.ox.ac.uk/doc/', True),
@@ -88,7 +89,8 @@ TIME_SERIES_SERVER_ARGS = {'address': ('localhost', 4545),
                            'authkey': config.get('timeseries.authkey')}
 TIME_SERIES_PATH = relative_path(config.get('timeseries:path'))
 
-LONGLIVING_CLASSES.add('openorg_timeseries.longliving.database.DatabaseThread')
+LONGLIVING_CLASSES |= set(['openorg_timeseries.longliving.database.DatabaseThread',
+                           'humfrey.elasticsearch.longliving.indexer.Indexer'])
 
 SOURCE_DIRECTORY = relative_path(config.get('update:source_directory'))
 SOURCE_URL = config.get('update:source_url')
