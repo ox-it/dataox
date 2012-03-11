@@ -46,7 +46,7 @@ class Place(object):
         ]
 
     def widget_templates(self):
-        return ('widgets/openmeters.html',)
+        return [('widgets/openmeters.html', self)] + super(Place, self).widget_templates()
 
     def get_all_time_series(self):
         return [Resource(uri, self._graph, self._endpoint) for uri in self._graph.subjects(NS.rdf.type, NS.timeseries.TimeSeries)]
