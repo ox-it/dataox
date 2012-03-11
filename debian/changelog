@@ -1,3 +1,10 @@
+oxford-dataox (0.2) unstable; urgency=low
+
+  * ElasticSearch integration
+  * Various bugfixes
+
+ -- Alexander Dutton <alexander.dutton@oucs.ox.ac.uk>  Sun, 11 Mar 2012 16:58:35 +0000
+
 oxford-dataox (0.1.3) unstable; urgency=low
 
   * Small fixes, including to templates.
