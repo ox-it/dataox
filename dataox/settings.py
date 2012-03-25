@@ -230,3 +230,13 @@ SESSION_COOKIE_SECURE = not DEBUG
 VOCABULARY_URL_OVERRIDES = {
     'oxp': 'http://oxpoints.oucs.ox.ac.uk/ns.ttl',
 }
+
+TEMPLATE_CONTEXT_PROCESSORS = (
+    "django.contrib.auth.context_processors.auth",
+    "django.core.context_processors.debug",
+    "django.core.context_processors.i18n",
+    "django.core.context_processors.media",
+    "django.core.context_processors.static",
+    "django.contrib.messages.context_processors.messages",
+    "dataox.core.context_processors.base_template_chooser"
+)

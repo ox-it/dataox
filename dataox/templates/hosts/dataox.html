@@ -1,0 +1,69 @@
+{% load hosts %}<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en-GB">
+  <head>
+    <title>{% block entire_title %}{% block title %}Open Data about the University of Oxford{% endblock %} | data.ox.ac.uk{% endblock %}</title>
+    <link rel="stylesheet" href="{{ STATIC_URL }}main.css" type="text/css"/>
+    <link rel="icon" href="{{ STATIC_URL }}favicon.ico" type="image/x-icon"/>{% if no_index %}
+    <meta name="robots" content="noindex"/>{% endif %}
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+<!--[if lt IE 9]>
+<script src="//html5shim.googlecode.com/svn/trunk/html5.js"></script>
+<![endif]-->
+    <script type="text/javascript" src="{{ STATIC_URL }}js/jquery-1.6.4.min.js"></script>
+    <script type="text/javascript" src="{{ STATIC_URL }}js/OpenLayers.js"></script>
+    <script type="text/javascript" src="{{ STATIC_URL }}js/jquery.flot.js"></script>
+    <script type="text/javascript" src="{{ STATIC_URL }}js/base.js"></script>
+    {% block extra_head %}{% endblock %}
+  </head>
+
+{% block body %}
+  <body class="{% block body_class %}{% endblock %}">
+    <div class="container">
+    <header>
+      <a href="http://www.ox.ac.uk/">
+        <img src="{{ STATIC_URL }}brandmark.gif" alt="University of Oxford"/>
+      </a>
+      {% block header_text %}
+      <p class="title">Open Data about the University of Oxford</p>
+      <p>data.ox.ac.uk</p>
+      {% endblock %}
+      <a href="{% host_url help on data %}#beta"><img src="{{ STATIC_URL }}beta.png" alt="beta" title="data.ox.ac.uk is currently in beta" id="beta-badge"/></a>
+    </header>
+    
+    <nav>
+      <ul>
+{% block nav %}
+        <li><a href="{% host_url index on data %}">home</a></li>
+        <li><a href="{% host_url datasets on data  %}">datasets</a></li>
+        <li><a href="{% host_url explore on data  %}">explore</a></li>
+        <li><a href="{% host_url sparql:endpoint on data  %}">sparql</a></li>
+        <li><a href="{% host_url help on data  %}">help</a></li>
+        <li><a href="{% host_url contact on data  %}">contact</a></li>
+{% endblock %}
+      </ul>
+{% block search_box %}
+      <div class="search-form">
+        <form method="get" action="{% host_url search on data %}" style="display:inline;">
+          <label for="search-query">Search&hellip;</label>
+          <input id="search-query" name="q" style="width:100px"/>
+          <input class="search-submit" type="submit" value="Search"/>
+        </form>
+      </div>
+{% endblock %}
+    </nav>
+
+    <article>{% block content %}
+      <h1>Home</h1>
+    {% endblock %}</article>
+
+      <footer>{% block footer %}
+        Site © University of Oxford •
+        <a href="http://creativecommons.org/licenses/by-sa/2.0/uk/" title="Attribution-ShareAlike 2.0 UK: England &amp; Wales">CC-BY-SA 2.0</a> •
+        <a href="{% host_url legal on data %}">Legal and privacy</a> •
+        <a href="https://github.com/oucs/dataox">Source</a>
+      {% endblock %}</footer>
+    </div>
+  </body>
+{% endblock %}
+</html>
