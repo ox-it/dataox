@@ -9,7 +9,7 @@ import rdflib
 
 from django.conf import settings
 from humfrey.utils.namespaces import NS
-from humfrey.utils.sparql import Endpoint
+from humfrey.sparql.endpoint import Endpoint
 
 class LocationGuesser(object):
 
