@@ -3,7 +3,6 @@ from __future__ import division
 from django_conneg.views import HTMLView
 
 from humfrey.utils.views import RedisView
-from humfrey.browse import views as browse_views
 from humfrey.results.views.standard import RDFView, ResultSetView
 from humfrey.utils.namespaces import NS
 from humfrey.utils.resource import Resource
@@ -50,7 +49,6 @@ class ExploreView(HTMLView, RedisView):
     def get(self, request):
         context = {
             'examples': EXAMPLES,
-            'lists': self.unpack(self.get_redis_client().get(browse_views.IndexView.LIST_META)),
         }
         return self.render(request, context, 'explore')
 
