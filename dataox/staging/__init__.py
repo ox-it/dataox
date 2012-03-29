@@ -6,6 +6,21 @@ from django.http import HttpRequest
 import django_hosts.reverse
 import django.core.urlresolvers
 
+"""
+This Django app allows the use of django_hosts while remaining on the same
+domain. It does the following:
+
+ * monkey-patches reverse_full so that a URL of '//example.org/foo' becomes
+   '/example.org/foo'
+ * monkey-patches reverse to prepend the domain name, so that '/foo' becomes
+   '/example.org/foo' (assuming that the HTTP Host header contains 'example.org'
+ * provides middleware for setting the HTTP Host from the first component of
+   path_info, so that the rest of the Django site (including reverse, as
+   patched above) thinks that the HTTP_HOST meta parameter is e.g. 'example.org'
+
+This means we don't have to mirror our production domain setup for staging.
+"""
+
 original_reverse_full = django_hosts.reverse.reverse_full
 def new_reverse_full(*args, **kwargs):
     # Strip a leading '/', so we remain on the same host
