@@ -9,5 +9,12 @@ class StagingMiddleware(object):
         if not path_info:
             return
         path_info = path_info.groupdict()
+        request.original_http_host = request.META['HTTP_HOST']
         request.META['HTTP_HOST'] = path_info['host']
         request.path_info = path_info['path']
+
+    def process_response(self, request, response):
+        if hasattr(request, 'original_http_host'):
+            request.path_info = '/%s%s' % (request.META['HTTP_HOST'], request.path_info)
+            request.META['HTTP_HOST'] = request.original_http_host
+        return response
