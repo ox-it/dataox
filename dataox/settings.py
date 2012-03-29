@@ -5,14 +5,18 @@ import os
 
 from humfrey.settings.common import *
 
-ENDPOINT_URL = 'http://localhost:3030/dataset/query'
-GRAPH_URL = 'http://localhost:3030/dataset/data'
+STAGING = True
+DEBUG=False
+
+ENDPOINT_URL = 'http://localhost:3030/public/query'
+GRAPH_URL = 'http://localhost:3030/public/data'
 SERVED_DOMAINS = ('data.ox.ac.uk',)
 
 INSTALLED_APPS += (
     'dataox.core',
     'dataox.resource',
     'dataox.feeds',
+    'dataox.equipment',
     'humfrey.update',
     'humfrey.graphviz',
     'humfrey.browse',

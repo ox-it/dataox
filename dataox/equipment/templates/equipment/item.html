@@ -1,0 +1,43 @@
+{% extends "equipment/base.html" %}
+
+{% block title %}{{ item.source.label }}{% endblock %}
+
+{% block breadcrumbs %}<li><a href=".">{{ item.source.label }}</a>{% endblock %}
+
+{% block content %}
+  <h1>{{ item.source.label }}</h1>
+  
+  {% if item.source.page %}<p>{% for page in item.source.page %}
+  <a href="{{ page.uri }}">{{ page.uri }}</a>{% if not forloop.last %}, {% endif %}
+  {% endfor %}</p>{% endif %}
+  
+  <p>{{ item.source.description }}</p>
+
+  <dl>{% if item.source.equipmentOf %}
+    <dt>Department:</dt>
+    <dd>{{ item.source.equipmentOf.label }}</dd>{% endif %}{% if item.source.availability %}
+    <dt>Availability:</dt>
+    <dd>{{ item.source.availability.label }}</dd>{% endif %}{% if item.source.accessPrerequisite %}
+    <dt>Access prerequisites:</dt>
+    <dd>{{ item.source.accessPrerequisite.label }}</dd>{% endif %}{% if item.source.useRestriction %}
+    <dt>Restrictions on use:</dt>
+    <dd>{{ item.source.useRestriction.label }}</dd>{% endif %}
+  </dl>
+  
+  {% if item.source.contact %}
+  <p>For more information, contact:</p>
+  <ul>{% for contact in item.source.contact %}
+    <li>{{ contact.label }}{% if contact.email %}, <a href="{{ contact.email }}">{{ contact.email|slice:"7:" }}</a>{% endif %}</li>{% endfor %}
+  </ul>
+  {% endif %}
+{% endblock %}
+
+{% block tertiary_content %}
+  {% if more_like_this.hits.total %}
+  <h2>More like this</h2>
+  
+  <ul>{% for hit in more_like_this.hits.hits %}
+    <li><a href="{% url item hit.id %}">{{ hit.source.label }}</a>{% if hit.source.description %}<br/>{{ hit.source.description|truncatewords:10 }}{% endif %}</li>{% endfor %}  
+  </ul>
+  {% endif %}
+{% endblock %}

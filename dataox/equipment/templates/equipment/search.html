@@ -1,0 +1,60 @@
+{% extends "elasticsearch/search.html" %}
+
+{% block other_formats %}{% endblock %}
+
+
+{% block content %}
+  <h1>Search</h1>
+
+  {% if not hits %}
+    <div class="sidebar-item search-box">
+      <h2>Query</h2>
+      <form method="get" action=".">
+        {{ form.q }}
+        <input type="submit" value="Search"/>
+      </form>
+    </div>
+  {% endif %}
+    
+      <div class="results">
+  {% if hits %}
+  
+  <p>Your search returned <strong>{{ hits.total }}</strong> results in <strong>{{ took }}</strong>ms.</p>
+  
+  {% include "elasticsearch/pagination.html" %}
+  
+  <ol start="{{ start }}">
+  {% for hit in hits.hits %}{% block hit %}
+  <li>
+    <a href="{% url item hit.id %}">{{ hit.source.label }}</a><br/>
+    {{ hit.source.description }}
+    
+  </li>
+  {% endblock %}{% endfor %}
+  </ol>
+
+  {% include "elasticsearch/pagination.html" %}
+  {% else %}
+  
+  <p>Enter a query to start searching.</p>
+  {% endif %}
+  </div>
+{% endblock %}
+
+{% block tertiary_content %}
+  {% if hits %}
+    <div class="sidebar-item search-box">
+      <h2>Query</h2>
+      <form method="get" action=".">
+        {{ form.q }}
+        <input type="submit" value="Search"/>
+      </form>
+    </div>
+  {% endif %}
+  {% if facets and hits.total %}
+    <h2>Refine by&hellip;</h2>
+    {% if facets.department %}
+      {% include "elasticsearch/facet.html" with facet=facets.department facet_name="department" %}
+	{% endif %}
+  {% endif %}
+{% endblock %}
