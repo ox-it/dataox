@@ -126,6 +126,9 @@ ADDITIONAL_NAMESPACES.update({
     'salary': 'http://purl.org/openorg/salary/',
     'meter': 'http://purl.org/meter/',
     'timeseries': 'http://purl.org/NET/time-series/',
+    'oxnotation': 'http://data.ox.ac.uk/id/notation/',
+    'xcri': 'http://xcri.org/profiles/1.2/',
+    'mlo': 'http://purl.org/net/mlo/',
 
 })
 
