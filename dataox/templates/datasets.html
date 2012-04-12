@@ -34,7 +34,7 @@
               {% endif %} 
               {% if dataset.open_data_stars %}
                 <a href="{% host_url help on data %}#stars">
-                  <img src="{{ MEDIA_URL }}{{ dataset.open_data_stars.0 }}" alt="{{ dataset.open_data_stars.1 }}"/>
+                  <img src="{{ STATIC_URL }}desc/{{ dataset.open_data_stars.0 }}" alt="{{ dataset.open_data_stars.1 }}"/>
                 </a>
               {% endif %}
             </td>
