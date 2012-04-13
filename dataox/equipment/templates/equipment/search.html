@@ -56,5 +56,8 @@
     {% if facets.department %}
       {% include "elasticsearch/facet.html" with facet=facets.department facet_name="department" %}
 	{% endif %}
+    {% if facets.basedNear %}
+      {% include "elasticsearch/facet.html" with facet=facets.basedNear facet_name="location" %}
+	{% endif %}
   {% endif %}
 {% endblock %}

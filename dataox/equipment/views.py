@@ -12,8 +12,10 @@ from django.http import Http404
 from humfrey.elasticsearch import views as elasticsearch_views
 
 class SearchView(elasticsearch_views.SearchView):
-    facets = {'department': {'terms': {'field': 'equipmentOf.label',
-                                        'size': 20}}}
+    facets = {'department': {'terms': {'field': 'equipmentOf.uri',
+                                        'size': 20}},
+              'basedNear': {'terms': {'field': 'basedNear.uri',
+                                      'size': 20}}}
     
     template_name = 'equipment/search'
     index_name = 'equipment/equipment'
