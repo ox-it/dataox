@@ -51,6 +51,16 @@ STATICFILES_DIRS = (
 )
 
 
+TEMPLATE_CONTEXT_PROCESSORS = (
+    "django.contrib.auth.context_processors.auth",
+    "django.core.context_processors.debug",
+    "django.core.context_processors.i18n",
+    "django.core.context_processors.media",
+    "django.core.context_processors.static",
+    "django.contrib.messages.context_processors.messages",
+    "dataox.core.context_processors.base_template_chooser"
+)
+
 
 ROOT_HOSTCONF = 'dataox.hosts'
 DEFAULT_HOST = 'empty'
@@ -59,6 +69,8 @@ if STAGING:
     INSTALLED_APPS += ('dataox.staging',)
     MIDDLEWARE_CLASSES = ('dataox.staging.middleware.StagingMiddleware',) + MIDDLEWARE_CLASSES
     STATIC_URL = '/static.data.ox.ac.uk/'
+    DEFAULT_HOST = 'staging'
+    TEMPLATE_CONTEXT_PROCESSORS += ('dataox.staging.context_processors.staging',)
 
 CACHE_BACKEND = 'memcached://127.0.0.1:3031/'
 
@@ -246,13 +258,3 @@ SESSION_COOKIE_SECURE = not DEBUG
 VOCABULARY_URL_OVERRIDES = {
     'oxp': 'http://oxpoints.oucs.ox.ac.uk/ns.ttl',
 }
-
-TEMPLATE_CONTEXT_PROCESSORS = (
-    "django.contrib.auth.context_processors.auth",
-    "django.core.context_processors.debug",
-    "django.core.context_processors.i18n",
-    "django.core.context_processors.media",
-    "django.core.context_processors.static",
-    "django.contrib.messages.context_processors.messages",
-    "dataox.core.context_processors.base_template_chooser"
-)

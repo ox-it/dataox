@@ -4,6 +4,7 @@
   <head>
     <title>{% block entire_title %}{% block title %}Open Data about the University of Oxford{% endblock %} | data.ox.ac.uk{% endblock %}</title>
     <link rel="stylesheet" href="{{ STATIC_URL }}main.css" type="text/css"/>
+    {% if staging %}<link rel="stylesheet" href="{{ STATIC_URL }}staging/base.css" type="text/css"/>{% endif %}
     <link rel="icon" href="{{ STATIC_URL }}favicon.ico" type="image/x-icon"/>{% if no_index %}
     <meta name="robots" content="noindex"/>{% endif %}
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>

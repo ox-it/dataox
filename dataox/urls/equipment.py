@@ -6,7 +6,7 @@ from dataox.equipment import views as equipment_views
 
 from humfrey.misc.views import SimpleView
 urlpatterns = patterns('',
-    url(r'^$', equipment_views.SearchView.as_view()),
+    url(r'^$', equipment_views.SearchView.as_view(), name='index'),
     url(r'^item:(?P<id>[\da-f]+)/$', equipment_views.ItemView.as_view(), name="item")
 ) + staticfiles_urlpatterns()
 

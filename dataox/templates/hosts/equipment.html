@@ -6,6 +6,7 @@
 
     <link rel="icon" type="image/gif" href="//www.admin.ox.ac.uk/media/global/wwwadminoxacuk/styleassets/images/favicon.gif" />
     <link rel="shortcut icon" type="image/gif" href="//www.admin.ox.ac.uk/media/global/wwwadminoxacuk/styleassets/images/favicon.gif" />
+    {% if staging %}<link rel="stylesheet" href="{{ STATIC_URL }}staging/base.css" type="text/css"/>{% endif %}
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
     <meta http-equiv="Cache-Control" content="max-age=10800" />
 
@@ -152,7 +153,7 @@
           <a href="//www.admin.ox.ac.uk/researchsupport/" id="departmental-logo"></a>
           
           <div id="breadcrumb">
-            <ol><!-- navigation object : Gl Pre Breadcrumb Locator --><!-- navigation object : Gl Pre Breadcrumb Home Link --><li><a href="//www.admin.ox.ac.uk/">UAS Home</a></li><!-- navigation object : Gl Breadcrumbs --><li><a href="/researchsupport/">Research Support</a></li><li><a href="/">Equipment catalogue</a></li>{% block breadcrumbs %}{% endblock %}</ol>
+            <ol><!-- navigation object : Gl Pre Breadcrumb Locator --><!-- navigation object : Gl Pre Breadcrumb Home Link --><li><a href="//www.admin.ox.ac.uk/">UAS Home</a></li><!-- navigation object : Gl Breadcrumbs --><li><a href="/researchsupport/">Research Support</a></li><li><a href="{% url index %}">Equipment catalogue</a></li>{% block breadcrumbs %}{% endblock %}</ol>
           </div><div class="clear"></div>
 
          

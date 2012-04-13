@@ -1,0 +1,23 @@
+{% extends "staging/base.html" %}{% load hosts %}
+
+{% block title %}Open Data Service Staging Instance{% endblock %}
+
+{% block nav %}{% endblock %}
+
+{% block content %}
+  <h1>Open Data Service <em>Staging Instance</em></h1>
+  
+  <p>This is the staging instance for <em>data.ox.ac.uk</em>. It is not a production service.</p>
+  
+  <p>In production, the Open Data Service is spread across various domains.
+     Here, they are all served from a single domain. Here are the staging
+     instances of the domains served by the Open Data Service:</p>
+  
+  <ul>
+    <li><a href="{% host_url index on data %}">data.ox.ac.uk</a></li>
+    <li><a href="{% host_url index on admin %}">admin.data.ox.ac.uk</a></li>
+    <li><a href="{% host_url index on equipment %}">equipment.data.ox.ac.uk</a></li>
+    <li><a href="{% host_url timeseries-endpoint:index on timeseries %}">time-series.data.ox.ac.uk</a></li>
+  </ul>
+    
+{% endblock %}
