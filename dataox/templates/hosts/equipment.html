@@ -6,10 +6,8 @@
 
     <link rel="icon" type="image/gif" href="//www.admin.ox.ac.uk/media/global/wwwadminoxacuk/styleassets/images/favicon.gif" />
     <link rel="shortcut icon" type="image/gif" href="//www.admin.ox.ac.uk/media/global/wwwadminoxacuk/styleassets/images/favicon.gif" />
-    {% if staging %}<link rel="stylesheet" href="{{ STATIC_URL }}staging/base.css" type="text/css"/>{% endif %}
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
     <meta http-equiv="Cache-Control" content="max-age=10800" />
-
     <meta name="description" content="Research Support, Research Support" />
     <meta name="keywords" content="Research Services, Research Accounts, Training, Funding, Managing Projects, Grant Applications, Awards, Contracts, Ethics, Policy, Costing, Pricing, IP, Governance, Clinical Trials, " />
     <meta http-equiv="imagetoolbar" content="No" />
@@ -74,8 +72,8 @@
     
   </head>
 
-  <body>
- 
+  <body>{% if staging %}{% include "staging/tab.html" %}{% endif %}
+
         <!-- header content on page -->
     <div id="header-wrapper">
       <div id="header">
