@@ -80,14 +80,22 @@ class Vacancy(object):
             label = u'Grade %s' % self.salary['grade']
             if self.salary.get('lower'):
                 label += u': £' + locale.format('%d', self.salary['lower'], grouping=True)
+                triples.append((salary_uri, NS.gr.hasMinCurrencyValue, rdflib.Literal(self.salary['lower'])))
                 if self.salary.get('upper') and self.salary['lower'] != self.salary['upper']:
                     label += u' to £' + locale.format('%d', self.salary['upper'], grouping=True)
                 if self.salary.get('discretionary'):
                     label += u', with discretionary range to £' + locale.format('%d', self.salary['discretionary'], grouping=True)
+            if self.salary.get('upper'):
+                triples.append((salary_uri, NS.gr.hasMaxCurrencyValue, rdflib.Literal(self.salary.get('discretionary') or self.salary['upper'])))
+                if self.salary['upper'] == self.salary.get('lower'):
+                    triples.append((salary_uri, NS.gr.hasCurrencyValue, rdflib.Literal(self.salary['upper'])))
+
             triples += [
                 (uri, NS.vacancy.salary, salary_uri),
-                (salary_uri, NS.rdf.type, NS.salary.SalarySpecification),
+                (salary_uri, NS.rdf.type, NS.gr.UnitPriceSpecification),
                 (salary_uri, NS.rdfs.label, rdflib.Literal(label)),
+                (salary_uri, NS.gr.validThrough, rdflib.Literal(self.closes)),
+                (salary_uri, NS.gr.hasCurrency, rdflib.Literal('GBP')),
             ]
 
         return triples
