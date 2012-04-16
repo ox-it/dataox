@@ -1,5 +1,6 @@
 import collections
 import itertools
+import logging
 import operator
 import re
 
@@ -10,6 +11,8 @@ import rdflib
 from django.conf import settings
 from humfrey.utils.namespaces import NS
 from humfrey.sparql.endpoint import Endpoint
+
+logger = logging.getLogger(__name__)
 
 class LocationGuesser(object):
 
@@ -143,11 +146,15 @@ class LocationGuesser(object):
             yield results(query_name, terms), True
 
     def correct_spelling(self, word):
-        if self.dictionary.check(word):
+        try:
+            if self.dictionary.check(word):
+                return word
+            else:
+                suggestions = self.dictionary.suggest(word)
+                return suggestions[0] if suggestions else word
+        except Exception:
+            logger.exception("Spelling correction failed for %r", word)
             return word
-        else:
-            suggestions = self.dictionary.suggest(word)
-            return suggestions[0] if suggestions else word
 
     def get_ancestors(self, child):
         parents = []

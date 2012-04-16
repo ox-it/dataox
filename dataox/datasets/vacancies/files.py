@@ -125,7 +125,12 @@ class VacancyFileHandler(object):
 
             if fetch_file or not self.client.hexists(self.TEXT_HASH, vacancy.id):
                 for converter in self.converters:
-                    text = converter.convert_to_text(file_path, file['mimetype'])
+                    try:
+                        text = converter.convert_to_text(file_path, file['mimetype'])
+                    except Exception, e:
+                        logger.exception("Failed to convert %r (%r) to text using %s",
+                                         file['url'],file['mimetype'], converter.__class__.__name__)
+                        continue
                     if text is not NotImplemented:
                         for x in u'\x04\x05\x0c':
                             text = text.replace(x, '')
