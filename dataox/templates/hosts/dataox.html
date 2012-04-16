@@ -44,7 +44,7 @@
       </ul>
 {% block search_box %}
       <div class="search-form">
-        <form method="get" action="{% host_url search on data %}" style="display:inline;">
+        <form method="get" action="{% block search_target %}{% host_url search on data %}{% endblock %}" style="display:inline;">
           <label for="search-query">Search&hellip;</label>
           <input id="search-query" name="q" style="width:100px"/>
           <input class="search-submit" type="submit" value="Search"/>
