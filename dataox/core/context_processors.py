@@ -6,6 +6,8 @@ def base_template_chooser(request):
         base_template_name = 'hosts/timeseries.html'
     elif http_host == 'equipment.data.ox.ac.uk':
         base_template_name = 'hosts/equipment.html'
+    elif http_host == 'course.data.ox.ac.uk':
+        base_template_name = 'hosts/course.html'
     else:
         base_template_name = 'hosts/dataox.html'
     return {'base_template_name': base_template_name}

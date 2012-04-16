@@ -14,6 +14,7 @@ SERVED_DOMAINS = ('data.ox.ac.uk',)
 
 INSTALLED_APPS += (
     'dataox.core',
+    'dataox.course',
     'dataox.resource',
     'dataox.feeds',
     'dataox.equipment',
