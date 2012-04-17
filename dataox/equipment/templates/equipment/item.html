@@ -32,7 +32,7 @@
   {% endif %}
 {% endblock %}
 
-{% block tertiary_content %}
+{% block tertiary_content %}{{ block.super }}
   {% if more_like_this.hits.total %}
   <h2>More like this</h2>
   

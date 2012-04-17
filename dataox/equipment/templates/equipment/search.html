@@ -41,7 +41,7 @@
   </div>
 {% endblock %}
 
-{% block tertiary_content %}
+{% block tertiary_content %}{{ block.super }}
   {% if hits %}
     <div class="sidebar-item search-box">
       <h2>Query</h2>

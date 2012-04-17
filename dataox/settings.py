@@ -58,6 +58,7 @@ TEMPLATE_CONTEXT_PROCESSORS = (
     "django.core.context_processors.i18n",
     "django.core.context_processors.media",
     "django.core.context_processors.static",
+    'django.core.context_processors.request',
     "django.contrib.messages.context_processors.messages",
     "dataox.core.context_processors.base_template_chooser"
 )
@@ -251,9 +252,9 @@ if config.get('ckan:enabled') == 'true':
 
 ARCHIVE_PATH = relative_path(config.get('archive:path'))
 
-LOGIN_URL = '//admin.data.ox.ac.uk/login/'
-LOGOUT_URL = '//admin.data.ox.ac.uk/logout/'
-LOGIN_REDIRECT_URL = '//admin.data.ox.ac.uk/'
+LOGIN_URL = '/login/'
+LOGOUT_URL = '/logout/'
+LOGIN_REDIRECT_URL = '/'
 SESSION_COOKIE_SECURE = not DEBUG
 
 VOCABULARY_URL_OVERRIDES = {

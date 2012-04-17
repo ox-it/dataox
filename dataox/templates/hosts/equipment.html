@@ -167,46 +167,15 @@
             <div id="primary-content">{% block content %}{% endblock %}</div>
  
             <!-- Tertiary Content -->
-            <div id="tertiary-content">{% block tertiary_content %}  
-              <!-- navigation object : GL RHS --><!-- text/tertiary - copied from text/related -->
+            <div id="tertiary-content">{% block tertiary_content %}
+{% if user.is_authenticated %}
+<p>Currently logged in as {{ user.first_name }} {{ user.last_name }} ({{ user.username }}).</p>
 
-<div class="related related-articles">
-<h2>Key contacts</h2>
-
- <ul><li><a href="//www.admin.ox.ac.uk/researchsupport/contacts/">Research Services </a></li>
-
-<li><a href="http://www.admin.ox.ac.uk/finance/oxonly/contacts/researchaccounts/" title="Research Accounts contacts">Research Accounts</a> </li>
-<li><a href="http://www.isis-innovation.com/" title="isis">Isis Innovation 
-Limited </a></li>
-<li><a href="//www.admin.ox.ac.uk/researchsupport/oxonly/contacts/resfac/">Research Facilitators</a></li>
-</ul>
-
-
-
-</div>
-<!-- text/tertiary - copied from text/related -->
-
-<div class="related related-articles">
-<h2>Quick links</h2>
-
- <ul>
-<li><a href="//www.admin.ox.ac.uk/researchsupport/oxonly/news/">Research Services News </a></li>
-<li><a href="http://www.admin.ox.ac.uk/finance/oxonly/research/ra_bulletin/" title="Research Accounts bulletin">Research Accounts Bulletin </a></li>
-<li><a href="//www.admin.ox.ac.uk/researchsupport/oxonly/news/info_sessions/">Presentations and information sessions</a></li>
-<li><a href="//www.admin.ox.ac.uk/researchsupport/sponsors/ec/">European Commission funding&nbsp;</a></li>
-<li><a href="//www.admin.ox.ac.uk/researchsupport/about/projects/">Joint review &amp; improvement programme </a></li>
-<li><a href="//www.admin.ox.ac.uk/researchsupport/oxonly/awards/qr/"><span>Charity and Business QR</span></a></li>
-
-<li><a href="//www.admin.ox.ac.uk/researchsupport/training/resadmin/">Research Administration training</a></li>
-<li><a href="http://www.admin.ox.ac.uk/pra/oxonly/general/ref.shtml" title="REF">Research Excellence Framework</a></li>
-<li><a href="http://www.admin.ox.ac.uk/pras/committees/research/" title="Research Committee (PRAS)">Research Committee</a></li>
-<li><a href="//www.admin.ox.ac.uk/researchsupport/contracts/consulting/">Consultancy</a></li>
-</ul>
-<ul>
-</ul>
-</div>
-
-            {% endblock %}</div>
+<p><a href="{% url logout %}">Log out</a></p>
+{% else %}
+<p><a href="{% url webauth:login %}?next={% block login_next_url %}{{ request.get_full_path|urlencode }}{% endblock %}">Log in</a> to see more comprehensive results.</p>
+{% endif %}
+{% endblock %}</div>
           </div>
 
           <!--[if IE 6]><div class="clear"></div><![endif]-->
