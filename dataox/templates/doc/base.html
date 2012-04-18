@@ -16,6 +16,8 @@
 {% endif %}
     </h1>
     
+    <div class="subject-uri">URI: <a href="{{ subject.uri }}" title="This identifies the thing this page is about. You should use it when referring to {{ subject.label }} (as opposed to the URL for this page{% if subject.foaf_homepage %}, or the homepage for this thing{% endif %})">{{ subject.uri }}</a></div>
+
     {% if subject.foaf_homepage %}
       <a href="{{ subject.foaf_homepage.uri }}">{{ subject.foaf_homepage.uri }}</a>
     {% endif %}

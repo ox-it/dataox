@@ -158,11 +158,12 @@ section.page-metadata h2 + h3, section.widget h2 + h3, section.widget h2 + table
 
 img.logo {
     float:right;
-    margin:0 0 0.5em 0.5em;
+    margin:2em 0 0.5em 0.5em;
     
 }
 
 div.container > article {
+	position: relative;
     display: block;
     padding:20px;
     background-color: #fff;
@@ -301,6 +302,7 @@ hr {
 
 .badges {
 	text-align: center;
+	margin-top: 2em;
 }
 
 .badges img {
@@ -375,4 +377,12 @@ div.search-form input#search-query {
     border-radius: 5px;
     -moz-border-radius: 5px;
     -webkit-border-radius: 5px;
+}
+
+div.subject-uri {
+    text-align: right;
+    color: #888;
+    position: absolute;
+    top: 0.7em;
+    right: 1em;
 }
