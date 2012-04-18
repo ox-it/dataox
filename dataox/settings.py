@@ -105,10 +105,6 @@ ID_MAPPING = (
     ('http://oxpoints.oucs.ox.ac.uk/id/', 'http://data.ox.ac.uk/doc:oxpoints/', False),
 )
 
-if STAGING:
-    ID_MAPPING = tuple((a, b.split('/', 1)[1], c) for a,b,c in ID_MAPPING)
-
-
 LONGLIVING_PUBSUB_WATCHERS += ('humfrey.elasticsearch.pubsub.update_search_indexes',)
 
 TIME_SERIES_URI_BASE = "http://data.ox.ac.uk/id/time-series/"
