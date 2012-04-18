@@ -1,0 +1,33 @@
+{% extends "course/base.html" %}
+
+{% block title %}Course catalogs{% endblock %}
+
+{% block content %}
+  <h1>Course catalogues</h1>
+
+  <p>The Oxford Course Data project makes the following course catalogues available.</p>
+
+  <p>Please note that the linked files may be rather large.</p>
+
+  <table>
+    <thead>
+      <tr>
+        <th>Title</th>
+        <th>Description</th>
+        <th>Provider</th>
+        <th>Download</th>
+      </tr>
+    </thead>
+    <tbody>{% for subject in subjects %}
+      <tr>
+        <td>{{ subject.label }}</td>
+        <td>{{ subject.description }}</td>
+        <td>{{ subject.dcterms_publisher.render }}</td>
+        <td>{% for format in renderers %}
+          <a href="?uri={{ subject.uri|urlencode }}&amp;format={{ format.format}}">{{ format.name }}</a>{% endfor %}
+        </td>
+      </tr>{% endfor %}
+    </tbody>
+  </table>
+
+{% endblock %}

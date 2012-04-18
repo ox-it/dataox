@@ -1,10 +1,13 @@
 from django.http import HttpResponse
 from django_conneg.decorators import renderer
-from django_conneg.views import HTMLView
+from django_conneg.views import HTMLView, ContentNegotiatedView
 
 from humfrey.elasticsearch import views as elasticsearch_views
 from humfrey.misc import views as misc_views
 from humfrey.results.views.standard import RDFView
+from humfrey.utils.namespaces import NS
+
+import rdflib
 
 import xcri_rdf
 
@@ -16,10 +19,28 @@ class SearchView(elasticsearch_views.SearchView):
               'offeredBy': {'terms': {'field': 'offeredBy.uri',
                                       'size': 20}}}
 
-class FeedView(misc_views.CannedQueryView, HTMLView, RDFView):
+class CatalogListView(misc_views.CannedQueryView, HTMLView, RDFView):
+    template_name = 'course/catalog_list'
+
+    query = """
+        DESCRIBE ?catalog ?publisher WHERE {
+          ?catalog a xcri:catalog ;
+            dcterms:publisher ?publisher .
+        }"""
+
+    def get_subjects(self, request, graph, renderers):
+        return graph.subjects(NS.rdf.type, NS.xcri.catalog)
+
+    def get_additional_context(self, request, renderers):
+        return {'renderers': [{'format': r.format,
+                               'name': r.name,
+                               'mimetypes': r.mimetypes} for r in renderers]}
+     
+
+class CatalogDetailView(misc_views.CannedQueryView, RDFView, ContentNegotiatedView):
     query = """
         CONSTRUCT {
-          ?catalog a xcri:catalog ;
+          %(uri)s a xcri:catalog ;
             dcterms:description ?catalogDescription ;
             dcterms:publisher ?provider ;
             skos:member ?course .
@@ -43,7 +64,7 @@ class FeedView(misc_views.CannedQueryView, HTMLView, RDFView):
           ?attendancePattern rdfs:label ?attendancePatternLabel ; skos:notation ?attendancePatternNotation .
           ?studyMode rdfs:label ?studyModeTitle .
         } WHERE {
-          ?catalog a xcri:catalog ;
+          %(uri)s a xcri:catalog ;
             skos:member ?course .
           OPTIONAL { ?catalog dcterms:description|dc:description ?catalogDescription } .
           OPTIONAL {
@@ -78,8 +99,8 @@ class FeedView(misc_views.CannedQueryView, HTMLView, RDFView):
     """
 
     query = """
-        DESCRIBE ?catalog ?course ?presentation ?organisation ?date ?venue ?courseTerm WHERE {
-          ?catalog a xcri:catalog .
+        DESCRIBE %(uri)s ?course ?presentation ?organisation ?date ?venue ?courseTerm WHERE {
+          %(uri)s a xcri:catalog .
           OPTIONAL {
             ?catalog dcterms:publisher ?organisation
           } .
@@ -95,7 +116,20 @@ class FeedView(misc_views.CannedQueryView, HTMLView, RDFView):
         }
     """
 
+    def get_query(self, request):
+        return self.query % {'uri': rdflib.URIRef(request.GET['uri']).n3()}
+
     @renderer(format='xcricap', mimetypes=('application/xcri-cap+xml',), name="XCRI-CAP 1.2")
     def render_xcricap(self, request, context, template_name):
         serializer = xcri_rdf.XCRICAPSerializer(context['graph'])
         return HttpResponse(serializer.generator(), mimetype='application/xcri-cap+xml')
+
+class CatalogView(ContentNegotiatedView):
+    catalog_detail_view = staticmethod(CatalogDetailView.as_view())
+    catalog_list_view = staticmethod(CatalogListView.as_view())
+
+    def get(self, request):
+        if 'uri' in request.GET:
+            return self.catalog_detail_view(request)
+        else:
+            return self.catalog_list_view(request, self.catalog_detail_view._renderers)

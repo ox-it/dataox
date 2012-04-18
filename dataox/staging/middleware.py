@@ -12,7 +12,7 @@ class StagingMiddleware(object):
         path_info = path_info.groupdict()
         request.original_http_host = request.META['HTTP_HOST']
         request.META['HTTP_HOST'] = path_info['host']
-        request.path_info = path_info['path']
+        request.path = request.path_info = path_info['path']
 
         if 'HTTP_REFERER' in request.META:
             referer = urlparse.urlparse(request.META['HTTP_REFERER'])
