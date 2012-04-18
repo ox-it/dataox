@@ -103,6 +103,14 @@ THUMBNAIL_HEIGHTS = (120, 80,)
 ID_MAPPING = (
     ('http://data.ox.ac.uk/id/', 'http://data.ox.ac.uk/doc/', True),
     ('http://oxpoints.oucs.ox.ac.uk/id/', 'http://data.ox.ac.uk/doc:oxpoints/', False),
+    ('http://id.conted.ox.ac.uk/', 'http://course.data.ox.ac.uk/doc:conted/', False),
+)
+
+HTML_MIMETYPES = ('application/xhtml+xml', 'text/html')
+
+ID_MAPPING_REDIRECTS = (
+    ('http://id.conted.ox.ac.uk/course/(?P<id>.*)', 'http://www.conted.ox.ac.uk/courses/details.php?id=%(id)s', HTML_MIMETYPES),
+    ('http://id.conted.ox.ac.uk/presentation/(?P<id>.*)', 'http://www.conted.ox.ac.uk/%(id)s', HTML_MIMETYPES),
 )
 
 LONGLIVING_PUBSUB_WATCHERS += ('humfrey.elasticsearch.pubsub.update_search_indexes',)
