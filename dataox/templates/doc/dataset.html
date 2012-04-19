@@ -146,8 +146,8 @@
       <tr class="row-even">
         <th>Classes in use:</th>
         <td>
-          {% for class in subject.used_classes %}
-            <a href="{% url sparql %}?query={{ "SELECT ?subject WHERE { GRAPH ?g { ?subject a "|urlencode }}{{ class.uri.n3|urlencode }}{{ " . ?g void:inDataset "|urlencode }}{{ subject.uri.n3|urlencode }}{{ " } } LIMIT 200"|urlencode }}&amp;common_prefixes=on">{{ class.label }}</a>
+          {% for class in subject.all.oo_usedClass %}
+            <a href="{% url sparql:endpoint %}?query={{ "SELECT ?subject WHERE { ?g void:inDataset "|urlencode }}{{ subject.n3|urlencode }}{{ " . GRAPH ?g { ?subject a "|urlencode }}{{ class.n3|urlencode }}{{ " } } LIMIT 200"|urlencode }}&amp;common_prefixes=on">{{ class.label }}</a>
             {{ cls|node }}
             {% if not forloop.last %}&#8226;{% endif %}
           {% empty %}
@@ -159,14 +159,15 @@
       <tr class="row-odd">
         <th>Predicates in use:</th>
         <td>
-          {% for predicate in subject.used_predicates %}
-            <a href="{% url sparql %}?query={{ "SELECT ?subject ?object WHERE { GRAPH ?g { ?subject "|urlencode }}{{ predicate.uri.n3|urlencode }}{{ " ?object . ?g void:inDataset "|urlencode }}{{ subject.uri.n3|urlencode }}{{ " } } LIMIT 200"|urlencode }}&amp;common_prefixes=on">{{ predicate.label }}</a>
+          {% for predicate in subject.all.oo_usedPredicate %}
+            <a href="{% url sparql:endpoint %}?query={{ "SELECT ?subject ?object WHERE { ?g void:inDataset "|urlencode }}{{ subject.n3|urlencode }}{{ " . GRAPH ?g { ?subject "|urlencode }}{{ predicate.n3|urlencode }}{{ " ?object } } LIMIT 200"|urlencode }}&amp;common_prefixes=on">{{ predicate.label }}</a>
             {% if not forloop.last %}&#8226;{% endif %}
           {% empty %}
             <em>None</em>
           {% endfor %}
         </td>
       </tr>
+
     </tbody>
   </table>
   
