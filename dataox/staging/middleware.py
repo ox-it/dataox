@@ -4,6 +4,8 @@ import urlparse
 from django_hosts import middleware
 
 class StagingMiddleware(object):
+    hosts_middleware = middleware.HostsMiddleware()
+
     path_info_re = re.compile(r'/(?P<host>[a-z\-.]+)(?P<path>/.*)$')
     def process_request(self, request):
         path_info = self.path_info_re.match(request.path_info)
@@ -30,6 +32,6 @@ class StagingMiddleware(object):
 
     def process_response(self, request, response):
         if hasattr(request, 'original_http_host'):
-            request.path_info = '/%s%s' % (request.META['HTTP_HOST'], request.path_info)
+            request.path = request.path_info = '/%s%s' % (request.META['HTTP_HOST'], request.path_info)
             request.META['HTTP_HOST'] = request.original_http_host
         return response

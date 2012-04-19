@@ -6,8 +6,9 @@ from django.http import HttpRequest
 import django_hosts.reverse
 import django.core.urlresolvers
 
+from humfrey.linkeddata import uri
 from humfrey.utils.resource import BaseResource
-from humfrey.desc.views import IdView
+from humfrey.desc.views import IdView, DocView
 
 """
 This Django app allows the use of django_hosts while remaining on the same
@@ -48,7 +49,11 @@ if settings.STAGING:
         return original_override_redirect(self, request, '/' + description_url, mimetypes)
     IdView.override_redirect = new_override_redirect
     
-    original_doc_url = BaseResource.doc_url.__get__
-    def new_doc_url(self):
-        return original_doc_url(self).split('/', 1)[1]
-    BaseResource.doc_url = property(new_doc_url)
+    original_doc_forwards = uri.doc_forwards
+    def new_doc_forwards(*args, **kwargs):
+        urls = original_doc_forwards(*args, **kwargs)
+        #raise Exception((urls._base[6:], urls._format_pattern[6:]))
+        return uri.DocURLs(urls._base[6:], urls._format_pattern[6:])
+    uri.doc_forwards = new_doc_forwards
+
+    DocView.check_canonical = False
