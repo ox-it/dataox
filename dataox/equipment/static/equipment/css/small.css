@@ -1,0 +1,237 @@
+/*
+
+flexible layout for small desktop screens
+*/
+
+
+#page {
+
+
+  margin: 0px auto;
+  width: 90%;
+  
+}
+
+/* drop shadow and rounded corners on main page blocks */
+
+header.pageHeader,
+.main,
+footer.site
+
+{
+  
+  border: 1px solid #bbb;
+	-webkit-box-shadow: #dedede 0.5em 0.5em 0.5em; /* Chrome Safari */
+	-moz-box-shadow: #dedede 0.5em 0.5em 0.5em; /* Firefox F3.5+ */
+	 box-shadow: #dedede 0.5em 0.5em 0.5em; /* Opera 10.5, IE 9.0 */
+
+  	-webkit-border-radius: 3px 3px 3px 3px;
+	-moz-border-radius:  3px 3px 3px 3px;
+}
+
+/* background-color for main sections (excluding header) */
+.main,
+footer.site {
+  background-color: #fff;
+
+}
+
+
+header.pageHeader h1{
+
+}
+
+
+
+.content .wrapper {
+  background-color:  #FFFFFF;
+  float: left;
+  width: 72%; /* 600px / 900px */
+  
+}
+
+.content footer {
+
+
+
+  clear: both;
+}
+
+.content a
+{
+text-decoration: underline;
+}
+
+
+
+
+div.main article.content {
+
+
+	float: right;
+	
+	width: 74%;
+}
+
+div.main aside {
+
+	
+	
+	width: 25%;
+
+
+}
+
+
+.main
+{
+
+
+  margin: 10px 0px;
+  padding: 10px;
+}
+
+.content footer section
+{
+
+
+  float: right;
+  width: 49%;
+}
+
+footer.site
+{
+margin: 20px 0px;
+
+clear: both;
+
+
+}
+
+
+
+/* highlight boxes */
+
+.highlight
+{
+background-color: #92bd56;
+width: 32%;
+float: left;
+padding: 0px;
+margin-right: 2px;
+min-height: 10em;
+}
+
+
+.highlight h1
+{
+background-color: #618538;
+color: #fff;
+font-weight: normal;
+margin: 0px;
+padding: 3px;
+}
+
+.highlight p,
+.highlight ul
+{
+padding: 5px;
+}
+
+.physicalClimate{
+background-color: #92bd56;
+}
+
+.physicalClimate h1
+{
+background-color: #618538;
+
+}
+
+
+.impactsAdaption{
+background-color: #dd9536;
+}
+
+.impactsAdaption h1
+{
+background-color: #a86523;
+
+}
+
+.mitigatonPolicy{
+background-color: #e3d14b;
+}
+
+.mitigatonPolicy h1
+{
+background-color: #695116;
+
+}
+
+
+
+
+.intro
+{
+margin-top: 10px;
+}
+
+footer.site
+{
+color: #999;
+font-size: 0.9em;
+padding: 10px;
+}
+
+footer.site a
+{
+color: #333;
+
+}
+
+
+
+
+
+footer li
+{
+display: inline;
+}
+
+footer .contactDetail
+{
+
+margin-left: 10px;
+}
+
+
+footer .copyright
+{
+
+}
+
+.contentMeta
+{
+  float: left;
+  width: 300px;
+}
+
+.socialMedia {
+
+
+  float: right;
+  width: 200px;
+  
+}
+
+.socialMedia ul {
+
+display: block;
+}
+
+
+.socialMedia ul li a {
+  float: right;
+  }
+

@@ -1,4 +1,4 @@
-{% extends "elasticsearch/search.html" %}
+{% extends "elasticsearch/search.html" %}{% load humfrey_desc %}
 
 {% block other_formats %}{% endblock %}
 
@@ -15,27 +15,27 @@
       </form>
     </div>
   {% endif %}
-    
+
       <div class="results">
   {% if hits %}
-  
-  <p>Your search returned <strong>{{ hits.total }}</strong> results in <strong>{{ took }}</strong>ms.</p>
-  
+
+  <p>Your search returned <strong>{{ hits.total }}</strong> results.</p>
+
   {% include "elasticsearch/pagination.html" %}
-  
+
   <ol start="{{ start }}">
   {% for hit in hits.hits %}{% block hit %}
   <li>
-    <a href="{% url item hit.id %}">{{ hit.source.label }}</a><br/>
+    <a href="{{ hit.source.uri|doc_url }}">{{ hit.source.label }}</a><br/>
     {{ hit.source.description }}
-    
+
   </li>
   {% endblock %}{% endfor %}
   </ol>
 
   {% include "elasticsearch/pagination.html" %}
   {% else %}
-  
+
   <p>Enter a query to start searching.</p>
   {% endif %}
   </div>
@@ -55,9 +55,9 @@
     <h2>Refine by&hellip;</h2>
     {% if facets.department %}
       {% include "elasticsearch/facet.html" with facet=facets.department facet_name="department" %}
-	{% endif %}
+        {% endif %}
     {% if facets.basedNear %}
       {% include "elasticsearch/facet.html" with facet=facets.basedNear facet_name="location" %}
-	{% endif %}
+        {% endif %}
   {% endif %}
 {% endblock %}

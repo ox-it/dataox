@@ -1,0 +1,48 @@
+/*
+styling for small screens, mobile devices etc.
+ */
+
+.main
+{
+background-color: #fff;
+padding-top: 20px;
+}
+
+header.pageHeader
+{
+margin-bottom: 0px;
+
+}
+
+
+
+
+
+ul.mqtest li
+{
+color: #eee;
+}
+ul.mqtest li.marmoset
+{
+color: #333;
+}
+
+header.pageHeader
+{
+margin-top: 0px;
+}
+
+
+/* give some padding to content containers */
+.main,
+footer.site
+{
+padding: 3px;
+}
+
+
+footer.site
+{
+background-color: #eee;
+}
+

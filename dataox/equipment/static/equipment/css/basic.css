@@ -1,0 +1,254 @@
+/*
+universal styles - referenced at all times
+ */
+body
+{
+
+background-color: #eee;
+color: #444;
+font-family: arial, sans-serif;
+font-size: 0.82em;
+padding: 0px;
+
+}
+
+
+
+
+h1, h2, h3, h4, h5, h6
+{
+color: #002B5F;
+font-family: "Trebuchet MS",Helvetica,Arial,sans-serif;
+}
+
+h1 {
+  font-size: 1.8em;
+}
+
+
+h2 {
+  font-size: 1.6em;
+}
+
+
+h3 {
+  font-size: 1.4em;
+}
+
+
+h4 {
+  font-size: 1.2em;
+}
+
+
+h5 {
+  font-size: 1em;
+}
+
+
+h6 {
+  font-size: 1.em;
+  font-style: italic;
+  font-weight: normal;
+}
+
+
+
+
+a,
+a:link,
+a:visited,
+a:active,
+a:focus,
+a:hover
+{
+color: #002D62;
+}
+
+/* give some space between main blocks */
+header.pageHeader,
+.main,
+footer.site,
+
+
+{
+margin-bottom: 10px;
+}
+
+
+p
+{
+margin: 0.7em 0px;
+}
+
+
+
+
+
+footer
+{
+
+	margin: 10px 0px;
+	text-align: center;	
+
+
+}
+
+footer div.copyright
+{
+text-align: center;
+
+}
+
+header.pageHeader
+{
+
+  background-color: #002147;
+  border-top-color: #002147; 
+  border-top-style: solid;
+  color: white;
+  height: 127px;
+  margin: 10px 0px;
+  padding: 0px ;
+  position: relative;
+
+ }
+
+  
+  
+  
+  /* nav styles */
+  
+.main .main aside nav{
+border-bottom:1px solid #d5d5d5;margin:4px 0 20px 0;text-align:left;font-size:.9em;line-height:1.5em;width:98%;
+}
+
+.main aside nav a{color:#666!important;}
+
+.main aside nav a:hover{color:#0F0F0F!important;}
+
+.main aside nav span{color:#0F0F0F;}
+
+.main aside nav ul{width:100%;}
+
+.main aside nav li {width:100%;padding:0;border-top:1px solid #d5d5d5;}
+
+.main aside nav li ul li{margin:0;border-top:none;}
+
+.main aside nav li ul li a,
+.main aside nav li ul li span
+{background-color:#f5f5f5;border-top:1px solid #d5d5d5;padding-left:20px;}
+
+.main aside nav li ul li ul {background-color:#e8e8e8;margin:0 0 0 15px;width:91%;}
+
+.main aside nav li ul li ul li,
+.main aside nav li ul li ul li a,
+.main aside nav li ul li ul li span{background-color:transparent;border:none;}
+
+.main aside nav li a,
+.main aside nav li span{text-decoration:none;background:url('images/bullet_arrow.gif') 3px 1.1em no-repeat;display:block;height:100%;padding:5px 0 5px 15px;}
+
+.main aside nav li ul a,
+.main aside nav li ul span{background-image:none;font-weight:normal;}
+
+.main aside nav li a.main-index,
+.main aside nav li span.main-index{padding-left:5px;background-image:none;}
+
+.main aside nav li a:hover{text-decoration:underline;}
+
+* html .main aside nav li ul a{height:1px;}
+
+
+	
+	
+a#oxCrest {
+
+	background: #002147 url('images/ox_brand2_pos.gif') no-repeat 0px 0px; 
+	border: 1px solid  #fff;
+	display: block;
+	height: 105px;
+	left: 10px;
+	padding: 0px;
+	position: absolute;
+	text-indent: -9000px;
+	top: 10px;
+	width: 105px;
+}	
+	
+	
+		
+a#homeLink {
+
+	background: transparent url('images/logo.png') no-repeat 0px 0px; 
+	display: block;
+	height: 100px;
+	left: 117px;
+	padding: 0px;
+	position: absolute;
+	text-indent: -9000px;
+	top: 17px;
+	width: 640px;
+}	
+	
+
+header.pageHeader a
+{
+color: #fff;
+}
+
+
+header.pageHeader h1
+{
+font-size: 2.1em;
+font-weight: normal;
+margin-bottom: 0.8em;
+}
+
+
+
+
+header ul li
+{
+display: inline;
+border-left: 1px solid #fff;
+padding: 2px 10px;
+font-size: 0.9em;
+
+}
+
+header ul li.first
+{
+border-left-style: none;
+}
+
+
+li 
+{
+list-style: none;
+}
+
+
+.main li 
+{
+list-style: bullet;
+}
+
+
+a
+{
+text-decoration: none;
+}
+
+
+.main a
+{
+text-decoration: underline;
+}
+
+.clear
+{
+clear: both;
+}
+
+
+
