@@ -3,7 +3,7 @@ from django_conneg.decorators import renderer
 from django_conneg.views import HTMLView, ContentNegotiatedView
 
 from humfrey.elasticsearch import views as elasticsearch_views
-from humfrey.misc import views as misc_views
+from humfrey.sparql import views as sparql_views
 from humfrey.results.views.standard import RDFView
 from humfrey.utils.namespaces import NS
 
@@ -19,7 +19,7 @@ class SearchView(elasticsearch_views.SearchView):
               'offeredBy': {'terms': {'field': 'offeredBy.uri',
                                       'size': 20}}}
 
-class CatalogListView(misc_views.CannedQueryView, HTMLView, RDFView):
+class CatalogListView(sparql_views.CannedQueryView, HTMLView, RDFView):
     template_name = 'course/catalog_list'
 
     query = """
@@ -37,7 +37,7 @@ class CatalogListView(misc_views.CannedQueryView, HTMLView, RDFView):
                                'mimetypes': r.mimetypes} for r in renderers]}
      
 
-class CatalogDetailView(misc_views.CannedQueryView, RDFView, ContentNegotiatedView):
+class CatalogDetailView(sparql_views.CannedQueryView, RDFView, ContentNegotiatedView):
     query = """
         CONSTRUCT {
           %(uri)s a xcri:catalog ;

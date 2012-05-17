@@ -6,8 +6,10 @@ from humfrey.utils.views import RedisView
 from humfrey.results.views.standard import RDFView, ResultSetView
 from humfrey.utils.namespaces import NS
 from humfrey.utils.resource import Resource
+from humfrey.sparql.views import StoreView
+from humfrey.linkeddata.views import MappingView
 
-class DatasetView(RDFView, HTMLView):
+class DatasetView(StoreView, MappingView, RDFView, HTMLView):
     _QUERY = """
         DESCRIBE ?dataset ?license ?publisher WHERE {
             ?dataset a void:Dataset .

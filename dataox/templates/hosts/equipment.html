@@ -1,204 +1,104 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
-<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en">
-  <head>
-    <title>{% block title %}{% endblock %}, Equipment catalogue, Research Support</title>
-<!-- three column -->
+<!DOCTYPE html>
+<!--[if lt IE 7 ]> <html lang="en" class="ie ie6"> <![endif]-->
+<!--[if IE 7 ]>    <html lang="en" class="ie ie7"> <![endif]-->
+<!--[if IE 8 ]>    <html lang="en" class="ie ie8"> <![endif]-->
+<!--[if IE 9 ]>    <html lang="en" class="ie ie9"> <![endif]-->
+<!--[if (gt IE 9)|!(IE)]><!-->
+<html lang="en">
+<!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  <!--[if lt IE 9]>
+  <script src="http://html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+  <![endif]-->
 
-    <link rel="icon" type="image/gif" href="//www.admin.ox.ac.uk/media/global/wwwadminoxacuk/styleassets/images/favicon.gif" />
-    <link rel="shortcut icon" type="image/gif" href="//www.admin.ox.ac.uk/media/global/wwwadminoxacuk/styleassets/images/favicon.gif" />
-    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
-    <meta http-equiv="Cache-Control" content="max-age=10800" />
-    <meta name="description" content="Research Support, Research Support" />
-    <meta name="keywords" content="Research Services, Research Accounts, Training, Funding, Managing Projects, Grant Applications, Awards, Contracts, Ethics, Policy, Costing, Pricing, IP, Governance, Clinical Trials, " />
-    <meta http-equiv="imagetoolbar" content="No" />
-    <meta name="DC.Author" content="Research Services webmaster" />
-    <meta name="DC.Coverage" content="Unlimited" />
-    <meta name="DC.Creator" content="University of Oxford" />
-    <meta name="DC.Date.modified" content="06 Jan 12" />
-    <meta name="DC.Description" content="Research Support, Research Support" />
-    <meta name="DC.Format" content="application/xhtml" />
+  <!-- print stylesheet for print stlying -->
+  <link media="print" href="{{ STATIC_URL }}equipment/css/print.css" rel="stylesheet" type="text/css" />
 
-    <meta name="DC.Language" content="en" />
-    <meta name="DC.Publisher" content="University of Oxford" />
-    <meta name="DC.Rights" content="Copyright University of Oxford" />
-    <meta name="DC.subject" content="Research Support, Research Services, Research Accounts, Training, Funding, Managing Projects, Grant Applications, Awards, Contracts, Ethics, Policy, Costing, Pricing, IP, Governance, Clinical Trials, " />
-    <meta name="DC.title" content="Research Support, Research Support" />
-    
-    <!-- Add NO ARCHIVE meta tag if required -->
-    
+  <!-- general reset styles for getting rid of annoying browser defaults -->
+  <link media="all" href="{{ STATIC_URL }}equipment/css/reset.css" rel="stylesheet" type="text/css" />
 
-    <!-- javascript file includes -->
-    <script type="text/javascript" src="//www.admin.ox.ac.uk/media/global/wwwadminoxacuk/styleassets/js/jquery.js">
-</script><!-- jquery -->
+  <!-- basic styles suitable for all devices *DO not put layout stuff here * -->
+  <link media="all" href="{{ STATIC_URL }}equipment/css/basic.css" rel="stylesheet" type="text/css" />
 
-    <script type="text/javascript" src="//www.admin.ox.ac.uk/media/global/wwwadminoxacuk/styleassets/js/jquery.clickOrEnter.js">
-</script><!-- jquery.clickOrEnter.js -->
-    <script type="text/javascript" src="//www.admin.ox.ac.uk/media/global/wwwadminoxacuk/styleassets/js/all.js">
-</script><!-- all.js -->
-    <script type="text/javascript" src="//www.admin.ox.ac.uk/media/global/wwwadminoxacuk/styleassets/js/page_setup.js">
-</script><!-- page_setup.js -->
+  <!-- styles for mobile devices-->
+  <link href="{{ STATIC_URL }}equipment/css/tiny.css" rel="stylesheet" type="text/css" media="screen and (max-width: 639px)" />
 
-    <!-- Related Content Advanced -->
-    
-    
-    <!-- CSS file combined from subversion-->
-    <link rel="stylesheet" type="text/css" media="all" href="//www.admin.ox.ac.uk/media/global/wwwadminoxacuk/styleassets/css/all-t4-production.css" />
-    <!-- CSS file for FAQ-->
+  <!-- styles for smallscreen devices-->
+  <link href="{{ STATIC_URL }}equipment/css/small.css" rel="stylesheet" type="text/css" media="(min-width: 640px)" />
 
-    <link rel="stylesheet" type="text/css" media="all" href="//www.admin.ox.ac.uk/media/global/wwwadminoxacuk/styleassets/css/FAQ-new.css" />
-    <!-- CSS for Gl More/Less -->
-    <link rel="stylesheet" type="text/css" media="all" href="//www.admin.ox.ac.uk/media/global/wwwadminoxacuk/styleassets/css/togglePanel.css" />
-    <!-- CSS for general bugFixing -->
-    <link rel="stylesheet" type="text/css" media="all" href="//www.admin.ox.ac.uk/media/global/wwwadminoxacuk/styleassets/css/generalBugFix.css" />
-    <!-- CSS for A to Z -->
-    <link rel="stylesheet" type="text/css" media="all" href="//www.admin.ox.ac.uk/media/global/wwwadminoxacuk/styleassets/css/AtoZ.css" />
+  <!-- styles for small-to-medium screen desktop  devices-->
+  <link rel="stylesheet" type="text/css" href="{{ STATIC_URL }}equipment/css/medium.css" media="(min-width: 1100px) and (max-width: 1600px)" />
+
+  <!-- styles for large screen desktop devices-->
+  <link rel="stylesheet" type="text/css" href="{{ STATIC_URL }}equipment/css/large.css" media="screen and (min-width: 1601px)" />
+
+  <!-- pull in tiny responsive sheets for mobile IE  ->
+  <!--[if (lt IE 9)&(!IEMobile)]>
+  <link rel="stylesheet" type="text/css" href="{{ STATIC_URL }}equipment/css/tiny.css" media="screen"/>
+  <![endif]-->
 
 
-    <!-- navigation object : Gl CSS Selector -->
+  <!-- pull in small and medium responsive sheets for desktop IE that doesn't unnderstand media queries (e.e before IE 9) ->
+  <!--[if (lt IE 9)&(!IEMobile)]>
+  <link rel="stylesheet" type="text/css" href="{{ STATIC_URL }}equipment/css/small.css" media="screen"/>
+  <link rel="stylesheet" type="text/css" href="{{ STATIC_URL }}equipment/css/medium.css" media="screen"/>
+  <![endif]-->
 
-    
-    <!-- note: the 'stripy' IE bug seems to have been caused by something in alumni/nav_primary.css,
-    not a change to the main nav_primary. The difference is that before the width was defined on
-    #primary-nav ul  (defined differently for the different images that go into it) but now is
-    not. With width on #primary-nav ul this goes away -->
-    <link rel="stylesheet" type="text/css" href="//www.admin.ox.ac.uk/media/global/wwwadminoxacuk/styleassets/css/prinav.css" />
+  <!-- styles for Internet explorer  ie-specific styles -->
+  <!--[if (gt IE 4)&(lt IE 9)]>
+  <link media="screen" href="{{ STATIC_URL }}equipment-dev/css/ie.css" rel="stylesheet" type="text/css"/>
+  <![endif]-->
 
-    <!--[if IE 6]><script src="//www.admin.ox.ac.uk/media/global/wwwadminoxacuk/styleassets/js/ie6.js" type="text/javascript"></script><script type="text/javascript" src="//www.admin.ox.ac.uk/media/global/wwwoxacuk/styleassets/js/pngfix.jquery.js">
-</script><![endif]-->
-    <!--[if IE 6]><link rel="stylesheet" type="text/css" href="//www.admin.ox.ac.uk/media/global/wwwadminoxacuk/styleassets/css/ie6.css" /><link rel="stylesheet" type="text/css" media="all" href="//www.admin.ox.ac.uk/media/global/wwwadminoxacuk/styleassets/css/togglePanel-IE6.css" /><link rel="stylesheet" type="text/css" media="all" href="/media/global/wwwadminoxacuk/styleassets/css/AtoZ-IE6_from_production.css" /><![endif]-->
-    <!--[if IE 7]><link rel="stylesheet" type="text/css" href="//www.admin.ox.ac.uk/media/global/wwwadminoxacuk/styleassets/css/ie7.css" /><![endif]-->
-    <link rel="stylesheet" type="text/css" href="//www.admin.ox.ac.uk/media/global/wwwadminoxacuk/styleassets/css/handheld.css" media="handheld" />
-    <link rel="stylesheet" type="text/css" href="//www.admin.ox.ac.uk/media/global/wwwadminoxacuk/styleassets/css/print.css" media="print" />
-    
-  </head>
+  <meta name="keywords" content="" />
+  <meta name="description" content="" />
 
-  <body>{% if staging %}{% include "staging/tab.html" %}{% endif %}
+  <title>{% block title %}This gets replaced{% endblock %} | Research Equipment Catalogue</title>
+</head>
+{% block body %}
+<body class="{% block body_class %}{% endblock %}">{% if staging %}{% include "staging/tab.html" %}{% endif %}
+  <div id="page">
+    <header class="pageHeader">
+      <h1><a href="index.html" id="homeLink">Research Equipment Catalogue</a></h1>
 
-        <!-- header content on page -->
-    <div id="header-wrapper">
-      <div id="header">
+      <a href="http://www.ox.ac.uk/" id="oxCrest">University of Oxford</a>
+    </header>
+    <div class="main">
+      <article class="content">{% block content %}
+        The main content of the page ends up in here.
+      {% endblock %}</article>
 
-        <ul id="access-links">
-          <li><a id="skipnav" href="#primary-content" accesskey="s">Start of main content</a></li>
-        </ul>
-
-        <div id="logos">
-          <span class="screenonly">
-            <a id="logo" href="/researchsupport/">
-              <img src="//www.admin.ox.ac.uk/media/global/wwwadminoxacuk/localsites/researchsupport/images/banners/research_support_header.gif" alt="Research Support" height="66" width="312" class="floated"  />
-            </a>
-          </span>
-          <span class="printonly">
-            <img src="//www.admin.ox.ac.uk/media/global/wwwadminoxacuk/localsites/researchsupport/images/banners/research_support_header_print.gif" alt="Research Support" height="66" width="312" class="floated"  />
-
-          </span>
-        </div>
-
-        <div class="find-it">
-          <!-- text/html formatter for GL Search Box -->
-
-<form id="searchform" action="http://www2.admin.ox.ac.uk/search_multiplex/multiplex.php" method="get">
- <div>
-  <label for="searchinput">Search</label>
-  <input type="text" name="q" id="searchinput" value="Enter search term" />
-
-  <input type="image" name="submit" alt="Search" src="//www.admin.ox.ac.uk/media/global/wwwadminoxacuk/styleassets/images/button_search.gif" class="searchbutton" />
-  <input type="hidden" name="access" value="p" />
-  <input type="hidden" name="output" value="xml_no_dtd" />
-  <input type="hidden" name="ie" value="UTF-8" />
-  <input type="hidden" name="client" value="admin" />
-  <input type="hidden" name="proxystylesheet" value="admin" />
-  <input type="hidden" name="subsite" value="resadmin" />
-  <input type="hidden" name="subsitename" value="University Administration and Services" />
-  <fieldset>
-
-    <label for="search-type" class="radio">
-      <input id="search-type" class="radio radio-first" type="radio" 
-             name="search-type" value="subsite" 
-             checked="checked" 
-      />This site</label>
-    <label for="search-type2" class="radio">
-      <input id="search-type2" class="radio" type="radio" 
-             name="search-type" value="pages"  
-      />University of Oxford</label>
-    <label for="search-type3" class="radio">
-      <input id="search-type3" class="radio" type="radio" 
-             name="search-type" value="people" 
-      />People</label>
-  </fieldset>
-
- </div>
-</form>
-        </div>
-        
-        <!-- Add header_logo_right -->
-        <div class="university-logo">
-          <a href="http://www.ox.ac.uk/">
-           
-          <img src="//www.admin.ox.ac.uk/media/global/wwwadminoxacuk/styleassets/images/header_logo.gif" alt="University of Oxford" height="115" width="115" class="floated"  />
-
-          </a>
-        </div>
-
-        
-        <!-- Primary Nav -->
-        
-
-      </div>
-    </div>      
-    <div id="wrapper">
-      <div id="content">         
-          <a href="//www.admin.ox.ac.uk/researchsupport/" id="departmental-logo"></a>
-          
-          <div id="breadcrumb">
-            <ol><!-- navigation object : Gl Pre Breadcrumb Locator --><!-- navigation object : Gl Pre Breadcrumb Home Link --><li><a href="//www.admin.ox.ac.uk/">UAS Home</a></li><!-- navigation object : Gl Breadcrumbs --><li><a href="/researchsupport/">Research Support</a></li><li><a href="{% url index %}">Equipment catalogue</a></li>{% block breadcrumbs %}{% endblock %}</ol>
-          </div><div class="clear"></div>
-
-         
-	  <div id="uas-wrapper">
-            <div id="secondary-content">{% block secondary_content %}
-              <!-- Main Left Nav -->
-              <ul id="secondary-nav"><li><a href="//www.admin.ox.ac.uk/researchsupport/about/">About research support </a></li><li><a href="//www.admin.ox.ac.uk/researchsupport/contacts/">Contacts</a></li><li><a href="//www.admin.ox.ac.uk/researchsupport/oxonly/news/">News </a></li><li><a href="//www.admin.ox.ac.uk/researchsupport/consultations/">Consultations</a></li><li><a href="//www.admin.ox.ac.uk/researchsupport/training/">Training and professional development </a></li><li><a href="//www.admin.ox.ac.uk/researchsupport/findfunding/">Find funding</a></li><li><a href="/researchsupport/sponsors/">Major sponsors</a></li><li><a href="/researchsupport/applying/">Applying for funding</a></li><li><a href="/researchsupport/costing/">Costing and pricing</a></li><li><a href="/researchsupport/facilities/">Research Facilities and Equipment</a></li><li><a href="/researchsupport/contracts/">Research contracts</a></li><li><a href="/researchsupport/ip/">Intellectual Property</a></li><li><a href="/researchsupport/impactke/">Impact and Knowledge Exchange</a></li><li><a href="/researchsupport/awards/">Managing awards</a></li><li><a href="/researchsupport/ctrg/">Clinical Trials and Research Governance</a></li><li><a href="/researchsupport/integrity/">Research integrity and ethics</a></li><li><a href="/researchsupport/reports/">Research Income and Activity Reports</a></li></ul>
-
-              <!-- Under Left Nav -->
-	      
-            {% endblock %}</div>
-              
-            <div id="primary-content">{% block content %}{% endblock %}</div>
- 
-            <!-- Tertiary Content -->
-            <div id="tertiary-content">{% block tertiary_content %}
-{% if user.is_authenticated %}
-<p>Currently logged in as {{ user.first_name }} {{ user.last_name }} ({{ user.username }}).</p>
-
-<p><a href="{% url logout %}">Log out</a></p>
-{% else %}
-<p><a href="{% url webauth:login %}?next={% block login_next_url %}{{ request.get_full_path|urlencode }}{% endblock %}">Log in</a> to see more comprehensive results.</p>
-{% endif %}
-{% endblock %}</div>
-          </div>
-
-          <!--[if IE 6]><div class="clear"></div><![endif]-->
-        </div>
-
-        <div id="footer">
-          <dl id="footer-updated"><dt>Last updated</dt> <dd>06 Jan 12</dd></dl>
-          <ul class="extras">
-            <!-- navigation object : Ad Tools -->            <li class="first"><!-- navigation object : Research Administration Gateway Link to Site Map --><a href="/researchsupport/sitemap/">Site Map</a></li>
-
-            <li><a href="mailto:research.services@admin.ox.ac.uk">Contact this site's webmaster</a></li>
-            <li><a href="http://www.ox.ac.uk/copyright.html">Legal notice</a></li>
+      <aside>
+        <nav>
+          <ul>
+            <li class="currentsection"><span class="youarehere" >home</span></li>
+            <li><a href="{% url about %}" >about the project</a></li>
+            <li><a href="{% url search %}" >search</a></li>
+            <li><a href="{% url browse %}" >browse by category</a></li>
+            <li><a href="{% url contact %}" >contact</a></li>
+            {% if user.is_authenticated %}
+            <li>logged in as {{ user.first_name }} {{ user.last_name }} ({{ user.username }})</li>
+            <li><a href="{% url webauth:logout %}">log out</a></li>
+            {% else %}
+            <li>logged in users get to see more</li>
+            <li><a href="{% url webauth:login %}">log in</a></li>
+            {% endif %}
+            
           </ul>
-        <div class="clear"></div>
-      </div>
-    </div>
-<!-- navigation object : Gl Analytics Code -->
-		<!-- link to Google Analytics' javascript -->
+        </nav>
 
-		<script src="http://www.google-analytics.com/urchin.js" type="text/javascript"></script>
-		<script type="text/javascript">
-			_uacct = "UA-7776382-1";
-			if (typeof urchinTracker == 'function') urchinTracker();
-		</script>
-  </body>
+        {% block tertiary_content %}{% endblock %}
+      </aside>
+    <!-- close .main -->
+    <div style="clear:both"></div>
+    </div>
+
+    <footer class="site">
+      <div class="copyright">
+        © University of Oxford
+      <!-- close .copyright -->
+      </div>
+    </footer>
+    </div><!-- /end #page -->
+</body>{% endblock body %}
 </html>
