@@ -102,6 +102,7 @@ THUMBNAIL_HEIGHTS = (120, 80,)
 
 ID_MAPPING = (
     ('http://data.ox.ac.uk/id/', 'http://data.ox.ac.uk/doc/', True),
+    ('https://data.ox.ac.uk/id/equipment/', 'https://www.research-facilities.ox.ac.uk/view/', True),
     ('http://oxpoints.oucs.ox.ac.uk/id/', 'http://data.ox.ac.uk/doc:oxpoints/', False),
     ('http://id.conted.ox.ac.uk/', 'http://course.data.ox.ac.uk/doc:conted/', False),
 )
@@ -151,6 +152,7 @@ ADDITIONAL_NAMESPACES.update({
     'oxnotation': 'http://data.ox.ac.uk/id/notation/',
     'xcri': 'http://xcri.org/profiles/1.2/',
     'mlo': 'http://purl.org/net/mlo/',
+    'spatialrelations': 'http://data.ordnancesurvey.co.uk/ontology/spatialrelations/',
 
 })
 

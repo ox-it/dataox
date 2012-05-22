@@ -4,6 +4,26 @@
 
 {% block content %}
 
-A {{ notation }} B
+<h1>Browse{% if concept %}: {{ concept.label }}{% endif %}</h1>
+
+{% if concepts %}
+<h2>Sub-categories</h2>
+
+<ul>
+{% for concept in concepts %}
+  <li><a href="{% url browse concept.skos_notation %}">{{ concept.label }}</a></li>
+{% endfor %}
+</ul>
+{% endif %}
+
+{% if equipment %}
+<h2>Equipment</h2>
+<ul>
+{% for e in equipment %}
+  <li><a href="{{ e.doc_url }}">{{ e.label }}</a></li>
+{% endfor %}
+</ul>
+{% endif %}
+
 
 {% endblock %}

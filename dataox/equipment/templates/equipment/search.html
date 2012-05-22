@@ -55,9 +55,21 @@
     <h2>Refine by&hellip;</h2>
     {% if facets.department %}
       {% include "elasticsearch/facet.html" with facet=facets.department facet_name="department" %}
-        {% endif %}
+    {% endif %}
     {% if facets.basedNear %}
       {% include "elasticsearch/facet.html" with facet=facets.basedNear facet_name="location" %}
-        {% endif %}
+    {% endif %}
+    {% if facets.institution %}
+      {% include "elasticsearch/facet.html" with facet=facets.institution facet_name="institution" %}
+    {% endif %}
+    {% if facets.category %}
+      {% include "elasticsearch/facet.html" with facet=facets.category facet_name="category" %}
+    {% endif %}
+    {% if facets.subcategory %}
+      {% include "elasticsearch/facet.html" with facet=facets.subcategory facet_name="subcategory" %}
+    {% endif %}
+    {% if facets.oxford %}
+      {% include "elasticsearch/facet.html" with facet=facets.oxford facet_name="Oxford?" %}
+    {% endif %}
   {% endif %}
 {% endblock %}

@@ -1,4 +1,4 @@
-{% extends "equipment/base.html" %}
+{% extends "equipment/base.html" %}{% load humfrey_desc %}
 
 {% block title %}{{ subject.label }}{% endblock %}
 
@@ -11,7 +11,9 @@
   <a href="{{ page.uri }}">{{ page.uri }}</a>{% if not forloop.last %}, {% endif %}
   {% endfor %}</p>{% endif %}
 
-  <p>{{ subject.description }}</p>
+  {% if subject.description %}
+  <p>{{ subject.description|node }}</p>
+  {% endif %}
 
   <dl>{% if subject.oo_equipmentOf %}
     <dt>Department:</dt>
@@ -27,7 +29,7 @@
   {% if subject.oo_contact %}
   <p>For more information, contact:</p>
   <ul>{% for contact in subject.all.oo_contact %}
-    <li>{{ contact.label }}{% if contact.v_email %}, <a href="{{ contact.email }}">{{ contact.v_email|slice:"7:" }}</a>{% endif %}</li>{% endfor %}
+    <li>{{ contact.label }}{% if contact.email %}, <a href="{{ contact.email }}">{{ contact.email|slice:"7:" }}</a>{% endif %}</li>{% endfor %}
   </ul>
   {% endif %}
 {% endblock %}

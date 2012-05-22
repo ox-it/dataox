@@ -51,7 +51,8 @@
   <![endif]-->
 
   <meta name="keywords" content="" />
-  <meta name="description" content="" />
+  <meta name="description" content="" />{% if no_index %}
+  <meta name="robots" content="noindex"/>{% endif %}
 
   <title>{% block title %}This gets replaced{% endblock %} | Research Equipment Catalogue</title>
 </head>

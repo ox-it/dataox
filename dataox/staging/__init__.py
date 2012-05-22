@@ -57,3 +57,12 @@ if settings.STAGING:
     uri.doc_forwards = new_doc_forwards
 
     DocView.check_canonical = False
+    
+    id_mapping = []
+    for a, b, c in settings.ID_MAPPING:
+        if a.startswith('https://'):
+            a = 'http' + a[5:]
+        if b.startswith('https://'):
+            b = 'http' + a[5:]
+        id_mapping.append((a, b, c))
+    settings.ID_MAPPING = tuple(id_mapping)

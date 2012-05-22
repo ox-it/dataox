@@ -1,1 +1,1 @@
-from dataox.resource import oxpoints, account
+from dataox.resource import oxpoints, account, agent
