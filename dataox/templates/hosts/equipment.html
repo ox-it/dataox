@@ -53,43 +53,61 @@
   <meta name="keywords" content="" />
   <meta name="description" content="" />{% if no_index %}
   <meta name="robots" content="noindex"/>{% endif %}
+  <link rel="shortcut icon" type="image/x-icon" href="{{ STATIC_URL }}favicon.ico" />
+  
+  <script type="text/javascript" src="{{ STATIC_URL }}js/jquery-1.6.4.min.js"></script>
+  <script type="text/javascript" src="{{ STATIC_URL }}equipment/base.js"></script>
+  {% block extra_head %}{% endblock %}
+  
 
-  <title>{% block title %}This gets replaced{% endblock %} | Research Equipment Catalogue</title>
+  <title>{% block title %}This gets replaced{% endblock %} | Research Facilities and Equipment at Oxford</title>
 </head>
 {% block body %}
 <body class="{% block body_class %}{% endblock %}">{% if staging %}{% include "staging/tab.html" %}{% endif %}
   <div id="page">
     <header class="pageHeader">
-      <h1><a href="index.html" id="homeLink">Research Equipment Catalogue</a></h1>
+      <h1><a href="{% url index %}" id="homeLink">Research Facilities and Equipment at Oxford</a></h1>
 
       <a href="http://www.ox.ac.uk/" id="oxCrest">University of Oxford</a>
     </header>
     <div class="main">
-      <article class="content">{% block content %}
+      <article class="content">
+      <div class="wrapper{% block with_left_sidebar %} with-left-sidebar{% endblock %}{% block with_right_sidebar %}{% endblock %}">
+      {% block content %}
         The main content of the page ends up in here.
-      {% endblock %}</article>
+      {% endblock %}
+      </div>
+      </article>
 
-      <aside>
+	{% block left_sidebar %}
+      <aside class="left-sidebar">
         <nav>
           <ul>
-            <li class="currentsection"><span class="youarehere" >home</span></li>
-            <li><a href="{% url about %}" >about the project</a></li>
-            <li><a href="{% url search %}" >search</a></li>
-            <li><a href="{% url browse %}" >browse by category</a></li>
-            <li><a href="{% url contact %}" >contact</a></li>
-            {% if user.is_authenticated %}
-            <li>logged in as {{ user.first_name }} {{ user.last_name }} ({{ user.username }})</li>
-            <li><a href="{% url webauth:logout %}">log out</a></li>
-            {% else %}
-            <li>logged in users get to see more</li>
-            <li><a href="{% url webauth:login %}">log in</a></li>
-            {% endif %}
-            
+            <li><a href="{% url index %}">home</a></li>
+            <li><a href="{% url about %}">about the project</a></li>
+            <li><a href="{% url search %}">search</a></li>
+            <li><a href="{% url browse %}">browse by category</a></li>
+            <li><a href="{% url contact %}">contact</a></li>
           </ul>
-        </nav>
 
-        {% block tertiary_content %}{% endblock %}
+          <div class="user" >
+            {% if user.is_authenticated %}
+            <p class="iam">logged in as <span class="realName">{{ user.first_name }} {{ user.last_name }}</span> </p>
+            <p class="logInOut"><a href="{% url webauth:logout %}">log out</a></p>
+            {% else %}
+            <p>Log in to see more results</p>
+            <p class="logInOut"><a href="{% url webauth:login %}">log in</a></p>
+            
+            {% endif %}
+          </div>
+
+          <a href="http://www.epsrc.ac.uk/" id="epsrc">Engineering and Physical Sciences Research Council</a>
+
+        </nav>
       </aside>
+    {% endblock %}
+    {% block right_sidebar %}{% endblock %}
+
     <!-- close .main -->
     <div style="clear:both"></div>
     </div>

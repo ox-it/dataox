@@ -2,6 +2,9 @@
 
 {% block other_formats %}{% endblock %}
 
+{% block body_class %}{{ block.super }} equipment-search{% endblock %}
+
+{% block extra_head %}{% endblock %}
 
 {% block content %}
   <h1>Search</h1>
@@ -41,8 +44,11 @@
   </div>
 {% endblock %}
 
-{% block tertiary_content %}{{ block.super }}
+{% block with_right_sidebar %} with-right-sidebar{% endblock %}
+
+{% block right_sidebar %}
   {% if hits %}
+  <aside class="right-sidebar">
     <div class="sidebar-item search-box">
       <h2>Query</h2>
       <form method="get" action=".">

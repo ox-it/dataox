@@ -4,6 +4,8 @@
 
 {% block breadcrumbs %}<li><a href=".">{{ item.source.label }}</a>{% endblock %}
 
+{% block body_class %}{{ block.super }} equipment-view{% endblock %}
+
 {% block content %}
   <h1>{{ subject.label }}</h1>
 
