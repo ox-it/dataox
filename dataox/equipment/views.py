@@ -85,13 +85,13 @@ class BrowseView(EquipmentView, HTMLView, RDFView, CannedQueryView, MappingView)
         if self.notation:
             return """
                 DESCRIBE ?concept ?narrower ?equipment ?narrowerEquipment WHERE {{
-                  ?concept skos:notation {} .
+                  ?concept skos:notation {notation} .
                   OPTIONAL {{ ?equipment dcterms:subject ?concept }} .
                   OPTIONAL {{
                     ?concept skos:narrower ?narrower .
                     OPTIONAL {{ ?narrowerEquipment dcterms:subject ?narrower }}
                   }}
-                }}""".format(self.notation.n3())
+                }}""".format(notation=self.notation.n3())
         else:
             return """
                 CONSTRUCT {{
