@@ -84,10 +84,13 @@ class BrowseView(EquipmentView, HTMLView, RDFView, CannedQueryView, MappingView)
     def get_query(self, request, notation):
         if self.notation:
             return """
-                DESCRIBE ?concept ?narrower ?equipment WHERE {{
+                DESCRIBE ?concept ?narrower ?equipment ?narrowerEquipment WHERE {{
                   ?concept skos:notation {} .
                   OPTIONAL {{ ?equipment dcterms:subject ?concept }} .
-                  OPTIONAL {{ ?concept skos:narrower ?narrower }}
+                  OPTIONAL {{
+                    ?concept skos:narrower ?narrower .
+                    OPTIONAL {{ ?narrowerEquipment dcterms:subject ?narrower }}
+                  }}
                 }}""".format(self.notation.n3())
         else:
             return """
@@ -95,24 +98,29 @@ class BrowseView(EquipmentView, HTMLView, RDFView, CannedQueryView, MappingView)
                  {concept_scheme} a skos:ConceptScheme ;
                     skos:prefLabel ?conceptSchemeLabel ;
                     skos:hasTopConcept ?concept .
-                  ?concept a skos:Concept ;
+                  ?narrower a skos:Concept ;
                     skos:prefLabel ?conceptLabel ;
                     skos:notation ?conceptNotation ;
-                    
+                    skos:narrower ?evenNarrower .
                 }} WHERE {{
                   {concept_scheme} a skos:ConceptScheme ;
-                    skos:prefLabel ?conceptSchemeLabel .
-                  {{
-                    SELECT ?concept ?conceptLabel ?conceptNotation (COUNT(?equipment) as ?equipmentCount) WHERE {{
-                      {concept_scheme} skos:hasTopConcept ?concept .
-                      ?concept a skos:Concept ;
-                        skos:prefLabel ?conceptLabel ;
-                        skos:notation ?conceptNotation ;
-                        skos:narrower*/^dcterms:subject ?equipment .
-                    }} GROUP BY ?concept ?conceptLabel ?conceptNotation 
+                    skos:prefLabel ?conceptSchemeLabel ;
+                    skos:hasTopConcept ?concept .
+                  ?concept skos:narrower* ?narrower .
+                  ?narrower a skos:Concept ;
+                    skos:prefLabel ?conceptLabel ;
+                    skos:notation ?conceptNotation .
+                  EXISTS {{
+                    ?narrower skos:narrower*/^dcterms:subject ?equipment
+                  }} .
+                  OPTIONAL {{
+                    ?narrower skos:narrower ?evenNarrower .
+                    EXISTS {{
+                      ?evenNarrower skos:narrower*/^dcterms:subject ?narrowerEquipment
+                    }}
                   }}
-                    
                 }}""".format(concept_scheme=self.concept_scheme.n3())
+                  # RT#1925559 GROUP BY ?concept ?conceptLabel ?conceptNotation ?narrower
 
     def finalize_context(self, request, context, notation):
         graph = context['graph']
@@ -122,8 +130,10 @@ class BrowseView(EquipmentView, HTMLView, RDFView, CannedQueryView, MappingView)
             concept = graph.value(None, NS.skos.notation, self.notation)
             context['concept'] = self.resource(concept)
             context['concepts'] = map(self.resource, graph.objects(concept, NS.skos.narrower))
+            context['level'] = 'subcategory' if '/' in self.notation else 'category'
         else:
             context['concepts'] = map(self.resource, graph.objects(self.concept_scheme, NS.skos.hasTopConcept))
+            context['level'] = 'index'
         context['concepts'].sort(key=lambda s:s.label)
         print context
         return context
