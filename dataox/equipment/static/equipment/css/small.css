@@ -43,12 +43,7 @@ header.pageHeader h1{
 
 
 
-.content .wrapper {
-  background-color:  #FFFFFF;
-  float: left;
-  width: 72%; /* 600px / 900px */
-  
-}
+
 
 .content footer {
 
@@ -63,23 +58,55 @@ text-decoration: underline;
 }
 
 
+div.main  {
+
+}
 
 
 div.main article.content {
 
-
+/*
 	float: right;
 	
 	width: 74%;
+	*/
+	width: 100%;
+	margin-left: -100%;
+	float: right;
+
+	}
+	
+
+div.main article.content .wrapper {
+
+  padding: 0px 10px;
 }
 
-div.main aside {
+div.main article.content .with-left-sidebar {
+	margin-left: 220px;
+}
 
-	
+div.main article.content .with-right-sidebar {
+	margin-left: 220px;
+}
+
+
+
+div.main aside.left-sidebar {
+	/*
 	
 	width: 25%;
+*/
 
+width: 220px;
+margin-right: -220px;
+float: left;
 
+}
+
+div.main aside.right-sidebar {
+	width: 220px;
+	float: right;
 }
 
 
@@ -91,13 +118,8 @@ div.main aside {
   padding: 10px;
 }
 
-.content footer section
-{
 
 
-  float: right;
-  width: 49%;
-}
 
 footer.site
 {
