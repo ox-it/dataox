@@ -1,4 +1,4 @@
-{% extends "elasticsearch/search.html" %}{% load humfrey_desc %}
+{% extends "elasticsearch/search.html" %}{% load humfrey_desc %}{% load humfrey_elasticsearch %}
 
 {% block other_formats %}{% endblock %}
 
@@ -22,6 +22,7 @@
       <div class="results">
   {% if hits %}
 
+  <h2>Results</h2>
   <p>Your search returned <strong>{{ hits.total }}</strong> results.</p>
 
   {% include "elasticsearch/pagination.html" %}
@@ -29,8 +30,14 @@
   <ol start="{{ start }}">
   {% for hit in hits.hits %}{% block hit %}
   <li>
-    <a href="{{ hit.source.uri|doc_url }}">{{ hit.source.label }}</a><br/>
-    {{ hit.source.description }}
+    <h3><a href="{{ hit.source.uri|doc_url }}">{{ hit.source.label }}</a></h3>
+    <div class="equipment-search-byline">
+      {{ hit.source.equipmentOf.label|default:hit.source.formalOrganisation.label|default:hit.source.formalOrganisation.uri }}
+      {{ hit.source.availability.label }}
+    </div>
+    {% if hit.source.description %}
+    <div class="equipment-search-description">{{ hit.source.description|search_html|truncatewords_html:25 }}</div>
+    {% endif %}
 
   </li>
   {% endblock %}{% endfor %}
@@ -58,24 +65,29 @@
     </div>
   {% endif %}
   {% if facets and hits.total %}
-    <h2>Refine by&hellip;</h2>
-    {% if facets.department %}
-      {% include "elasticsearch/facet.html" with facet=facets.department facet_name="department" %}
-    {% endif %}
-    {% if facets.basedNear %}
-      {% include "elasticsearch/facet.html" with facet=facets.basedNear facet_name="location" %}
-    {% endif %}
-    {% if facets.institution %}
-      {% include "elasticsearch/facet.html" with facet=facets.institution facet_name="institution" %}
-    {% endif %}
-    {% if facets.category %}
-      {% include "elasticsearch/facet.html" with facet=facets.category facet_name="category" %}
-    {% endif %}
-    {% if facets.subcategory %}
-      {% include "elasticsearch/facet.html" with facet=facets.subcategory facet_name="subcategory" %}
-    {% endif %}
-    {% if facets.oxford %}
-      {% include "elasticsearch/facet.html" with facet=facets.oxford facet_name="Oxford?" %}
-    {% endif %}
+    <div class="sidebar-item">
+      <h2>Refine by&hellip;</h2>
+      {% if facets.department %}
+        {% include "elasticsearch/facet.html" with facet=facets.department facet_name="department" %}
+      {% endif %}
+      {% if facets.basedNear %}
+        {% include "elasticsearch/facet.html" with facet=facets.basedNear facet_name="location" %}
+      {% endif %}
+      {% if facets.institution %}
+        {% include "elasticsearch/facet.html" with facet=facets.institution facet_name="institution" %}
+      {% endif %}
+      {% if facets.category %}
+        {% include "elasticsearch/facet.html" with facet=facets.category facet_name="category" %}
+      {% endif %}
+      {% if facets.subcategory %}
+        {% include "elasticsearch/facet.html" with facet=facets.subcategory facet_name="subcategory" %}
+      {% endif %}
+      {% if facets.oxford %}
+        {% include "elasticsearch/facet.html" with facet=facets.oxford facet_name="Oxford?" %}
+      {% endif %}
+    </div>
+  {% endif %}
+  {% if hits %}
+  </aside>
   {% endif %}
 {% endblock %}
