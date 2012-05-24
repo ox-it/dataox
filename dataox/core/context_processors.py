@@ -1,13 +1,14 @@
+__all__ = ['base_template_chooser']
+
+_base_templates = {'data': 'hosts/dataox.html',
+                   'admin': 'hosts/admin.html',
+                   'timeseries': 'hosts/timeseries.html',
+                   'course': 'hosts/course.html',
+                   'equipment': 'hosts/equipment.html',
+                   'empty': 'hosts/dataox.html'}
+_default_template = _base_templates['data']
+
 def base_template_chooser(request):
-    http_host = request.META['HTTP_HOST']
-    if http_host == 'admin.data.ox.ac.uk':
-        base_template_name = 'hosts/admin.html'
-    elif http_host == 'time-series.data.ox.ac.uk':
-        base_template_name = 'hosts/timeseries.html'
-    elif http_host == 'equipment.data.ox.ac.uk':
-        base_template_name = 'hosts/equipment.html'
-    elif http_host == 'course.data.ox.ac.uk':
-        base_template_name = 'hosts/course.html'
-    else:
-        base_template_name = 'hosts/dataox.html'
+    host = request.host.name
+    base_template_name = _base_templates.get(host, _default_template)
     return {'base_template_name': base_template_name}
