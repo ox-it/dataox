@@ -4,8 +4,7 @@ class Equipment(object):
     @classmethod
     def _describe_patterns(cls):
         return [
-            '%(uri)s oo:contact %(contact)s',
-            '%(contact)s v:tel %(telephone)s',
+            '%(uri)s oo:contact %(contact)s . OPTIONAL { %(contact)s v:tel %(telephone)s }',
             '%(uri)s oo:accessPrerequisite %(accessPrerequisite)s',
             '%(uri)s oo:useRestriction %(useRestriction)s',
             '%(uri)s oo:availability %(availability)s',
