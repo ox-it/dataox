@@ -15,5 +15,18 @@ class Equipment(object):
             '%(uri)s spatialrelations:within %(within)s',
             '%(uri)s gr:hasMakeAndModel %(makeAndModel)s . %(makeAndModel)s gr:hasManufacturer %(manufacturer)s',
         ]
+        
+    @property
+    def geo_provider(self):
+        return self.spatialrelations_within or self.foaf_based_near
+    
+    @property
+    def geo_lat(self):
+        return self.geo_provider.geo_lat if self.geo_provider else None
+
+    @property
+    def geo_long(self):
+        return self.geo_provider.geo_long if self.geo_provider else None
+
 
 register(Equipment, 'oo:Equipment')

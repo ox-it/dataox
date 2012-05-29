@@ -8,15 +8,17 @@
 
 <h1>{% if not concept %}Categories{% else %}{{ concept.label }}{% endif %}</h1>
 
-{% if concepts %}
+{% include "equipment/login_prompt.html" %}
 
+{% if concepts %}
+<h2 class="hidden">Sub-categories</h2>
 <ul class="equipment-categories">
 {% for concept in concepts %}
   <li class="equipment-category">
-    <h2><a href="{% url browse concept.skos_notation %}">{{ concept.label }}</a></h2>
+    <h3><a href="{% url browse concept.skos_notation %}">{{ concept.label }}</a></h3>
     {% if concept.skos_narrower %}
     <ul>{% for narrower in concept.all.skos_narrower %}
-      <li><a href="{% url browse concept.skos_notation %}">{{ narrower.label }}</a></li>{% endfor %}
+      <li><a href="{% url browse narrower.skos_notation %}">{{ narrower.label }}</a></li>{% endfor %}
     </ul>
     {% endif %}
     {% if concept.dcterms_subject_inv %}
@@ -30,11 +32,16 @@
 {% endif %}
 
 {% if concept.dcterms_subject_inv %}
+<h2 class="hidden">Equipment</h2>
 <ul>
 {% for equipment in concept.all.dcterms_subject_inv %}
   <li><a href="{{ equipment.doc_url }}">{{ equipment.label }}</a></li>
 {% endfor %}
 </ul>
+{% endif %}
+
+{% if not concepts and not concept.dcterms_subject_inv %}
+<p>There are no categories or equipment to display.</p>
 {% endif %}
 
 

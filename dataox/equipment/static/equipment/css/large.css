@@ -8,4 +8,15 @@ styles and layout for large desktop screens
   
 }
 
+/*
+ul.equipment-categories {
+	columns: 2;
+	background-color: red;
+}
+*/
 
+body.equipment-browse ul.equipment-categories ul {
+	-moz-column-count: 3;
+	-webkit-column-count: 3;
+	column-count: 3;
+}

@@ -109,7 +109,6 @@ header.pageHeader
   border-top-color: #002147; 
   border-top-style: solid;
   color: white;
-  height: 127px;
   margin: 10px 0px;
   padding: 0px ;
   position: relative;
@@ -131,9 +130,9 @@ border-bottom:1px solid #d5d5d5;margin:4px 0 20px 0;text-align:left;font-size:.9
 
 .main aside nav span{color:#0F0F0F;}
 
-.main aside nav ul{width:100%;}
+.main aside nav ul{width:100%; padding: 0}
 
-.main aside nav li {width:100%;padding:0;border-top:1px solid #d5d5d5;}
+.main aside nav li {width:100%;padding:0;border-top:1px solid #d5d5d5; list-style: none; list-style-image: none}
 
 .main aside nav li ul li{margin:0;border-top:none;}
 
@@ -170,32 +169,16 @@ display:block;height:100%;padding:5px 0 5px 15px;}
 	
 a#oxCrest {
 
-	background: #002147 url('images/ox_brand2_pos.gif') no-repeat 0px 0px; 
-	border: 1px solid  #fff;
 	display: block;
-	height: 105px;
 	left: 10px;
 	padding: 0px;
 	position: absolute;
 	text-indent: -9000px;
 	top: 10px;
-	width: 105px;
 }	
 	
 	
-		
-a#homeLink {
 
-	background: transparent url('images/logo.png') no-repeat 0px 0px; 
-	display: block;
-	height: 100px;
-	left: 117px;
-	padding: 0px;
-	position: absolute;
-	text-indent: -9000px;
-	top: 17px;
-	width: 640px;
-}	
 	
 
 header.pageHeader a
@@ -235,17 +218,22 @@ list-style: none;
 }
 
 
-.main ul
+.main ul, .main ol
 {
 margin: 1em 0px;
+padding-left: 2em;
+list-style: disc;
 }
 
 .main li 
 {
-list-style: bullet;
+list-style: disc;
 margin: 0.5em 0px;
 }
 
+.main dd {
+	padding-left:2em;
+}
 
 a
 {
@@ -263,7 +251,10 @@ text-decoration: underline;
 clear: both;
 }
 
-
+.hidden {
+	position: absolute;
+	left: -9999px;
+}
 
 .user {
 background: #FDFEFE;
@@ -290,19 +281,34 @@ text-align: right;
 font-weight: bold;
 }
 
+div.equipment-credit {
+  text-align: center;
+  margin: 40px 0;
+}
 
+.brandmark {
+	display: block;
+	padding: 0;
+	margin: 5px auto;
+	font-size: 0;
+	color: #fff;
+	border: none;
+	text-indent: -9999px;
+	background-repeat: no-repeat;
+	background-position: 0 0;
+	background-color: #fff;
+}
 
-#epsrc {
-background: #fff url('images/epsrc.png') no-repeat 0px 0px;
-display: block;
-padding: 0px;
-margin: 30px auto;
-font-size: 0px;
-color: #fff;
-width: 200px;
-height: 80px;
-border: none;
+#brandmark-epsrc {
+	background-image: url('images/epsrc.png');
+	width: 200px;
+	height: 80px;
+}
 
+#brandmark-open-data-service {
+	background-image: url('images/open-data-service.png');
+	width: 190px;
+	height: 68px;
 }
 
 
@@ -337,18 +343,137 @@ body.equipment-browse h3 a
 			
 }
 
+body.equipment-browse ul.equipment-categories {
+	padding-left: 0;
+}
+
+body.equipment-browse li.equipment-category {
+	list-style: none;
+}
+
 /* search styling */
 
-body.equipment-search div.wrapper {
-    position: relative;
-    margin-right: 220px;
-}
 
-
-body.equipment-search div.sidebar-item {
-    border: 1px solid #dfe2e4;
-}
 
 body.equipment-search div.search-box h2 {
     margin-top: 0;
+}
+
+body.equipment-search .results h3 {
+	margin-bottom:3px;
+}
+
+body.equipment-search .results li {
+	list-style: none;
+}
+
+#login-prompt {
+    margin: 10px auto;
+    width: 15em;
+	background: #FDFEFE;
+	filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#fdfefe', endColorstr='#f4f7fa');
+	background: -webkit-gradient(linear, left top, left bottom, from(#FDFEFE), to(#F4F7FA));
+	background: -moz-linear-gradient(top, #FDFEFE, #F4F7FA);
+    border: 1px solid #DFE2E4;
+    text-align:center;
+    padding:1em;
+    border-radius:1em;
+    line-height:1.2em;
+}
+
+#login-prompt a {
+	font-size: 1.25em;
+}
+
+
+
+.collapsible-heading { padding-left:15px; background:url('images/facet-arrow.png') 2px 8px no-repeat; cursor:pointer; }
+.collapsible-heading-collapsed { background-position:2px -141px; }
+.collapsible-heading-toggle { text-decoration:none; color:#333; }
+.collapsible-heading-status { position:absolute; left:-99999px; }
+.collapsible-content { overflow:hidden; }
+.collapsible-content-collapsed { display:none; }
+
+.facet {
+    margin-top: 5px;
+}
+
+.facet h3 {
+    background-color: #002147;
+    color: #fff;
+    margin: 0;
+    padding: 5px 5px 5px 20px;
+    border-top: 1px solid #103157;
+
+}
+
+.facet h3 a {
+    color: #fff;
+    text-decoration: none;
+}
+
+.facet-remove {
+    text-decoration: none;
+    background:url('images/facet-arrow.png') 2px -307px no-repeat; cursor: pointer;
+    padding-left: 20px !important;
+}
+
+.facet ul {
+    margin: 0;
+    padding: 0;
+}
+
+.facet li {
+	background: #FDFEFE;
+	filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#fdfefe', endColorstr='#f4f7fa');
+	background: -webkit-gradient(linear, left top, left bottom, from(#FDFEFE), to(#F4F7FA));
+	background: -moz-linear-gradient(top, #FDFEFE, #F4F7FA);
+    border: 1px solid #002147;
+    border-top: 0;
+    margin: 0;
+    list-style: none;
+}
+
+.facet li a {
+    display: block;
+    padding: 5px;
+}
+
+div.olControlAttribution {
+    background-color: rgba(255, 255, 255, 0.6);
+    bottom: 0;
+    font-size: 10px;
+    padding: 2px;
+    position: absolute;
+    right: 0;
+}
+
+dl.equipment-search-meta {
+	font-size: 9pt;
+}
+
+dl.equipment-search-meta dt {
+	font-weight: bold;
+	float:left;
+	clear:left;
+	width: 7em;
+}
+
+dl.equipment-search-meta dd {
+	display: inline;
+	float: left;
+	margin-left: 0;
+}
+
+.equipment-search-description {
+	padding-top: 3px;
+}
+
+.advanced-search-form td, .advanced-search-form th {
+	padding: 2px;
+}
+
+.advanced-search-form tfoot td {
+	padding-top: 5px;
+	text-align: center;
 }

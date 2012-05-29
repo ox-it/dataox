@@ -41,7 +41,22 @@ header.pageHeader h1{
 
 }
 
+		
+a#homeLink {
+	background: transparent url('images/logo.png') no-repeat 0px 0px; 
+	display: block;
+	height: 100px;
+	left: 117px;
+	padding: 0px;
+	position: absolute;
+	text-indent: -9000px;
+	top: 17px;
+	width: 640px;
+}
 
+#login-prompt {
+    font-size:20px;
+}
 
 
 
@@ -87,7 +102,7 @@ div.main article.content .with-left-sidebar {
 }
 
 div.main article.content .with-right-sidebar {
-	margin-left: 220px;
+	margin-right: 220px;
 }
 
 
@@ -257,3 +272,12 @@ display: block;
   float: right;
   }
 
+a#oxCrest {
+	background: url('images/ox_brand2_rev.gif') no-repeat 0px 0px; 
+	height: 105px;
+	width: 105px;
+}
+
+header.pageHeader {
+	height: 127px;
+}

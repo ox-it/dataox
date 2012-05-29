@@ -1,4 +1,4 @@
-{% extends "equipment/base.html" %}{% load humfrey_desc %}
+{% extends "equipment/base.html" %}{% load humfrey_desc %}{% load hosts %}
 
 {% block title %}{{ subject.label }}{% endblock %}
 
@@ -6,9 +6,57 @@
 
 {% block body_class %}{{ block.super }} equipment-view{% endblock %}
 
+{% block extra_head %}{{ block.super }}
+  <script type="text/javascript" src="{{ STATIC_URL }}js/OpenLayers.js"></script>
+  <script type="text/javascript" src="{{ STATIC_URL }}js/base.js"></script>
+{% endblock %}
+
+{% block with_right_sidebar %} with-right-sidebar{% endblock %}
+
+{% block right_sidebar %}
+  <aside class="right-sidebar">
+  
+  {% if subject.geo_lat and subject.geo_long %}
+    <section>
+      <h2>Map</h2>
+      {% include "widgets/map.html" with width="220px" height="220px" %}
+    </section>
+  {% endif %}
+  
+  {% with subject.spatialrelations_within.v_adr as adr %}{% if adr %}
+    <section>
+      <h2>Address</h2>
+      {% if subject.spatialrelations_within.label %}
+        {{ subject.spatialrelations_within.label }}<br/>
+      {% endif %}
+      {% if adr|property:"v:street-address" %}
+        {{ adr|property:"v:street-address" }}<br/>
+      {% endif %}
+      {% if adr|property:"v:extended-address" %}
+        {{ adr|property:"v:extended-address" }}<br/>
+      {% endif %}
+      {% if adr|property:"v:locality" %}
+        {{ adr|property:"v:locality" }}<br/>
+      {% endif %}
+      {% if adr|property:"v:postal-code" %}
+        {{ adr|property:"v:postal-code" }}<br/>
+      {% endif %}
+    </section>
+  {% endif %}{% endwith %}
+  
+  {% with subject.spatialrelations_within.all.foaf_depiction as depictions %}{% if depictions %}
+    <section>
+      <h2>Images of building</h2>
+      {% for depiction in depictions %}
+        <img src="{% url resized-image %}?url={{ depiction.uri|urlencode }}&amp;width=220" alt="Photograph of {{ subject.spatialrelations_within.label }}"/>
+      {% endfor %}
+    </section>
+  {% endif %}{% endwith %}
+  </aside>
+{% endblock %}
+
 {% block content %}
   <h1>{{ subject.label }}</h1>
-
   {% if item.source.page %}<p>{% for page in item.source.page %}
   <a href="{{ page.uri }}">{{ page.uri }}</a>{% if not forloop.last %}, {% endif %}
   {% endfor %}</p>{% endif %}
@@ -17,9 +65,14 @@
   <p>{{ subject.description|node }}</p>
   {% endif %}
 
-  <dl>{% if subject.oo_equipmentOf %}
+  <dl>{% if subject.dcterms_subject %}
+    <dt>Category:</dt>{% for category in subject.all.dcterms_subject %}
+    <dd><a href="{% url browse category.skos_notation %}">{{ category.label }}</a></dd>{% endfor %}{% endif %}{% if subject.oo_equipmentOf %}
     <dt>Department:</dt>
-    <dd>{{ subject.oo_equipmentOf.label }}</dd>{% endif %}{% if subject.oo_availability %}
+    <dd>{{ subject.oo_equipmentOf|node|default:"" }}</dd>{% endif %}{% if subject.foaf_based_near or subject.spatialrelations_within %}
+    <dt>Location:</dt>
+    <dd>{{ subject.spatialrelations_within|node|default:"" }}{% if subject.foaf_based_near and subject.spatialrelations_within %}, {% endif %}
+        {{ subject.foaf_based_near.label|default:"" }}</dd>{% endif %}{% if subject.oo_availability %}
     <dt>Availability:</dt>
     <dd>{{ subject.oo_availability.label }}</dd>{% endif %}{% if subject.oo_accessPrerequisite %}
     <dt>Access prerequisites:</dt>

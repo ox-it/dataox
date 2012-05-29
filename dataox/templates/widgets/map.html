@@ -1,2 +1,2 @@
-  <div id="mapdiv" style="width:200px; height:200px; font-size:9pt;"></div>
+  <div id="mapdiv" style="width:{{ width|default:"200px" }}; height:{{ height|default:"200px" }}; font-size:9pt;"></div>
   <script type="text/javascript">$(function() { widgetMap("mapdiv", {{ subject.geo_long }}, {{ subject.geo_lat }}); });</script>

@@ -53,17 +53,23 @@
   <meta name="keywords" content="" />
   <meta name="description" content="" />{% if no_index %}
   <meta name="robots" content="noindex"/>{% endif %}
+  <meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1, maximum-scale=1, minimum-scale=1"/>
   <link rel="shortcut icon" type="image/x-icon" href="{{ STATIC_URL }}favicon.ico" />
   
+  <script type="text/javascript">
+    var staticURL = "{{ STATIC_URL|escapejs }}";
+  </script>
   <script type="text/javascript" src="{{ STATIC_URL }}js/jquery-1.6.4.min.js"></script>
+  <script type="text/javascript" src="{{ STATIC_URL }}jquery-collapsible-content/js/jQuery.collapsible.js"></script>
   <script type="text/javascript" src="{{ STATIC_URL }}equipment/base.js"></script>
+  {% include "analytics/consent.html" %}
   {% block extra_head %}{% endblock %}
   
 
   <title>{% block title %}This gets replaced{% endblock %} | Research Facilities and Equipment at Oxford</title>
 </head>
 {% block body %}
-<body class="{% block body_class %}{% endblock %}">{% if staging %}{% include "staging/tab.html" %}{% endif %}
+<body class="{% block body_class %}{% endblock %}">{% if 0 and staging %}{% include "staging/tab.html" %}{% endif %}
   <div id="page">
     <header class="pageHeader">
       <h1><a href="{% url index %}" id="homeLink">Research Facilities and Equipment at Oxford</a></h1>
@@ -79,18 +85,20 @@
       </div>
       </article>
 
+    {% block right_sidebar %}{% endblock %}
 	{% block left_sidebar %}
       <aside class="left-sidebar">
         <nav>
           <ul>
             <li><a href="{% url index %}">home</a></li>
-            <li><a href="{% url about %}">about the project</a></li>
             <li><a href="{% url search %}">search</a></li>
             <li><a href="{% url browse %}">browse by category</a></li>
+            <li><a href="{% url about %}">about</a></li>
+            <li><a href="{% url contact %}">contribute</a></li>
             <li><a href="{% url contact %}">contact</a></li>
-          </ul>
-
-          <div class="user" >
+            </ul>
+            
+            <div class="user" >
             {% if user.is_authenticated %}
             <p class="iam">logged in as <span class="realName">{{ user.first_name }} {{ user.last_name }}</span> </p>
             <p class="logInOut"><a href="{% url webauth:logout %}">log out</a></p>
@@ -100,21 +108,28 @@
             
             {% endif %}
           </div>
+          
+          <div class="equipment-credit">Supported by:
+          <a href="http://www.epsrc.ac.uk/" class="brandmark" id="brandmark-epsrc" title="Work on this project has been facilitated by an EPSRC Institutional Sponsorship Grant (EPSRC Delivery Plan theme: ‘Efficiency and Effectiveness - promoting sharing of research equipment’)">Engineering and Physical Sciences Research Council</a>
+          </div>
 
-          <a href="http://www.epsrc.ac.uk/" id="epsrc">Engineering and Physical Sciences Research Council</a>
-
+          <div class="equipment-credit">Powered by:
+          <a href="http://data.ox.ac.uk/" class="brandmark" id="brandmark-open-data-service">University of Oxford Open Data Service</a>
+          </div>
+          
         </nav>
       </aside>
     {% endblock %}
-    {% block right_sidebar %}{% endblock %}
-
+    
     <!-- close .main -->
     <div style="clear:both"></div>
     </div>
 
     <footer class="site">
       <div class="copyright">
-        © University of Oxford
+        Site © University of Oxford
+        •
+        <a href="{% url legal %}">Legal, cookies and Privacy</a> 
       <!-- close .copyright -->
       </div>
     </footer>

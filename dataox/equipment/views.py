@@ -18,6 +18,8 @@ from humfrey.sparql.views import StoreView, CannedQueryView
 from humfrey.utils.namespaces import NS
 from humfrey.utils.resource import BaseResource
 
+from .forms import AdvancedSearchForm
+
 class EquipmentView(object):
     """
     Mixin to choose between public and internal indexes.
@@ -41,17 +43,32 @@ class DocView(EquipmentView, desc_views.DocView):
     template_name = 'equipment/view'
 
 class SearchView(EquipmentView, elasticsearch_views.SearchView):
-    facets = {'department': {'terms': {'field': 'equipmentOf.uri',
-                                        'size': 20}},
-              'basedNear': {'terms': {'field': 'basedNear.uri',
-                                      'size': 20}},
-              'institution': {'terms': {'field': 'formalOrganisation.uri',
-                                        'size': 20}},
-              'oxford': {'terms': {'field': 'oxfordUniversityEquipment'}},
-              'category': {'terms': {'field': 'category.uri'}},
-              'subcategory': {'terms': {'field': 'subcategory.uri'}}}
-    
+    @property
+    def facets(self):
+        facets = {
+            'institution': {'terms': {'field': 'formalOrganisation.uri', 'size': 100}},
+            'basedNear': {'terms': {'field': 'basedNear.uri', 'size': 100}},
+            'category': {'terms': {'field': 'category.uri'}}
+        }
+        if 'filter.formalOrganisation.uri' in self.request.GET:
+            facets['department'] = {'terms': {'field': 'equipmentOf.uri', 'size': 100}}
+        if 'filter.category.uri' in self.request.GET:
+            facets['subcategory'] = {'terms': {'field': 'subcategory.uri'}}
+        return facets
+
+        #          'oxford': {'terms': {'field': 'oxfordUniversityEquipment'}},
+
     template_name = 'equipment/search'
+
+    dependent_parameters = {'filter.category.uri': ('filter.subcategory.uri',),
+                            'filter.formalOrganisation.uri': ('filter.equipmentOf.uri',)}
+    
+    def finalize_context(self, request, context):
+        if not context.get('q'):
+            context['form'] = AdvancedSearchForm(request.GET or None,
+                                                 search_url=self.search_url,
+                                                 store=self.store)
+        return context
 
 #class ItemView(EquipmentView, HTMLView, JSONPView):
 #    def get(self, request, id):
@@ -73,14 +90,14 @@ class SearchView(EquipmentView, elasticsearch_views.SearchView):
 class BrowseView(EquipmentView, HTMLView, RDFView, CannedQueryView, MappingView):
     concept_scheme = rdflib.URIRef('http://data.ox.ac.uk/id/equipment-category')
     datatype = rdflib.URIRef('http://data.ox.ac.uk/id/notation/equipment-category')
-
+    
     template_name = 'equipment/browse'
-
+    
     @property
     def notation(self):
         if self.kwargs.get('notation'):
             return rdflib.Literal(self.kwargs['notation'], datatype=self.datatype)
-
+    
     def get_query(self, request, notation):
         if self.notation:
             return """
@@ -111,7 +128,7 @@ class BrowseView(EquipmentView, HTMLView, RDFView, CannedQueryView, MappingView)
                     skos:prefLabel ?conceptLabel ;
                     skos:notation ?conceptNotation .
                   EXISTS {{
-                    ?narrower skos:narrower*/^dcterms:subject ?equipment
+                    ?narrower skos:narrower*/^dcterms:subject ?equipment 
                   }} .
                   OPTIONAL {{
                     ?narrower skos:narrower ?evenNarrower .
@@ -128,6 +145,8 @@ class BrowseView(EquipmentView, HTMLView, RDFView, CannedQueryView, MappingView)
         context['equipment'].sort(key=lambda s:s.label)
         if self.notation:
             concept = graph.value(None, NS.skos.notation, self.notation)
+            if not concept:
+                raise Http404
             context['concept'] = self.resource(concept)
             context['concepts'] = map(self.resource, graph.objects(concept, NS.skos.narrower))
             context['level'] = 'subcategory' if '/' in self.notation else 'category'
@@ -135,5 +154,5 @@ class BrowseView(EquipmentView, HTMLView, RDFView, CannedQueryView, MappingView)
             context['concepts'] = map(self.resource, graph.objects(self.concept_scheme, NS.skos.hasTopConcept))
             context['level'] = 'index'
         context['concepts'].sort(key=lambda s:s.label)
-        print context
+        
         return context

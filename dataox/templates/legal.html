@@ -1,19 +1,26 @@
 {% extends "base.html" %}
 
-{% block title %}Privacy policy, terms of use, and legal statement{% endblock %}
+{% block title %}Privacy policy, cookies, terms of use, and legal statement{% endblock %}
+
+{% block body_class %}{{ block.super }} legal{% endblock %}
 
 {% block content %}
-  <h1>Privacy policy, terms of use, and legal statement</h1>
+  <h1>Privacy policy, cookies, terms of use, and legal statement</h1>
   
   <p>This site is operated by <a href="http://www.oucs.ox.ac.uk/">the
-     Computing Services</a> at the <a href="http://www.ox.ac.uk/">the
+     Computing Services</a> at <a href="http://www.ox.ac.uk/">the
      University of Oxford</a>.</p>
      
-  <section>
+  <section id="table-of-contents">
     <h2>Table of contents</h2>
     
     <ul>
-      <li><a href="#data-protection">Data protection and privacy</a></li>
+      <li><a href="#data-protection">Data protection and privacy</a>
+        <ul>
+          <li><a href="#cookies">Cookies</a></li>{% if analytics_enabled %}
+          <li><a href="#analytics">Cookies for analytics</a></li>{% endif %}
+        </ul>
+      </li>
       <li><a href="#terms-of-use">Terms of use</a>
         <ul>
           <li><a href="#licensing">Licensing</a></li>
@@ -38,13 +45,52 @@
       <li>The <a href="http://en.wikipedia.org/wiki/Referrer">referer</a></li>
     </ul>
     
-    <p>If you supply your e-mail address (for example, by signing up to the
+    <p>If you supply your e-mail address (for example, by signing up to a
        mailing list or corresponding with the webmaster) it will only be used
        for the purpose for which it was supplied.</p>
     
     <p>We will not pass on your
        e-mail address or any other personally identifying information about
        you to any party external to the University of Oxford.</p>
+    
+    <section id="cookies">
+      <h3>Cookies</h3>
+      
+      <p>This site may set the following cookies when you interact with it in
+         specified ways:</p>
+      
+      <dl>
+        <dt><code>sessionid</code></dt>
+        <dd>This is a Django session cookie. It will not be set unless something
+            is stored in the session, which presently will only happen were you
+            to log in.</dd>
+        <dt><code>csrftoken</code></dt>
+        <dd>This is a Django CSRF
+            (<a hre="http://en.wikipedia.org/wiki/Cross-site_request_forgery">cross-site
+            request forgery</a>) prevention cookie. It will only be set on pages
+            that allow you to submit data to the website.</dd>{% if analytics_enabled %}
+        <dt><code>use_analytics</code></dt>
+        <dd>This records whether you have opted out of receiving Google
+            Analytics cookies.</dd>
+        <dt><code>__utma</code>, <code>__utmb</code>, <code>__utmc</code>, <code>__utmz</code></dt>
+        <dd>These are Google Analytics cookies, which we use to collect various
+            metrics on the use of this site. <a href="#analytics">See below</a>
+            for more information, and how to opt out.</dd>
+        {% endif %}
+        
+      </dl>
+    </section>{% if analytics_enabled %}
+    
+    <section id="analytics">
+      <h3>Cookies for analytics</h3>
+      
+      <p>This site uses <a href="http://en.wikipedia.org/wiki/Google_Analytics">Google
+         Analytics</a> to collect statistics on the use of this website. We do
+         not share the information we collect with anyone outside of the University,
+         and we are unable to identify you individually though Google Analytics.</p>
+      
+      <div id="analytics-controls"/>
+    </section>{% endif %}
   </section>
   
   <section id="terms-of-use">

@@ -10,20 +10,45 @@
   <h1>Search</h1>
 
   {% if not hits %}
-    <div class="sidebar-item search-box">
-      <h2>Query</h2>
-      <form method="get" action=".">
-        {{ form.q }}
-        <input type="submit" value="Search"/>
-      </form>
-    </div>
+    <h2 class="hidden">Query</h2>
+    
+    <form method="get" action="." class="advanced-search-form">
+      <table>
+        <tbody>
+          {{ form }}
+        </tbody>
+        <tfoot>
+          <tr>
+            <td colspan="2">
+              <input type="submit" value="Search"/>
+            </td>
+          </tr>
+        </tfoot>
+      </table>
+    </form>
+    
+    <p>Example queries:</p>
+    
+    <ul>
+      <li><tt>*</tt> (matches everything)</li>
+      <li><tt>microscope</tt> (mostly things that are microscopes)</li>
+      <li><tt>microscopy</tt> (things to do with microscopy)</li>
+      <li><tt>micro*</tt> (things to do with small things)</li>
+      <li><tt>category.label:cell</tt> (things in cell-related categories)</li>
+    </ul>
   {% endif %}
 
       <div class="results">
   {% if hits %}
 
-  <h2>Results</h2>
-  <p>Your search returned <strong>{{ hits.total }}</strong> results.</p>
+  <h2 class="hidden">Results</h2>
+
+  <p>
+    Your search for <strong>{{ q }}</strong> returned <strong>{{ hits.total }}</strong> results.
+{% if not user.is_authenticated %}
+    <a href="{% url webauth:login %}?next={{ request.get_full_path|urlencode }}">Try logging in to see restricted results.</a>
+{% endif %}
+  </p>
 
   {% include "elasticsearch/pagination.html" %}
 
@@ -31,10 +56,14 @@
   {% for hit in hits.hits %}{% block hit %}
   <li>
     <h3><a href="{{ hit.source.uri|doc_url }}">{{ hit.source.label }}</a></h3>
-    <div class="equipment-search-byline">
-      {{ hit.source.equipmentOf.label|default:hit.source.formalOrganisation.label|default:hit.source.formalOrganisation.uri }}
-      {{ hit.source.availability.label }}
-    </div>
+    <dl class="equipment-search-meta">{% if hit.source.basedNear.label or hit.source.building.label %}
+      <dt>Location:</dt>
+      <dd>{{ hit.source.building.label|default:"" }}{% if hit.source.basedNear.label and hit.source.building.label %}, {% endif %}
+          {{ hit.source.basedNear.label|default:"" }}</dd>{% endif %}{% if hit.source.availability.label %}
+      <dt>Availability:</dt>
+      <dd>{{ hit.source.availability.label }}</dd>{% endif %}
+    </dl>
+    <div style="clear: both"/>
     {% if hit.source.description %}
     <div class="equipment-search-description">{{ hit.source.description|search_html|truncatewords_html:25 }}</div>
     {% endif %}
@@ -44,9 +73,6 @@
   </ol>
 
   {% include "elasticsearch/pagination.html" %}
-  {% else %}
-
-  <p>Enter a query to start searching.</p>
   {% endif %}
   </div>
 {% endblock %}
@@ -57,7 +83,7 @@
   {% if hits %}
   <aside class="right-sidebar">
     <div class="sidebar-item search-box">
-      <h2>Query</h2>
+      <h2 class="hidden">Query</h2>
       <form method="get" action=".">
         {{ form.q }}
         <input type="submit" value="Search"/>
@@ -67,23 +93,23 @@
   {% if facets and hits.total %}
     <div class="sidebar-item">
       <h2>Refine by&hellip;</h2>
+      {% if facets.institution %}
+        {% include "elasticsearch/facet.html" with facet=facets.institution facet_name="institution" terse=1 %}
+      {% endif %}
       {% if facets.department %}
-        {% include "elasticsearch/facet.html" with facet=facets.department facet_name="department" %}
+        {% include "elasticsearch/facet.html" with facet=facets.department facet_name="department" terse=1 %}
       {% endif %}
       {% if facets.basedNear %}
-        {% include "elasticsearch/facet.html" with facet=facets.basedNear facet_name="location" %}
-      {% endif %}
-      {% if facets.institution %}
-        {% include "elasticsearch/facet.html" with facet=facets.institution facet_name="institution" %}
+        {% include "elasticsearch/facet.html" with facet=facets.basedNear facet_name="location" terse=1 %}
       {% endif %}
       {% if facets.category %}
-        {% include "elasticsearch/facet.html" with facet=facets.category facet_name="category" %}
+        {% include "elasticsearch/facet.html" with facet=facets.category facet_name="category" terse=1 %}
       {% endif %}
       {% if facets.subcategory %}
-        {% include "elasticsearch/facet.html" with facet=facets.subcategory facet_name="subcategory" %}
+        {% include "elasticsearch/facet.html" with facet=facets.subcategory facet_name="subcategory" terse=1 %}
       {% endif %}
       {% if facets.oxford %}
-        {% include "elasticsearch/facet.html" with facet=facets.oxford facet_name="Oxford?" %}
+        {% include "elasticsearch/facet.html" with facet=facets.oxford facet_name="Oxford?" terse=1 %}
       {% endif %}
     </div>
   {% endif %}

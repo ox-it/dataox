@@ -46,3 +46,41 @@ footer.site
 background-color: #eee;
 }
 
+header, header h1  {
+	margin-top: 0 !important;
+}
+
+
+a#oxCrest {
+	background: url('images/ox_brand4_rev.gif') no-repeat 0px 0px; 
+	height: 87px;
+	width: 87px;
+}
+
+#login-prompt {
+    font-size: 12px;
+}
+
+header.pageHeader h1 {
+	padding-top: 10px;
+	margin-left: 107px;
+	font-size:24px;
+}
+
+
+header.pageHeader {
+	height: 107px;
+}
+
+h1, h2, .right-sidebar h3 {
+	text-align: center;
+}
+
+.right-sidebar {
+	margin: auto auto;
+	width: 220px;
+}
+
+div.results ol {
+	padding-left:5px;
+}

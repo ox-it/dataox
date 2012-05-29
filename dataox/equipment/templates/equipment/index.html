@@ -5,7 +5,17 @@
 {% block body_class %}equipment-index{% endblock %}
 
 {% block content %}
-  <h1>Research Facilities and Equipment at Oxford</h1>
+  <h1>Welcome</h1>
+
+  {% include "equipment/login_prompt.html" %}
+
+  <p>A catalogue of all the equipment and facilities available for use at the University of Oxford.</p>
+
+  <form method="get" action="{% url search %}">
+    <input name="q"/>
+    <input name="filter.formalOrganisation.uri" value="http://oxpoints.oucs.ox.ac.uk/id/00000000" type="hidden"/>
+    <input type="submit" value="Search"/>
+  </form>
 
   <p>Foo</p>
 {% endblock %}
