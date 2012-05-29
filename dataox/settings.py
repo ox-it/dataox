@@ -116,15 +116,10 @@ ID_MAPPING_REDIRECTS = (
     ('http://id.conted.ox.ac.uk/presentation/(?P<id>.*)', 'http://www.conted.ox.ac.uk/%(id)s', HTML_MIMETYPES),
 )
 
-LONGLIVING_PUBSUB_WATCHERS += ('humfrey.elasticsearch.pubsub.update_search_indexes',)
-
 TIME_SERIES_URI_BASE = "http://data.ox.ac.uk/id/time-series/"
 TIME_SERIES_SERVER_ARGS = {'address': ('localhost', 4545),
                            'authkey': config.get('timeseries.authkey')}
 TIME_SERIES_PATH = relative_path(config.get('timeseries:path'))
-
-LONGLIVING_CLASSES |= set(['openorg_timeseries.longliving.database.DatabaseThread',
-                           'humfrey.elasticsearch.longliving.indexer.Indexer'])
 
 SOURCE_DIRECTORY = relative_path(config.get('update:source_directory'))
 SOURCE_URL = config.get('update:source_url')
@@ -135,8 +130,6 @@ except ImportError:
     pass
 else:
     pass
-    #LONGLIVING_CLASSES |= set(['openmeters.ion.DiscoveryThread',
-    #                           'openmeters.ion.PollThread'])
 
 
 UPDATE_TRANSFORMS += (
