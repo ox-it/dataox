@@ -21,8 +21,8 @@ def AdvancedSearchForm(*args, **kwargs):
     labels = get_labels(formal_organisation_choices + based_near_choices,
                         endpoint=store.query_endpoint)
     
-    formal_organisation_choices = [('-', '-'*20)]+[(uri, labels[rdflib.URIRef(uri)]) for uri in formal_organisation_choices]
-    based_near_choices = [('-', '-'*20)]+[(uri, labels[rdflib.URIRef(uri)]) for uri in based_near_choices]
+    formal_organisation_choices = [('', '-'*20)]+[(uri, labels[rdflib.URIRef(uri)]) for uri in formal_organisation_choices]
+    based_near_choices = [('', '-'*20)]+[(uri, labels[rdflib.URIRef(uri)]) for uri in based_near_choices]
 
     attrs = {'q': forms.CharField(label='Query'),
              'filter.basedNear.uri': forms.ChoiceField(label='Location',
