@@ -27,6 +27,7 @@ INSTALLED_APPS += (
     'django.contrib.admin',
     'object_permissions',
     'django_webauth',
+    'djcelery',
 )
 
 DATABASES = {
@@ -180,3 +181,28 @@ SESSION_COOKIE_SECURE = not DEBUG
 VOCABULARY_URL_OVERRIDES = {
     'oxp': 'http://oxpoints.oucs.ox.ac.uk/ns.ttl',
 }
+
+# Celery
+
+BROKER_URL = "redis://localhost:6379/0"
+CELERY_RESULT_BACKEND = "redis"
+CELERY_REDIS_HOST = "localhost"
+CELERY_REDIS_PORT = 6379
+CELERY_REDIS_DB = 0
+CELERY_IMPORTS = (
+    'humfrey.archive.tasks',
+    'humfrey.ckan.tasks',
+    'humfrey.elasticsearch.tasks',
+    'humfrey.update.tasks',
+)
+CELERYBEAT_SCHEDULER = 'djcelery.schedulers.DatabaseScheduler'
+
+import djcelery
+djcelery.setup_loader()
+
+DEPENDENT_TASKS = {'humfrey.update.update': ('humfrey.ckan.upload_dataset_metadata',
+                                             'humfrey.update.run_dependents',
+                                             'humfrey.archive.update_dataset_archives',
+                                             'humfrey.elasticsearch.update_indexes_after_dataset_update')}
+
+ARCHIVE_STORES = ('public',)
