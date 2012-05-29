@@ -6,9 +6,6 @@ from django.http import HttpRequest
 import django_hosts.reverse
 import django.core.urlresolvers
 
-from humfrey.linkeddata import uri
-from humfrey.utils.resource import BaseResource
-from humfrey.desc.views import IdView, DocView
 
 """
 This Django app allows the use of django_hosts while remaining on the same
@@ -26,6 +23,25 @@ This means we don't have to mirror our production domain setup for staging.
 """
 
 if settings.STAGING:
+    from humfrey.linkeddata import mappingconf
+
+    original_set_id_mapping = mappingconf.set_id_mapping
+    def new_set_id_mapping(value):
+        if value:
+            id_mapping = []
+            for a, b, c in value:
+                id_mapping.append((a, b, c))
+                if b.startswith('https://'):
+                    b = 'http' + b[5:]
+                    id_mapping.append((a, b, c))
+        else:
+            id_mapping = value
+        original_set_id_mapping(id_mapping)
+    mappingconf.set_id_mapping = new_set_id_mapping
+
+
+    from humfrey.linkeddata import uri
+
     original_reverse_full = django_hosts.reverse.reverse_full
     def new_reverse_full(*args, **kwargs):
         # Strip a leading '/', so we remain on the same host
@@ -43,26 +59,19 @@ if settings.STAGING:
 
         return '/%s%s' % (request.META['HTTP_HOST'], original_reverse(*args, **kwargs))
     django.core.urlresolvers.reverse = new_reverse
-    
+
+    original_doc_forwards = uri.doc_forwards
+    def new_doc_forwards(*args, **kwargs):
+        urls = original_doc_forwards(*args, **kwargs)
+        return uri.DocURLs(urls._base.split(':/', 1)[-1], urls._format_pattern.split(':/', 1)[-1])
+    uri.doc_forwards = new_doc_forwards
+
+    from humfrey.desc.views import IdView, DocView
+
     original_override_redirect = IdView.override_redirect
     def new_override_redirect(self, request, description_url, mimetypes):
         return original_override_redirect(self, request, '/' + description_url, mimetypes)
     IdView.override_redirect = new_override_redirect
     
-    original_doc_forwards = uri.doc_forwards
-    def new_doc_forwards(*args, **kwargs):
-        urls = original_doc_forwards(*args, **kwargs)
-        #raise Exception((urls._base[6:], urls._format_pattern[6:]))
-        return uri.DocURLs(urls._base[6:], urls._format_pattern[6:])
-    uri.doc_forwards = new_doc_forwards
-
     DocView.check_canonical = False
-    
-    id_mapping = []
-    for a, b, c in settings.ID_MAPPING:
-        if a.startswith('https://'):
-            a = 'http' + a[5:]
-        if b.startswith('https://'):
-            b = 'http' + a[5:]
-        id_mapping.append((a, b, c))
-    settings.ID_MAPPING = tuple(id_mapping)
+
