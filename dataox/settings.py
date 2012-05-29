@@ -18,6 +18,7 @@ INSTALLED_APPS += (
     'dataox.resource',
     'dataox.feeds',
     'dataox.equipment',
+    'dataox.analytics',
     'humfrey.update',
     'humfrey.graphviz',
     'humfrey.browse',
@@ -60,7 +61,8 @@ TEMPLATE_CONTEXT_PROCESSORS = (
     "django.core.context_processors.static",
     'django.core.context_processors.request',
     "django.contrib.messages.context_processors.messages",
-    "dataox.core.context_processors.base_template_chooser"
+    "dataox.core.context_processors.base_template_chooser",
+    "dataox.analytics.context_processors.do_not_track",
 )
 
 

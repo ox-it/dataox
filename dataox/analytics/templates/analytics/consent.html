@@ -1,0 +1,9 @@
+{% if analytics_enabled %}
+<link rel="stylesheet" type="text/css" href="{{ STATIC_URL }}analytics/analytics.css"/>
+<script type="text/javascript">
+  var doNotTrack = {{ do_not_track }};
+  var analyticsID = "{{ analytics_id|escapejs }}";
+  var privacyPolicyURL = "{% url legal %}#analytics";
+</script>
+<script type="text/javascript" src="{{ STATIC_URL }}analytics/analytics.js" async></script>
+{% endif %}
