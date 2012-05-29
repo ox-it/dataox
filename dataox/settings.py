@@ -21,7 +21,6 @@ INSTALLED_APPS += (
     'dataox.analytics',
     'humfrey.update',
     'humfrey.graphviz',
-    'humfrey.browse',
     'humfrey.manage',
     'humfrey.elasticsearch',
     'openorg_timeseries',
