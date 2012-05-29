@@ -19,7 +19,7 @@ function widgetMap(elementID, longitude, latitude) {
  
   var size = new OpenLayers.Size(21,25);
   var offset = new OpenLayers.Pixel(-(size.w/2), -size.h);
-  var icon = new OpenLayers.Icon('/site-media/marker.png', size, offset);
+  var icon = new OpenLayers.Icon(staticURL + 'marker.png', size, offset);
   markers.addMarker(new OpenLayers.Marker(lonLat, icon));
  
   map.setCenter (lonLat, zoom);

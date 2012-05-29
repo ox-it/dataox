@@ -10,6 +10,9 @@
 <!--[if lt IE 9]>
 <script src="//html5shim.googlecode.com/svn/trunk/html5.js"></script>
 <![endif]-->
+    <script type="text/javascript">
+      var staticURL = "{{ STATIC_URL|escapejs }}";
+    </script>
     <script type="text/javascript" src="{{ STATIC_URL }}js/jquery-1.6.4.min.js"></script>
     <script type="text/javascript" src="{{ STATIC_URL }}js/OpenLayers.js"></script>
     <script type="text/javascript" src="{{ STATIC_URL }}js/jquery.flot.js"></script>
