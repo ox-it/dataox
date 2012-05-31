@@ -95,7 +95,7 @@
   {% endif %}
   {% if facets and hits.total %}
     <div class="sidebar-item">
-      <h2>Refine by&hellip;</h2>
+      <h2>refine by&hellip;</h2>
       {% if facets.institution %}
         {% include "elasticsearch/facet.html" with facet=facets.institution facet_name="institution" terse=1 %}
       {% endif %}
