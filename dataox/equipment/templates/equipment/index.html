@@ -9,13 +9,17 @@
 
   {% include "equipment/login_prompt.html" %}
 
-  <p>A catalogue of all the equipment and facilities available for use at the University of Oxford.</p>
+  <p>Welcome to the University of Oxford's research facilities and equipment
+on-line searchable database which has been developed with funding
+from EPSRC.</p>
 
-  <form method="get" action="{% url search %}">
+
+  <form class="simpleSearch" method="get" action="{% url search %}">
     <input name="q"/>
     <input name="filter.formalOrganisation.uri" value="http://oxpoints.oucs.ox.ac.uk/id/00000000" type="hidden"/>
     <input type="submit" value="Search"/>
   </form>
 
-  <p>Foo</p>
+
+
 {% endblock %}
