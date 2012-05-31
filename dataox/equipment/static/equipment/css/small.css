@@ -102,7 +102,7 @@ div.main article.content .with-left-sidebar {
 }
 
 div.main article.content .with-right-sidebar {
-	margin-right: 220px;
+	margin-right: 225px;
 }
 
 
@@ -120,7 +120,7 @@ float: left;
 }
 
 div.main aside.right-sidebar {
-	width: 220px;
+	width: 225px;
 	float: right;
 }
 
