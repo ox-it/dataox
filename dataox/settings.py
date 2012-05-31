@@ -99,7 +99,7 @@ TEMPLATE_DIRS = (
     os.path.join(os.path.dirname(__file__), 'templates'),
 ) + TEMPLATE_DIRS
 
-THUMBNAIL_WIDTHS = (200, 400)
+THUMBNAIL_WIDTHS = (200, 220, 400)
 THUMBNAIL_HEIGHTS = (120, 80,)
 
 ID_MAPPING = (
