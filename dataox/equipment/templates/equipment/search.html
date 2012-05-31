@@ -43,15 +43,16 @@
 
   <h2 class="hidden">Results</h2>
 
-  <p>
+  <p class="numResults">
     Your search for <strong>{{ q }}</strong> returned <strong>{{ hits.total }}</strong> results.
 {% if not user.is_authenticated %}
     <a href="{% url webauth:login %}?next={{ request.get_full_path|urlencode }}">Try logging in to see restricted results.</a>
 {% endif %}
   </p>
 
-  {% include "elasticsearch/pagination.html" %}
-
+ <div class="pagination" >
+ {% include "elasticsearch/pagination.html" %}
+  </div>
   <ol start="{{ start }}">
   {% for hit in hits.hits %}{% block hit %}
   <li>
@@ -72,7 +73,9 @@
   {% endblock %}{% endfor %}
   </ol>
 
-  {% include "elasticsearch/pagination.html" %}
+   <div class="pagination" >
+ {% include "elasticsearch/pagination.html" %}
+  </div>
   {% endif %}
   </div>
 {% endblock %}
@@ -84,7 +87,7 @@
   <aside class="right-sidebar">
     <div class="sidebar-item search-box">
       <h2 class="hidden">Query</h2>
-      <form method="get" action=".">
+      <form method="get" action="." class="simpleSearch" >
         {{ form.q }}
         <input type="submit" value="Search"/>
       </form>
