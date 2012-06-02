@@ -8,15 +8,39 @@ styles and layout for large desktop screens
   
 }
 
-/*
-ul.equipment-categories {
-	columns: 2;
-	background-color: red;
+
+a#oxCrest {
+
+left: 68px;
 }
-*/
+
+a#homeLink {
+
+
+	background: transparent url('images/logo-large.png') no-repeat 0px 0px; 
+	left: 360px;
+	width: 800px;
+}
+
+
+
 
 body.equipment-browse ul.equipment-categories ul {
 	-moz-column-count: 3;
 	-webkit-column-count: 3;
 	column-count: 3;
+}
+
+
+.advanced-search-form,
+.searchTips {
+float: left; 
+clear: none;
+width: 300px;
+}
+
+.searchTips {
+
+margin: 0px;
+width: 700px;
 }

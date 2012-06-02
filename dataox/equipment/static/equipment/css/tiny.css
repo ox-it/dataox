@@ -46,7 +46,7 @@ footer.site
 background-color: #eee;
 }
 
-header, header h1  {
+header, header div.siteTitle  {
 	margin-top: 0 !important;
 }
 
@@ -61,7 +61,7 @@ a#oxCrest {
     font-size: 12px;
 }
 
-header.pageHeader h1 {
+header.pageHeader div.siteTitle {
 	padding-top: 25px;
 	margin-left: 107px;
 	font-size:24px;

@@ -55,7 +55,7 @@ a#homeLink {
 }
 
 #login-prompt {
-    font-size:20px;
+    font-size:1.4em;
 }
 
 
@@ -221,11 +221,6 @@ font-size: 0.9em;
 padding: 10px;
 }
 
-footer.site a
-{
-color: #333;
-
-}
 
 
 
@@ -281,3 +276,5 @@ a#oxCrest {
 header.pageHeader {
 	height: 127px;
 }
+
+

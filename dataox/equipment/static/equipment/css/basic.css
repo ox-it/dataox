@@ -17,14 +17,16 @@ padding: 0px;
 
 h1, h2, h3, h4, h5, h6
 {
+clear: both;
 color: #002B5F;
 font-family: "Trebuchet MS",Helvetica,Arial,sans-serif;
-margin: 0.5em 0px;
+margin: 1.1em 0px 0.7em 0px;
  font-weight: normal;
 }
 
 h1 {
   font-size: 1.9em;
+  margin-top: 5px;
 }
 
 
@@ -99,7 +101,13 @@ img,
 	
 }
 
+#mapdiv img {
 
+border: none;
+margin: 0px;
+padding: 0px;
+
+}
 
 
 footer
@@ -114,6 +122,27 @@ footer
 footer div.copyright
 {
 text-align: center;
+
+}
+
+
+footer a,
+footer a:link,
+footer a:visited,
+footer a:active
+{
+color: #666;
+margin-left: 30px;
+text-decoration: underline;
+
+}
+
+
+footer a:hover,
+footer a:focus
+{
+color: #333;
+
 
 }
 
@@ -253,8 +282,16 @@ margin: 0.5em 0px;
 }
 
 .main dd {
-	padding-left:2em;
+
+margin: 0.3em 0px 1em 0px;
 }
+
+.main dt {
+
+margin: 0.5em 0px 0px 0px;
+}
+
+
 
 a
 {
@@ -277,8 +314,11 @@ clear: both;
 	left: -9999px;
 }
 
+.panel
+/*
 .user,
 .simpleSearch
+*/
 {
 background: #FDFEFE;
 filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#fdfefe', endColorstr='#f4f7fa');
@@ -403,21 +443,16 @@ body.equipment-search .results li {
 }
 
 #login-prompt {
-    margin: 10px auto;
-    width: 15em;
-	background: #FDFEFE;
-	filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#fdfefe', endColorstr='#f4f7fa');
-	background: -webkit-gradient(linear, left top, left bottom, from(#FDFEFE), to(#F4F7FA));
-	background: -moz-linear-gradient(top, #FDFEFE, #F4F7FA);
-    border: 1px solid #DFE2E4;
-    text-align:center;
-    padding:1em;
-    border-radius:1em;
-    line-height:1.2em;
+	margin: 10px auto;
+	text-align:center;
+	padding:0.5em;
+	border-radius:0.5em;
+	line-height:1.2em;
+	
 }
 
 #login-prompt a {
-	font-size: 1.25em;
+	font-size: 1.1em;
 }
 
 
@@ -491,20 +526,20 @@ div.olControlAttribution {
 
 
 
-dl
+dl.itemDetails
 	{
 	clear: both;
 	font-size: 0.9em;
 	margin: 10px 0px ;
 }
 
-dl dt,
-dl dd{
+dl.itemDetails dt,
+dl.itemDetails dd{
 
   margin: 5px 2px	;
 }
 
-dl dt
+dl.itemDetails dt
 {
 	font-weight: bold;
 	float:left;
@@ -512,7 +547,7 @@ dl dt
 	width: 7em;
 }
 
-dl dd {
+dl.itemDetails dd {
 	display: inline;
 	float: left;
 	margin-left: 0;
@@ -560,6 +595,9 @@ dl.equipment-search-meta dd {
 }
 
 
+
+
+
 .numResults {
 
 font-size: 1.2em;
@@ -592,4 +630,33 @@ div.pagination strong
 {
 font-size: 1.2em;
 margin: 0px 2px;
+}
+
+
+body.equipment-browse .main ul.equipment-categories ul{
+
+padding-left: 0px;
+}
+
+
+body.equipment-browse ul.equipment-categories li{
+
+list-style: none;
+}
+
+
+ul.searchExamples a {
+font-weight: bold;
+text-decoration: none;
+}
+
+
+ul.searchExamples a:focus,
+ul.searchExamples a:hover{
+
+text-decoration: underline;
+}
+
+.searchTips h2 {
+margin-top: 0px;
 }

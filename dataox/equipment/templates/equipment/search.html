@@ -7,6 +7,10 @@
 {% block extra_head %}{% endblock %}
 
 {% block content %}
+
+
+{% include "equipment/login_prompt.html" %}
+
   <h1>Search</h1>
 
   {% if not hits %}
@@ -27,15 +31,31 @@
       </table>
     </form>
     
-    <p>Example queries:</p>
+   
+   <div class="panel searchTips">
+   <h2>Tips on searching</h2>
+   <p>You can use single terms or phrases in your query. A Single Term is a single word such as "test" or "hello". A Phrase is a group of words surrounded by double quotes such as "hello dolly".</p>
+
+<p>Multiple terms can be combined together with  operators such as <strong>-</strong> and <strong>*</strong> to form a more complex query. </p>
+
+<p>For example <strong>video - endoscope</strong> would find records that contain 'video' but <em>not</em> 'endoscope'.  <strong>*scope</strong> would find records that contain words ending in 'scope'.
+
+
+</p>
+
+<p>For more information, please see the <a href="http://lucene.apache.org/core/3_6_0/queryparsersyntax.html" >Lucene search syntax guide</a>.</p>
+   <h3>Example queries</h3>
     
-    <ul>
-      <li><tt>*</tt> (matches everything)</li>
-      <li><tt>microscope</tt> (mostly things that are microscopes)</li>
-      <li><tt>microscopy</tt> (things to do with microscopy)</li>
-      <li><tt>micro*</tt> (things to do with small things)</li>
-      <li><tt>category.label:cell</tt> (things in cell-related categories)</li>
+    <ul class="searchExamples">
+      <li><tt><a href="?q=*" >*</a></tt> (matches everything)</li>
+      <li><tt><a href="?q=microscope" >microscope</a></tt> (mostly things that are microscopes)</li>
+      <li><tt><a href="?q=microscopy" >microscopy</a></tt> (things to do with microscopy)</li>
+      <li><tt><a href="?q=micro*" >micro*</a></tt> (things to do with small things)</li>
+      <li><tt><a href="?q=category.label:cell" >category.label:cell</a></tt> (things in cell-related categories)</li>
     </ul>
+    
+    
+    </div>
   {% endif %}
 
       <div class="results">
@@ -80,14 +100,14 @@
   </div>
 {% endblock %}
 
-{% block with_right_sidebar %} with-right-sidebar{% endblock %}
+{% block with_right_sidebar %}{% if hits %} with-right-sidebar {% endif %}{% endblock %}
 
 {% block right_sidebar %}
   {% if hits %}
   <aside class="right-sidebar">
     <div class="sidebar-item search-box">
       <h2 class="hidden">Query</h2>
-      <form method="get" action="." class="simpleSearch" >
+      <form method="get" action="." class="panel simpleSearch" >
         {{ form.q }}
         <input type="submit" value="Search"/>
       </form>

@@ -33,13 +33,13 @@
   <!-- styles for large screen desktop devices-->
   <link rel="stylesheet" type="text/css" href="{{ STATIC_URL }}equipment/css/large.css" media="screen and (min-width: 1601px)" />
 
-  <!-- pull in tiny responsive sheets for mobile IE  ->
+  <!-- pull in tiny responsive sheets for mobile IE  -->
   <!--[if (lt IE 9)&(!IEMobile)]>
   <link rel="stylesheet" type="text/css" href="{{ STATIC_URL }}equipment/css/tiny.css" media="screen"/>
   <![endif]-->
 
 
-  <!-- pull in small and medium responsive sheets for desktop IE that doesn't unnderstand media queries (e.e before IE 9) ->
+  <!-- pull in small and medium responsive sheets for desktop IE that doesn't understand media queries (i.e. before IE 9) -->
   <!--[if (lt IE 9)&(!IEMobile)]>
   <link rel="stylesheet" type="text/css" href="{{ STATIC_URL }}equipment/css/small.css" media="screen"/>
   <link rel="stylesheet" type="text/css" href="{{ STATIC_URL }}equipment/css/medium.css" media="screen"/>
@@ -72,7 +72,7 @@
 <body class="{% block body_class %}{% endblock %}">{% if 0 and staging %}{% include "staging/tab.html" %}{% endif %}
   <div id="page">
     <header class="pageHeader">
-      <h1><a href="{% url index %}" id="homeLink">Research Facilities and Equipment at Oxford</a></h1>
+      <div class="siteTitle"><a href="{% url index %}" id="homeLink">Research Facilities and Equipment at Oxford</a></div>
 
       <a href="http://www.ox.ac.uk/" id="oxCrest">University of Oxford</a>
     </header>
@@ -94,11 +94,11 @@
             <li><a href="{% url search %}">search</a></li>
             <li><a href="{% url browse %}">browse by category</a></li>
             <li><a href="{% url about %}">about</a></li>
-            <li><a href="{% url contact %}">contribute</a></li>
+            <li><a href="{% url contribute %}">contribute</a></li>
             <li><a href="{% url contact %}">contact</a></li>
             </ul>
             
-            <div class="user" >
+            <div class="panel user" >
             {% if user.is_authenticated %}
             <p class="iam">logged in as <span class="realName">{{ user.first_name }} {{ user.last_name }}</span> </p>
             <p class="logInOut"><a href="{% url webauth:logout %}">log out</a></p>
@@ -127,9 +127,9 @@
 
     <footer class="site">
       <div class="copyright">
-        Site © University of Oxford
-        •
-        <a href="{% url legal %}">Legal, cookies and Privacy</a> 
+         © University of Oxford
+        
+        <a href="{% url legal %}">Privacy statement</a> 
       <!-- close .copyright -->
       </div>
     </footer>

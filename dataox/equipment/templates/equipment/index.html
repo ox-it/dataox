@@ -5,13 +5,17 @@
 {% block body_class %}equipment-index{% endblock %}
 
 {% block content %}
-  <h1>Welcome</h1>
 
-  {% include "equipment/login_prompt.html" %}
+{% include "equipment/login_prompt.html" %}
+  <h1>Welcome</h1>
 
   <p>Welcome to the University of Oxford's research facilities and equipment
 on-line searchable database which has been developed with funding
 from EPSRC.</p>
+
+
+
+
 
 
   <form class="simpleSearch" method="get" action="{% url search %}">

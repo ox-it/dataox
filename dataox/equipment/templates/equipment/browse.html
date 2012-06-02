@@ -5,10 +5,10 @@
 {% block body_class %}equipment-browse equipment-browse-{{ level }}{% endblock %}
 
 {% block content %}
+{% include "equipment/login_prompt.html" %}
 
 <h1>{% if not concept %}Categories{% else %}{{ concept.label }}{% endif %}</h1>
 
-{% include "equipment/login_prompt.html" %}
 
 {% if concepts %}
 <h2 class="hidden">Sub-categories</h2>
