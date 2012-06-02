@@ -36,7 +36,7 @@ urlpatterns = patterns('',
     url(r'^about/$', misc_views.SimpleView.as_view(template_name="equipment/about"), name='about'),
     url(r'^contact/$', misc_views.SimpleView.as_view(template_name="equipment/contact"), name='contact'),
     url(r'^legal-and-privacy/$', misc_views.SimpleView.as_view(template_name='legal'), name='legal'),
-    url(r'^thumbnail/$', images_views.ResizedImageView.as_view(), name='resized-image'),
+    url(r'^thumbnail/$', equipment_views.ResizedImageView.as_view(**mapping_kwargs), name='resized-image'),
     
 ) + staticfiles_urlpatterns()
 
