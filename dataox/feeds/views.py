@@ -9,7 +9,7 @@ from django.utils.feedgenerator import RssUserland091Feed, Rss201rev2Feed, Atom1
 from django_conneg.decorators import renderer
 from django_conneg.views import HTMLView, JSONPView, ContentNegotiatedView
 from humfrey.utils.namespaces import NS
-from humfrey.utils.resource import Resource
+from humfrey.linkeddata.resource import resource
 from humfrey.results.views.standard import RDFView
 from humfrey.sparql.views import CannedQueryView
 

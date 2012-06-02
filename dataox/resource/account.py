@@ -2,12 +2,13 @@ from xml.sax.saxutils import escape, quoteattr
 from django.utils.safestring import mark_safe
 
 import rdflib
-from humfrey.utils.resource import register
 
 class Account(object):
     _WIDGET_TEMPLATES = {
         rdflib.URIRef('http://www.twitter.com/'): 'widgets/twitter.html',
     }
+
+    rdf_types = ('foaf:OnlineAccount',)
 
     def render(self):
         if self.foaf_accountServiceHomepage._identifier == rdflib.URIRef('http://www.twitter.com/'):
@@ -22,4 +23,3 @@ class Account(object):
         if service_homepage in self._WIDGET_TEMPLATES:
             widgets.append((self._WIDGET_TEMPLATES[service_homepage], self))
         return widgets
-register(Account, 'foaf:OnlineAccount')

@@ -1,6 +1,10 @@
-from humfrey.utils.resource import register
+from humfrey.linkeddata.resource import ResourceRegistry
+
+import dataox.resource
 
 class Equipment(object):
+    types = ('oo:Equipment',)
+
     @classmethod
     def _describe_patterns(cls):
         return [
@@ -28,5 +32,13 @@ class Equipment(object):
     def geo_long(self):
         return self.geo_provider.geo_long if self.geo_provider else None
 
+class Organization(dataox.resource.oxpoints.Organization):
+    @classmethod
+    def _describe_patterns(cls):
+        return [
+            '%(equipment)s oo:equipmentOf %(uri)s',
+        ]
 
-register(Equipment, 'oo:Equipment')
+resource_registry = dataox.resource.resource_registry + ResourceRegistry(
+    Equipment, Organization
+)

@@ -1,4 +1,4 @@
-from humfrey.utils.resource import Resource, register
+from humfrey.linkeddata.resource import Resource
 from humfrey.utils.namespaces import NS
 
 class CollegeHall(object):
@@ -21,16 +21,16 @@ class CollegeHall(object):
 
     def widget_templates(self):
         return [('widgets/norrington.html', self)] + super(CollegeHall, self).widget_templates()
-register(CollegeHall, 'oxp:Hall', 'oxp:College')
 
 class Organization(object):
+    types = ('oxp:College', 'oxp:Hall', 'oxp:Faculty', 'oxp:Unit',
+                            'oxp:Unit', 'oxp:Department', 'oxp:Library',
+                            'oxp:University', 'org:Organization')
     def widget_templates(self):
         widgets = super(Organization, self).widget_templates()
         for account in self.all.foaf_account:
             widgets.extend(account.widget_templates())
         return widgets
-register(Organization, 'oxp:College', 'oxp:Hall', 'oxp:Faculty', 'oxp:Unit', 'oxp:Department',
-                       'oxp:Library', 'oxp:University', 'org:Organization')
 
 class Place(object):
     @classmethod
@@ -53,4 +53,3 @@ class Place(object):
     def get_time_series(self):
         if self.meter_pertainsTo_inv:
             return self.meter_pertainsTo_inv.timeseries_timeSeries
-register(Place, 'oxp:Building', 'oxp:Site', 'oxp:Space', 'oxp:Room')

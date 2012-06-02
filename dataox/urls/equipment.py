@@ -10,12 +10,14 @@ from humfrey.images import views as images_views
 from humfrey.misc import views as misc_views
 
 from dataox.equipment import views as equipment_views
+from dataox.equipment.resource import resource_registry
 
 from humfrey.misc.views import SimpleView
 
 mapping_kwargs = {'id_mapping': (('https://data.ox.ac.uk/id/equipment/', 'https://www.research-facilities.ox.ac.uk/view/', True),),
                   'doc_view': ('equipment', 'doc-generic'),
-                  'desc_view': ('equipment', 'desc')}
+                  'desc_view': ('equipment', 'desc'),
+                  'resource_registry': resource_registry}
 
 urlpatterns = patterns('',
     url(r'^search/$', equipment_views.SearchView.as_view(**mapping_kwargs), name='search'),

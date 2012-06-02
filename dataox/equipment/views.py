@@ -16,7 +16,6 @@ from humfrey.linkeddata.views import MappingView
 from humfrey.results.views.standard import RDFView
 from humfrey.sparql.views import StoreView, CannedQueryView
 from humfrey.utils.namespaces import NS
-from humfrey.utils.resource import BaseResource
 
 from .forms import AdvancedSearchForm
 
@@ -40,7 +39,10 @@ class DescView(EquipmentView, desc_views.DescView):
     pass
 
 class DocView(EquipmentView, desc_views.DocView):
-    template_name = 'equipment/view'
+    template_overrides = (
+        ('equipment/view/equipment', 'oo:Equipment'),
+        ('equipment/view/organization', 'oxp:Department', 'org:Organization', 'org:FormalOrganization', 'org:OrganizationalUnit'),
+    )
 
 class SearchView(EquipmentView, elasticsearch_views.SearchView):
     @property
