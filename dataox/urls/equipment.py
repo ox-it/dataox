@@ -14,7 +14,10 @@ from dataox.equipment.resource import resource_registry
 
 from humfrey.misc.views import SimpleView
 
-mapping_kwargs = {'id_mapping': (('https://data.ox.ac.uk/id/equipment/', 'https://www.research-facilities.ox.ac.uk/view/', True),),
+mapping_kwargs = {'id_mapping': (('https://data.ox.ac.uk/id/equipment/', 'https://www.research-facilities.ox.ac.uk/view:equipment/', True),
+                                 ('https://data.ox.ac.uk/id/facility/', 'https://www.research-facilities.ox.ac.uk/view:facility/', True),
+                                 ('http://id.southampton.ac.uk/', 'https://www.research-facilities.ox.ac.uk/view:soton/', False),
+                                 ('http://oxpoints.oucs.ox.ac.uk/id/', 'https://www.research-facilities.ox.ac.uk/view:oxpoints/', False)),
                   'doc_view': ('equipment', 'doc-generic'),
                   'desc_view': ('equipment', 'desc'),
                   'resource_registry': resource_registry}
