@@ -1,10 +1,7 @@
-{% extends "equipment/base.html" %}{% load humfrey_desc %}{% load hosts %}
+{% extends "equipment/view/base.html" %}{% load humfrey_desc %}{% load hosts %}
 
-{% block title %}{{ subject.label }}{% endblock %}
 
 {% block breadcrumbs %}<li><a href=".">{{ item.source.label }}</a>{% endblock %}
-
-{% block body_class %}{{ block.super }} equipment-view{% endblock %}
 
 {% block extra_head %}{{ block.super }}
   <script type="text/javascript" src="{{ STATIC_URL }}js/OpenLayers.js"></script>
@@ -16,6 +13,13 @@
 {% block right_sidebar %}
   <aside class="right-sidebar">
   
+  {% if subject.foaf_depiction %}
+    <section>
+      <h2 class="hidden">Image</h2>
+      <img src="{% url resized-image %}?url={{ subject.foaf_depiction.uri|urlencode }}&amp;width=220" alt="Image of {{ subject.label }}"/>
+    </section>
+  {% endif %}
+
   {% if subject.geo_lat and subject.geo_long %}
     <section>
       <h2>Map</h2>
@@ -78,7 +82,9 @@
     <dt>Access prerequisites:</dt>
     <dd>{{ subject.oo_accessPrerequisite.label }}</dd>{% endif %}{% if subject.oo_useRestriction %}
     <dt>Restrictions on use:</dt>
-    <dd>{{ subject.oo_useRestriction.label }}</dd>{% endif %}
+    <dd>{{ subject.oo_useRestriction.label }}</dd>{% endif %}{% if subject.foaf_page %}
+    <dt>More information:</dt>
+    <dd>{{ subject.foaf_page|node }}</dd>{% endif %}
   </dl>
 
   {% if subject.oo_contact %}

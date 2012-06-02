@@ -1,0 +1,9 @@
+{% extends "equipment/base.html" %}
+
+{% block title %}{{ subject.label }}{% endblock %}
+
+{% block body_class %}{{ block.super }} equipment-view{% endblock %}
+
+{% block content %}
+  <h1>{{ subject.label }}</h1>
+{% endblock %}
