@@ -38,6 +38,7 @@ urlpatterns = patterns('',
     url(r'^$', misc_views.SimpleView.as_view(template_name="equipment/index"), name='index'),
     url(r'^about/$', misc_views.SimpleView.as_view(template_name="equipment/about"), name='about'),
     url(r'^contact/$', misc_views.SimpleView.as_view(template_name="equipment/contact"), name='contact'),
+    url(r'^contribute/$', misc_views.SimpleView.as_view(template_name="equipment/contribute"), name='contribute'),
     url(r'^legal-and-privacy/$', misc_views.SimpleView.as_view(template_name='legal'), name='legal'),
     url(r'^thumbnail/$', equipment_views.ResizedImageView.as_view(**mapping_kwargs), name='resized-image'),
     
