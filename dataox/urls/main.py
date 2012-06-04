@@ -4,7 +4,7 @@ from django.views.generic.simple import redirect_to
 from django.contrib.staticfiles.urls import staticfiles_urlpatterns
 
 from humfrey.desc import views as desc_views
-from humfrey.images import views as images_views
+from humfrey.thumbnail import views as thumbnail_views
 from humfrey.misc import views as misc_views
 from humfrey.graphviz import views as graphviz_views
 from humfrey.elasticsearch import views as elasticsearch_views
@@ -42,7 +42,7 @@ urlpatterns = patterns('',
     (r'^browse/', include('humfrey.browse.urls', 'browse')),
     (r'^feeds/', include('dataox.feeds.urls', 'feeds')),
 
-    (r'^external-image/$', images_views.ResizedImageView.as_view(), {}, 'resized-image'),
+    (r'^thumbnail/$', thumbnail_views.ThumbnailView.as_view(), {}, 'thumbnail'),
 
     (r'^graphviz/$', graphviz_views.GraphVizView.as_view(), {}, 'graphviz'),
 

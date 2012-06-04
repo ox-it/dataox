@@ -15,7 +15,6 @@ from humfrey.elasticsearch import views as elasticsearch_views
 from humfrey.linkeddata.views import MappingView
 from humfrey.results.views.standard import RDFView
 from humfrey.sparql.views import StoreView, CannedQueryView
-from humfrey.images import views as images_views
 from humfrey.utils.namespaces import NS
 
 from .forms import AdvancedSearchForm
@@ -159,6 +158,3 @@ class BrowseView(EquipmentView, HTMLView, RDFView, CannedQueryView, MappingView)
         context['concepts'].sort(key=lambda s:s.label)
         
         return context
-
-class ResizedImageView(EquipmentView, images_views.ResizedImageView):
-    pass

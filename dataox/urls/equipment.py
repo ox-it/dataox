@@ -1,12 +1,9 @@
 from django.conf.urls.defaults import patterns, url, include
-from django.conf import settings
 from django.contrib.staticfiles.urls import staticfiles_urlpatterns
 
 from django.contrib.auth import views as auth_views
 from django_webauth.views import LogoutView
 
-from humfrey.desc import views as desc_views
-from humfrey.images import views as images_views
 from humfrey.misc import views as misc_views
 
 from dataox.equipment import views as equipment_views
@@ -40,7 +37,6 @@ urlpatterns = patterns('',
     url(r'^contact/$', misc_views.SimpleView.as_view(template_name="equipment/contact"), name='contact'),
     url(r'^contribute/$', misc_views.SimpleView.as_view(template_name="equipment/contribute"), name='contribute'),
     url(r'^legal-and-privacy/$', misc_views.SimpleView.as_view(template_name='legal'), name='legal'),
-    url(r'^thumbnail/$', equipment_views.ResizedImageView.as_view(**mapping_kwargs), name='resized-image'),
     
 ) + staticfiles_urlpatterns()
 
