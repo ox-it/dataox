@@ -70,7 +70,7 @@ ROOT_HOSTCONF = 'dataox.hosts'
 DEFAULT_HOST = 'empty'
 
 if STAGING:
-    INSTALLED_APPS += ('dataox.staging',)
+    INSTALLED_APPS = ('dataox.staging',) + INSTALLED_APPS
     MIDDLEWARE_CLASSES = ('dataox.staging.middleware.StagingMiddleware',) + MIDDLEWARE_CLASSES
     STATIC_URL = '/static.data.ox.ac.uk/'
     DEFAULT_HOST = 'staging'

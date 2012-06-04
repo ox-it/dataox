@@ -47,6 +47,7 @@ if settings.STAGING:
         # Strip a leading '/', so we remain on the same host
         return original_reverse_full(*args, **kwargs)[1:]
     django_hosts.reverse.reverse_full = new_reverse_full
+    django_hosts.reverse_full = new_reverse_full
 
     original_reverse = django.core.urlresolvers.reverse
     def new_reverse(*args, **kwargs):
