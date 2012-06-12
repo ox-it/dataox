@@ -19,6 +19,7 @@ INSTALLED_APPS = (
     'django_hosts',
     'django_jenkins',
     'django_webauth',
+    'djcelery',
     'humfrey.base',
     'humfrey.desc',
     'humfrey.elasticsearch',
@@ -46,6 +47,7 @@ IGNORE_TEST_MODULES = [
     'django_hosts.tests',
     'object_permissions.tests',
     'django.contrib.auth.tests.remote_user',
+    'django.contrib.auth.tests.context_processors',
 ]
 
 TEST_RUNNER = 'humfrey.tests.runners.HumfreyTestSuiteRunner'
