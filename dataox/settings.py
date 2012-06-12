@@ -194,6 +194,7 @@ CELERY_IMPORTS = (
     'humfrey.update.tasks',
 )
 CELERYBEAT_SCHEDULER = 'djcelery.schedulers.DatabaseScheduler'
+CELERYD_LOG_COLOR = False
 
 import djcelery
 djcelery.setup_loader()
