@@ -172,7 +172,12 @@ LOGIN_REDIRECT_URL = '/'
 SESSION_COOKIE_SECURE = not DEBUG
 
 VOCABULARY_URL_OVERRIDES = {
+    'afn': None,
+    'cc': 'http://creativecommons.org/schema.rdf',
+    'fn': None,
+    'oxnotation': None,
     'oxp': 'http://oxpoints.oucs.ox.ac.uk/ns.ttl',
+    'pf': None,
 }
 
 # Celery
