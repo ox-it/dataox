@@ -1,12 +1,4 @@
-import httplib
-import urllib2
-try:
-    import json
-except ImportError:
-    import simplejson
-
-from django_conneg.views import HTMLView, JSONPView
-from django.conf import settings
+from django_conneg.views import HTMLView
 from django.http import Http404
 import rdflib
 
@@ -14,7 +6,7 @@ from humfrey.desc import views as desc_views
 from humfrey.elasticsearch import views as elasticsearch_views
 from humfrey.linkeddata.views import MappingView
 from humfrey.results.views.standard import RDFView
-from humfrey.sparql.views import StoreView, CannedQueryView
+from humfrey.sparql.views import CannedQueryView
 from humfrey.utils.namespaces import NS
 
 from .forms import AdvancedSearchForm
@@ -139,7 +131,6 @@ class BrowseView(EquipmentView, HTMLView, RDFView, CannedQueryView, MappingView)
                     }}
                   }}
                 }}""".format(concept_scheme=self.concept_scheme.n3())
-                  # RT#1925559 GROUP BY ?concept ?conceptLabel ?conceptNotation ?narrower
 
     def finalize_context(self, request, context, notation):
         graph = context['graph']
