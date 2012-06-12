@@ -1,4 +1,4 @@
-{% extends "equipment/view/base.html" %}{% load humfrey_desc %}{% load hosts %}
+{% extends "equipment/view/base.html" %}{% load humfrey_desc %}{% load humfrey_thumbnail %}{% load hosts %}
 
 
 {% block breadcrumbs %}<li><a href=".">{{ item.source.label }}</a>{% endblock %}
@@ -16,7 +16,7 @@
   {% if subject.foaf_depiction %}
     <section>
       <h2 class="hidden">Image</h2>
-      <img src="{% url resized-image %}?url={{ subject.foaf_depiction.uri|urlencode }}&amp;width=220" alt="Image of {{ subject.label }}"/>
+      <img src="{% thumbnail subject.foaf_depiction.uri width=220 %}" alt="Image of {{ subject.label }}"/>
     </section>
   {% endif %}
 
@@ -52,7 +52,7 @@
     <section>
       <h2>Images of building</h2>
       {% for depiction in depictions %}
-        <img src="{% url resized-image %}?url={{ depiction.uri|urlencode }}&amp;width=220" alt="Photograph of {{ subject.spatialrelations_within.label }}"/>
+        <img src="{% thumbnail depiction.uri width=220 %}" alt="Photograph of {{ subject.spatialrelations_within.label }}"/>
       {% endfor %}
     </section>
   {% endif %}{% endwith %}
@@ -70,10 +70,11 @@
   {% endif %}
 
   <dl class="itemDetails">{% if subject.dcterms_subject %}
-    <dt>Category:</dt>{% for category in subject.all.dcterms_subject %}
-    <dd><a href="{% url browse category.skos_notation %}">{{ category.label }}</a></dd>{% endfor %}{% endif %}{% if subject.oo_equipmentOf %}
+    <dt>Category:</dt>{% for category in subject.all.dcterms_subject %}{% if category.skos_notation %}
+    <dd><a href="{% url browse category.skos_notation %}">{{ category.label }}</a></dd>{% else %}
+    <dd>{{ category.label }}</dd>{% endif %}{% endfor %}{% endif %}{% if subject.equipmentOf %}
     <dt>Department:</dt>
-    <dd>{{ subject.oo_equipmentOf|node|default:"" }}</dd>{% endif %}{% if subject.foaf_based_near or subject.spatialrelations_within %}
+    <dd>{{ subject.equipmentOf|node|default:"" }}</dd>{% endif %}{% if subject.foaf_based_near or subject.spatialrelations_within %}
     <dt>Location:</dt>
     <dd>{{ subject.spatialrelations_within|node|default:"" }}{% if subject.foaf_based_near and subject.spatialrelations_within %}, {% endif %}
         {{ subject.foaf_based_near.label|default:"" }}</dd>{% endif %}{% if subject.oo_availability %}
