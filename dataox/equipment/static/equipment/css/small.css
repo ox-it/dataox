@@ -42,16 +42,14 @@ header.pageHeader h1{
 }
 
 		
-a#homeLink {
-	background: transparent url('images/logo.png') no-repeat 0px 0px; 
-	display: block;
-	height: 100px;
-	left: 117px;
-	padding: 0px;
-	position: absolute;
-	text-indent: -9000px;
-	top: 17px;
-	width: 640px;
+header.pageHeader div.siteTitle {
+
+	font-size: 2em;
+	font-weight: normal;
+	letter-spacing: 0.07em;
+	margin: 40px 5px 0px 120px;
+	padding-top: 2px;
+	text-align: center;
 }
 
 #login-prompt {

@@ -16,10 +16,16 @@ left: 68px;
 
 a#homeLink {
 
-
-	background: transparent url('images/logo-large.png') no-repeat 0px 0px; 
+	background: transparent url('images/logo.png') no-repeat 0px 0px;
+	display: block;
+	height: 100px;
 	left: 360px;
+	padding: 0px;
+	position: absolute;
+	text-indent: -9000px;
+	top: 10px;
 	width: 800px;
+
 }
 
 
