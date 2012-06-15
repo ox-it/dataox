@@ -84,7 +84,9 @@
     <dt>Access prerequisites:</dt>
     <dd>{{ subject.oo_accessPrerequisite.label }}</dd>{% endif %}{% if subject.oo_useRestriction %}
     <dt>Restrictions on use:</dt>
-    <dd>{{ subject.oo_useRestriction.label }}</dd>{% endif %}{% if subject.foaf_page %}
+    <dd>{{ subject.oo_useRestriction.label }}</dd>{% endif %}
+    <dt>Quantity:</dt>
+    <dd>{{ subject.gr_hasInventoryLevel.gr_hasValue|default:"1" }} available</dd>{% if subject.foaf_page %}
     <dt>More information:</dt>
     <dd>{{ subject.foaf_page|node }}</dd>{% endif %}
   </dl>
