@@ -64,7 +64,7 @@
   <h2 class="hidden">Results</h2>
 
   <p class="numResults">
-    Your search for <strong>{{ q }}</strong> returned <strong>{{ hits.total }}</strong> results.
+    Your search for <strong>{{ q }}</strong> returned <strong>{{ hits.total }}</strong> result{{ hits.total|pluralize }}.
 {% if not user.is_authenticated %}
     <a href="{% url webauth:login %}?next={{ request.get_full_path|urlencode }}">Try logging in to see restricted results.</a>
 {% endif %}
