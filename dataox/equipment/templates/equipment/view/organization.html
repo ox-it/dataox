@@ -1,0 +1,23 @@
+{% extends "equipment/view/base.html" %}{% load humfrey_desc %}
+
+{% block content %}
+{% include "equipment/login_prompt.html" %}
+  <h1>{{ subject.label }}</h1>
+  
+  <section>
+  	<h2>Equipment</h2>
+  	
+  	<ul>{% for equipment in subject.allEquipment %}
+  	  <li>
+    <h3>{{ equipment|node }}</h3>{% if equipment.oo_availability %}
+    <dl class="equipment-search-meta"><dt>Availability:</dt>
+      <dd>{{ equipment.oo_availability.label }}</dd>
+    </dl>{% endif %}
+    <div style="clear: both"/>
+    {% if equipment.description %}
+    <div class="equipment-search-description">{{ equipment.description|node|truncatewords_html:25 }}</div>
+    {% endif %}
+  	  </li>{% endfor %}
+  	</ul>
+  </section>
+{% endblock %}
