@@ -72,9 +72,9 @@
   <dl class="itemDetails">{% if subject.dcterms_subject %}
     <dt>Category:</dt>{% for category in subject.all.dcterms_subject %}{% if category.skos_notation %}
     <dd><a href="{% url browse category.skos_notation %}">{{ category.label }}</a></dd>{% else %}
-    <dd>{{ category.label }}</dd>{% endif %}{% endfor %}{% endif %}{% if subject.equipmentOf %}
+    <dd>{{ category.label }}</dd>{% endif %}{% endfor %}{% endif %}{% if subject.oo_organizationPart or subject.oo_formalOrganization %}
     <dt>Department:</dt>
-    <dd>{{ subject.equipmentOf|node|default:"" }}</dd>{% endif %}{% if subject.foaf_based_near or subject.spatialrelations_within %}
+    <dd>{{ subject.oo_organizationPart|node|default:"" }}{% if subject.oo_organizationPart and subject.oo_formalOrganization %}, {% endif %}{{ subject.oo_formalOrganization|node|default:"" }}</dd>{% endif %}{% if subject.foaf_based_near or subject.spatialrelations_within %}
     <dt>Location:</dt>
     <dd>{{ subject.spatialrelations_within|node|default:"" }}{% if subject.foaf_based_near and subject.spatialrelations_within %}, {% endif %}
         {{ subject.foaf_based_near.label|default:"" }}</dd>{% endif %}{% if subject.oo_availability %}

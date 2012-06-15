@@ -33,6 +33,8 @@ class Organization(object):
         return widgets
 
 class Place(object):
+    types = ('oxp:Building', 'oxp:Site', 'oxp:Space', 'oxp:Room', 'org:Site')
+
     @classmethod
     def _construct_patterns(cls):
         return [

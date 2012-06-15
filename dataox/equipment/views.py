@@ -31,10 +31,7 @@ class DescView(EquipmentView, desc_views.DescView):
     pass
 
 class DocView(EquipmentView, desc_views.DocView):
-    template_overrides = (
-        ('equipment/view/equipment', 'oo:Equipment'),
-        ('equipment/view/organization', 'oxp:Department', 'org:Organization', 'org:FormalOrganization', 'org:OrganizationalUnit'),
-    )
+    template_name = 'equipment/view/base'
 
 class SearchView(EquipmentView, elasticsearch_views.SearchView):
     @property
