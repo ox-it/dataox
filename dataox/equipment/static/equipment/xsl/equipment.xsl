@@ -202,7 +202,7 @@
 
   <xsl:template match="general-location">
     <xsl:variable name="general-location" select="key('general-location-lookup', text(), $general-locations)"/>
-    <xsl:if test="$general-location/@oxpoints or $general-location/@uri">
+    <xsl:if test="text()">
       <foaf:based_near>
         <xsl:choose>
           <xsl:when test="$general-location/@oxpoints">
