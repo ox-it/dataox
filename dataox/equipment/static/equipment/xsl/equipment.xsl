@@ -181,7 +181,7 @@
 
   <xsl:template match="department-code">
     <oo:organizationPart>
-      <org:Organization rdf:about="https://data.ox.ac.uk/equipment-department/{ex:slugify(text())}">
+      <org:Organization rdf:about="https://data.ox.ac.uk/id/equipment-department/{ex:slugify(text())}">
         <skos:notation>
           <xsl:attribute name="rdf:datatype">
             <xsl:text>http://data.ox.ac.uk/id/notation/</xsl:text>
@@ -219,6 +219,13 @@
               </rdfs:label>
             </geo:SpatialThing>
           </xsl:when>
+          <xsl:otherwise>
+            <geo:SpatialThing rdf:about="https://data.ox.ac.uk/id/equipment-general-location/{ex:slugify(text())}">
+              <rdfs:label>
+                <xsl:value-of select="text()"/>
+              </rdfs:label>
+            </geo:SpatialThing>
+          </xsl:otherwise>
         </xsl:choose>
       </foaf:based_near>
     </xsl:if>
@@ -386,10 +393,17 @@
   <ex:general-locations>
     <ex:general-location name="Headington" uri="http://dbpedia.org/resource/Headington" label="Headington"/>
     <ex:general-location name="Science Area" oxpoints="59030245"/>
+    <ex:general-location name="Oxford Science Area" oxpoints="59030245"/>
+    <ex:general-location name="Begbroke Science Park" oxpoints="51219523"/>
+    <!-- We don't have a URI for this yet
+    <ex:general-location name="Osney Mead Industrial Estate"/>
+    -->
+    <ex:general-location name="Wytham" uri="http://dbpedia.org/resource/Wytham" label="Wytham"/>
     <ex:general-location name="HCMC" uri="http://dbpedia.org/resource/Ho_Chi_Minh_City" label="Ho Chi Minh City"/>
     <ex:general-location name="New York" uri="http://dbpedia.org/resource/New_York" label="New York"/>
     <ex:general-location name="Toronto" uri="http://dbpedia.org/resource/Toronto" label="Toronto"/>
     <ex:general-location name="Maesot" uri="http://dbpedia.org/resource/Mae_Sot_District" label="Mae Sot"/>
+    <ex:general-location name="Zimbabwe" uri="http://dbpedia.org/resource/Zimbabwe" label="Zimbabwe"/>
   </ex:general-locations>
 
   <ex:makes>
