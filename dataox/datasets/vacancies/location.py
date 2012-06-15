@@ -60,7 +60,7 @@ class LocationGuesser(object):
         return self._query_results
 
     def get_parents(self):
-        return dict((unicode(a._identifier), unicode(b._identifier)) for a, b in self.endpoint.query(self.parents_query))
+        return dict((unicode(a), unicode(b)) for a, b in self.endpoint.query(self.parents_query))
 
     def get_query_results(self):
         query_results = {}
@@ -68,7 +68,7 @@ class LocationGuesser(object):
             query = self.queries[name]
             query_results[name] = collections.defaultdict(set)
             for result in self.endpoint.query(query):
-                query_results[name][unicode(result.label)].add(unicode(result.thing._identifier))
+                query_results[name][unicode(result.label)].add(unicode(result.thing))
             query_results[name] = dict(query_results[name])
 
         query_results['names'] = collections.defaultdict(set)
