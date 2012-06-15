@@ -60,6 +60,7 @@
 {% endblock %}
 
 {% block content %}
+{% include "equipment/login_prompt.html" %}
   <h1>{{ subject.label }}</h1>
   {% if item.source.page %}<p>{% for page in item.source.page %}
   <a href="{{ page.uri }}">{{ page.uri }}</a>{% if not forloop.last %}, {% endif %}

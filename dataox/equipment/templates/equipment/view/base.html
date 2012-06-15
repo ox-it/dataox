@@ -1,4 +1,4 @@
-{% extends "equipment/base.html" %}
+{% extends "equipment/base.html" %}{% load humfrey_desc %}
 
 {% block title %}{{ subject.label }}{% endblock %}
 
@@ -6,4 +6,16 @@
 
 {% block content %}
   <h1>{{ subject.label }}</h1>
+
+  <p>This page shows raw data about this resource. We have not yet had the time
+     to build a pretty viewer for this type of item. Don't worry if it seems a
+     bit arcane — you are looking under the hood of our service into the data
+     inside!</p>
+
+  <dl class="itemDetails">
+{% for predicate, objects in subject.properties %}
+        <dt>{{ predicate.label|capfirst }}:</dt>{% for object in objects %}
+        <dd>{{ object|node|truncatewords_html:100 }}</dd>{% endfor %}
+{% endfor %}
+  </dl>
 {% endblock %}

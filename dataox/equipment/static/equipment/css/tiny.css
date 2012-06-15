@@ -83,6 +83,10 @@ h1, h2, .right-sidebar h3 {
 	width: 220px;
 }
 
+.left-sidebar, .right-sidebar {
+	clear: both;
+}
+
 div.results ol {
 	padding-left:5px;
 }

@@ -538,6 +538,7 @@ dl.itemDetails
 	clear: both;
 	font-size: 0.9em;
 	margin: 10px 0px ;
+	padding-right: 12em;
 }
 
 dl.itemDetails dt,
@@ -550,14 +551,16 @@ dl.itemDetails dt
 {
 	font-weight: bold;
 	float:left;
-	clear: left;
-	width: 7em;
+	clear: both;
+	width: 10em;
 }
 
 dl.itemDetails dd {
-	display: inline;
-	float: left;
-	margin-left: 0;
+	margin-right: -12em;
+	display:block;
+	float:right;
+	clear:right;
+	width:100%;
 }
 
 
