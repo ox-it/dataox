@@ -20,7 +20,7 @@
     xmlns:tei="http://www.tei-c.org/ns/1.0"
   >
   <xsl:output method="xml" indent="yes"/>
-  <xsl:param name="target" select="'public'"/>
+  <xsl:param name="store" select="'public'"/>
   <xsl:param name="output" select="'equipment'"/>
 
   <xsl:function name="ex:slugify">
@@ -84,36 +84,37 @@
   <xsl:template match="equipment" mode="equipment">
     <xsl:variable name="to-include">
       <xsl:choose>
-        <xsl:when test="$target='public'"><xsl:value-of select="public"/></xsl:when>
-        <xsl:when test="$target='equipment-university'"><xsl:value-of select="university"/></xsl:when>
-        <xsl:when test="$target='equipment-seesec'"><xsl:value-of select="seesec"/></xsl:when>
+        <xsl:when test="$store='public'"><xsl:value-of select="public"/></xsl:when>
+        <xsl:when test="$store='equipment'"><xsl:value-of select="university"/></xsl:when>
+        <xsl:when test="$store='seesec'"><xsl:value-of select="seesec"/></xsl:when>
         <xsl:otherwise>
-          <xsl:message terminate="yes">Unexpected target: <xsl:value-of select="target"/></xsl:message>
+          <xsl:message terminate="yes">Unexpected store: <xsl:value-of select="store"/></xsl:message>
         </xsl:otherwise>
       </xsl:choose>
     </xsl:variable>
 
-    <xsl:if test="$to-include='Yes' or $target='public'">
+    <xsl:if test="$to-include='Yes' or $store='public'">
       <cerif:Equipment rdf:about="{@uri}">
-	<xsl:choose>
-          <xsl:when test="quantity/text() &gt; 1">
-            <rdf:type rdf:resource="http://purl.org/goodrelations/v1#SomeItems"/>
-            <gr:hasInventoryLevel>
-              <gr:QuantitativeValue rdf:about="{@uri}/quantity">
-                <gr:hasValue rdf:datatype="http://www.w3.org/2001/XMLSchema#int">
-                  <xsl:value-of select="quantity/text()"/>
-                </gr:hasValue>
-              </gr:QuantitativeValue>
-            </gr:hasInventoryLevel>
-          </xsl:when>
-          <xsl:otherwise>
-            <rdf:type rdf:resource="http://purl.org/goodrelations/v1#Individual"/>
-          </xsl:otherwise>
-        </xsl:choose>
         <!-- Everything is part of the University of Oxford -->
         <oo:formalOrganization rdf:resource="http://oxpoints.oucs.ox.ac.uk/id/00000000"/>
+
         <xsl:if test="$to-include='Yes'">
           <xsl:apply-templates select="*"/>
+	  <xsl:choose>
+            <xsl:when test="quantity/text() &gt; 1">
+              <rdf:type rdf:resource="http://purl.org/goodrelations/v1#SomeItems"/>
+              <gr:hasInventoryLevel>
+                <gr:QuantitativeValue rdf:about="{@uri}/quantity">
+                  <gr:hasValue rdf:datatype="http://www.w3.org/2001/XMLSchema#int">
+                    <xsl:value-of select="quantity/text()"/>
+                  </gr:hasValue>
+                </gr:QuantitativeValue>
+              </gr:hasInventoryLevel>
+            </xsl:when>
+            <xsl:otherwise>
+              <rdf:type rdf:resource="http://purl.org/goodrelations/v1#Individual"/>
+            </xsl:otherwise>
+          </xsl:choose>
         </xsl:if>
       </cerif:Equipment>
     </xsl:if>
@@ -256,7 +257,7 @@
         <xsl:when test="self::tertiary-contact-email">tertiary-contact</xsl:when>
       </xsl:choose>
     </xsl:variable>
-    <xsl:if test="$target != 'public'">
+    <xsl:if test="$store != 'public'">
       <oo:contact>
         <foaf:Agent rdf:about="{../@uri}/{$uri-part}">
           <xsl:if test="$contact-name">
