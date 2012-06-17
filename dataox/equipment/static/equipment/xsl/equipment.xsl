@@ -266,7 +266,7 @@
           <vcard:email rdf:resource="mailto:{text()}"/>
         </foaf:Agent>
       </oo:contact>
-      <xsl:if test="$uri-part = 'primary-contact">
+      <xsl:if test="$uri-part = 'primary-contact'">
         <oo:primaryContact rdf:resource="{../@uri}/{$uri-part}"/>
       </xsl:if>
     </xsl:if>
