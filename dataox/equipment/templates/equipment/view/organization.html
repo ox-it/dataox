@@ -1,23 +1,48 @@
 {% extends "equipment/view/base.html" %}{% load humfrey_desc %}
 
+{% block with_right_sidebar %} with-right-sidebar{% endblock %}
+
 {% block content %}
 {% include "equipment/login_prompt.html" %}
   <h1>{{ subject.label }}</h1>
   
+  {% if subject.description %}
+  <div class="description">{{ subject.description }}</div>
+  {% endif %}
+
+  {% if subject.foaf_homepage %}
+  <p class="homepage">Homepage: <span>{{ subject.foaf_homepage|node }}</span></p>
+  {% endif %}
+
   <section>
   	<h2>Equipment</h2>
   	
-  	<ul>{% for equipment in subject.allEquipment %}
-  	  <li>
-    <h3>{{ equipment|node }}</h3>{% if equipment.oo_availability %}
-    <dl class="equipment-search-meta"><dt>Availability:</dt>
-      <dd>{{ equipment.oo_availability.label }}</dd>
-    </dl>{% endif %}
-    <div style="clear: both"/>
-    {% if equipment.description %}
-    <div class="equipment-search-description">{{ equipment.description|node|truncatewords_html:25 }}</div>
-    {% endif %}
-  	  </li>{% endfor %}
-  	</ul>
+  	{% include "equipment/view/equipment_list.html" with equipment_list=subject.allEquipment show_location=1 %}
   </section>
+{% endblock %}
+
+{% block right_sidebar %}
+  <aside class="right-sidebar">
+
+  {% with subject.v_adr as adr %}{% if adr %}
+    <section>
+      <h2>Address</h2>
+      {% if subject.spatialrelations_within.label %}
+        {{ subject.spatialrelations_within.label }}<br/>
+      {% endif %}
+      {% if adr|property:"v:street-address" %}
+        {{ adr|property:"v:street-address" }}<br/>
+      {% endif %}
+      {% if adr|property:"v:extended-address" %}
+        {{ adr|property:"v:extended-address" }}<br/>
+      {% endif %}
+      {% if adr|property:"v:locality" %}
+        {{ adr|property:"v:locality" }}<br/>
+      {% endif %}
+      {% if adr|property:"v:postal-code" %}
+        {{ adr|property:"v:postal-code" }}<br/>
+      {% endif %}
+    </section>
+  {% endif %}{% endwith %}
+  </aside>
 {% endblock %}

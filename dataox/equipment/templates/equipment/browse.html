@@ -33,11 +33,9 @@
 
 {% if concept.dcterms_subject_inv %}
 <h2 class="hidden">Equipment</h2>
-<ul>
-{% for equipment in concept.all.dcterms_subject_inv %}
-  <li><a href="{{ equipment.doc_url }}">{{ equipment.label }}</a></li>
-{% endfor %}
-</ul>
+
+{% include "equipment/view/equipment_list.html" with equipment_list=concept.all.dcterms_subject_inv show_managed_by=1 show_location=1 %}
+
 {% endif %}
 
 {% if not concepts and not concept.dcterms_subject_inv %}

@@ -19,18 +19,21 @@ body
 
 h1, h2, h3, h4, h5, h6
 {
-clear: both;
-color: #002B5F;
-font-family: "Trebuchet MS",Helvetica,Arial,sans-serif;
-margin: 1.1em 0px 0.7em 0px;
- font-weight: normal;
+	clear: both;
+	color: #002B5F;
+	font-family: "Trebuchet MS",Helvetica,Arial,sans-serif;
+	font-weight: normal;
+	line-height: 1.1em;
+	margin: 1.1em 0px 0.7em 0px;
 }
 
 h1 {
   font-size: 2.2em;
   margin-top: 5px;
 }
-
+h1.not-first {
+	margin: 1.1em 0px 0.7em 0px;
+}
 
 h2 {
   font-size: 1.9em;
@@ -424,6 +427,14 @@ body.equipment-browse h3 a
 			
 }
 
+body.equipment-browse h2 a:hover,
+body.equipment-browse h3 a:hover,
+body.equipment-browse h2 a:focus,
+body.equipment-browse h3 a:focus
+{
+	text-decoration: underline;
+}
+
 body.equipment-browse ul.equipment-categories {
 	padding-left: 0;
 }
@@ -683,10 +694,55 @@ body.equipment-search .equipment-quantity {
 	filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#fdfefe', endColorstr='#f4f7fa');
 	background: -webkit-gradient(linear, left top, left bottom, from(#FDFEFE), to(#F4F7FA));
 	background: -moz-linear-gradient(top, #414E5D, #59708A);
-	border: 1px solid #002147;
+	border: 1px solid #002147;		
 	-moz-border-radius: 5px;
 	-webkit-border-radius: 5px;
 	border-radius: 5px;
 	clear: both;
 	color: white;
+}
+
+
+ul.equipmentList  {
+
+	margin: 0px;
+	padding: 0px;
+}
+
+ul.equipmentList  li {
+	background: #FDFEFE;
+	border: 1px solid #DFE2E4;
+	border-top: 2px solid #DFE2E4;
+	border-bottom: 2px solid #DFE2E4;
+	border-radius: 3px;
+		-moz-border-radius: 3px;
+		-webkit-border-radius: 3px;
+	list-style: none;
+	margin: 5px 0px;
+	padding: 0px;
+}
+
+ul.equipmentList  li h3 {
+	filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#fdfefe', endColorstr='#f4f7fa');
+	background: -webkit-gradient(linear, left top, left bottom, from(#FDFEFE), to(#F4F7FA));
+	background: -moz-linear-gradient(top, #414E5D, #59708A);
+	border: none;
+	border-bottom: 1px solid #DFE2E4;
+	margin: 0px 0px;
+	padding: 5px
+	}
+	
+ul.equipmentList  li h3 a{
+	text-decoration: none;
+}
+
+ul.equipmentList  li h3 a:hover,
+ul.equipmentList  li h3 a:focus{
+	text-decoration: underline;
+}
+
+
+ul.equipmentList  li dl,
+ul.equipmentList  li div{
+	margin: 5px;
 }

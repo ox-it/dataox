@@ -81,9 +81,9 @@ class SearchView(EquipmentView, elasticsearch_views.SearchView):
 class BrowseView(EquipmentView, HTMLView, RDFView, CannedQueryView, MappingView):
     concept_scheme = rdflib.URIRef('http://data.ox.ac.uk/id/equipment-category')
     datatype = rdflib.URIRef('http://data.ox.ac.uk/id/notation/equipment-category')
-    
+
     template_name = 'equipment/browse'
-    
+
     @property
     def notation(self):
         if self.kwargs.get('notation'):
@@ -92,9 +92,12 @@ class BrowseView(EquipmentView, HTMLView, RDFView, CannedQueryView, MappingView)
     def get_query(self, request, notation):
         if self.notation:
             return """
-                DESCRIBE ?concept ?narrower ?equipment ?narrowerEquipment WHERE {{
+                DESCRIBE ?concept ?narrower ?equipment ?narrowerEquipment ?other WHERE {{
                   ?concept skos:notation {notation} .
-                  OPTIONAL {{ ?equipment dcterms:subject ?concept }} .
+                  OPTIONAL {{
+                    ?equipment dcterms:subject ?concept .
+                    OPTIONAL {{ ?equipment oo:equipmentOf|oo:organizationPart|oo:formalOrganization|oo:formalOrganisation|foaf:based_near|spatialrelations:within|oo:availability ?other }}
+                  }} .
                   OPTIONAL {{
                     ?concept skos:narrower ?narrower .
                     OPTIONAL {{ ?narrowerEquipment dcterms:subject ?narrower }}

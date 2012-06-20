@@ -70,26 +70,48 @@
   <p>{{ subject.description|node }}</p>
   {% endif %}
 
-  <dl class="itemDetails">{% if subject.dcterms_subject %}
-    <dt>Category:</dt>{% for category in subject.all.dcterms_subject %}{% if category.skos_notation %}
-    <dd><a href="{% url browse category.skos_notation %}">{{ category.label }}</a></dd>{% else %}
-    <dd>{{ category.label }}</dd>{% endif %}{% endfor %}{% endif %}{% if subject.oo_organizationPart or subject.oo_formalOrganization %}
-    <dt>Department:</dt>
-    <dd>{{ subject.oo_organizationPart|node|default:"" }}{% if subject.oo_organizationPart and subject.oo_formalOrganization %}, {% endif %}{{ subject.oo_formalOrganization|node|default:"" }}</dd>{% endif %}{% if subject.foaf_based_near or subject.spatialrelations_within %}
-    <dt>Location:</dt>
-    <dd>{{ subject.spatialrelations_within|node|default:"" }}{% if subject.foaf_based_near and subject.spatialrelations_within %}, {% endif %}
-        {{ subject.foaf_based_near.label|default:"" }}</dd>{% endif %}{% if subject.oo_availability %}
-    <dt>Availability:</dt>
-    <dd>{{ subject.oo_availability.label }}</dd>{% endif %}{% if subject.oo_accessPrerequisite %}
-    <dt>Access prerequisites:</dt>
-    <dd>{{ subject.oo_accessPrerequisite.label }}</dd>{% endif %}{% if subject.oo_useRestriction %}
-    <dt>Restrictions on use:</dt>
-    <dd>{{ subject.oo_useRestriction.label }}</dd>{% endif %}
-    <dt>Quantity:</dt>
-    <dd>{{ subject.gr_hasInventoryLevel.gr_hasValue|default:"1" }} available</dd>{% if subject.foaf_page %}
-    <dt>More information:</dt>
-    <dd>{{ subject.foaf_page|node }}</dd>{% endif %}
-  </dl>
+  <table>{% if subject.dcterms_subject %}
+    <tr>
+      <th rowspan="{{ subject.all.dcterms_subject|length }}">Category:</th>{% for category in subject.all.dcterms_subject %}{% if category.skos_notation %}
+      <td><a href="{% url browse category.skos_notation %}">{{ category.label }}</a></td>{% else %}
+      <td>{{ category.label }}</td>{% endif %}{% endfor %}
+    </tr>{% endif %}{% if subject.oo_organizationPart or subject.oo_formalOrganization %}
+    <tr>
+      <th>Managed by:</th>
+      <td>{{ subject.oo_organizationPart|node|default:"" }}{% if subject.oo_organizationPart and subject.oo_formalOrganization %}, {% endif %}{{ subject.oo_formalOrganization.label|default:"" }}</td>
+    </tr>{% endif %}{% if subject.foaf_based_near or subject.spatialrelations_within %}
+    <tr>
+      <th>Location:</th>
+      <td>{{ subject.spatialrelations_within|node|default:"" }}{% if subject.foaf_based_near and subject.spatialrelations_within %}, {% endif %}
+          {{ subject.foaf_based_near.label|default:"" }}</td>
+    </tr>{% endif %}{% if subject.oo_availability %}
+    <tr>
+      <th>Availability:</th>
+      <td>{{ subject.oo_availability.label }}</td>
+    </tr>{% endif %}{% if subject.oo_accessPrerequisite %}
+    <tr>
+      <th>Access prerequisites:</th>
+      <td>{{ subject.oo_accessPrerequisite.label }}</td>
+    </tr>{% endif %}{% if subject.oo_useRestriction %}
+    <tr>
+      <th>Restrictions on use:</th>
+      <td>{{ subject.oo_useRestriction.label }}</td>
+    </tr>{% endif %}{% if subject|has_type:"gr:Individual" or subject|has_type:"gr:SomeItems" %}
+    <tr>
+      <th>Quantity:</th>
+      <td>{% if subject|has_type:"gr:Individual" %}
+        1 available
+       {% else %}{% if subject.gr_hasInventoryLevel.gr_hasValue %}
+       {{ subject.gr_hasInventoryLevel.gr_hasValue }} available
+       {% else %}
+         unknown
+       {% endif %}{% endif %}</td>
+    </tr>{% endif %}{% if subject.foaf_page %}
+    <tr>
+      <th>More information:</th>
+      <td>{{ subject.foaf_page|node }}</td>{% endif %}
+    </tr>
+  </table>
 
   {% if subject.oo_contact %}
   <div class="contactInfo" >

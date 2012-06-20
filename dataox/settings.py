@@ -152,6 +152,10 @@ ADDITIONAL_NAMESPACES.update({
 
 })
 
+SHELL_TRANSFORMS = {
+    'spreadsheet2tei': ['/usr/bin/spreadsheet2tei', None],
+}
+
 ELASTICSEARCH_SERVER = {'host': 'localhost',
                         'port': 9200}
 

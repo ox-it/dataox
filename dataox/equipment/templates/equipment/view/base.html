@@ -10,12 +10,16 @@
   <p>This page shows raw data about this resource. We have not yet had the time
      to build a pretty viewer for this type of item. Don't worry if it seems a
      bit arcane — you are looking under the hood of our service into the data
-     inside!</p>
+     inside!</p> 
 
-  <dl class="itemDetails">
+  <table>
+    <tbody>
 {% for predicate, objects in subject.properties %}
-        <dt>{{ predicate.label|capfirst }}:</dt>{% for object in objects %}
-        <dd>{{ object|node|truncatewords_html:100 }}</dd>{% endfor %}
+      <tr>
+        <th rowspan="{{ objects|length }}">{{ predicate.label|capfirst }}:</th>{% for object in objects %}
+        <td>{{ object|node|truncatewords_html:100 }}</td>
+      </tr>{% endfor %}
 {% endfor %}
-  </dl>
+    </tbody>
+  </table>
 {% endblock %}

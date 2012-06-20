@@ -1,0 +1,26 @@
+{% load humfrey_desc %}
+
+<ul class="equipmentList" >{% for equipment in equipment_list %}
+  <li>
+    <h3>{{ equipment|node }}</h3>
+    <dl class="itemDetails">{% if show_managed_by %}{% if equipment.oo_organizationPart or equipment.oo_formalOrganization %}
+      <dt>Managed by:</dt>
+      <dd>{{ equipment.oo_organizationPart|node|default:"" }}{% if equipment.oo_organizationPart and equipment.oo_formalOrganization %}, {% endif %}{{ equipment.oo_formalOrganization.label|default:"" }}</dd>
+  {% endif %}{% endif %}{% if show_location %}{% if equipment.foaf_based_near or equipment.spatialrelations_within %}
+
+      <dt>Location:</dt>
+      <dd>{{ equipment.spatialrelations_within|node|default:"" }}{% if equipment.foaf_based_near and equipment.spatialrelations_within %}, {% endif %}
+          {{ equipment.foaf_based_near.label|default:"" }}</dd>
+    {% endif %}{% endif %}{% if equipment.oo_availability %}
+
+      <dt>Availability:</dt>
+      <dd>{{ equipment.oo_availability.label }}</dd>
+    {% endif %}
+    </dl>
+    <div class="clear"></div>
+    
+    {% if equipment.description %}
+    <div class="equipment-search-description">{{ equipment.description|node|truncatewords_html:25 }}</div>
+    {% endif %}
+  </li>{% endfor %}
+</ul>

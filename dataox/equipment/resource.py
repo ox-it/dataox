@@ -1,11 +1,14 @@
 from humfrey.linkeddata.resource import ResourceRegistry
+from humfrey.utils.namespaces import NS, expand
 
 import dataox.resource
+
+equipment_types = set(map(expand, ['oo:Equipment', 'cerif:Equipment']))
 
 class Equipment(object):
     template_name = 'equipment/view/equipment'
 
-    types = ('oo:Equipment', 'cerif:Equipment')
+    types = tuple(equipment_types)
 
     @classmethod
     def _describe_patterns(cls):
@@ -69,15 +72,44 @@ class Place(dataox.resource.oxpoints.Place):
     @classmethod
     def _describe_patterns(cls):
         return [
-            '%(equipment)s spatialrelations:within+ %(uri)s',
+            """%(equipment)s spatialrelations:within+ %(uri)s ; a ?equipmentType .
+               NOT EXISTS {
+                 %(equipment)s spatialrelations:within+ ?building . ?building spatialrelations:within+ %(uri)s .
+                 ?building rdf:type/rdfs:subClassOf* ?building
+               }
+               EXISTS {
+                 { ?equipmentType rdfs:subClassOf* oo:Equipment }
+                 UNION
+                 { ?equipmentType rdfs:subClassOf* cerif:Equipment }
+               }""",
         ]
 
     @classmethod
     def _construct_patterns(cls):
         return [
             # Add direct spatialrelations:within property where there is a chain.
-            ('%(equipment)s spatialrelations:within %(uri)s', '%(equipment)s spatialrelations:within+ %(uri)s'),
+            ('%(equipment)s spatialrelations:within %(uri)s',
+             """%(equipment)s spatialrelations:within+ %(uri)s .
+                NOT EXISTS {
+                  %(equipment)s spatialrelations:within+ ?building . ?building spatialrelations:within+ %(uri)s .
+                  ?building rdf:type/rdfs:subClassOf* ?building
+                }"""),
+            ('%(child)s spatialrelations:within %(parent)s. %(parent)s a %(parentType)s',
+             '%(uri)s spatialrelations:within* %(child)s . %(child)s spatialrelations:within %(parent)s. %(parent)s a %(parentType)s'),
         ]
+
+    @property
+    def hierarchy(self):
+        ancestors, ancestor = [], self
+        while ancestor:
+            ancestors.insert(0, ancestor)
+            ancestor = ancestor.get('spatialrelations:within')
+        return ancestors
+
+    @property
+    def allEquipment(self):
+        contained = self.get_all('spatialrelations:within', inverse=True)
+        return [item for item in contained if set(self._graph.objects(item._identifier, NS.rdf.type)) & equipment_types]
 
 resource_registry = dataox.resource.resource_registry + ResourceRegistry(
     Equipment, Organization, Place

@@ -47,7 +47,7 @@
 
   <!-- styles for Internet explorer  ie-specific styles -->
   <!--[if (gt IE 4)&(lt IE 9)]>
-  <link media="screen" href="{{ STATIC_URL }}equipment-dev/css/ie.css" rel="stylesheet" type="text/css"/>
+  <link media="screen" href="{{ STATIC_URL }}equipment/css/ie.css" rel="stylesheet" type="text/css"/>
   <![endif]-->
 
   <meta name="keywords" content="" />
@@ -89,7 +89,7 @@
 	{% block left_sidebar %}
       <aside class="left-sidebar">
         <nav>
-          <h2>Site Navigation</h2>
+          <h2 class="hidden">Site Navigation</h2>
           <ul>
             <li><a href="{% url index %}">home</a></li>
             <li><a href="{% url search %}">search</a></li>
