@@ -58,9 +58,9 @@ class Vacancy(object):
                 (uri, NS.rdfs.comment, rdflib.Literal(self.plain_description)),
             ]
         for root in self.roots:
-            triples.append((uri, NS.vacancy.employer, root))
+            triples.append((uri, NS.oo.formalOrganization, root))
         for orgpart in self.orgparts:
-            triples.append((uri, NS.vacancy.organizationalUnit, orgpart))
+            triples.append((uri, NS.oo.organizationalUnit, orgpart))
 
         for file in self.files:
             file_uri = rdflib.URIRef(file['local_url'])

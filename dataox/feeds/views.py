@@ -202,8 +202,10 @@ class VacancyView(FeedView, RDFView):
                           'pubdate': dateutil.parser.parse(self.graph.value(vacancy, NS.vacancy.applicationClosingDate)),
                           'resource': resource,
                           'unique_id': resource.hexhash})
-            if self.all:
-                items[-1]['title'] += " (%s)" % resource.get('vacancy:organizationalUnit').get('skos:prefLabel')
+            if self.all and resource.get('oo:organizationalUnit'):
+                subdepts = [r.label for r in resource.get_all('oo:organizationalUnit') if r.get('skos:prefLabel') and r._identifier != self.unit]
+                if subdepts:
+                    items[-1]['title'] += " (%s)" % ', '.join(subdepts)
         items.sort(key=lambda item: (item['pubdate'], item['title']))
         return items
 
