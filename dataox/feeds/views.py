@@ -10,8 +10,9 @@ from django_conneg.decorators import renderer
 from django_conneg.views import HTMLView, JSONPView, ContentNegotiatedView
 from humfrey.utils.namespaces import NS
 from humfrey.linkeddata.resource import Resource
-from humfrey.results.views.standard import RDFView
-from humfrey.sparql.views import CannedQueryView
+from humfrey.linkeddata.views import MappingView
+from humfrey.results.views.standard import RDFView, ResultSetView
+from humfrey.sparql.views import CannedQueryView, StoreView
 
 class IndexView(HTMLView):
     def get(self, request):
@@ -99,13 +100,13 @@ def add_root_elements(self, handler):
     if self.feed['ttl'] is not None:
         handler.addQuickElement(u"ttl", self.feed['ttl'])        
 
-class VacancyIndexView(HTMLView, CannedQueryView):
+class VacancyIndexView(HTMLView, CannedQueryView, ResultSetView):
     query = """
       SELECT ?unit (SAMPLE(?unitLabel_) as ?unitLabel) (COUNT(DISTINCT ?vacancy) as ?vacancies) (SAMPLE(?subUnit_) as ?subUnit) WHERE {
-        GRAPH <http://data.ox.ac.uk/graph/vocabulary/oxp> {
-          ?type rdfs:subClassOf* org:Organization
-        } .
-        ?unit rdf:type ?type ; skos:prefLabel ?unitLabel_ .
+        ?type rdfs:subClassOf* org:Organization
+        GRAPH <http://data.ox.ac.uk/graph/oxpoints/data> {
+            ?unit rdf:type ?type ; skos:prefLabel ?unitLabel_ .
+        }
         OPTIONAL { ?subUnit_ org:subOrganizationOf ?unit } .
         OPTIONAL {
           GRAPH <http://data.ox.ac.uk/graph/vacancies/current> {
@@ -116,7 +117,7 @@ class VacancyIndexView(HTMLView, CannedQueryView):
     """
     template_name = "feeds/vacancy-index"
 
-class VacancyView(FeedView, RDFView):
+class VacancyView(FeedView, RDFView, StoreView, MappingView):
     template_name = "feeds/vacancy"
     _json_indent=2
     
@@ -132,15 +133,16 @@ class VacancyView(FeedView, RDFView):
     DESCRIBE %%(unit)s ?unit ?vacancy ?salary WHERE {
       OPTIONAL {
         GRAPH <http://data.ox.ac.uk/graph/vacancies/current> {
-          ?vacancy a vacancy:Vacancy ;
-            vacancy:organizationalUnit ?unit ;
-            vacancy:salary ?salary ;
-            vacancy:applicationClosingDate ?closes ;
-            rdfs:label ?label ;
-            rdfs:comment ?description .
-          FILTER (?closes > now()) .
-        } .
-        GRAPH <http://data.ox.ac.uk/graph/oxpoints> {
+          ?vacancy a vacancy:Vacancy .
+        }
+        ?vacancy
+          oo:organizationalUnit ?unit ;
+          vacancy:salary ?salary ;
+          vacancy:applicationClosingDate ?closes ;
+          rdfs:label ?label ;
+          rdfs:comment ?description .
+        FILTER (?closes > now()) .
+        GRAPH <http://data.ox.ac.uk/graph/oxpoints/data> {
           ?unit org:subOrganizationOf%(cardinality)s %%(unit)s
         } .
         %%(filter)s
