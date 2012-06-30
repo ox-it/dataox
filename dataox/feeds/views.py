@@ -9,7 +9,7 @@ from django.utils.feedgenerator import RssUserland091Feed, Rss201rev2Feed, Atom1
 from django_conneg.decorators import renderer
 from django_conneg.views import HTMLView, JSONPView, ContentNegotiatedView
 from humfrey.utils.namespaces import NS
-from humfrey.linkeddata.resource import resource
+from humfrey.linkeddata.resource import Resource
 from humfrey.results.views.standard import RDFView
 from humfrey.sparql.views import CannedQueryView
 
@@ -138,7 +138,7 @@ class VacancyView(FeedView, RDFView):
             vacancy:applicationClosingDate ?closes ;
             rdfs:label ?label ;
             rdfs:comment ?description .
-          FILTER (?closes != now()) .
+          FILTER (?closes > now()) .
         } .
         GRAPH <http://data.ox.ac.uk/graph/oxpoints> {
           ?unit org:subOrganizationOf%(cardinality)s %%(unit)s
