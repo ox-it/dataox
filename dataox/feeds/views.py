@@ -164,7 +164,7 @@ class VacancyView(FeedView, RDFView, StoreView, MappingView):
 
         formats = {}
         for renderer in self._renderers:
-            formats[renderer.format] = {'url': request.build_absolute_uri(reverse(self.reverse_name, args=[oxpoints_id, renderer.format])),
+            formats[renderer.format] = {'url': reverse(self.reverse_name, args=[oxpoints_id, renderer.format]),
                                         'format': renderer.format,
                                         'name': renderer.name,
                                         'mimetypes': renderer.mimetypes}
