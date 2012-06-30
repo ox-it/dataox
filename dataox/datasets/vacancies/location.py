@@ -159,6 +159,9 @@ class LocationGuesser(object):
     def get_ancestors(self, child):
         parents = []
         while child:
+            if child in parents:
+                logger.warning("%s is its own parent", child)
+                break
             parents.append(child)
             child = self.parents.get(child)
         return parents
