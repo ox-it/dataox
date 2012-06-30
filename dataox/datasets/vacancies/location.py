@@ -43,8 +43,8 @@ class LocationGuesser(object):
             ?child org:subOrganizationOf ?parent
         }"""
 
-    def __init__(self):
-        self.endpoint = Endpoint(settings.ENDPOINT_QUERY)
+    def __init__(self, transform_manager):
+        self.endpoint = Endpoint(transform_manager.store.query_endpoint)
         self.dictionary = enchant.Dict("en_GB")
 
     @property

@@ -42,7 +42,7 @@ class RetrieveVacancies(Transform):
         self.current_transform = current_transform
         self.removed_transform = removed_transform
 
-        self.scrapers = (RecruitOxScraper(), JobsAcScraper())
+        self.scrapers = (RecruitOxScraper, JobsAcScraper)
         self.file_handler = VacancyFileHandler()
 
     def execute(self, transform_manager):
@@ -50,8 +50,10 @@ class RetrieveVacancies(Transform):
 
         run_started = self.site_timezone.localize(datetime.datetime.now()).replace(microsecond=0)
 
+        scrapers = [scraper(transform_manager) for scraper in self.scrapers]
+
         current_vacancies = {}
-        for scraper in self.scrapers:
+        for scraper in scrapers:
             scraper.get_vacancies(current_vacancies)
 
         for vacancy_id in current_vacancies:
