@@ -2,7 +2,7 @@
 <div class="search-item-header">
   <h3><a href="{{ hit.url }}">{{ hit.source.label }}</a></h3>
   <span class="search-item-type">Vacancy</span>
-  <div class="search-item-byline">{{ hit.source.organizationalPart.label }}, {{ hit.source.salary.label }}</div>
+  <div class="search-item-byline">{{ hit.source.organizationPart.label }}, {{ hit.source.salary.label }}</div>
 </div>
 
 <div class="search-item-description">{{ hit.source.description|search_html|truncatewords_html:"50" }}</div>

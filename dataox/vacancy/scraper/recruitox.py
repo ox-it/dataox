@@ -143,7 +143,7 @@ class RecruitOxScraper(Scraper):
             hits = results['hits']['hits']
             if hits:
                 hit = hits[0]['_source']
-                vacancy.organizationalPart = hit['uri']
+                vacancy.organizationPart = hit['uri']
                 try:
                     vacancy.formalOrganization = hit['rootOrganization']['uri']
                 except KeyError:

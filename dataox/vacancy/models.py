@@ -14,7 +14,7 @@ class Vacancy(models.Model):
     title = models.CharField(max_length=512)
 
     location = models.CharField(max_length=1024)
-    organizationalPart = models.CharField(max_length=256, blank=True)
+    organizationPart = models.CharField(max_length=256, blank=True)
     formalOrganization = models.CharField(max_length=256, blank=True)
     
     description = models.TextField()
@@ -75,8 +75,8 @@ class Vacancy(models.Model):
             ]
         for formalOrganization in self.formalOrganization.split():
             triples.append((uri, NS.oo.formalOrganization, rdflib.URIRef(formalOrganization)))
-        for organizationalPart in self.organizationalPart.split():
-            triples.append((uri, NS.oo.organizationalPart, rdflib.URIRef(organizationalPart)))
+        for organizationPart in self.organizationPart.split():
+            triples.append((uri, NS.oo.organizationPart, rdflib.URIRef(organizationPart)))
 
         for document in self.document_set.all():
             document_uri = rdflib.URIRef(document.local_url)

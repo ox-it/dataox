@@ -110,7 +110,7 @@ class VacancyIndexView(HTMLView, CannedQueryView, ResultSetView):
         OPTIONAL { ?subUnit_ org:subOrganizationOf ?unit } .
         OPTIONAL {
           GRAPH <http://data.ox.ac.uk/graph/vacancies/current> {
-            ?vacancy oo:organizationalPart ?unit
+            ?vacancy oo:organizationPart ?unit
           }
         }
       } GROUP BY ?unit ORDER BY ?unitLabel
@@ -136,7 +136,7 @@ class VacancyView(FeedView, RDFView, StoreView, MappingView):
           ?vacancy a vacancy:Vacancy .
         }
         ?vacancy
-          oo:organizationalPart ?unit ;
+          oo:organizationPart ?unit ;
           vacancy:salary ?salary ;
           vacancy:applicationClosingDate ?closes ;
           rdfs:label ?label ;
