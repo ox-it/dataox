@@ -6,16 +6,17 @@ import email.utils
 import logging
 import os
 import pickle
-import re
+import shutil
 import subprocess
 import time
-import urllib
 import urllib2
 import urlparse
 
 from django.conf import settings
 import pytz
 import redis
+
+from humfrey.update.tasks.retrieve import retrieve
 
 logger = logging.getLogger(__name__)
 
@@ -50,6 +51,7 @@ class OxGarageConverter(object):
             L.append(value)
         L.append('--' + BOUNDARY + '--')
         L.append('')
+        print map(type, L)
         body = CRLF.join(L)
         content_type = 'multipart/form-data; boundary=%s' % BOUNDARY
         return content_type, body
@@ -60,7 +62,7 @@ class OxGarageConverter(object):
         filename = os.path.split(file_path)[-1]
 
         with open(file_path, 'rb') as f:
-            request_mimetype, body = self.encode_multipart_formdata([], [('fileToConvert', filename, mimetype, f.read())])
+            request_mimetype, body = self.encode_multipart_formdata([], [('fileToConvert', filename.encode('utf8'), mimetype.encode('utf8'), f.read())])
 
         conversion_url = self.oxgarage_base + '/'.join(mt.replace('/', '%3A') for mt in self.conversions[mimetype])
         try:
@@ -85,62 +87,50 @@ class VacancyFileHandler(object):
 
     def __init__(self):
         self.converters = (OxGarageConverter(), PDFConverter())
-        self.client = redis.client.Redis(**settings.REDIS_PARAMS)
     def pack(self, value):
         return base64.b64encode(pickle.dumps(value))
     def unpack(self, value):
         return pickle.loads(base64.b64decode(value))
 
-    def retrieve_files(self, transform_manager, vacancy):
+    def retrieve(self, document):
         file_path_base = os.path.join(settings.SOURCE_DIRECTORY, 'vacancies')
         file_url_base = urlparse.urljoin(settings.SOURCE_URL, 'vacancies/')
 
-        for file in vacancy.files:
-            filename = file['url'].split('/')[-1]
-            file_path = os.path.join(file_path_base, vacancy.id.encode('utf-8'), filename)
-            file_url = '%s%s/%s' % (file_url_base, vacancy.id, filename)
+        filename = document.url.split('/')[-1]
+        file_path = os.path.join(file_path_base, document.vacancy.vacancy_id.encode('utf-8'), filename)
+        file_url = '%s%s/%s' % (file_url_base, document.vacancy.vacancy_id, filename)
 
-            file['local_url'] = file_url
+        document.local_url = file_url
 
-            request = urllib2.Request(file['url'])
-            request.get_method = lambda: 'HEAD'
+        logger.debug("Retrieving vacancy document: %s", document.url)
+        filename, headers = retrieve(document.url)
+
+        document.mimetype = headers.get('content-type')
+
+        last_modified = self.parse_http_date(headers['last-modified'])
+        last_modified_ts = time.mktime(last_modified.timetuple())
+        os.utime(filename, (last_modified_ts, last_modified_ts))
+
+        if not os.path.exists(os.path.dirname(file_path)):
+            os.makedirs(os.path.dirname(file_path))
+        shutil.copy2(filename, file_path)
+
+        for converter in self.converters:
             try:
-                response = urllib2.urlopen(request)
-            except urllib2.HTTPError:
-                logger.exception("Error for HEAD request to %r", file['url'])
+                text = converter.convert_to_text(file_path, document.mimetype)
+            except Exception:
+                logger.exception("Failed to convert %r (%r) to text using %s",
+                                 document.url, document.mimetype, converter.__class__.__name__)
                 continue
-
-            file['mimetype'] = response.headers.get('Content-type')
-
-            last_modified = self.parse_http_date(response.headers['Last-modified'])
-            last_modified_ts = time.mktime(last_modified.timetuple())
-
-            fetch_file = not os.path.exists(file_path) or os.stat(file_path).st_mtime < last_modified_ts
-
-            if fetch_file:
-                if not os.path.exists(os.path.dirname(file_path)):
-                    os.makedirs(os.path.dirname(file_path))
-                urllib.urlretrieve(file['url'], file_path)
-                os.utime(file_path, (last_modified_ts, last_modified_ts))
-
-            if fetch_file or not self.client.hexists(self.TEXT_HASH, vacancy.id):
-                for converter in self.converters:
-                    try:
-                        text = converter.convert_to_text(file_path, file['mimetype'])
-                    except Exception, e:
-                        logger.exception("Failed to convert %r (%r) to text using %s",
-                                         file['url'],file['mimetype'], converter.__class__.__name__)
-                        continue
-                    if text is not NotImplemented:
-                        for x in u'\x04\x05\x0c':
-                            text = text.replace(x, '')
-                        file['text'] = text
-                        break
-                else:
-                    file['text'] = None
-                self.client.hset(self.TEXT_HASH, vacancy.id, self.pack(file['text']))
-            else:
-                file['text'] = self.unpack(self.client.hget(self.TEXT_HASH, vacancy.id))
+            if text is not NotImplemented:
+                for x in u'\x04\x05\x0c':
+                    text = text.replace(x, '')
+                document.text = text
+                break
+        else:
+            document.text = ''
+        
+        document.save()
 
 
     def parse_http_date(self, ts):

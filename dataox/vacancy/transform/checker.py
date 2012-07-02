@@ -4,7 +4,7 @@ from __future__ import with_statement
 from humfrey.update.transform.base import Transform
 from humfrey.update.models import UpdateDefinition
 
-from dataox.datasets.vacancies.recruitox import RecruitOxScraper
+from dataox.vacancy.scraper import RecruitOxScraper
 
 class RetrieveVacanciesChecker(Transform):
     COUNT_KEY = 'dataox:transform:vacancies:count'

@@ -9,7 +9,7 @@ from django.utils.feedgenerator import RssUserland091Feed, Rss201rev2Feed, Atom1
 from django_conneg.decorators import renderer
 from django_conneg.views import HTMLView, JSONPView, ContentNegotiatedView
 from humfrey.utils.namespaces import NS
-from humfrey.linkeddata.resource import Resource
+from humfrey.linkeddata.resource import Resource, BaseResource
 from humfrey.linkeddata.views import MappingView
 from humfrey.results.views.standard import RDFView, ResultSetView
 from humfrey.sparql.views import CannedQueryView, StoreView
@@ -67,7 +67,7 @@ class FeedView(HTMLView, JSONPView):
         return HttpResponse(feed.writeString('utf-8'), mimetype=mimetype)
 
     def simplify(self, value):
-        if isinstance(value, Resource):
+        if isinstance(value, BaseResource):
             return NotImplemented
         elif isinstance(value, rdflib.Literal) and value.datatype == NS.xsd.dateTime:
             return self.simplify(dateutil.parser.parse(value))
@@ -110,7 +110,7 @@ class VacancyIndexView(HTMLView, CannedQueryView, ResultSetView):
         OPTIONAL { ?subUnit_ org:subOrganizationOf ?unit } .
         OPTIONAL {
           GRAPH <http://data.ox.ac.uk/graph/vacancies/current> {
-            ?vacancy vacancy:organizationalUnit ?unit
+            ?vacancy oo:organizationalPart ?unit
           }
         }
       } GROUP BY ?unit ORDER BY ?unitLabel
@@ -136,7 +136,7 @@ class VacancyView(FeedView, RDFView, StoreView, MappingView):
           ?vacancy a vacancy:Vacancy .
         }
         ?vacancy
-          oo:organizationalUnit ?unit ;
+          oo:organizationalPart ?unit ;
           vacancy:salary ?salary ;
           vacancy:applicationClosingDate ?closes ;
           rdfs:label ?label ;

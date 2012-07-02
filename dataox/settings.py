@@ -19,6 +19,7 @@ INSTALLED_APPS += (
     'dataox.feeds',
     'dataox.equipment',
     'dataox.analytics',
+    'dataox.vacancy',
     'humfrey.update',
     'humfrey.graphviz',
     'humfrey.manage',
@@ -133,8 +134,8 @@ else:
 
 
 UPDATE_TRANSFORMS += (
-    'dataox.datasets.vacancies.RetrieveVacancies',
-    'dataox.datasets.vacancies.checker.RetrieveVacanciesChecker',
+    'dataox.vacancy.transform.RetrieveVacancies',
+    'dataox.vacancy.transform.RetrieveVacanciesChecker',
 )
 
 UPDATE_FILES_DIRECTORY = os.path.join(MEDIA_ROOT, 'update-files')
@@ -210,3 +211,7 @@ DEPENDENT_TASKS = {'humfrey.update.update': ('humfrey.ckan.upload_dataset_metada
                                              'humfrey.elasticsearch.update_indexes_after_dataset_update')}
 
 ARCHIVE_STORES = ('public',)
+
+ANONYMOUS_USER_ID = 0
+
+RESOURCE_REGISTRY = 'dataox.resource.resource_registry'
