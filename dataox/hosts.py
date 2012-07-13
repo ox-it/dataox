@@ -7,6 +7,7 @@ host_patterns = patterns('',
     host(r'time-series.data.ox.ac.uk', 'dataox.urls.timeseries', name='timeseries'),
     host(r'course.data.ox.ac.uk', 'dataox.urls.course', name='course'),
     host(r'www.research-facilities.ox.ac.uk', 'dataox.urls.equipment', name='equipment'),
+    host(r'maps.ox.ac.uk', 'dataox.urls.maps', name='maps'),
     host(r'$x^', 'dataox.urls.empty', name='empty'),
     host(r'$x^', 'dataox.staging.urls', name='staging'),
 )
