@@ -1,0 +1,35 @@
+@prefix void:    <http://rdfs.org/ns/void#> .
+@prefix rdfs:    <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix dcterms: <http://purl.org/dc/terms/> .
+@prefix cc:      <http://creativecommons.org/ns#> .
+@prefix oo:      <http://purl.org/openorg/> .
+@prefix foaf: <http://xmlns.com/foaf/0.1/> .
+@prefix xcri: <http://xcri.org/profiles/1.2/> .
+@prefix mlo: <http://purl.org/net/mlo/> .
+@prefix time: <http://www.w3.org/2006/time#> .
+@prefix skos: <http://www.w3.org/2004/02/skos/core#> .
+@prefix v: <http://www.w3.org/2006/vcard/ns#> .
+
+<http://data.ox.ac.uk/id/dataset/courses/conted> a void:Dataset ;
+    rdfs:label "Course catalogue for the Department for Continuing Education" ;
+
+    dcterms:isPartOf <http://data.ox.ac.uk/id/dataset/courses> ;
+
+    dcterms:publisher <http://oxpoints.oucs.ox.ac.uk/id/23232568> ;
+    dcterms:description "Upcoming courses offered by the Department for Continuing Education, modelled using XCRI-CAP." ;
+
+    void:vocabulary xcri:, mlo:, dcterms:, v:, foaf:, rdfs:, time: ;
+
+    cc:attributionName "Department for Continuing Education, University of Oxford" ;
+    cc:attributionURL <http://www.conted.ox.ac.uk/> ;
+    oo:contact [ a foaf:Agent;
+                 foaf:name "Department for Continuing Education" ;
+                 foaf:mbox <mailto:enquiries@conted.ox.ac.uk> ] .
+
+<http://data.ox.ac.uk/graph/courses/conted/data> a foaf:Document ;
+    void:inDataset <http://data.ox.ac.uk/id/dataset/courses/conted> .
+
+<http://data.ox.ac.uk/graph/courses/conted/metadata> a foaf:Document ;
+    void:inDataset <http://data.ox.ac.uk/id/dataset/catalogue> ;
+    dcterms:license <http://creativecommons.org/publicdomain/zero/1.0/> .
+
