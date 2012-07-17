@@ -1,19 +1,30 @@
-<!DOCTYPE html>
+{% load hosts %}<!DOCTYPE html>
 <html>
   <head>
     <title>Maps of the University of Oxford</title>
     <link rel="stylesheet" type="text/css" href="{{ STATIC_URL }}maps/base.css"/>
+    <script type="application/javascript">
+      var staticURL = "{{ STATIC_URL|escapejs }}";
+    </script>
     <script type="application/javascript" src="{{ STATIC_URL }}js/jquery-1.6.4.min.js"></script>
-    <script type="application/javascript" src="{{ STATIC_URL }}js/OpenLayers.js"></script>
+    <script type="application/javascript" src="{{ STATIC_URL }}OpenLayers-2.12/OpenLayers.js"></script>
     <script type="application/javascript" src="{{ STATIC_URL }}maps/base.js"></script>
   </head>
   
   <body>
       <header>
+        <img src="{{ STATIC_URL }}brandmarks/2248_ox_brand6_rev_rect.gif" alt=""/>
         <h1>Maps of the University of Oxford</h1>
       </header>
     <div id="container">
       <nav>
+        <div id="navHeader">
+          <form method="get" action="{% host_url search on data %}">
+            <input id="q" name="q"/>
+            <input type="submit" value="Search"/>
+          </form>
+        </div>
+        <div id="placeList"></div>
       
       </nav>
       <div id="map"></div>
