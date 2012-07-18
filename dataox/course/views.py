@@ -117,12 +117,19 @@ class CatalogDetailView(sparql_views.CannedQueryView, RDFView, ContentNegotiated
         }
     """
 
+    @property
+    def catalog_uri(self):
+        try:
+            return rdflib.URIRef(self.request.GET['uri'])
+        except KeyError:
+            raise Http404
+
     def get_query(self, request):
-        return self.query % {'uri': rdflib.URIRef(request.GET['uri']).n3()}
+        return self.query % {'uri': self.catalog_uri.n3()}
 
     @renderer(format='xcricap', mimetypes=('application/xcri-cap+xml',), name="XCRI-CAP 1.2")
     def render_xcricap(self, request, context, template_name):
-        serializer = xcri_rdf.XCRICAPSerializer(context['graph'])
+        serializer = xcri_rdf.XCRICAPSerializer(context['graph'], self.catalog_uri)
         return HttpResponse(serializer.generator(), mimetype='application/xcri-cap+xml')
 
 class CatalogView(ContentNegotiatedView):
