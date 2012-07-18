@@ -21,8 +21,8 @@
     <tbody>{% for subject in subjects %}
       <tr>
         <td>{{ subject.label }}</td>
-        <td>{{ subject.description }}</td>
-        <td>{{ subject.dcterms_publisher.render }}</td>
+        <td>{{ subject.description|default:"" }}</td>
+        <td>{{ subject.dcterms_publisher.label }}</td>
         <td>{% for format in renderers %}
           <a href="?uri={{ subject.uri|urlencode }}&amp;format={{ format.format}}">{{ format.name }}</a>{% endfor %}
         </td>

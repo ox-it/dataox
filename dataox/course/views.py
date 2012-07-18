@@ -1,8 +1,9 @@
-from django.http import HttpResponse
+from django.http import HttpResponse, Http404
 from django_conneg.decorators import renderer
 from django_conneg.views import HTMLView, ContentNegotiatedView
 
 from humfrey.elasticsearch import views as elasticsearch_views
+from humfrey.linkeddata.views import MappingView
 from humfrey.sparql import views as sparql_views
 from humfrey.results.views.standard import RDFView
 from humfrey.utils.namespaces import NS
@@ -19,7 +20,7 @@ class SearchView(elasticsearch_views.SearchView):
               'offeredBy': {'terms': {'field': 'offeredBy.uri',
                                       'size': 20}}}
 
-class CatalogListView(sparql_views.CannedQueryView, HTMLView, RDFView):
+class CatalogListView(sparql_views.CannedQueryView, HTMLView, RDFView, MappingView):
     template_name = 'course/catalog_list'
 
     query = """
@@ -29,7 +30,7 @@ class CatalogListView(sparql_views.CannedQueryView, HTMLView, RDFView):
         }"""
 
     def get_subjects(self, request, graph, renderers):
-        return graph.subjects(NS.rdf.type, NS.xcri.catalog)
+        return sorted(map(self.resource, graph.subjects(NS.rdf.type, NS.xcri.catalog)), key=lambda x:x.label)
 
     def get_additional_context(self, request, renderers):
         return {'renderers': [{'format': r.format,
