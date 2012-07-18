@@ -10,10 +10,11 @@
 @prefix skos: <http://www.w3.org/2004/02/skos/core#> .
 @prefix v: <http://www.w3.org/2006/vcard/ns#> .
 
+<http://data.ox.ac.uk/id/dataset/courses>
+    void:subset <http://data.ox.ac.uk/id/dataset/courses/conted> .
+
 <http://data.ox.ac.uk/id/dataset/courses/conted> a void:Dataset ;
     rdfs:label "Course catalogue for the Department for Continuing Education" ;
-
-    dcterms:isPartOf <http://data.ox.ac.uk/id/dataset/courses> ;
 
     dcterms:publisher <http://oxpoints.oucs.ox.ac.uk/id/23232568> ;
     dcterms:description "Upcoming courses offered by the Department for Continuing Education, modelled using XCRI-CAP." ;

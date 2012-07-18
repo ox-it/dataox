@@ -1,0 +1,21 @@
+@prefix void:    <http://rdfs.org/ns/void#> .
+@prefix rdfs:    <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix dcterms: <http://purl.org/dc/terms/> .
+@prefix cc:      <http://creativecommons.org/ns#> .
+@prefix oo:      <http://purl.org/openorg/> .
+@prefix foaf: <http://xmlns.com/foaf/0.1/> .
+@prefix xcri: <http://xcri.org/profiles/1.2/> .
+@prefix mlo: <http://purl.org/net/mlo/> .
+@prefix time: <http://www.w3.org/2006/time#> .
+@prefix skos: <http://www.w3.org/2004/02/skos/core#> .
+@prefix v: <http://www.w3.org/2006/vcard/ns#> .
+
+<http://course.data.ox.ac.uk/id/catalog> a xcri:catalog ;
+    rdfs:label "Course catalogue for the University of Oxford" ;
+
+    dcterms:publisher <http://oxpoints.oucs.ox.ac.uk/id/00000000> ;
+
+    skos:member <http://course.data.ox.ac.uk/id/continuing-education/catalog> ;
+        <http://course.data.ox.ac.uk/id/itlp/catalog> ;
+        <http://course.data.ox.ac.uk/id/daisy/catalog> .
+
