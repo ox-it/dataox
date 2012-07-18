@@ -31,9 +31,9 @@ class StagingMiddleware(object):
                                                                 referer.fragment))
 
     def process_response(self, request, response):
-        if 'Location' in response and '.ox.ac.uk/' not in response['Location']:
-            response['Location'] = '/{0}{1}'.format(request.META['HTTP_HOST'], response['Location'])
         if hasattr(request, 'original_http_host'):
             request.path = request.path_info = '/%s%s' % (request.META['HTTP_HOST'], request.path_info)
             request.META['HTTP_HOST'] = request.original_http_host
+        if 'Location' in response and '.ox.ac.uk/' not in response['Location']:
+            response['Location'] = urlparse.urljoin(request.build_absolute_uri(), response['Location'])
         return response
