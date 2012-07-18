@@ -15,7 +15,7 @@
 
     dcterms:publisher <http://oxpoints.oucs.ox.ac.uk/id/00000000> ;
 
-    skos:member <http://course.data.ox.ac.uk/id/continuing-education/catalog> ;
-        <http://course.data.ox.ac.uk/id/itlp/catalog> ;
+    skos:member <http://course.data.ox.ac.uk/id/continuing-education/catalog> ,
+        <http://course.data.ox.ac.uk/id/itlp/catalog> ,
         <http://course.data.ox.ac.uk/id/daisy/catalog> .
 
