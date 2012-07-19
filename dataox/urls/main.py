@@ -37,9 +37,8 @@ urlpatterns = patterns('',
     (r'^explore/(?P<slug>[a-z\d-]+)/$', ExampleDetailView.as_view(), {}, 'example-detail'),
     (r'^explore/example:(?P<slug>[a-z\d-]+)/$', redirect_to, {'url': '/explore/%(slug)s/'}),
 
-    (r'^pingback/', include('humfrey.pingback.urls.public', 'pingback')),
+    (r'^pingback/', include('humfrey.pingback.urls', 'pingback')),
     (r'^sparql/', include('humfrey.sparql.urls.simple', 'sparql')),
-    (r'^browse/', include('humfrey.browse.urls', 'browse')),
     (r'^feeds/', include('dataox.feeds.urls', 'feeds')),
 
     (r'^thumbnail/$', thumbnail_views.ThumbnailView.as_view(), {}, 'thumbnail'),
