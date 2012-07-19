@@ -11,7 +11,6 @@ admin.autodiscover()
 
 urlpatterns = patterns('',
     url(r'^$', misc_views.SimpleView.as_view(template_name='manage/index'), name='index'),
-    url(r'^pingback/', include('humfrey.pingback.urls.admin', 'pingback')),
     url(r'^time-series/', include('openorg_timeseries.urls.admin', 'timeseries')),
     url(r'^update/', include('humfrey.update.urls', 'update')),
     url(r'^time-series/', include('openorg_timeseries.urls.admin', 'timeseries-admin')),
