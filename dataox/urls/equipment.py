@@ -40,5 +40,5 @@ urlpatterns = patterns('',
     
 ) + staticfiles_urlpatterns()
 
-handler404 = SimpleView.as_view(template_name='404-main', context={'status_code':404})
+handler404 = SimpleView.as_view(template_name='404', context={'status_code':404})
 handler500 = SimpleView.as_view(template_name='500', context={'status_code':500})

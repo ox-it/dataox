@@ -22,5 +22,5 @@ urlpatterns = patterns('',
     url(r'^admin/', admin.site.urls),
 ) + staticfiles_urlpatterns()
 
-handler404 = misc_views.SimpleView.as_view(template_name='404-empty', context={'status_code':404})
+handler404 = misc_views.SimpleView.as_view(template_name='404', context={'status_code':404})
 handler500 = misc_views.SimpleView.as_view(template_name='500', context={'status_code':500})

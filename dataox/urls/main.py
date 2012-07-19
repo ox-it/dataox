@@ -50,6 +50,6 @@ urlpatterns = patterns('',
     (r'^.well-known/void$', redirect_to, {'url': '/datasets/', 'permanent': False}),
 ) + staticfiles_urlpatterns()
 
-handler404 = misc_views.SimpleView.as_view(template_name='404-main', context={'status_code':404})
+handler404 = misc_views.SimpleView.as_view(template_name='404', context={'status_code':404})
 handler500 = misc_views.SimpleView.as_view(template_name='500', context={'status_code':500})
 
