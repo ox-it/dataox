@@ -12,8 +12,8 @@ $(function () {
 	analyticsControls.children().remove();
 	if (doNotTrack)
 		analyticsControls.append($(
-			'<p>Your browser is currently sending the <a href="http://en.wikipedia.org/wiki/Do_Not_Track">Do' +
-			'Not Track</a> header, and so Analytics is disabled.'));
+			'<p>Your browser is currently sending the <a href="http://en.wikipedia.org/wiki/Do_Not_Track">Do ' +
+			'Not Track</a> header, and so Analytics is disabled.</p>'));
 	else {
 		analyticsControls.append($('<p>Enable or disable Google Analytics:</p>'));
 		var options = $('<ul/>')
