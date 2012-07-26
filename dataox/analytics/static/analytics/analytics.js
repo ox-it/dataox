@@ -7,13 +7,8 @@ var rejectableCookies = ['__utma', '__utmb', '__utmc', '__utmz'];
 var analyticsInjected = false;
 
 $(function () {
-	$.ajaxSetup({
-		  cache: true
-	});
+	var analyticsControls = $('#analytics-controls').addClass('analytics-controls');
 
-	$.getScript(staticURL + "jquery-cookie/jquery.cookie.js", function() {
-
-	var analyticsControls = $('#analytics-controls').addClass('analytics-controls')
 	analyticsControls.children().remove();
 	if (doNotTrack)
 		analyticsControls.append($(
@@ -53,7 +48,6 @@ $(function () {
 	}
 	if ($.cookie('use_analytics') != 'false')
 		injectAnalytics();
-	});
 });
 
 function analyticsControl(enabled) {
@@ -71,7 +65,7 @@ function injectAnalytics() {
 	if (!analyticsInjected) {
 		analyticsInjected = true;
 		var _gaq = _gaq || [];
-		_gaq.push(['_setAccount', 'UA-32168758-1']);
+		_gaq.push(['_setAccount', analyticsID]);
 		_gaq.push(['_trackPageview']);
 
 		var src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
