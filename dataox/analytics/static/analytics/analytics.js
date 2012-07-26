@@ -41,7 +41,7 @@ $(function () {
 				.append(' for more information, and to change your preference later. ')
 				.append(
 					$('<a id="analytics-accept" href="#">Accept and dismiss</a>').click(function() { return analyticsControl(true); })
-					.append($('<img class="analytics-notice-dismiss" alt="">').attr('src', staticURL + 'analytics/dismiss.png'))
+					.append($('<span class="analytics-notice-dismiss" title="Accept and dismiss"></span>'))
 					
 				)
 				);
@@ -56,19 +56,22 @@ function analyticsControl(enabled) {
 		injectAnalytics();
 	else
 		for (var i in rejectableCookies)
-			$.cookie(rejectableCookies[i], null);
-	$('#analytics-notice').slideUp();
+			$.cookie(rejectableCookies[i], null, {domain: '.' + window.location.hostname, path: '/'});
+	$('#analytics-notice').slideUp('fast', function() { $('#analytics-notice').remove(); });
 	return false;
 }
+
+var _gaq = _gaq || [];
 
 function injectAnalytics() {
 	if (!analyticsInjected) {
 		analyticsInjected = true;
-		var _gaq = _gaq || [];
-		_gaq.push(['_setAccount', analyticsID]);
-		_gaq.push(['_trackPageview']);
 
-		var src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
-		$.getScript(src);
-	}
+	_gaq.push(['_setAccount', analyticsID]);
+	_gaq.push(['_trackPageview']);
+
+	var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+	ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+	var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+}
 }

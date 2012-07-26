@@ -1,3 +1,5 @@
+@charset "UTF-8";
+
 div#analytics-notice {
 	background: #ffc578; /* Old browsers */
 	background: -moz-linear-gradient(top, #ffc578 0%, #fb9d23 100%); /* FF3.6+ */
@@ -10,6 +12,8 @@ div#analytics-notice {
 	margin-bottom: 1em;
 	padding: 1em 3em 1em 1em;
 	position: relative;
+    font-size:  11.6833px;
+    font-family: Verdana, Helvetica, Arial, sans-serif;
 }
 
 div#analytics-notice a {
@@ -42,7 +46,19 @@ border-radius: 5px;
 
 .analytics-notice-dismiss {
 	position:absolute;
-	right: 9px;
+	right: 13px;
 	top: 50%;
-	margin-top: -11px;
+	margin-top: -9px;
+	width: 19px;
+	height: 20px;
+	display: block;
+	font-size: 24pt;
+	line-height: 15px;
+	padding-left: 1px;
+    color: #000;
+
+}
+
+.analytics-notice-dismiss:before {
+	content: "⊠";
 }
