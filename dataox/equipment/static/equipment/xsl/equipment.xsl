@@ -128,7 +128,7 @@
 
   <xsl:template match="model">
     <rdfs:label>
-      <xsl:value-of select="concat(normalize-space(../make), ' ', normalize-space(.))"/>
+      <xsl:value-of select="normalize-space(concat(../make, ' ', .))"/>
     </rdfs:label>
 
     <xsl:variable name="make-details" select="key('make-lookup', ../make/text(), $makes)"/>
@@ -176,7 +176,7 @@
 
   <xsl:template match="equipment-details">
     <rdfs:comment>
-      <xsl:value-of select="."/>
+      <xsl:value-of select="normalize-space(.)"/>
     </rdfs:comment>
   </xsl:template>
 
@@ -195,7 +195,7 @@
           <xsl:value-of select="."/>
         </skos:notation>
         <rdfs:label>
-          <xsl:value-of select="../department/text()"/>
+          <xsl:value-of select="../department/normalize-space(text())"/>
         </rdfs:label>
       </org:Organization>
     </oo:organizationPart>
@@ -223,7 +223,7 @@
           <xsl:otherwise>
             <geo:SpatialThing rdf:about="https://data.ox.ac.uk/id/equipment-general-location/{ex:slugify(text())}">
               <rdfs:label>
-                <xsl:value-of select="text()"/>
+                <xsl:value-of select="normalize-space(text())"/>
               </rdfs:label>
             </geo:SpatialThing>
           </xsl:otherwise>
