@@ -3,6 +3,7 @@
 @prefix dcterms: <http://purl.org/dc/terms/> .
 @prefix foaf: <http://xmlns.com/foaf/0.1/> .
 @prefix cerif: <http://spi-fm.uca.es/neologism/cerif#> .
+@prefix skos: <http://www.w3.org/2004/02/skos/core#> .
 
 @prefix adhoc: <http://vocab.ox.ac.uk/ad-hoc-data-ox/> .
 
