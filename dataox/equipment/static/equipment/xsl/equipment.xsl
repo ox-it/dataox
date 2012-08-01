@@ -363,25 +363,25 @@
 
   <!-- SKOS Concept Scheme generation -->
   <xsl:template match="/" mode="skos">
-    <skos:ConceptScheme rdf:about="http://data.ox.ac.uk/id/equipment-category">
+    <skos:ConceptScheme rdf:about="https://data.ox.ac.uk/id/equipment-category">
       <skos:prefLabel>Taxonomy for research facilities and equipment at the University of Oxford</skos:prefLabel>
       <dcterms:publisher rdf:resource="http://oxpoints.oucs.ox.ac.uk/id/23233536"/>
       <xsl:for-each-group select="equipment" group-by="ex:slugify(category)">
         <skos:hasTopConcept>
-          <skos:Concept rdf:about="http://data.ox.ac.uk/id/equipment-category/{ex:slugify(category)}">
+          <skos:Concept rdf:about="https://data.ox.ac.uk/id/equipment-category/{ex:slugify(category)}">
             <skos:prefLabel>
               <xsl:value-of select="category"/>
             </skos:prefLabel>
-            <skos:notation rdf:datatype="http://data.ox.ac.uk/id/notation/equipment-category">
+            <skos:notation rdf:datatype="https://data.ox.ac.uk/id/notation/equipment-category">
               <xsl:value-of select="ex:slugify(category)"/>
             </skos:notation>
             <xsl:for-each-group select="current-group()" group-by="ex:slugify(subcategory)">
               <skos:narrower>
-                <skos:Concept rdf:about="http://data.ox.ac.uk/id/equipment-category/{ex:slugify(category)}/{ex:slugify(subcategory)}">
+                <skos:Concept rdf:about="https://data.ox.ac.uk/id/equipment-category/{ex:slugify(category)}/{ex:slugify(subcategory)}">
                   <skos:prefLabel>
                     <xsl:value-of select="subcategory"/>
                   </skos:prefLabel>
-                  <skos:notation rdf:datatype="http://data.ox.ac.uk/id/notation/equipment-category">
+                  <skos:notation rdf:datatype="https://data.ox.ac.uk/id/notation/equipment-category">
                     <xsl:value-of select="concat(ex:slugify(category), '/', ex:slugify(subcategory))"/>
                   </skos:notation>
                 </skos:Concept>
@@ -393,6 +393,29 @@
       </xsl:for-each-group>
 
     </skos:ConceptScheme>
+    <skos:ConceptScheme rdf:about="https://data.ox.ac.uk/id/equipment-shareability">
+      <skos:prefLabel>Taxonomy of equipment shareability statuses</skos:prefLabel>
+      <dcterms:publisher rdf:resource="http://oxpoints.oucs.ox.ac.uk/id/23233536"/>
+      <skos:hasTopConcept>
+        <skos:Concept rdf:about="https://data.ox.ac.uk/id/equipment-shareability/yes">
+          <skos:prefLabel>yes</skos:prefLabel>
+          <skos:definition>The item will likely be available for use by members of the University of Oxford.</skos:definition>
+        </skos:Concept>
+      </skos:hasTopConcept>
+      <skos:hasTopConcept>
+        <skos:Concept rdf:about="https://data.ox.ac.uk/id/equipment-shareability/contact">
+          <skos:prefLabel>contact for details</skos:prefLabel>
+          <skos:definition>No information is held about whether the item is able to be shared. Please contact for more information.</skos:definition>
+        </skos:Concept>
+      </skos:hasTopConcept>
+      <skos:hasTopConcept>
+        <skos:Concept rdf:about="https://data.ox.ac.uk/id/equipment-shareability/no">
+          <skos:prefLabel>contact for details</skos:prefLabel>
+          <skos:definition>It is unlikely that the item is available for re-use by others.</skos:definition>
+        </skos:Concept>
+      </skos:hasTopConcept>
+    </skos:ConceptScheme>
+
   </xsl:template>
 <!--
         <skos:hasTopConcept>

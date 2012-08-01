@@ -1,0 +1,7 @@
+@prefix adhoc: <http://vocab.ox.ac.uk/ad-hoc-data-ox/>
+
+adhoc:equipment-shareability a rdfs:Property, owl:ObjectProperty ;
+  rdfs:label "shareability" ;
+  rdfs:domain cerif:Equipment ;
+  rdfs:range skos:Concept .
+
