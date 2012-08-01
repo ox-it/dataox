@@ -348,7 +348,7 @@
   </xsl:template>
 
   <xsl:template match="shareable" mode="inside">
-    <adhoc:equipment-shareabiliity>
+    <adhoc:equipment-shareability>
       <xsl:attribute name="rdf:resource">
         <xsl:text>https://data.ox.ac.uk/id/equipment-shareability/</xsl:text>
         <xsl:choose>
@@ -357,7 +357,7 @@
           <xsl:when test="text()='N'">no</xsl:when>
         </xsl:choose>
       </xsl:attribute>
-    </adhoc:equipment-shareabiliity>
+    </adhoc:equipment-shareability>
   </xsl:template>
 
 
