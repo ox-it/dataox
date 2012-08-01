@@ -357,7 +357,7 @@
           <xsl:when test="text()='N'">no</xsl:when>
         </xsl:choose>
       </xsl:attribute>
-    </adhoc:shareabiliity>
+    </adhoc:equipment-shareabiliity>
   </xsl:template>
 
 
@@ -415,7 +415,7 @@
         </skos:Concept>
       </skos:hasTopConcept>
     </skos:ConceptScheme>
-
+        
   </xsl:template>
 <!--
         <skos:hasTopConcept>
