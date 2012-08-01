@@ -1,10 +1,22 @@
 @prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
 @prefix owl:  <http://www.w3.org/2002/07/owl#> .
+@prefix dcterms: <http://purl.org/dc/terms/> .
+@prefix foaf: <http://xmlns.com/foaf/0.1/> .
 
 @prefix adhoc: <http://vocab.ox.ac.uk/ad-hoc-data-ox/>
+
+:adhoc a owl:Ontology ;
+  rdfs:label "ad hoc namespace for the University of Oxford's Open Data Service" ;
+  rdfs:comment "Contains terms specific to the University of Oxford which can't be defined elsewhere." ;
+  dcterms:publisher <http://oxpoints.oucs.ox.ac.uk/id/31337175> ;
+  dcterms:license <http://creativecommons.org/publicdomain/zero/1.0/> .
+
+<> a foaf:Document ;
+  dcterms:publisher <http://oxpoints.oucs.ox.ac.uk/id/31337175> ;
+  dcterms:license <http://creativecommons.org/publicdomain/zero/1.0/> .
 
 adhoc:equipment-shareability a rdfs:Property, owl:ObjectProperty ;
   rdfs:label "shareability" ;
   rdfs:domain cerif:Equipment ;
-  rdfs:range skos:Concept .
-
+  rdfs:range skos:Concept ;
+  rdfs:isDefinedBy adhoc: .
