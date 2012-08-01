@@ -18,6 +18,8 @@
     xmlns:geo="http://www.w3.org/2003/01/geo/wgs84_pos#"
     xmlns:org="http://www.w3.org/ns/org#"
     xmlns:tei="http://www.tei-c.org/ns/1.0"
+    xmlns:tio="http://purl.org/tio/ns#"
+    xmlns:adhoc="http://vocab.ox.ac.uk/ad-hoc-data-ox/"
   >
   <xsl:output method="xml" indent="yes"/>
   <xsl:param name="store" select="'public'"/>
@@ -99,8 +101,8 @@
         <oo:formalOrganization rdf:resource="http://oxpoints.oucs.ox.ac.uk/id/00000000"/>
 
         <xsl:if test="$to-include='Yes'">
-          <xsl:apply-templates select="*"/>
-	  <xsl:choose>
+          <xsl:apply-templates select="*" mode="inside"/>
+          <xsl:choose>
             <xsl:when test="quantity/text() &gt; 1">
               <rdf:type rdf:resource="http://purl.org/goodrelations/v1#SomeItems"/>
               <gr:hasInventoryLevel>
@@ -117,16 +119,19 @@
           </xsl:choose>
         </xsl:if>
       </cerif:Equipment>
+      <xsl:if test="$to-include='Yes'">
+        <xsl:apply-templates select="*" mode="outside"/>
+      </xsl:if>
     </xsl:if>
   </xsl:template>
 
-  <xsl:template match="unique-identifier">
+  <xsl:template match="unique-identifier" mode="inside">
     <skos:notation rdf:datatype="http://data.ox.ac.uk/id/notation/equipment-rso">
       <xsl:value-of select="text()"/>
     </skos:notation>
   </xsl:template>
 
-  <xsl:template match="model">
+  <xsl:template match="model" mode="inside">
     <rdfs:label>
       <xsl:value-of select="normalize-space(concat(../make, ' ', .))"/>
     </rdfs:label>
@@ -174,13 +179,13 @@
     </gr:hasMakeAndModel>
   </xsl:template>
 
-  <xsl:template match="equipment-details">
+  <xsl:template match="equipment-details" mode="inside">
     <rdfs:comment>
       <xsl:value-of select="normalize-space(.)"/>
     </rdfs:comment>
   </xsl:template>
 
-  <xsl:template match="department-code">
+  <xsl:template match="department-code" mode="inside">
     <oo:organizationPart>
       <org:Organization rdf:about="https://data.ox.ac.uk/id/equipment-department/{ex:slugify(text())}">
         <skos:notation>
@@ -201,7 +206,7 @@
     </oo:organizationPart>
   </xsl:template>
 
-  <xsl:template match="general-location">
+  <xsl:template match="general-location" mode="inside">
     <xsl:variable name="general-location" select="key('general-location-lookup', text(), $general-locations)"/>
     <xsl:if test="text()">
       <foaf:based_near>
@@ -232,7 +237,7 @@
     </xsl:if>
   </xsl:template>
 
-  <xsl:template match="building-number">
+  <xsl:template match="building-number" mode="inside">
     <spatialrelations:within>
       <rdf:Resource rdf:about="https://data.ox.ac.uk/equipment-building/{ex:slugify(text())}">
         <skos:notation rdf:datatype="http://data.ox.ac.uk/id/notation/estates">
@@ -242,7 +247,7 @@
     </spatialrelations:within>
   </xsl:template>
 
-  <xsl:template match="primary-contact-email|secondary-contact-email|tertiary-contact-email">
+  <xsl:template match="primary-contact-email|secondary-contact-email|tertiary-contact-email" mode="inside">
     <xsl:variable name="contact-name">
       <xsl:choose>
         <xsl:when test="self::primary-contact-email"><xsl:value-of select="../primary-contact-name"/></xsl:when>
@@ -272,7 +277,7 @@
     </xsl:if>
   </xsl:template>
 
-  <xsl:template match="website">
+  <xsl:template match="website" mode="inside">
     <xsl:choose>
       <xsl:when test="starts-with(text(), 'http://')">
         <foaf:page rdf:resource="{.}"/>
@@ -283,7 +288,7 @@
     </xsl:choose>
   </xsl:template>
 
-  <xsl:template match="image-url">
+  <xsl:template match="image-url" mode="inside">
     <xsl:choose>
       <xsl:when test="starts-with(text(), 'http://')">
         <foaf:depiction>
@@ -298,7 +303,7 @@
     </xsl:choose>
   </xsl:template>
 
-  <xsl:template match="availability">
+  <xsl:template match="availability" mode="inside">
     <oo:availability>
       <oo:Availability rdf:about="{../@uri}/availability">
         <rdfs:label><xsl:value-of select="text()"/></rdfs:label>
@@ -306,7 +311,7 @@
     </oo:availability>
   </xsl:template>
 
-  <xsl:template match="access">
+  <xsl:template match="access" mode="inside">
     <oo:accessPrerequisite>
       <oo:AccessPrerequisite rdf:about="{../@uri}/access-prerequisite">
         <rdfs:label><xsl:value-of select="text()"/></rdfs:label>
@@ -314,7 +319,7 @@
     </oo:accessPrerequisite>
   </xsl:template>
     
-  <xsl:template match="restrictions-on-use">
+  <xsl:template match="restrictions-on-use" mode="inside">
     <oo:useRestriction>
       <oo:UseRestriction rdf:about="{../@uri}/use-restriction">
         <rdfs:label><xsl:value-of select="text()"/></rdfs:label>
@@ -322,9 +327,39 @@
     </oo:useRestriction>
   </xsl:template>
 
-  <xsl:template match="subcategory">
+  <xsl:template match="subcategory" mode="inside">
     <dcterms:subject rdf:resource="http://data.ox.ac.uk/id/equipment-category/{ex:slugify(../category)}/{ex:slugify(.)}"/>
   </xsl:template>
+
+  <xsl:template match="shareable" mode="outside">
+    <xsl:choose>
+      <xsl:when test="text()='Y'">
+        <gr:Offering rdf:about="{../@uri}/offering">
+          <rdfs:label>Available for use by members of the University of Oxford</rdfs:label>
+          <tio:incudes>
+            <tio:TicketPlaceholder rdf:about="{../@uri}/the-use-thereof">
+              <tio:accessTo rdf:resource="{../@uri}"/>
+            </tio:TicketPlaceholder>
+          </tio:incudes>
+          <gr:eligibleCustomerTypes rdf:resource="https://data.ox.ac.uk/id/group/member"/>
+        </gr:Offering>
+      </xsl:when>
+    </xsl:choose>
+  </xsl:template>
+
+  <xsl:template match="shareable" mode="inside">
+    <adhoc:equipment-shareabiliity>
+      <xsl:attribute name="rdf:resource">
+        <xsl:text>https://data.ox.ac.uk/id/equipment-shareability/</xsl:text>
+        <xsl:choose>
+          <xsl:when test="text()='Y'">yes</xsl:when>
+          <xsl:when test="text()='C'">contact</xsl:when>
+          <xsl:when test="text()='N'">no</xsl:when>
+        </xsl:choose>
+      </xsl:attribute>
+    </adhoc:shareabiliity>
+  </xsl:template>
+
 
   <!-- SKOS Concept Scheme generation -->
   <xsl:template match="/" mode="skos">
@@ -418,6 +453,6 @@
     <ex:make name="3dMD" uri="http://opencorporates.com/id/companies/gb/04080651" short="3dmd"/>
   </ex:makes>
 
-  <xsl:template match="*"/>
+  <xsl:template match="*" mode="skos inside outside"/>
 </xsl:stylesheet>
 
