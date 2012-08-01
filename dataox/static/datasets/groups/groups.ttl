@@ -1,0 +1,56 @@
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix foaf: <http://xmlns.com/foaf/0.1/> .
+@prefix gr:   <http://purl.org/goodrelations/v1#> .
+@prefix owl:  <http://www.w3.org/2002/07/owl#> .
+@prefix dcterms: <http://purl.org/dc/terms/> .
+@prefix org:     <http://www.w3.org/ns/org#> .
+
+@prefix : <https://data.ox.ac.uk/id/group/> .
+
+<> a foaf:Document ;
+  rdfs:label "Simple person group definitions for the University of Oxford" ;
+  dcterms:publisher <http://oxpoints.oucs.ox.ac.uk/id/31337175> ;
+  dcterms:license <http://creativecommons.org/publicdomain/zero/1.0/> .
+
+:everyone a foaf:Group, gr:BusinessEntityType ;
+  foaf:name "everyone" ;
+  # Everyone who is a foaf:Person is in the group of everyone
+  foaf:membershipClass foaf:Person .
+
+
+# Lets define membership of the University formally.
+# If " ?x a foaf:Person ; org:memberOf 'the University' ", then " 'University members' foaf:member ?x ".
+# See http://xmlns.com/foaf/spec/#term_Group for more information
+
+:member a foaf:Group, gr:BusinessEntityType ;
+  foaf:name "members of the University of Oxford" ;
+  foaf:membershipClass <https://data.ox.ac.uk/id/group/member/membership-class> .
+
+<https://data.ox.ac.uk/id/group/member/membership-class> a owl:Class ;
+  rdfs:subClassOf foaf:Person ;
+  rdfs:subClassOf <https://data.ox.ac.uk/id/group/member/restriction> .
+
+<https://data.ox.ac.uk/id/group/member/restriction> a owl:Restriction ;
+  owl:onProperty org:memberOf ;
+  owl:hasValue <http://oxpoints.oucs.ox.ac.uk/id/00000000> .
+
+
+# These ones are too much effort to express formally for now.
+
+:convocation a foaf:Group, gr:BusinessEntityType ;
+  foaf:name "members of Convocation at the University of Oxford" .
+
+:congregation a foaf:Group, gr:BusinessEntityType ;
+  foaf:name "members of Congregation at the University of Oxford" .
+
+:student a foaf:Group, gr:BusinessEntityType ;
+  foaf:name "students of the University of Oxford" .
+
+:undergraduate a foaf:Group, gr:BusinessEntityType ;
+  foaf:name "undergraduate students of the University of Oxford" .
+
+:postgraduate a foaf:Group, gr:BusinessEntityType ;
+  foaf:name "postgraduate students of the University of Oxford" .
+
+:staff a foaf:Group, gr:BusinessEntityType ;
+  foaf:name "staff of the University of Oxford" .
