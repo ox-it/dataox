@@ -100,9 +100,9 @@
     <tr>
       <th>Quantity:</th>
       <td>{% if subject|has_type:"gr:Individual" %}
-        1 available
+        1 item
        {% else %}{% if subject.gr_hasInventoryLevel.gr_hasValue %}
-       {{ subject.gr_hasInventoryLevel.gr_hasValue }} available
+       {{ subject.gr_hasInventoryLevel.gr_hasValue }} items
        {% else %}
          unknown
        {% endif %}{% endif %}</td>
