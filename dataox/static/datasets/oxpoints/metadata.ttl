@@ -1,0 +1,71 @@
+@prefix humfrey: <http://purl.org/NET/humfrey/ns/> .
+@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix dcterms: <http://purl.org/dc/terms/> .
+@prefix cc:      <http://creativecommons.org/ns#> .
+@prefix void: <http://rdfs.org/ns/void#> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+@prefix foaf: <http://xmlns.com/foaf/0.1/> .
+@prefix oxp: <http://ns.ox.ac.uk/namespace/oxpoints/2009/02/owl#> .
+@prefix oo: <http://purl.org/openorg/> .
+@prefix org: <http://www.w3.org/ns/org#> .
+@prefix skos: <http://www.w3.org/2004/02/skos/core#> .
+@prefix geo: <http://www.w3.org/2003/01/geo/wgs84_pos#> .
+@prefix dc: <http://purl.org/dc/elements/1.1/> .
+@prefix v: <http://www.w3.org/2006/vcard/ns#> .
+@prefix dcat: <http://www.w3.org/ns/dcat#> .
+
+
+<https://data.ox.ac.uk/id/dataset/oxpoints> a void:Dataset, dcat:Dataset ;
+    rdfs:label "OxPoints"@en ;
+    dcterms:title "OxPoints"@en ;
+    dcterms:description "OxPoints is the University's geospatial, temporal and organisational RDF store.\n\nOxPoints aims to contain information about most political and built entities within the University, including college, department, building and rooms." ;
+    
+    foaf:homepage <http://www.oucs.ox.ac.uk/oxpoints/> ;
+
+    dcterms:license <http://creativecommons.org/publicdomain/zero/1.0/> ;
+    dcterms:rightsHolder <http://oxpoints.oucs.ox.ac.uk/id/00000000> ;
+    dcterms:publisher <http://oxpoints.oucs.ox.ac.uk/id/23233567> ;
+
+    cc:license <http://creativecommons.org/publicdomain/zero/1.0/> ;
+    cc:attributionName "University of Oxford"@en ;
+    cc:attributionURL <http://www.oucs.ox.ac.uk/oxpoints/> ;
+
+    skos:notation "oxpoints"^^humfrey:theDataHubDatasetName ;
+
+    dcterms:conformsTo oo:opendata-5-star ;
+
+    void:exampleResource <http://oxpoints.oucs.ox.ac.uk/id/00000000> ,
+                         <http://oxpoints.oucs.ox.ac.uk/id/23233678> ,
+                         <http://oxpoints.oucs.ox.ac.uk/id/59030245> ,
+                         <http://oxpoints.oucs.ox.ac.uk/id/23233759> ,
+                         <http://oxpoints.oucs.ox.ac.uk/id/23232622> ,
+                         <http://oxpoints.oucs.ox.ac.uk/id/32320008> ;
+    void:vocabulary oxp:, dc:, dcterms:, skos:, foaf:, geo:, v: ;
+
+    oo:exampleQuery [
+        rdf:value "prefix dc: <http://purl.org/dc/elements/1.1/>\nprefix dcterms: <http://purl.org/dc/terms/>\nprefix oxp: <http://ns.ox.ac.uk/namespace/oxpoints/2009/02/owl#>\nSELECT ?department ?building WHERE {\n  ?department a oxp:Department ;\n    dcterms:isPartOf+ <http://oxpoints.oucs.ox.ac.uk/id/23232639> ;\n    oxp:primaryPlace/dcterms:isPartOf* ?building .\n    ?building a oxp:Building .\n} ORDER BY ?label" ;
+        rdfs:label "Departments in the MPLS division and their primary locations" ;
+        rdfs:comment ""
+    ] ,
+    [
+        rdf:value"prefix dcterms: <http://purl.org/dc/terms/>\nprefix oxp: <http://ns.ox.ac.uk/namespace/oxpoints/2009/02/owl#>\nSELECT ?division (count(?building) as ?number_of_buildings) WHERE {\n ?division a oxp:Division .\n ?building a oxp:Building ;\n dcterms:isPartOf*/^oxp:occupies/dcterms:isPartOf* ?division\n } GROUP BY ?division" ;
+        rdfs:label "Number of buildings occupied per division" ;
+        rdfs:comment ""
+    ]; 
+
+    oo:contact [ a foaf:Agent ;
+        foaf:mbox <mailto:oxpoints@oucs.ox.ac.uk> ;
+        foaf:name "Oxford University Computing Services"
+    ] .
+
+<https://data.ox.ac.uk/id/dataset/catalogue> dcat:dataset <https://data.ox.ac.uk/id/dataset/oxpoints> .
+
+<https://data.ox.ac.uk/graph/oxpoints/data> a foaf:Document ;
+    void:inDataset <https://data.ox.ac.uk/id/dataset/oxpoints> ;
+    dcterms:license <http://creativecommons.org/publicdomain/zero/1.0/> .
+
+<https://data.ox.ac.uk/graph/oxpoints/metadata> a foaf:Document ;
+    void:inDataset <https://data.ox.ac.uk/id/dataset/catalogue> ;
+    dcterms:license <http://creativecommons.org/publicdomain/zero/1.0/> .
+
