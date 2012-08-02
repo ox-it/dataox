@@ -126,7 +126,7 @@
   </xsl:template>
 
   <xsl:template match="unique-identifier" mode="inside">
-    <skos:notation rdf:datatype="http://data.ox.ac.uk/id/notation/equipment-rso">
+    <skos:notation rdf:datatype="https://data.ox.ac.uk/id/notation/equipment-rso">
       <xsl:value-of select="text()"/>
     </skos:notation>
   </xsl:template>
@@ -144,17 +144,17 @@
           <xsl:value-of select="$make-details/@uri"/>
         </xsl:when>
         <xsl:otherwise>
-          <xsl:value-of select="concat('http://data.ox.ac.uk/id/equipment-model/', ex:slugify(../make/text()))"/>
+          <xsl:value-of select="concat('https://data.ox.ac.uk/id/equipment-model/', ex:slugify(../make/text()))"/>
         </xsl:otherwise>
       </xsl:choose>
     </xsl:variable>
     <xsl:variable name="model-uri">
       <xsl:choose>
         <xsl:when test="$make-details and $model-details">
-          <xsl:value-of select="concat('http://data.ox.ac.uk/id/equipment-model/', $make-details/@short, '/', $model-details/@short)"/>
+          <xsl:value-of select="concat('https://data.ox.ac.uk/id/equipment-model/', $make-details/@short, '/', $model-details/@short)"/>
         </xsl:when>
         <xsl:when test="$make-details">
-          <xsl:value-of select="concat('http://data.ox.ac.uk/id/equipment-model/', $make-details/@short, '/', ex:slugify(text()))"/>
+          <xsl:value-of select="concat('https://data.ox.ac.uk/id/equipment-model/', $make-details/@short, '/', ex:slugify(text()))"/>
         </xsl:when>
         <xsl:otherwise>
           <xsl:value-of select="concat($make-uri, '/', ex:slugify(text()))"/>
@@ -190,7 +190,7 @@
       <org:Organization rdf:about="https://data.ox.ac.uk/id/equipment-department/{ex:slugify(text())}">
         <skos:notation>
           <xsl:attribute name="rdf:datatype">
-            <xsl:text>http://data.ox.ac.uk/id/notation/</xsl:text>
+            <xsl:text>https://data.ox.ac.uk/id/notation/</xsl:text>
             <xsl:choose>
               <xsl:when test="matches(., '^[A-Z\d]{2}$')">twoThree</xsl:when>
               <xsl:when test="matches(., '^\d{8}$')">oxpoints</xsl:when>
@@ -213,7 +213,7 @@
         <xsl:choose>
           <xsl:when test="$general-location/@oxpoints">
             <geo:SpatialThing rdf:about="https://data.ox.ac.uk/equipment-location/{ex:slugify(text())}">
-              <skos:notation rdf:datatype="http://data.ox.ac.uk/id/notation/oxpoints">
+              <skos:notation rdf:datatype="https://data.ox.ac.uk/id/notation/oxpoints">
                 <xsl:value-of select="$general-location/@oxpoints"/>
               </skos:notation>
             </geo:SpatialThing>
@@ -240,7 +240,7 @@
   <xsl:template match="building-number" mode="inside">
     <spatialrelations:within>
       <rdf:Resource rdf:about="https://data.ox.ac.uk/equipment-building/{ex:slugify(text())}">
-        <skos:notation rdf:datatype="http://data.ox.ac.uk/id/notation/estates">
+        <skos:notation rdf:datatype="https://data.ox.ac.uk/id/notation/estates">
           <xsl:value-of select="text()"/>
         </skos:notation>
       </rdf:Resource>
@@ -279,7 +279,7 @@
 
   <xsl:template match="website" mode="inside">
     <xsl:choose>
-      <xsl:when test="starts-with(text(), 'http://')">
+      <xsl:when test="matches(text(), '^(http|https|ftp)://')">
         <foaf:page rdf:resource="{.}"/>
       </xsl:when>
       <xsl:when test="starts-with(text(), 'www.')">
@@ -290,7 +290,7 @@
 
   <xsl:template match="image-url" mode="inside">
     <xsl:choose>
-      <xsl:when test="starts-with(text(), 'http://')">
+      <xsl:when test="matches(text(), '^(http|https|ftp)://')">
         <foaf:depiction>
            <foaf:Image rdf:about="{.}"/>
         </foaf:depiction>
@@ -328,7 +328,7 @@
   </xsl:template>
 
   <xsl:template match="subcategory" mode="inside">
-    <dcterms:subject rdf:resource="http://data.ox.ac.uk/id/equipment-category/{ex:slugify(../category)}/{ex:slugify(.)}"/>
+    <dcterms:subject rdf:resource="https://data.ox.ac.uk/id/equipment-category/{ex:slugify(../category)}/{ex:slugify(.)}"/>
   </xsl:template>
 
   <xsl:template match="shareable" mode="outside">
