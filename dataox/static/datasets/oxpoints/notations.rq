@@ -1,0 +1,25 @@
+CONSTRUCT {
+  ?thing skos:notation ?notation
+} WHERE {
+  { ?thing oxp:hasOBNCode ?code .
+    BIND(STRDT(?code, oxnotation:estates) as ?notation) }
+  UNION
+  { ?thing oxp:hasOLISCode ?code .
+    BIND(STRDT(?code, oxnotation:olis) as ?notation) }
+  UNION
+  { ?thing oxp:hasOLISAlephCode ?code .
+    BIND(STRDT(?code, oxnotation:aleph) as ?notation) }
+  UNION
+  { ?thing oxp:hasFinanceCode ?code .
+    BIND(STRDT(?code, oxnotation:twoThree) as ?notation) }
+  UNION
+  { ?thing oxp:hasOUCSCode ?code .
+    BIND(STRDT(?code, oxnotation:oucs) as ?notation) }
+  UNION
+  { GRAPH <http://data.ox.ac.uk/graph/oxpoints/data> {
+      ?thing a ?type
+    } .
+    FILTER (REGEX(STR(?thing), '^http://oxpoints\\.oucs\\.ox\\.ac\\.uk/id/\\d{8}$')) .
+    BIND(STRDT(SUBSTR(STR(?thing), 34), oxnotation:oxpoints) as ?notation) }
+}
+
