@@ -94,6 +94,8 @@ AUTHENTICATION_BACKENDS = (
 
 MIDDLEWARE_CLASSES += (
     'django_conneg.support.middleware.BasicAuthMiddleware',
+    'django.contrib.messages.middleware.MessageMiddleware',
+    'dataox.analytics.middleware.DoNotTrackMiddleware',
 )
 
 TEMPLATE_DIRS = (

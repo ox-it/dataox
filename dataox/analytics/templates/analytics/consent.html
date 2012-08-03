@@ -1,10 +1,14 @@
 {% if analytics_enabled %}
-<link rel="stylesheet" type="text/css" href="{{ STATIC_URL }}analytics/analytics.css"/>
-<script type="application/javascript">
-  var doNotTrack = {{ do_not_track }};
-  var analyticsID = "{{ analytics_id|escapejs }}";
-  var privacyPolicyURL = "{% url legal %}#analytics";
+<style type="text/css">
+  @import url('//www.oucs.ox.ac.uk/shared/stylesheet/analytics/analytics.css');
+</style>
+<script type="text/javascript" src="//www.oucs.ox.ac.uk/shared/stylesheet/js/jquery.cookie.js"></script>
+<script type="text/javascript" src="//www.oucs.ox.ac.uk/shared/stylesheet/analytics/analytics.js"></script>
+<script type="text/javascript">
+  optionalAnalytics({
+	  analyticsID: "{{ analytics_id|escapejs }}",
+	  doNotTrack: {{ do_not_track|yesno:"true,false" }},
+	  privacyPolicyURL: "{% url legal %}#analytics",
+  });
 </script>
-<script type="application/javascript" src="{{ STATIC_URL }}jquery-cookie/jquery.cookie.js"></script>
-<script type="application/javascript" src="{{ STATIC_URL }}analytics/analytics.js"></script>
 {% endif %}
