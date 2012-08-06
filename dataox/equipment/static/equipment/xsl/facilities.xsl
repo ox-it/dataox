@@ -2,6 +2,7 @@
 <xsl:stylesheet version="2.0"
     xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
     xmlns:oo="http://purl.org/openorg/"
+    xmlns:cerif="http://spi-fm.uca.es/neologism/cerif#"
     xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
     xmlns:rdfs="http://www.w3.org/2000/01/rdf-schema#"
     xmlns:owl="http://www.w3.org/2002/07/owl#"
@@ -14,33 +15,22 @@
     xmlns:srx="http://www.w3.org/2005/sparql-results#"
     xmlns:gr="http://purl.org/goodrelations/v1#"
     xmlns:ex="http://www.example.org/"
-    xmlns:tei="http://www.tei-c.org/ns/1.0"
-    xmlns:humfrey="http://purl.org/NET/humfrey/ns/"
+    xmlns:geo="http://www.w3.org/2003/01/geo/wgs84_pos#"
     xmlns:org="http://www.w3.org/ns/org#"
+    xmlns:tei="http://www.tei-c.org/ns/1.0"
+    xmlns:tio="http://purl.org/tio/ns#"
+    xmlns:adhoc="http://vocab.ox.ac.uk/ad-hoc-data-ox/"
   >
+  <xsl:import href="common.xsl"/>
+
+  <xsl:variable name="type">facility</xsl:variable>
+  <xsl:template name="uri">
+    <xsl:text>https://data.ox.ac.uk/id/facility/</xsl:text>
+    <xsl:value-of select="ex:slugify(tei:cell[3]/text())"/>
+  </xsl:template>
+
   <xsl:output method="xml" indent="yes"/>
   <xsl:param name="store" select="'public'"/>
-
-  <xsl:function name="ex:slugify">
-    <xsl:param name="term"/>
-    <xsl:choose>
-      <xsl:when test="contains($term, '(')">
-        <xsl:value-of select="ex:slugify(substring-before($term, '('))"/>
-      </xsl:when>
-      <xsl:otherwise>
-        <xsl:value-of select="replace(lower-case(normalize-space($term)), '[^a-z0-9]+', '-')"/>
-      </xsl:otherwise>
-    </xsl:choose>
-  </xsl:function>
-
-  <xsl:variable name="columns">
-    <columns>
-      <xsl:for-each select="//tei:row[1]/tei:cell">
-        <column name="{text()}" slug="{ex:slugify(text())}" n="{position()}"/>
-      </xsl:for-each>
-    </columns>
-  </xsl:variable>
-  <xsl:key name="columns" match="column" use="number(@n)"/>
 
   <xsl:template match="/">
     <xsl:variable name="facilities">
@@ -51,41 +41,54 @@
     </rdf:RDF>
   </xsl:template>
 
-  <xsl:template match="tei:row" mode="preprocess">
-    <facility uri="https://data.ox.ac.uk/id/facility/{count(preceding-sibling::tei:row)}">
-      <xsl:for-each select="tei:cell">
-        <xsl:if test="text()">
-          <xsl:element name="{key('columns', position(), $columns)/@slug}">
-            <xsl:value-of select="normalize-space(text())"/>
-          </xsl:element>
-        </xsl:if>
-      </xsl:for-each>
-    </facility>
-  </xsl:template>
-
   <xsl:template match="facility">
-    <oo:Facility rdf:about="{@uri}">
-      <xsl:apply-templates select="*"/>
-    </oo:Facility>
+    <cerif:Facility rdf:about="{@uri}">
+      <xsl:apply-templates select="*" mode="inside"/>
+    </cerif:Facility>
+    <xsl:apply-templates select="*" mode="outside"/>
   </xsl:template>
 
-  <xsl:template match="name-of-facility-service">
+  <xsl:template match="name-of-facility-service" mode="inside">
     <rdfs:label>
       <xsl:value-of select="text()"/>
     </rdfs:label>
+    <skos:notation rdf:datatype="https://data.ox.ac.uk/id/notation/facility-rso">
+      <xsl:value-of select="ex:slugify(text())"/>
+    </skos:notation>
   </xsl:template>
 
-  <xsl:template match="department">
-    <oo:facilityOf>
-      <org:Organization rdf:about="https://data.ox.ac.uk/id/facility-department/{ex:slugify(text())}">
-        <humfrey:searchNormalization rdf:parseType="Resource">
-          <humfrey:searchQuery>
-            <xsl:value-of select="text()"/>
-          </humfrey:searchQuery>
-          <humfrey:searchType>organization</humfrey:searchType>
-        </humfrey:searchNormalization>
+  <xsl:template match="department-code" mode="inside">
+    <oo:organizationPart>
+      <org:Organization rdf:about="https://data.ox.ac.uk/id/equipment-department/{ex:slugify(text())}">
+        <skos:notation>
+          <xsl:attribute name="rdf:datatype">
+            <xsl:text>https://data.ox.ac.uk/id/notation/</xsl:text>
+            <xsl:choose>
+              <xsl:when test="matches(., '^[A-Z\d]{2}$')">twoThree</xsl:when>
+              <xsl:when test="matches(., '^\d{8}$')">oxpoints</xsl:when>
+              <xsl:otherwise>department</xsl:otherwise>
+            </xsl:choose>
+          </xsl:attribute>
+          <xsl:value-of select="."/>
+        </skos:notation>
+        <rdfs:label>
+          <xsl:value-of select="../department/normalize-space(text())"/>
+        </rdfs:label>
       </org:Organization>
-    </oo:facilityOf>
+    </oo:organizationPart>
   </xsl:template>
-  <xsl:template match="*"/>
+
+  <xsl:template match="contact-email" mode="inside">
+    <oo:contact>
+      <foaf:Agent rdf:about="{../@uri}/contact">
+        <xsl:if test="../contact-name/text()">
+          <foaf:name>
+            <xsl:value-of select="../contact-name/text()"/>
+          </foaf:name>
+        </xsl:if>
+        <vcard:email rdf:resource="mailto:{text()}"/>
+      </foaf:Agent>
+    </oo:contact>
+  </xsl:template>
+
 </xsl:stylesheet>
