@@ -9,6 +9,13 @@
 
 <h1>{% if not concept %}Categories{% else %}{{ concept.label }}{% endif %}</h1>
 
+{% if not concept %}
+<p>All pieces of equipment have been categorised according to the experimental
+   technique that they are mainly associated with. Similar techniques or those
+   associated with a particular field of study have been grouped together,
+   enabling a two-tier searchable system. Any suggestions for
+   re-categorisation should be made via the <a href="{% url contact %}">contact page</a>.</p>
+{% endif %}
 
 {% if concepts %}
 <h2 class="hidden">Sub-categories</h2>
