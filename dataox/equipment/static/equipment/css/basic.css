@@ -734,6 +734,7 @@ ul.equipmentList  li h3 {
 	
 ul.equipmentList  li h3 a{
 	text-decoration: none;
+	color: #fff;
 }
 
 ul.equipmentList  li h3 a:hover,
@@ -745,4 +746,8 @@ ul.equipmentList  li h3 a:focus{
 ul.equipmentList  li dl,
 ul.equipmentList  li div{
 	margin: 5px;
+}
+
+table td, table th {
+	padding: 3px;
 }
