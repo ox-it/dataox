@@ -68,18 +68,21 @@
           <skos:Concept rdf:about="https://data.ox.ac.uk/id/equipment-shareability/yes">
             <skos:prefLabel>yes</skos:prefLabel>
             <skos:definition>The item will likely be available for use by members of the University of Oxford.</skos:definition>
+            <skos:notation rdf:datatype="https://data.ox.ac.uk/id/notation/equipment-shareability">yes</skos:notation>
           </skos:Concept>
         </skos:hasTopConcept>
         <skos:hasTopConcept>
           <skos:Concept rdf:about="https://data.ox.ac.uk/id/equipment-shareability/contact">
             <skos:prefLabel>contact for details</skos:prefLabel>
             <skos:definition>No information is held about whether the item is able to be shared. Please contact for more information.</skos:definition>
+            <skos:notation rdf:datatype="https://data.ox.ac.uk/id/notation/equipment-shareability">contact</skos:notation>
           </skos:Concept>
         </skos:hasTopConcept>
         <skos:hasTopConcept>
           <skos:Concept rdf:about="https://data.ox.ac.uk/id/equipment-shareability/no">
             <skos:prefLabel>contact for details</skos:prefLabel>
             <skos:definition>It is unlikely that the item is available for re-use by others.</skos:definition>
+            <skos:notation rdf:datatype="https://data.ox.ac.uk/id/notation/equipment-shareability">no</skos:notation>
           </skos:Concept>
         </skos:hasTopConcept>
       </skos:ConceptScheme>
