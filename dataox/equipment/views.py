@@ -79,8 +79,8 @@ class SearchView(EquipmentView, elasticsearch_views.SearchView):
 #        return self.render(request, context, 'equipment/item')
 
 class BrowseView(EquipmentView, HTMLView, RDFView, CannedQueryView, MappingView):
-    concept_scheme = rdflib.URIRef('http://data.ox.ac.uk/id/equipment-category')
-    datatype = rdflib.URIRef('http://data.ox.ac.uk/id/notation/equipment-category')
+    concept_scheme = rdflib.URIRef('https://data.ox.ac.uk/id/equipment-category')
+    datatype = rdflib.URIRef('https://data.ox.ac.uk/id/notation/equipment-category')
 
     template_name = 'equipment/browse'
 
