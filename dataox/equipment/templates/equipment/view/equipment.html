@@ -117,15 +117,7 @@
     </tr>
   </table>
 
-  {% if subject.oo_contact %}
-  <div class="contactInfo" >
-  <h2>Contact information</h2>
-  <p>For more information, contact:</p>
-  <ul>{% for contact in subject.all.oo_contact %}
-    <li>{{ contact.label }}{% if contact.email %}, <a href="{{ contact.email }}">{{ contact.email|slice:"7:" }}</a>{% endif %}</li>{% endfor %}
-  </ul>
-  </div>
-  {% endif %}
+{% include "equipment/view/contact.html" %}
 {% endblock %}
 
 {% block tertiary_content %}{{ block.super }}
