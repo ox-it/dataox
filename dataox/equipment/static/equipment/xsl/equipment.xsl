@@ -75,8 +75,11 @@
         <xsl:when test="$make-details">
           <xsl:value-of select="$make-details/@uri"/>
         </xsl:when>
-        <xsl:otherwise>
+        <xsl:when test="../make/text()">
           <xsl:value-of select="concat('https://data.ox.ac.uk/id/equipment-model/', ex:slugify(../make/text()))"/>
+        </xsl:when>
+        <xsl:otherwise>
+          <xsl:text>https://data.ox.ac.uk/id/equipment-model/-</xsl:text>
         </xsl:otherwise>
       </xsl:choose>
     </xsl:variable>
@@ -98,14 +101,16 @@
         <gr:name>
           <xsl:value-of select="."/>
         </gr:name>
-        <gr:hasManufacturer>
-          <gr:BusinessEntity rdf:about="{$make-uri}">
-            <gr:name>
-              <xsl:value-of select="../make"/>
-            </gr:name>
-            <xsl:apply-templates select="$make-details" mode="pages"/>
-          </gr:BusinessEntity>
-        </gr:hasManufacturer>
+        <xsl:if test="../make/text()">
+          <gr:hasManufacturer>
+            <gr:BusinessEntity rdf:about="{$make-uri}">
+              <gr:name>
+                <xsl:value-of select="../make"/>
+              </gr:name>
+              <xsl:apply-templates select="$make-details" mode="pages"/>
+            </gr:BusinessEntity>
+          </gr:hasManufacturer>
+        </xsl:if>
         <xsl:apply-templates select="$model-details" mode="pages"/>
       </gr:ProductOrServiceModel>
     </gr:hasMakeAndModel>
