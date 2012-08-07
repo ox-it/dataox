@@ -23,29 +23,10 @@
   >
   <xsl:import href="common.xsl"/>
 
-  <xsl:variable name="type">facility</xsl:variable>
+  <xsl:variable name="type">cerif:Facility</xsl:variable>
   <xsl:template name="uri">
     <xsl:text>https://data.ox.ac.uk/id/facility/</xsl:text>
-    <xsl:value-of select="ex:slugify(tei:cell[3]/text())"/>
-  </xsl:template>
-
-  <xsl:output method="xml" indent="yes"/>
-  <xsl:param name="store" select="'public'"/>
-
-  <xsl:template match="/">
-    <xsl:variable name="facilities">
-      <xsl:apply-templates select="//tei:table[1]/tei:row[position() &gt; 1]" mode="preprocess"/>
-    </xsl:variable>
-    <rdf:RDF>
-      <xsl:apply-templates select="$facilities/facility"/>
-    </rdf:RDF>
-  </xsl:template>
-
-  <xsl:template match="facility">
-    <cerif:Facility rdf:about="{@uri}">
-      <xsl:apply-templates select="*" mode="inside"/>
-    </cerif:Facility>
-    <xsl:apply-templates select="*" mode="outside"/>
+    <xsl:value-of select="tei:cell[1]/text()"/>
   </xsl:template>
 
   <xsl:template match="name-of-facility-service" mode="inside">
@@ -89,6 +70,12 @@
         <vcard:email rdf:resource="mailto:{text()}"/>
       </foaf:Agent>
     </oo:contact>
+  </xsl:template>
+
+  <xsl:template match="facility-id" mode="inside">
+    <skos:notation rdf:datatype="https://data.ox.ac.uk/id/notation/facility-rso">
+      <xsl:value-of select="text()"/>
+    </skos:notation>
   </xsl:template>
 
 </xsl:stylesheet>

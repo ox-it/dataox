@@ -23,15 +23,12 @@
   >
   <xsl:import href="common.xsl"/>
 
-  <xsl:variable name="type">equipment</xsl:variable>
+  <xsl:variable name="type">cerif:Equipment</xsl:variable>
   <xsl:template name="uri">
     <xsl:text>https://data.ox.ac.uk/id/equipment/</xsl:text>
     <xsl:value-of select="tei:cell[2]/text()"/>
   </xsl:template>
 
-  <xsl:output method="xml" indent="yes"/>
-  <xsl:param name="store" select="'public'"/>
-  <xsl:param name="output" select="'equipment'"/>
 
   <xsl:variable name="general-locations" select="document('')/xsl:stylesheet/ex:general-locations"/>
   <xsl:variable name="makes" select="document('')/xsl:stylesheet/ex:makes"/>
@@ -43,63 +40,24 @@
   <xsl:key name="model-lookup" match="ex:model" use="@name"/>
 
 
-  <xsl:template match="/">
-    <xsl:variable name="equipment">
-      <xsl:apply-templates select="//tei:table[1]/tei:row[position() &gt; 1]" mode="preprocess"/>
-    </xsl:variable>
-    <rdf:RDF>
-      <xsl:choose>
-        <xsl:when test="$output='equipment'">
-          <xsl:apply-templates select="$equipment/equipment" mode="equipment"/>
-        </xsl:when>
-        <xsl:when test="$output='skos'">
-          <xsl:apply-templates select="$equipment" mode="skos"/>
-        </xsl:when>
-      </xsl:choose>
-    </rdf:RDF>
-  </xsl:template>
 
     
-  <xsl:template match="equipment" mode="equipment">
-    <xsl:variable name="to-include">
-      <xsl:choose>
-        <xsl:when test="$store='public'"><xsl:value-of select="public"/></xsl:when>
-        <xsl:when test="$store='equipment'"><xsl:value-of select="university"/></xsl:when>
-        <xsl:when test="$store='seesec'"><xsl:value-of select="seesec"/></xsl:when>
-        <xsl:otherwise>
-          <xsl:message terminate="yes">Unexpected store: <xsl:value-of select="store"/></xsl:message>
-        </xsl:otherwise>
-      </xsl:choose>
-    </xsl:variable>
-
-    <xsl:if test="$to-include='Yes' or $store='public'">
-      <cerif:Equipment rdf:about="{@uri}">
-        <!-- Everything is part of the University of Oxford -->
-        <oo:formalOrganization rdf:resource="http://oxpoints.oucs.ox.ac.uk/id/00000000"/>
-
-        <xsl:if test="$to-include='Yes'">
-          <xsl:apply-templates select="*" mode="inside"/>
-          <xsl:choose>
-            <xsl:when test="quantity/text() &gt; 1">
-              <rdf:type rdf:resource="http://purl.org/goodrelations/v1#SomeItems"/>
-              <gr:hasInventoryLevel>
-                <gr:QuantitativeValue rdf:about="{@uri}/quantity">
-                  <gr:hasValue rdf:datatype="http://www.w3.org/2001/XMLSchema#int">
-                    <xsl:value-of select="quantity/text()"/>
-                  </gr:hasValue>
-                </gr:QuantitativeValue>
-              </gr:hasInventoryLevel>
-            </xsl:when>
-            <xsl:otherwise>
-              <rdf:type rdf:resource="http://purl.org/goodrelations/v1#Individual"/>
-            </xsl:otherwise>
-          </xsl:choose>
-        </xsl:if>
-      </cerif:Equipment>
-      <xsl:if test="$to-include='Yes'">
-        <xsl:apply-templates select="*" mode="outside"/>
-      </xsl:if>
-    </xsl:if>
+  <xsl:template match="quantity" mode="inside">
+    <xsl:choose>
+      <xsl:when test="text() &gt; 1">
+        <rdf:type rdf:resource="http://purl.org/goodrelations/v1#SomeItems"/>
+        <gr:hasInventoryLevel>
+          <gr:QuantitativeValue rdf:about="{@uri}/quantity">
+            <gr:hasValue rdf:datatype="http://www.w3.org/2001/XMLSchema#int">
+              <xsl:value-of select="text()"/>
+            </gr:hasValue>
+          </gr:QuantitativeValue>
+        </gr:hasInventoryLevel>
+      </xsl:when>
+      <xsl:otherwise>
+        <rdf:type rdf:resource="http://purl.org/goodrelations/v1#Individual"/>
+      </xsl:otherwise>
+    </xsl:choose>
   </xsl:template>
 
   <xsl:template match="unique-identifier" mode="inside">
@@ -223,88 +181,20 @@
     </xsl:if>
   </xsl:template>
 
-
-  <!-- SKOS Concept Scheme generation -->
-  <xsl:template match="/" mode="skos">
-    <skos:ConceptScheme rdf:about="https://data.ox.ac.uk/id/equipment-category">
-      <skos:prefLabel>Taxonomy for research facilities and equipment at the University of Oxford</skos:prefLabel>
-      <dcterms:publisher rdf:resource="http://oxpoints.oucs.ox.ac.uk/id/23233536"/>
-      <xsl:for-each-group select="equipment" group-by="ex:slugify(category)">
-        <skos:hasTopConcept>
-          <skos:Concept rdf:about="https://data.ox.ac.uk/id/equipment-category/{ex:slugify(category)}">
-            <skos:prefLabel>
-              <xsl:value-of select="category"/>
-            </skos:prefLabel>
-            <skos:notation rdf:datatype="https://data.ox.ac.uk/id/notation/equipment-category">
-              <xsl:value-of select="ex:slugify(category)"/>
-            </skos:notation>
-            <xsl:for-each-group select="current-group()" group-by="ex:slugify(subcategory)">
-              <skos:narrower>
-                <skos:Concept rdf:about="https://data.ox.ac.uk/id/equipment-category/{ex:slugify(category)}/{ex:slugify(subcategory)}">
-                  <skos:prefLabel>
-                    <xsl:value-of select="subcategory"/>
-                  </skos:prefLabel>
-                  <skos:notation rdf:datatype="https://data.ox.ac.uk/id/notation/equipment-category">
-                    <xsl:value-of select="concat(ex:slugify(category), '/', ex:slugify(subcategory))"/>
-                  </skos:notation>
-                </skos:Concept>
-              </skos:narrower>
-            </xsl:for-each-group>
-
-          </skos:Concept>
-        </skos:hasTopConcept>
-      </xsl:for-each-group>
-
-    </skos:ConceptScheme>
-    <skos:ConceptScheme rdf:about="https://data.ox.ac.uk/id/equipment-shareability">
-      <skos:prefLabel>Taxonomy of equipment shareability statuses</skos:prefLabel>
-      <dcterms:publisher rdf:resource="http://oxpoints.oucs.ox.ac.uk/id/23233536"/>
-      <skos:hasTopConcept>
-        <skos:Concept rdf:about="https://data.ox.ac.uk/id/equipment-shareability/yes">
-          <skos:prefLabel>yes</skos:prefLabel>
-          <skos:definition>The item will likely be available for use by members of the University of Oxford.</skos:definition>
-        </skos:Concept>
-      </skos:hasTopConcept>
-      <skos:hasTopConcept>
-        <skos:Concept rdf:about="https://data.ox.ac.uk/id/equipment-shareability/contact">
-          <skos:prefLabel>contact for details</skos:prefLabel>
-          <skos:definition>No information is held about whether the item is able to be shared. Please contact for more information.</skos:definition>
-        </skos:Concept>
-      </skos:hasTopConcept>
-      <skos:hasTopConcept>
-        <skos:Concept rdf:about="https://data.ox.ac.uk/id/equipment-shareability/no">
-          <skos:prefLabel>contact for details</skos:prefLabel>
-          <skos:definition>It is unlikely that the item is available for re-use by others.</skos:definition>
-        </skos:Concept>
-      </skos:hasTopConcept>
-    </skos:ConceptScheme>
-        
-  </xsl:template>
-<!--
-        <skos:hasTopConcept>
-          <skos:Concept rdf:about="http://data.ox.ac.uk/id/equipment-category/{ex:slugify($category)}">
-            <skos:prefLabel>
-              <xsl:value-of select="$category"/>
-            </skos:prefLabel>
-            <skos:notation rdf:datatype="http://data.ox.ac.uk/id/notation/equipment-category">
-              <xsl:value-of select="ex:slugify($category)"/>
-            </skos:notation>
-            <skos:narrower>
-              <skos:Concept rdf:about="http://data.ox.ac.uk/id/equipment-category/{ex:slugify($category)}/{ex:slugify($subcategory)}">
-                <skos:prefLabel>
-                  <xsl:value-of select="$subcategory"/>
-                </skos:prefLabel>
-                <skos:notation rdf:datatype="http://data.ox.ac.uk/id/notation/equipment-category">
-                  <xsl:value-of select="concat(ex:slugify($category), '/', ex:slugify($subcategory))"/>
-                </skos:notation>
-              </skos:Concept>
-            </skos:narrower>
-          </skos:Concept>
-        </skos:hasTopConcept>
-      </skos:ConceptScheme>
+  <xsl:template match="small-research-facility" mode="inside">
+    <xsl:if test="text()">
+      <oo:relatedFacility>
+        <cerif:Facility rdf:about="{../@uri}/facility">
+          <rdfs:label>
+            <xsl:value-of select="text()"/>
+          </rdfs:label>
+          <skos:notation rdf:datatype="https://data.ox.ac.uk/id/notation/facility-rso">
+            <xsl:value-of select="ex:slugify(text())"/>
+          </skos:notation>
+        </cerif:Facility>
+      </oo:relatedFacility>
     </xsl:if>
   </xsl:template>
--->
 
   <xsl:template match="*" mode="pages">
     <xsl:if test="@page">

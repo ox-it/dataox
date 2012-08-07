@@ -22,6 +22,10 @@
     xmlns:adhoc="http://vocab.ox.ac.uk/ad-hoc-data-ox/"
   >
 
+  <xsl:param name="store" select="'public'"/>
+  <xsl:variable name="type" select="'rdf:Resource'"/>
+  <xsl:output method="xml" indent="yes"/>
+
   <xsl:function name="ex:slugify">
     <xsl:param name="term"/>
     <xsl:choose>
@@ -33,6 +37,46 @@
       </xsl:otherwise>
     </xsl:choose>
   </xsl:function>
+
+  <xsl:template match="/">
+    <xsl:variable name="items">
+      <xsl:apply-templates select="//tei:table[1]/tei:row[position() &gt; 1]" mode="preprocess"/>
+    </xsl:variable>
+    <rdf:RDF>
+      <xsl:apply-templates select="$items/item" mode="item"/>
+    </rdf:RDF>
+  </xsl:template>
+
+  <xsl:template match="item" mode="item">
+    <xsl:variable name="to-include">
+      <xsl:choose>
+        <xsl:when test="$store='public'"><xsl:value-of select="public"/></xsl:when>
+        <xsl:when test="$store='equipment'"><xsl:value-of select="university"/></xsl:when>
+        <xsl:when test="$store='seesec'"><xsl:value-of select="seesec"/></xsl:when>
+        <xsl:otherwise>
+          <xsl:message terminate="yes">Unexpected store: <xsl:value-of select="store"/></xsl:message>
+        </xsl:otherwise>
+      </xsl:choose>
+    </xsl:variable>
+
+    <xsl:if test="$to-include='Yes' or $store='public'">
+      <xsl:element name="{$type}">
+        <xsl:attribute name="rdf:about">
+          <xsl:value-of select="@uri"/>
+        </xsl:attribute>
+
+        <!-- Everything is part of the University of Oxford -->
+        <oo:formalOrganization rdf:resource="http://oxpoints.oucs.ox.ac.uk/id/00000000"/>
+
+        <xsl:if test="$to-include='Yes'">
+          <xsl:apply-templates select="*" mode="inside"/>
+        </xsl:if>
+      </xsl:element>
+      <xsl:if test="$to-include='Yes'">
+        <xsl:apply-templates select="*" mode="outside"/>
+      </xsl:if>
+    </xsl:if>
+  </xsl:template>
 
   <xsl:variable name="columns">
     <columns>
@@ -46,7 +90,7 @@
   <xsl:template name="uri"/>
 
   <xsl:template match="tei:row" mode="preprocess">
-    <xsl:element name="{$type}">
+    <item>
       <xsl:attribute name="uri">
         <xsl:call-template name="uri"/>
       </xsl:attribute>
@@ -57,7 +101,7 @@
           </xsl:element>
         </xsl:if>
       </xsl:for-each>
-    </xsl:element>
+    </item>
   </xsl:template>
 
 
