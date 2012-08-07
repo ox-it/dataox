@@ -26,7 +26,9 @@
   <!-- SKOS Concept Scheme generation -->
   <xsl:template match="/">
     <xsl:variable name="items">
-      <xsl:apply-templates select="//tei:table[1]/tei:row[position() &gt; 1]" mode="preprocess"/>
+      <xsl:for-each-group select="//tei:table[1]/tei:row[position() &gt; 1]" group-by="position()">
+        <xsl:call-template name="preprocess"/>
+      </xsl:for-each-group>
     </xsl:variable>
     <rdf:RDF>
       <skos:ConceptScheme rdf:about="https://data.ox.ac.uk/id/equipment-category">
