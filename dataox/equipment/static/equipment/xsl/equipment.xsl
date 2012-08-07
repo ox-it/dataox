@@ -39,10 +39,7 @@
   <xsl:key name="make-lookup" match="ex:make" use="@name"/>
   <xsl:key name="model-lookup" match="ex:model" use="@name"/>
 
-
-
-    
-  <xsl:template match="quantity" mode="inside">
+  <xsl:template match="item/quantity" mode="inside">
     <xsl:choose>
       <xsl:when test="text() &gt; 1">
         <rdf:type rdf:resource="http://purl.org/goodrelations/v1#SomeItems"/>
@@ -60,13 +57,13 @@
     </xsl:choose>
   </xsl:template>
 
-  <xsl:template match="unique-identifier" mode="inside">
+  <xsl:template match="item/unique-identifier" mode="inside">
     <skos:notation rdf:datatype="https://data.ox.ac.uk/id/notation/equipment-rso">
       <xsl:value-of select="text()"/>
     </skos:notation>
   </xsl:template>
 
-  <xsl:template match="model" mode="inside">
+  <xsl:template match="item/model" mode="inside">
     <rdfs:label>
       <xsl:value-of select="normalize-space(concat(../make, ' ', .))"/>
     </rdfs:label>
@@ -114,13 +111,13 @@
     </gr:hasMakeAndModel>
   </xsl:template>
 
-  <xsl:template match="equipment-details" mode="inside">
+  <xsl:template match="item/equipment-details" mode="inside">
     <rdfs:comment>
       <xsl:value-of select="normalize-space(.)"/>
     </rdfs:comment>
   </xsl:template>
 
-  <xsl:template match="general-location" mode="inside">
+  <xsl:template match="item/general-location" mode="inside">
     <xsl:variable name="general-location" select="key('general-location-lookup', text(), $general-locations)"/>
     <xsl:if test="text()">
       <foaf:based_near>
@@ -151,7 +148,7 @@
     </xsl:if>
   </xsl:template>
 
-  <xsl:template match="primary-contact-email|secondary-contact-email|tertiary-contact-email" mode="inside">
+  <xsl:template match="item/primary-contact-email|item/secondary-contact-email|item/tertiary-contact-email" mode="inside">
     <xsl:variable name="contact-name">
       <xsl:choose>
         <xsl:when test="self::primary-contact-email"><xsl:value-of select="../primary-contact-name"/></xsl:when>
@@ -181,7 +178,7 @@
     </xsl:if>
   </xsl:template>
 
-  <xsl:template match="small-research-facility" mode="inside">
+  <xsl:template match="item/small-research-facility" mode="inside">
     <xsl:if test="text()">
       <oo:relatedFacility>
         <cerif:Facility rdf:about="{../@uri}/facility">

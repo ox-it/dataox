@@ -24,12 +24,13 @@
   <xsl:import href="common.xsl"/>
 
   <xsl:variable name="type">cerif:Facility</xsl:variable>
+  <xsl:variable name="group-column">1</xsl:variable>
   <xsl:template name="uri">
     <xsl:text>https://data.ox.ac.uk/id/facility/</xsl:text>
     <xsl:value-of select="tei:cell[1]/text()"/>
   </xsl:template>
 
-  <xsl:template match="name-of-facility-service" mode="inside">
+  <xsl:template match="item/name-of-facility-service" mode="inside">
     <rdfs:label>
       <xsl:value-of select="text()"/>
     </rdfs:label>
@@ -38,7 +39,7 @@
     </skos:notation>
   </xsl:template>
 
-  <xsl:template match="department-code" mode="inside">
+  <xsl:template match="item/department-code" mode="inside">
     <oo:organizationPart>
       <org:Organization rdf:about="https://data.ox.ac.uk/id/equipment-department/{ex:slugify(text())}">
         <skos:notation>
@@ -59,7 +60,7 @@
     </oo:organizationPart>
   </xsl:template>
 
-  <xsl:template match="contact-email" mode="inside">
+  <xsl:template match="item/contact-email" mode="inside">
     <oo:contact>
       <foaf:Agent rdf:about="{../@uri}/contact">
         <xsl:if test="../contact-name/text()">
@@ -71,5 +72,10 @@
       </foaf:Agent>
     </oo:contact>
   </xsl:template>
+
+  <!-- Columns we don't care about, which are handled in common.xsl -->
+  <xsl:template match="item/availability" mode="inside"/>
+  <xsl:template match="item/access" mode="inside"/>
+  <xsl:template match="item/restrictions-on-use" mode="inside"/>
 
 </xsl:stylesheet>

@@ -20,10 +20,12 @@
     xmlns:tei="http://www.tei-c.org/ns/1.0"
     xmlns:tio="http://purl.org/tio/ns#"
     xmlns:adhoc="http://vocab.ox.ac.uk/ad-hoc-data-ox/"
+    xmlns:xs="http://www.w3.org/2001/XMLSchema"
   >
 
   <xsl:param name="store" select="'public'"/>
   <xsl:variable name="type" select="'rdf:Resource'"/>
+  <xsl:variable name="group-column"></xsl:variable>
   <xsl:output method="xml" indent="yes"/>
 
   <xsl:function name="ex:slugify">
@@ -40,7 +42,9 @@
 
   <xsl:template match="/">
     <xsl:variable name="items">
-      <xsl:apply-templates select="//tei:table[1]/tei:row[position() &gt; 1]" mode="preprocess"/>
+      <xsl:for-each-group select="//tei:table[1]/tei:row[position() &gt; 1]" group-by="if ($group-column) then tei:cell[xs:integer($group-column)] else position()">
+        <xsl:call-template name="preprocess"/>
+      </xsl:for-each-group>
     </xsl:variable>
     <rdf:RDF>
       <xsl:apply-templates select="$items/item" mode="item"/>
@@ -48,6 +52,13 @@
   </xsl:template>
 
   <xsl:template match="item" mode="item">
+    <!-- This expects three columns per row called "Public", "University" and "SEESEC", each
+         containing either "Yes" or "No". $store is passed in as a parameter to the template
+         and decided which of these columns will be used.
+
+         The public target is slightly special. We say that everything exists, just not what
+         it is. It also does not get any contact details.
+    -->
     <xsl:variable name="to-include">
       <xsl:choose>
         <xsl:when test="$store='public'"><xsl:value-of select="public"/></xsl:when>
@@ -69,11 +80,11 @@
         <oo:formalOrganization rdf:resource="http://oxpoints.oucs.ox.ac.uk/id/00000000"/>
 
         <xsl:if test="$to-include='Yes'">
-          <xsl:apply-templates select="*" mode="inside"/>
+          <xsl:apply-templates select="*|row/*" mode="inside"/>
         </xsl:if>
       </xsl:element>
       <xsl:if test="$to-include='Yes'">
-        <xsl:apply-templates select="*" mode="outside"/>
+        <xsl:apply-templates select="*|row/*" mode="outside"/>
       </xsl:if>
     </xsl:if>
   </xsl:template>
@@ -89,7 +100,7 @@
 
   <xsl:template name="uri"/>
 
-  <xsl:template match="tei:row" mode="preprocess">
+  <xsl:template name="preprocess">
     <item>
       <xsl:attribute name="uri">
         <xsl:call-template name="uri"/>
@@ -101,13 +112,24 @@
           </xsl:element>
         </xsl:if>
       </xsl:for-each>
+      <xsl:for-each select="current-group()">
+        <row>
+          <xsl:for-each select="tei:cell">
+            <xsl:if test="text()">
+              <xsl:element name="{key('columns', position(), $columns)/@slug}">
+                <xsl:value-of select="normalize-space(text())"/>
+              </xsl:element>
+            </xsl:if>
+          </xsl:for-each>
+        </row>
+      </xsl:for-each>
     </item>
   </xsl:template>
 
 
   <!-- These are columns common among both equipment and facilities -->
 
-  <xsl:template match="shareable" mode="outside">
+  <xsl:template match="item/shareable" mode="outside">
     <xsl:choose>
       <xsl:when test="text()='Y'">
         <gr:Offering rdf:about="{../@uri}/offering">
@@ -123,7 +145,7 @@
     </xsl:choose>
   </xsl:template>
 
-  <xsl:template match="shareable" mode="inside">
+  <xsl:template match="item/shareable" mode="inside">
     <adhoc:equipment-shareability>
       <xsl:attribute name="rdf:resource">
         <xsl:text>https://data.ox.ac.uk/id/equipment-shareability/</xsl:text>
@@ -136,11 +158,11 @@
     </adhoc:equipment-shareability>
   </xsl:template>
 
-  <xsl:template match="subcategory" mode="inside">
+  <xsl:template match="row/subcategory" mode="inside">
     <dcterms:subject rdf:resource="https://data.ox.ac.uk/id/equipment-category/{ex:slugify(../category)}/{ex:slugify(.)}"/>
   </xsl:template>
 
-  <xsl:template match="availability" mode="inside">
+  <xsl:template match="item/availability" mode="inside">
     <oo:availability>
       <oo:Availability rdf:about="{../@uri}/availability">
         <rdfs:label><xsl:value-of select="text()"/></rdfs:label>
@@ -148,7 +170,7 @@
     </oo:availability>
   </xsl:template>
 
-  <xsl:template match="access" mode="inside">
+  <xsl:template match="item/access" mode="inside">
     <oo:accessPrerequisite>
       <oo:AccessPrerequisite rdf:about="{../@uri}/access-prerequisite">
         <rdfs:label><xsl:value-of select="text()"/></rdfs:label>
@@ -156,7 +178,7 @@
     </oo:accessPrerequisite>
   </xsl:template>
     
-  <xsl:template match="restrictions-on-use" mode="inside">
+  <xsl:template match="item/restrictions-on-use" mode="inside">
     <oo:useRestriction>
       <oo:UseRestriction rdf:about="{../@uri}/use-restriction">
         <rdfs:label><xsl:value-of select="text()"/></rdfs:label>
@@ -164,7 +186,7 @@
     </oo:useRestriction>
   </xsl:template>
 
-  <xsl:template match="website" mode="inside">
+  <xsl:template match="item/website" mode="inside">
     <xsl:choose>
       <xsl:when test="matches(text(), '^(http|https|ftp)://')">
         <foaf:page rdf:resource="{.}"/>
@@ -175,7 +197,7 @@
     </xsl:choose>
   </xsl:template>
 
-  <xsl:template match="image-url" mode="inside">
+  <xsl:template match="item/image-url" mode="inside">
     <xsl:choose>
       <xsl:when test="matches(text(), '^(http|https|ftp)://')">
         <foaf:depiction>
@@ -190,7 +212,7 @@
     </xsl:choose>
   </xsl:template>
 
-  <xsl:template match="department-code" mode="inside">
+  <xsl:template match="item/department-code" mode="inside">
     <oo:organizationPart>
       <org:Organization rdf:about="https://data.ox.ac.uk/id/equipment-department/{ex:slugify(text())}">
         <skos:notation>
@@ -211,7 +233,7 @@
     </oo:organizationPart>
   </xsl:template>
 
-  <xsl:template match="building-number" mode="inside">
+  <xsl:template match="item/building-number" mode="inside">
     <spatialrelations:within>
       <rdf:Resource rdf:about="https://data.ox.ac.uk/equipment-building/{ex:slugify(text())}">
         <skos:notation rdf:datatype="https://data.ox.ac.uk/id/notation/estates">
