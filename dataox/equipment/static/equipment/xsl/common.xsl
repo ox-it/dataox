@@ -159,7 +159,16 @@
   </xsl:template>
 
   <xsl:template match="row/subcategory" mode="inside">
-    <dcterms:subject rdf:resource="https://data.ox.ac.uk/id/equipment-category/{ex:slugify(../category)}/{ex:slugify(.)}"/>
+    <dcterms:subject>
+      <skos:Concept rdf:about="https://data.ox.ac.uk/id/unmatched-equipment-category/{ex:slugify(../category)}/{ex:slugify(.)}">
+        <skos:prefLabel>
+          <xsl:value-of select="text()"/>
+        </skos:prefLabel>
+        <skos:notation rdf:datatype="https://data.ox.ac.uk/id/notation/equipment-category">
+          <xsl:value-of select="concat(ex:slugify(../category), '/', ex:slugify(.))"/>
+        </skos:notation>
+      </skos:Concept>
+    </dcterms:subject>
   </xsl:template>
 
   <xsl:template match="item/availability" mode="inside">
