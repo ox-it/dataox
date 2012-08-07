@@ -10,11 +10,20 @@
   <h1>Welcome</h1>
 
   <p>Welcome to the University of Oxford's research facilities and equipment
-on-line searchable database which has been developed with funding
-from EPSRC.</p>
+     on-line searchable database which has been developed with funding from
+     <a href="http://www.epsrc.ac.uk/">EPSRC</a>. The purpose of this database
+     is to provide information on research
+     equipment over £10K and on the University’s Small Research Facilities
+     (SRFs) and to promote and encourage the sharing of equipment across the
+     University.</p>
 
-<p>You can search for a piece of equipment using the free text search field below.
-</p>
+  <p>You can search for a piece of equipment using only the free text search
+     field below, do an advanced search where you can refine by general
+     location and or browse by <a href="{% url browse %}">category</a>
+     or Facility.</p>
+
+  <p>If you would like to add or amend an entry, please see the Contribute
+     page. For all other queries please see the Contact page.</p>
 
   <form class="simpleSearch" method="get" action="{% url search %}">
     <input name="q"/>
