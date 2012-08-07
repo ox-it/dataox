@@ -149,3 +149,17 @@ class BrowseView(EquipmentView, HTMLView, RDFView, CannedQueryView, MappingView)
         context['concepts'].sort(key=lambda s:s.label)
         
         return context
+
+class FacilityListView(EquipmentView, HTMLView, RDFView, CannedQueryView, MappingView):
+    query = """
+        DESCRIBE * WHERE {
+          VALUES ?facilityType { cerif:Facility oo:Facility } .
+          ?facility a ?facilityType
+        }
+    """
+
+    template_name = "equipment/facilities"
+
+    def get_subjects(self, request, graph):
+        return set(graph.subjects(NS.rdf.type, NS.cerif.Facility)) \
+             | set(graph.subjects(NS.rdf.type, NS.oo.Facility))

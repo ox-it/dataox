@@ -84,6 +84,10 @@
       <th>Location:</th>
       <td>{{ subject.spatialrelations_within|node|default:"" }}{% if subject.foaf_based_near and subject.spatialrelations_within %}, {% endif %}
           {{ subject.foaf_based_near.label|default:"" }}</td>
+    </tr>{% endif %}{% if subject.oo_relatedFacility %}
+    <tr>
+      <th>Facility:</th>
+      <td>{{ subject.oo_relatedFacility|node }}</td>
     </tr>{% endif %}{% if subject.oo_availability %}
     <tr>
       <th>Availability:</th>

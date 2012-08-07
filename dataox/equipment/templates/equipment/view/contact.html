@@ -1,0 +1,11 @@
+  {% if subject.oo_contact %}
+  <div class="contactInfo" >
+  <h2>Contact information</h2>
+  <p>For more information, contact:</p>
+  <ul>{% if subject.oo_primaryContact %}{% with subject.oo_primaryContact as contact %}
+    <li>{{ contact.label }}{% if contact.email %}, <a href="{{ contact.email }}">{{ contact.email|slice:"7:" }}</a>{% endif %}</li>{% endwith %}{% endif %}
+  {% for contact in subject.all.oo_contact %}{% if contact != subject.oo_primaryContact %}
+    <li>{{ contact.label }}{% if contact.email %}, <a href="{{ contact.email }}">{{ contact.email|slice:"7:" }}</a>{% endif %}</li>{% endif %}{% endfor %}
+  </ul>
+  </div>
+  {% endif %}

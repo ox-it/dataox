@@ -4,6 +4,7 @@ from humfrey.utils.namespaces import NS, expand
 import dataox.resource
 
 equipment_types = set(map(expand, ['oo:Equipment', 'cerif:Equipment']))
+facility_types = set(map(expand, ['oo:Facility', 'cerif:Facility']))
 
 class Equipment(object):
     template_name = 'equipment/view/equipment'
@@ -38,6 +39,17 @@ class Equipment(object):
     def geo_long(self):
         return self.geo_provider.geo_long if self.geo_provider else None
 
+class Facility(object):
+    template_name = 'equipment/view/facility'
+
+    types = tuple(facility_types)
+
+    @classmethod
+    def _describe_patterns(cls):
+        return [
+            '%(equipment)s oo:relatedFacility %(uri)s',
+            '%(uri)s oo:contact %(contact)s . OPTIONAL { %(contact)s v:tel %(telephone)s }',
+        ]
 
 class Organization(dataox.resource.oxpoints.Organization):
     template_name = 'equipment/view/organization'
@@ -112,6 +124,6 @@ class Place(dataox.resource.oxpoints.Place):
         return [item for item in contained if set(self._graph.objects(item._identifier, NS.rdf.type)) & equipment_types]
 
 resource_registry = dataox.resource.resource_registry + ResourceRegistry(
-    Equipment, Organization, Place
+    Equipment, Facility, Organization, Place
 )
 

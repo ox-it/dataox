@@ -1,0 +1,24 @@
+{% extends "equipment/view/base.html" %}{% load humfrey_desc %}{% load humfrey_thumbnail %}{% load hosts %}
+
+
+{% block content %}
+{% include "equipment/login_prompt.html" %}
+  <h1>{{ subject.label }}</h1>
+  
+  <table>
+    <tbody>{% if subject.oo_organizationPart or subject.oo_formalOrganization %}
+      <tr>
+        <th>Managed by:</th>
+        <td>{{ subject.oo_organizationPart|node|default:"" }}{% if subject.oo_organizationPart and subject.oo_formalOrganization %}, {% endif %}{{ subject.oo_formalOrganization.label|default:"" }}</td>
+      </tr>{% endif %}
+    </tbody>
+  </table>
+
+{% include "equipment/view/contact.html" %}
+  
+  {% with subject.all.oo_relatedFacility_inv as equipment_list %}
+    {% include "equipment/view/equipment_list.html" %}
+  {% endwith %}
+
+
+{% endblock %}

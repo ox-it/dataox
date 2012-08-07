@@ -26,6 +26,8 @@ urlpatterns = patterns('',
     url(r'^view.+$', equipment_views.DocView.as_view(**mapping_kwargs), name='doc'),
     url(r'^desc/$', equipment_views.DescView.as_view(**mapping_kwargs), name='desc'),
 
+    url(r'^facilities/$', equipment_views.FacilityListView.as_view(**mapping_kwargs), name='facilities'),
+
     url(r'^browse/(?:(?P<notation>[a-z\-\d\/]+)/)?$', equipment_views.BrowseView.as_view(**mapping_kwargs), name='browse'),
 
     url(r'^login/', auth_views.login, name='login'),
