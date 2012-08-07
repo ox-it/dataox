@@ -44,7 +44,7 @@
       <xsl:when test="text() &gt; 1">
         <rdf:type rdf:resource="http://purl.org/goodrelations/v1#SomeItems"/>
         <gr:hasInventoryLevel>
-          <gr:QuantitativeValue rdf:about="{@uri}/quantity">
+          <gr:QuantitativeValue rdf:about="{../@uri}/quantity">
             <gr:hasValue rdf:datatype="http://www.w3.org/2001/XMLSchema#int">
               <xsl:value-of select="text()"/>
             </gr:hasValue>
