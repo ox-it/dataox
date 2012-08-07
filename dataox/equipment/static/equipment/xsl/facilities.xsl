@@ -72,10 +72,4 @@
     </oo:contact>
   </xsl:template>
 
-  <xsl:template match="facility-id" mode="inside">
-    <skos:notation rdf:datatype="https://data.ox.ac.uk/id/notation/facility-rso">
-      <xsl:value-of select="text()"/>
-    </skos:notation>
-  </xsl:template>
-
 </xsl:stylesheet>
