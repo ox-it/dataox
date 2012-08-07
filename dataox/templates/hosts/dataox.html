@@ -17,6 +17,7 @@
     <script type="text/javascript" src="{{ STATIC_URL }}js/OpenLayers.js"></script>
     <script type="text/javascript" src="{{ STATIC_URL }}js/jquery.flot.js"></script>
     <script type="text/javascript" src="{{ STATIC_URL }}js/base.js"></script>
+    {% include "analytics/include_head.html" %}
     {% block extra_head %}{% endblock %}
   </head>
 
@@ -67,6 +68,7 @@
         <a href="https://github.com/oucs/dataox">Source</a>
       {% endblock %}</footer>
     </div>
+    {% include "analytics/include_foot.html" %}
   </body>
 {% endblock %}
 </html>
