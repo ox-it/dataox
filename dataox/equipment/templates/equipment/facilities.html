@@ -9,10 +9,20 @@
   <h1>Facilities</h1>
   
   {% if subjects %}
-  <ul>
-  {% for subject in subjects %}
-    <li>{{ subject|node }}</li>{% endfor %}
-  </ul>
+  <table>
+    <thead>
+      <tr>
+        <th>Name</th>
+        <th>Department</th>
+      </tr>
+    </thead>
+    <tbody>{% for subject in subjects %}
+      <tr>
+        <td>{{ subject|node }}</td>
+        <td>{{ subject.oo_organizationPart|node }}</td>
+      </tr>{% endfor %}
+    </tbody>
+  </table>
   {% else %}
   <p>There are no facilities to display.{% if not user.is_authenticated %} Try logging in.{% endif %}</p>
   {% endif %}
