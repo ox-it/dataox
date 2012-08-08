@@ -143,6 +143,7 @@ UPDATE_TRANSFORMS += (
 UPDATE_FILES_DIRECTORY = os.path.join(MEDIA_ROOT, 'update-files')
 
 ADDITIONAL_NAMESPACES.update({
+    'adhoc': 'http://vocab.ox.ac.uk/ad-hoc-data-ox/',
     'cerif': 'http://spi-fm.uca.es/neologism/cerif#',
     'vacancy': 'http://purl.org/openorg/vacancy/',
     'salary': 'http://purl.org/openorg/salary/',
