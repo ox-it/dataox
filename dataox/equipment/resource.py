@@ -48,6 +48,8 @@ class Facility(object):
     def _describe_patterns(cls):
         return [
             '%(equipment)s oo:relatedFacility %(uri)s',
+            '%(uri)s dcterms:subject %(category)s',
+            '%(uri)s oo:organizationPart %(department)s',
             '%(uri)s oo:contact %(contact)s . OPTIONAL { %(contact)s v:tel %(telephone)s }',
         ]
 
@@ -76,7 +78,11 @@ class Organization(dataox.resource.oxpoints.Organization):
 
     @property
     def allEquipment(self):
-        return self.get_all('oo:organizationPart', inverse=True)
+        return [r for r in self.get_all('oo:organizationPart', inverse=True) if set(t._identifier for t in r.get_all('rdf:type')) & equipment_types]
+
+    @property
+    def allFacilities(self):
+        return [r for r in self.get_all('oo:organizationPart', inverse=True) if set(t._identifier for t in r.get_all('rdf:type')) & facility_types]
 
 class Place(dataox.resource.oxpoints.Place):
     template_name = 'equipment/view/place'
