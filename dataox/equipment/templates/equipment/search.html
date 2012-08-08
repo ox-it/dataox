@@ -75,24 +75,8 @@
   </div>
   <ol start="{{ start }}">
   {% for hit in hits.hits %}{% block hit %}
-  <li>
-    <h3><a href="{{ hit.source.uri|doc_url }}">{{ hit.source.label }}</a>{% if hit.source.quantity > 1 %} <span class="hidden">(</span><span class="equipment-quantity" title="{{ hit.source.quantity }} available">{{ hit.source.quantity }}</span><span class="hidden">)</span>{% endif %}</h3>
-    <dl class="itemDetails">{% if hit.source.equipmentOf.label or hit.source.formalOrganisation.label %}
-      <dt>Managed by:</dt>
-      <dd>{{ hit.source.equipmentOf.label|default:"" }}{% if hit.source.equipmentOf.label and hit.source.formalOrganisation.label %}, {% endif %}
-          {{ hit.source.formalOrganisation.label }}</dd>
-    {% endif %}{% if hit.source.basedNear.label or hit.source.building.label %}
-      <dt>Location:</dt>
-      <dd>{{ hit.source.building.label|default:"" }}{% if hit.source.basedNear.label and hit.source.building.label %}, {% endif %}
-          {{ hit.source.basedNear.label|default:"" }}</dd>{% endif %}{% if hit.source.availability.label %}
-      <dt>Availability:</dt>
-      <dd>{{ hit.source.availability.label }}</dd>{% endif %}
-    </dl>
-    <div style="clear: both"/>
-    {% if hit.source.description %}
-    <div class="equipment-search-description">{{ hit.source.description|search_html|truncatewords_html:25 }}</div>
-    {% endif %}
-
+  <li class="search-item">
+    {% include hit|search_item_template:default_search_item_template_name %}
   </li>
   {% endblock %}{% endfor %}
   </ol>

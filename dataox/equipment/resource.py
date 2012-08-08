@@ -8,6 +8,7 @@ facility_types = set(map(expand, ['oo:Facility', 'cerif:Facility']))
 
 class Equipment(object):
     template_name = 'equipment/view/equipment'
+    search_item_template_name = 'search_item/equipment'
 
     types = tuple(equipment_types)
 
