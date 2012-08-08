@@ -7,9 +7,9 @@
     <link rel="icon" href="{{ STATIC_URL }}favicon.ico" type="image/x-icon"/>{% if no_index %}
     <meta name="robots" content="noindex"/>{% endif %}
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
-<!--[if lt IE 9]>
-<script src="//html5shim.googlecode.com/svn/trunk/html5.js"></script>
-<![endif]-->
+  <!--[if lt IE 9]>
+  <script src="{{ STATIC_URL }}js/html5shiv.js"></script>
+  <![endif]-->
     <script type="text/javascript">
       var staticURL = "{{ STATIC_URL|escapejs }}";
     </script>
