@@ -9,7 +9,7 @@
   <h1>Facilities</h1>
   
   {% if subjects %}
-  <table>
+  <table class="facility-list">
     <thead>
       <tr>
         <th>Name</th>
@@ -17,7 +17,7 @@
       </tr>
     </thead>
     <tbody>{% for subject in subjects %}
-      <tr>
+      <tr class="row-{% cycle "odd" "even" %}">
         <td>{{ subject|node }}</td>
         <td>{{ subject.oo_organizationPart|node }}</td>
       </tr>{% endfor %}

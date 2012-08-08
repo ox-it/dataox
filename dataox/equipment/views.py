@@ -160,7 +160,13 @@ class FacilityListView(EquipmentView, HTMLView, RDFView, CannedQueryView, Mappin
     """
 
     template_name = "equipment/facilities"
+    with_labels = True
 
     def get_subjects(self, request, graph):
-        return set(graph.subjects(NS.rdf.type, NS.cerif.Facility)) \
-             | set(graph.subjects(NS.rdf.type, NS.oo.Facility))
+        facilities = set(graph.subjects(NS.rdf.type, NS.cerif.Facility)) \
+                   | set(graph.subjects(NS.rdf.type, NS.oo.Facility))
+
+        facilities = map(self.resource, facilities)
+        facilities.sort(key=lambda facility: facility.label)
+
+        return facilities
