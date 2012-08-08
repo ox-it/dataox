@@ -53,7 +53,13 @@ class SearchView(EquipmentView, elasticsearch_views.SearchView):
 
     dependent_parameters = {'filter.category.uri': ('filter.subcategory.uri',),
                             'filter.formalOrganisation.uri': ('filter.equipmentOf.uri',)}
-    
+
+    def get_query(self, parameters, cleaned_data, start, page_size):
+        query = super(SearchView, self).get_query(parameters, cleaned_data, start, page_size)
+        # Make sure things only come from the equipment, facility and service types.
+        query['filter']['and'].append({'or': [{'type': {'value': t}} for t in ('equipment', 'facility', 'service')]})
+        return query
+
     def finalize_context(self, request, context):
         if not context.get('q'):
             context['form'] = AdvancedSearchForm(request.GET or None,
