@@ -43,7 +43,7 @@
 {% if concept.dcterms_subject_inv %}
 <h2 class="hidden">Equipment</h2>
 
-{% include "equipment/view/equipment_list.html" with equipment_list=concept.all.dcterms_subject_inv show_managed_by=1 show_location=1 %}
+{% include "equipment/view/equipment_list.html" with equipment_list=equipment show_managed_by=1 show_location=1 %}
 
 {% endif %}
 

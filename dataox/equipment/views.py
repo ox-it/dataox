@@ -134,7 +134,8 @@ class BrowseView(EquipmentView, HTMLView, RDFView, CannedQueryView, MappingView)
 
     def finalize_context(self, request, context, notation):
         graph = context['graph']
-        context['equipment'] = map(self.resource, graph.subjects(NS.rdf.type, NS.oo.Equipment))
+        context['equipment'] = map(self.resource, set(graph.subjects(NS.rdf.type, NS.oo.Equipment)) \
+                                                | set(graph.subjects(NS.rdf.type, NS.cerif.Equipment)))
         context['equipment'].sort(key=lambda s:s.label)
         if self.notation:
             concept = graph.value(None, NS.skos.notation, self.notation)
