@@ -6,7 +6,12 @@
   <h1>{{ subject.label }}</h1>
   
   <table>
-    <tbody>{% if subject.oo_organizationPart or subject.oo_formalOrganization %}
+    <tbody>{% if subject.dcterms_subject %}
+      <tr>
+        <th rowspan="{{ subject.all.dcterms_subject|length }}">Category:</th>{% for category in subject.all.dcterms_subject %}{% if category.skos_notation %}
+        <td><a href="{% url browse category.skos_notation %}">{{ category.label }}</a></td>{% else %}
+        <td>{{ category.label }}</td>{% endif %}{% endfor %}
+      </tr>{% endif %}{% if subject.oo_organizationPart or subject.oo_formalOrganization %}
       <tr>
         <th>Managed by:</th>
         <td>{{ subject.oo_organizationPart|node|default:"" }}{% if subject.oo_organizationPart and subject.oo_formalOrganization %}, {% endif %}{{ subject.oo_formalOrganization.label|default:"" }}</td>
@@ -15,10 +20,8 @@
   </table>
 
 {% include "equipment/view/contact.html" %}
-  
-  {% with subject.all.oo_relatedFacility_inv as equipment_list %}
-    {% include "equipment/view/equipment_list.html" %}
-  {% endwith %}
+
+{% include "equipment/view/equipment_list.html" with equipment_list=subject.all.oo_relatedFacility_inv show_location=1 %}
 
 
 {% endblock %}

@@ -14,11 +14,13 @@
   <p class="homepage">Homepage: <span>{{ subject.foaf_homepage|node }}</span></p>
   {% endif %}
 
+{% if subject.allEquipment %}
   <section>
   	<h2>Equipment</h2>
   	
   	{% include "equipment/view/equipment_list.html" with equipment_list=subject.allEquipment show_location=1 %}
   </section>
+{% endif %}
 {% endblock %}
 
 {% block right_sidebar %}

@@ -92,6 +92,10 @@
     <tr>
       <th>Availability:</th>
       <td>{{ subject.oo_availability.label }}</td>
+    </tr>{% endif %}{% if subject|property:"adhoc:equipment-shareability" %}
+    <tr>
+      <th>Shareability:</th>
+      <td>{{ subject|property:"adhoc:equipment-shareability"|property:"skos:prefLabel"|capfirst }}</td>
     </tr>{% endif %}{% if subject.oo_accessPrerequisite %}
     <tr>
       <th>Access prerequisites:</th>
