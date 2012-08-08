@@ -686,14 +686,12 @@ body.equipment-search .equipment-quantity:before {
 	content: '×';
 }
 
-body.equipment-search .equipment-quantity {
+body.equipment-search .equipment-quantity, body.equipment-search .equipment-shareability {
 	font-size: 70%;
 	margin: 2px;
 	padding: 3px;
 	background: #FDFEFE;
-	filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#fdfefe', endColorstr='#f4f7fa');
-	background: -webkit-gradient(linear, left top, left bottom, from(#FDFEFE), to(#F4F7FA));
-	background: -moz-linear-gradient(top, #414E5D, #59708A);
+	filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#414E5D', endColorstr='#59708A');
 	border: 1px solid #002147;		
 	-moz-border-radius: 5px;
 	-webkit-border-radius: 5px;
@@ -702,6 +700,10 @@ body.equipment-search .equipment-quantity {
 	color: white;
 }
 
+html>body.equipment-search .equipment-quantity, html>body.equipment-search .equipment-shareability {
+	background: -webkit-gradient(linear, left top, left bottom, from(#414E5D), to(#59708A));
+	background: -moz-linear-gradient(top, #414E5D, #59708A);
+}
 
 ul.equipmentList  {
 
