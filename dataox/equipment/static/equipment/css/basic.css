@@ -288,7 +288,11 @@ list-style: disc;
 .main li 
 {
 list-style: disc;
-margin: 0.5em 0px;
+margin: 0.2em 0px;
+}
+
+body.legal .main li ul {
+	margin: 0.2em 0;
 }
 
 .main dd {
@@ -548,14 +552,14 @@ dl.itemDetails
 	{
 	clear: both;
 	font-size: 0.9em;
-	margin: 10px 0px ;
+	margin: 3px 0 10px 0 ;
 	padding-right: 12em;
 }
 
 dl.itemDetails dt,
 dl.itemDetails dd{
 
-  margin: 5px 2px	;
+  margin: 0px 2px	;
 }
 
 dl.itemDetails dt
@@ -762,4 +766,23 @@ ul.equipmentList  li div{
 
 table td, table th {
 	padding: 3px;
+}
+
+table.facility-list {
+	border-bottom: 1px solid #677A84;
+}
+
+table.facility-list thead th {
+	background-color: #677A84;
+	color: #fff;
+}
+
+table.facility-list tr.row-even {
+	background-color: #DFE2E4
+}
+
+table.facility-list th, table.facility-list td {
+	border-left: 1px solid #677A84;
+	border-right: 1px solid #677A84;
+
 }
