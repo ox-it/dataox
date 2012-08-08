@@ -98,7 +98,7 @@ class BrowseView(EquipmentView, HTMLView, RDFView, CannedQueryView, MappingView)
     def get_query(self, request, notation):
         if self.notation:
             return """
-                DESCRIBE ?concept ?narrower ?equipment ?narrowerEquipment ?other WHERE {{
+                DESCRIBE ?concept ?narrower ?equipment ?narrowerEquipment ?other ?broader WHERE {{
                   ?concept skos:notation {notation} .
                   OPTIONAL {{
                     ?equipment dcterms:subject ?concept .
@@ -107,6 +107,9 @@ class BrowseView(EquipmentView, HTMLView, RDFView, CannedQueryView, MappingView)
                   OPTIONAL {{
                     ?concept skos:narrower ?narrower .
                     OPTIONAL {{ ?narrowerEquipment dcterms:subject ?narrower }}
+                  }} .
+                  OPTIONAL {{
+                    ?broader skos:narrower ?concept .
                   }}
                 }}""".format(notation=self.notation.n3())
         else:
