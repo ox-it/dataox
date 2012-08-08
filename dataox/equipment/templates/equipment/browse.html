@@ -1,13 +1,15 @@
 {% extends "equipment/base.html" %}
 
-{% block title %}Browse{% endblock %}
+{% block title %}{% if not concept %}Browse{% else %}{{ concept.label }}{% endif %}{% endblock %}
 
 {% block body_class %}equipment-browse equipment-browse-{{ level }}{% endblock %}
 
 {% block content %}
 {% include "equipment/login_prompt.html" %}
 
-<h1>{% if not concept %}Categories{% else %}{{ concept.label }}{% endif %}</h1>
+{% with concept.skos_narrower_inv as broader %}
+<h1>{% if not concept %}Categories{% else %}{% if broader %}<a href="{% url browse broader.skos_notation %}">{{ broader.label }}</a> » {% endif %}{{ concept.label }}{% endif %}</h1>
+{% endwith %}
 
 {% if not concept %}
 <p>All pieces of equipment have been categorised according to the experimental
