@@ -80,7 +80,7 @@
         </skos:hasTopConcept>
         <skos:hasTopConcept>
           <skos:Concept rdf:about="https://data.ox.ac.uk/id/equipment-shareability/no">
-            <skos:prefLabel>contact for details</skos:prefLabel>
+            <skos:prefLabel>no</skos:prefLabel>
             <skos:definition>It is unlikely that the item is available for re-use by others.</skos:definition>
             <skos:notation rdf:datatype="https://data.ox.ac.uk/id/notation/equipment-shareability">no</skos:notation>
           </skos:Concept>
