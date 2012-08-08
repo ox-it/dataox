@@ -62,7 +62,7 @@ for line in open('requirements.txt'):
 setup(
     name='dataox',
     description="The frontend to the University of Oxford's institutional data site.",
-    author='Oxford University Computing Services',
+    author='IT Services, University of Oxford',
     author_email='opendata@oucs.ox.ac.uk',
     version='0.2',
     packages=packages,

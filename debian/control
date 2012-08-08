@@ -1,7 +1,7 @@
 Source: oxford-dataox
 Section: python
 Priority: extra
-Maintainer: Alexander Dutton <alexander.dutton@oucs.ox.ac.uk>
+Maintainer: Alexander Dutton <alexander.dutton@it.ox.ac.uk>
 Build-Depends: debhelper (>= 7.0.50~),
                python-all,
                python-support
