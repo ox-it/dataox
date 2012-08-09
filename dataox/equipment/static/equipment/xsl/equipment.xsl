@@ -198,6 +198,14 @@
     </xsl:if>
   </xsl:template>
 
+  <xsl:template match="item/keywords" mode="inside">
+    <xsl:for-each select="tokenize(text(), ';')">
+      <dc:subject>
+        <xsl:value-of select="normalize-space(.)"/>
+      </dc:subject>
+    </xsl:for-each>
+  </xsl:template>
+
   <xsl:template match="*" mode="pages">
     <xsl:if test="@page">
       <foaf:page rdf:resource="{@page}"/>
