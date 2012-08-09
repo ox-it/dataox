@@ -12,6 +12,8 @@
   <script src="{{ STATIC_URL }}js/html5shiv.js"></script>
   <![endif]-->
 
+  <link rel="stylesheet" type="text/css" href="{{ STATIC_URL }}jquery-ui/css/smoothness/jquery-ui-1.8.22.custom.css"></script>
+
   <!-- print stylesheet for print stlying -->
   <link media="print" href="{{ STATIC_URL }}equipment/css/print.css" rel="stylesheet" type="text/css" />
 
@@ -61,9 +63,11 @@
   
   <script type="text/javascript">
     var staticURL = "{{ STATIC_URL|escapejs }}";
+    var searchURL = "{% url search %}";
   </script>
-  <script type="text/javascript" src="{{ STATIC_URL }}js/jquery-1.6.4.min.js"></script>
+  <script type="text/javascript" src="{{ STATIC_URL }}js/jquery-1.7.2.min.js"></script>
   <script type="text/javascript" src="{{ STATIC_URL }}jquery-collapsible-content/js/jQuery.collapsible.js"></script>
+  <script type="text/javascript" src="{{ STATIC_URL }}jquery-ui/js/jquery-ui-1.8.22.custom.min.js"></script>
   <script type="text/javascript" src="{{ STATIC_URL }}equipment/base.js"></script>
   {% block extra_head %}{% endblock %}
   
