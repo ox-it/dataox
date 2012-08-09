@@ -705,3 +705,35 @@ table.facility-list th, table.facility-list td {
 	border-right: 1px solid #677A84;
 }
 
+table.contribute {
+	border: 1px solid #ccc;
+	width: 100%;
+}
+
+table.contribute tr {
+	border-bottom: 1px solid #eee;
+	border-top: 1px solid #eee;
+padding: 3px;
+}
+
+table.contribute th {
+	vertical-align: middle;
+	text-align: right;
+}
+
+table.contribute tfoot td {
+	text-align: center;
+}
+
+table.contribute tbody input, table.contribute tbody textarea {
+	width: 90%;
+}
+
+ul.errorlist {
+	list-style: none;
+	color: white;
+	background-color: #f44;
+}
+
+ul.errorlist li {
+}

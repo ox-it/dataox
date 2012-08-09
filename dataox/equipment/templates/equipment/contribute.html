@@ -3,3 +3,24 @@
 {% block title %}Contribute{% endblock %}
 
 {% block body_class %}equipment-contribute{% endblock %}
+
+{% block content %}
+  <h1>Contribute</h1>
+
+  <form method="post" action=".">
+
+  	<table class="contribute">
+	  <tbody>
+        {{ form }}
+	  </tbody>
+	  <tfoot>
+	    <tr>
+	      <td colspan="2">
+	        <input type="submit" value="Submit">
+	      </td>
+	    </tr>
+	  </tfoot>
+  	</table>
+  </form>
+
+  {% endblock %}

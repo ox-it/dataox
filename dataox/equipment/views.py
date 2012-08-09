@@ -1,5 +1,9 @@
-from django_conneg.views import HTMLView
+from django.conf import settings
 from django.http import Http404
+from django.template import loader, RequestContext
+from django.core.mail import EmailMessage
+from django_conneg.http import HttpResponseSeeOther
+from django_conneg.views import HTMLView
 import rdflib
 
 from humfrey.desc import views as desc_views
@@ -9,7 +13,7 @@ from humfrey.results.views.standard import RDFView
 from humfrey.sparql.views import CannedQueryView
 from humfrey.utils.namespaces import NS
 
-from .forms import AdvancedSearchForm
+from . import forms
 
 class EquipmentView(object):
     """
@@ -32,6 +36,41 @@ class DescView(EquipmentView, desc_views.DescView):
 
 class DocView(EquipmentView, desc_views.DocView):
     template_name = 'equipment/view/base'
+
+class ContributeView(HTMLView):
+    recipients_to = [('Research Services', 'research.facilities@admin.ox.ac.uk')]
+    recipients_cc = [('Open Data Team', 'opendata-admin@maillist.ox.ac.uk')]
+
+    def common(self, request):
+        if hasattr(self, 'context'):
+            return
+        self.context = {'form': forms.ContributeForm(request.POST or None)}
+
+    def get(self, request):
+        if 'submitted' in request.GET:
+            return self.render(request, {}, 'equipment/contribute-submitted')
+
+        self.common(request)
+        return self.render(request, self.context, 'equipment/contribute')
+
+    def post(self, request):
+        self.common(request)
+        if not self.context['form'].is_valid():
+            return self.get(request)
+
+        template = loader.get_template("equipment/contribute.eml")
+        body = template.render(RequestContext(request, {'data': self.context['form'].cleaned_data}))
+
+        message = EmailMessage("New equipment listing",
+                               body=body,
+                               to=['%s <%s>' % recipient for recipient in self.recipients_to],
+                               cc=['%s <%s>' % recipient for recipient in self.recipients_cc],
+                               #from_email="{0.first_name} {0.last_name} (via www.research-facilities.ox.ac.uk) <{1}>".format(request.user, settings.SERVER_EMAIL),
+                               headers={#'From': "{0.first_name} {0.last_name} (via www.research-facilities.ox.ac.uk) <{1}>".format(request.user, settings.SERVER_EMAIL),
+                                        'Sender': settings.SERVER_EMAIL,
+                                        'Reply-To': request.user.email})
+        message.send(fail_silently=False)
+        return HttpResponseSeeOther("?submitted=true")
 
 class SearchView(EquipmentView, elasticsearch_views.SearchView):
     @property
@@ -57,14 +96,15 @@ class SearchView(EquipmentView, elasticsearch_views.SearchView):
     def get_query(self, parameters, cleaned_data, start, page_size):
         query = super(SearchView, self).get_query(parameters, cleaned_data, start, page_size)
         # Make sure things only come from the equipment, facility and service types.
-        query['filter']['and'].append({'or': [{'type': {'value': t}} for t in ('equipment', 'facility', 'service')]})
+        if 'type' not in self.request.GET:
+            query['filter']['and'].append({'or': [{'type': {'value': t}} for t in ('equipment', 'facility', 'service')]})
         return query
 
     def finalize_context(self, request, context):
         if not context.get('q'):
-            context['form'] = AdvancedSearchForm(request.GET or None,
-                                                 search_url=self.search_url,
-                                                 store=self.store)
+            context['form'] = forms.AdvancedSearchForm(request.GET or None,
+                                                       search_url=self.search_endpoint.search_url,
+                                                       store=self.store)
         return context
 
 #class ItemView(EquipmentView, HTMLView, JSONPView):

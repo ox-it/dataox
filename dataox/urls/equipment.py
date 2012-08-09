@@ -25,6 +25,7 @@ urlpatterns = patterns('',
     url(r'^view/$', equipment_views.DocView.as_view(**mapping_kwargs), name='doc-generic'),
     url(r'^view.+$', equipment_views.DocView.as_view(**mapping_kwargs), name='doc'),
     url(r'^desc/$', equipment_views.DescView.as_view(**mapping_kwargs), name='desc'),
+    url(r'^contribute/$', equipment_views.ContributeView.as_view(), name='contribute'),
 
     url(r'^facilities/$', equipment_views.FacilityListView.as_view(**mapping_kwargs), name='facilities'),
 
@@ -37,7 +38,6 @@ urlpatterns = patterns('',
     url(r'^$', misc_views.SimpleView.as_view(template_name="equipment/index"), name='index'),
     url(r'^about/$', misc_views.SimpleView.as_view(template_name="equipment/about"), name='about'),
     url(r'^contact/$', misc_views.SimpleView.as_view(template_name="equipment/contact"), name='contact'),
-    url(r'^contribute/$', misc_views.SimpleView.as_view(template_name="equipment/contribute"), name='contribute'),
     url(r'^legal-and-privacy/$', misc_views.SimpleView.as_view(template_name='legal'), name='legal'),
     
 ) + staticfiles_urlpatterns()

@@ -34,3 +34,48 @@ def AdvancedSearchForm(*args, **kwargs):
     form = type('AdvancedSearchForm', (forms.Form,), attrs)
     
     return form(*args, **kwargs)
+
+class ContributeForm(forms.Form):
+    manufacturer = forms.CharField()
+    model = forms.CharField()
+    description = forms.CharField(widget=forms.Textarea,
+                                  help_text="What kind of things can it do? If there are any alterations, list them here.")
+    quantity = forms.IntegerField()
+    srf = forms.CharField(label="Name of Research Facility",
+                          help_text="If this equipment is part of an SRF or MRF, provide its name here.",
+                          required=False)
+    availability = forms.CharField(widget=forms.Textarea,
+                                   help_text="How much spare capacity does this equipment have?",
+                                   required=False)
+    access = forms.CharField(widget=forms.Textarea,
+                             help_text="What groups of people are allowed to use it?",
+                             required=False)
+    useRestrictions = forms.CharField(widget=forms.Textarea,
+                                      label="Restrictions on use:",
+                                      help_text="e.g. funding body restrictions, training requirements, contamination issues",
+                                      required=False)
+
+    page = forms.URLField(required=False, label="Web page:")
+    image = forms.URLField(label="Image URL:",
+                           help_text="If there's a picture of this piece of equipment on the web, provide a link to it here.",
+                           required=False)
+
+    department = forms.CharField(widget=forms.TextInput(attrs={'class': 'autocomplete', 'data-type': 'organization'}))
+    place = forms.CharField(widget=forms.TextInput(attrs={'class': 'autocomplete', 'data-type': 'spatial-thing'}),
+                            label="Location",
+                            help_text="Most likely a building, but maybe a room.")
+
+    primary_contact_name = forms.CharField()
+    primary_contact_email = forms.EmailField()
+
+    secondary_contact_name = forms.CharField(required=False)
+    secondary_contact_email = forms.EmailField(required=False)
+
+    tertiary_contact_name = forms.CharField(required=False)
+    tertiary_contact_email = forms.EmailField(required=False)
+
+    university = forms.BooleanField(label="Show to members of the University?", required=False)
+    seesec = forms.BooleanField(label="Show to members of other universities?", required=False)
+    public = forms.BooleanField(label="Show to everyone?", required=False)
+
+    notes = forms.CharField(widget=forms.Textarea, label="Anything else you'd like us to know?", required=False)

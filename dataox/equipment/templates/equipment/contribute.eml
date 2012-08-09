@@ -1,0 +1,46 @@
+Dear Research Services,
+
+Someone has just submitted a new piece of equipment!
+
+Submitted by: {{ user.first_name }} {{ user.last_name }} ({{ user.username }})
+              {{ user.email }}
+Groups: {{ user.groups.all|join:", " }}
+From IP: {{ request.META.REMOTE_ADDR }}
+
+Make: {{ data.manufacturer }}
+Model: {{ data.model }}
+
+Description:
+{{ data.description }}
+
+Quantity: {{ data.quantity }}
+SRF: {{ data.srf|default:"not specified" }}{% if data.availability %}
+
+Availability:
+{{ data.availability }}{% endif %}{% if data.access %}
+
+Access:
+{{ data.access }}{% endif %}{% if data.useRestrictions %}
+
+Restrictions on use:
+{{ data.useRestrictions }}{% endif %}
+
+URL: {{ data.page }}
+Image: {{ data.image }}
+
+Department: {{ data.department }}
+Location: {{ data.place }}
+
+Primary contact:   {{ data.primary_contact_name }}
+                   {{ data.primary_contact_email }}{% if data.secondary_contact_name or data.secondary_contact_email %}
+Secondary contact: {{ data.secondary_contact_name }}
+                   {{ data.secondary_contact_email }}{% endif %}{% if data.tertiary_contact_name or data.tertiary_contact_email %}
+Tertiary contact:  {{ data.tertiary_contact_name }}
+                   {{ data.tertiary_contact_email }}{% endif %}{% if data.notes %}
+
+Additional information:
+{{ data.notes }}{% endif %}
+
+Best regards,
+
+The Open Data Team
