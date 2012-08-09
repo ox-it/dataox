@@ -1,8 +1,4 @@
-
-/*
-
-*/
-
-@import url("small.css");
-@import url("medium.css"); 
-
+/* IE seems to assume clears on these things. */
+aside.left-sidebar, aside.right-sidebar, div.main article.content {
+	clear: none;
+}
