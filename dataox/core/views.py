@@ -54,7 +54,7 @@ class ExploreView(HTMLView, RedisView):
         }
         return self.render(request, context, 'explore')
 
-class ExampleResourceView(ResultSetView, HTMLView):
+class ExampleResourceView(ResultSetView, HTMLView, StoreView, MappingView):
     _QUERY = """
         CONSTRUCT {
             ?dataset a void:Dataset ;
@@ -78,7 +78,7 @@ class ExampleResourceView(ResultSetView, HTMLView):
 
         return self.render(request, context, 'explore-resource')
 
-class ExampleQueryView(ResultSetView, HTMLView):
+class ExampleQueryView(ResultSetView, HTMLView, StoreView, MappingView):
     _QUERY = """
         SELECT ?dataset ?datasetLabel ?value ?label ?comment WHERE {
             ?dataset a void:Dataset ;
