@@ -117,7 +117,7 @@
     </tr>{% endif %}{% if subject.foaf_page %}
     <tr>
       <th>More information:</th>
-      <td>{{ subject.foaf_page|node }}</td>{% endif %}
+      <td><a href="{{ subject.foaf_page.uri }}">{{ subject.foaf_page.uri }}</a></td>{% endif %}
     </tr>
   </table>
 
