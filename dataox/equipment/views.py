@@ -221,14 +221,14 @@ class BrowseView(EquipmentView, HTMLView, RDFView, CannedQueryView, MappingView)
             context['concepts'] = map(self.resource, graph.objects(self.concept_scheme, NS.skos.hasTopConcept))
             context['level'] = 'index'
         context['concepts'].sort(key=lambda s:s.label)
-        
+
         return context
 
 class FacilityListView(EquipmentView, HTMLView, RDFView, CannedQueryView, MappingView):
     query = """
         DESCRIBE * WHERE {
           VALUES ?facilityType { cerif:Facility oo:Facility } .
-          ?facility a ?facilityType
+          ?facility a ?facilityType ; oo:formalOrganization <http://oxpoints.oucs.ox.ac.uk/id/00000000>
         }
     """
 
