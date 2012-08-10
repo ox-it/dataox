@@ -1,4 +1,4 @@
-Dear Research Services,
+{% autoescape off %}Dear Research Services,
 
 Someone has just submitted a new piece of equipment!
 
@@ -12,6 +12,9 @@ Model: {{ data.model }}
 
 Description:
 {{ data.description }}
+
+Category: {{ data.category }}
+          {{ category.label }}
 
 Quantity: {{ data.quantity }}
 SRF: {{ data.srf|default:"not specified" }}{% if data.availability %}
@@ -28,8 +31,10 @@ Restrictions on use:
 URL: {{ data.page }}
 Image: {{ data.image }}
 
-Department: {{ data.department }}
-Location: {{ data.place }}
+Department: {{ data.department }}{% if department %}
+            {{ department.label }}{% if department.oxp_hasFinanceCode %} ({{ department.oxp_hasFinanceCode }}){% endif %}{% endif %}
+Location: {{ data.place }}{% if place %}
+          {{ place.label }}{% if department.oxp_hasEstatesCode %} ({{ department.oxp_hasEstatesCode }}){% endif %}{% endif %}
 
 Primary contact:   {{ data.primary_contact_name }}
                    {{ data.primary_contact_email }}{% if data.secondary_contact_name or data.secondary_contact_email %}
@@ -44,3 +49,4 @@ Additional information:
 Best regards,
 
 The Open Data Team
+{% endautoescape %}

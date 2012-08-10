@@ -25,7 +25,7 @@ urlpatterns = patterns('',
     url(r'^view/$', equipment_views.DocView.as_view(**mapping_kwargs), name='doc-generic'),
     url(r'^view.+$', equipment_views.DocView.as_view(**mapping_kwargs), name='doc'),
     url(r'^desc/$', equipment_views.DescView.as_view(**mapping_kwargs), name='desc'),
-    url(r'^contribute/$', equipment_views.ContributeView.as_view(), name='contribute'),
+    url(r'^contribute/$', equipment_views.ContributeView.as_view(**mapping_kwargs), name='contribute'),
 
     url(r'^facilities/$', equipment_views.FacilityListView.as_view(**mapping_kwargs), name='facilities'),
 

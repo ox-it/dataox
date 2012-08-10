@@ -1,3 +1,5 @@
+import functools
+
 from django.conf import settings
 from django.http import Http404
 from django.template import loader, RequestContext
@@ -8,9 +10,10 @@ import rdflib
 
 from humfrey.desc import views as desc_views
 from humfrey.elasticsearch import views as elasticsearch_views
+from humfrey.linkeddata.resource import Resource
 from humfrey.linkeddata.views import MappingView
 from humfrey.results.views.standard import RDFView
-from humfrey.sparql.views import CannedQueryView
+from humfrey.sparql.views import CannedQueryView, StoreView
 from humfrey.utils.namespaces import NS
 
 from . import forms
@@ -37,7 +40,7 @@ class DescView(EquipmentView, desc_views.DescView):
 class DocView(EquipmentView, desc_views.DocView):
     template_name = 'equipment/view/base'
 
-class ContributeView(HTMLView):
+class ContributeView(HTMLView, MappingView, StoreView):
     recipients_to = [('Research Services', 'research.facilities@admin.ox.ac.uk')]
     recipients_cc = [('Open Data Team', 'opendata-admin@maillist.ox.ac.uk')]
 
@@ -53,13 +56,28 @@ class ContributeView(HTMLView):
         self.common(request)
         return self.render(request, self.context, 'equipment/contribute')
 
+    autocompleted_fields = ('category', 'department', 'place')
+    def resolve_autocompleted_fields(self, fields, cleaned_data):
+        """
+        Some of the fields are autocompleted and return URIs; this looks up
+        those URIs so we can re-attach labels to them.
+        """
+        uri = lambda k: rdflib.URIRef(cleaned_data[k])
+        query = "DESCRIBE {0}".format(' '.join(uri(k).n3() for k in fields))
+        graph = self.endpoint.query(query)
+        resource = functools.partial(Resource, graph=graph, endpoint=self.endpoint)
+        return dict((k, resource(uri(k))) for k in fields if k in cleaned_data)
+
     def post(self, request):
         self.common(request)
         if not self.context['form'].is_valid():
             return self.get(request)
 
         template = loader.get_template("equipment/contribute.eml")
-        body = template.render(RequestContext(request, {'data': self.context['form'].cleaned_data}))
+        context = {'data': self.context['form'].cleaned_data}
+        context.update(self.resolve_autocompleted_fields(self.autocompleted_fields,
+                                                         self.context['form'].cleaned_data))
+        body = template.render(RequestContext(request, context))
 
         message = EmailMessage("New equipment listing",
                                body=body,
