@@ -4,6 +4,8 @@ from django.conf import settings
 from django.http import Http404
 from django.template import loader, RequestContext
 from django.core.mail import EmailMessage
+from django.utils.decorators import method_decorator
+from django.contrib.auth.decorators import login_required
 from django_conneg.http import HttpResponseSeeOther
 from django_conneg.views import HTMLView
 import rdflib
@@ -43,6 +45,10 @@ class DocView(EquipmentView, desc_views.DocView):
 class ContributeView(HTMLView, MappingView, StoreView):
     recipients_to = [('Research Services', 'research.facilities@admin.ox.ac.uk')]
     recipients_cc = [('Open Data Team', 'opendata-admin@maillist.ox.ac.uk')]
+
+    @method_decorator(login_required(login_url='/webauth/login/'))
+    def dispatch(self, request):
+        return super(ContributeView, self).dispatch(request)
 
     def common(self, request):
         if hasattr(self, 'context'):
