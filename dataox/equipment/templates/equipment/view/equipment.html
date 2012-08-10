@@ -72,7 +72,7 @@
 
   <table>{% if subject.dcterms_subject %}
     <tr>
-      <th rowspan="{{ subject.all.dcterms_subject|length }}">Category:</th>{% for category in subject.all.dcterms_subject %}{% if category.skos_notation %}
+      <th rowspan="{{ subject.all.dcterms_subject|length }}">Category:</th>{% for category in subject.all.dcterms_subject %}{% if not forloop.first %}</tr><tr>{% endif %}{% if category.skos_notation %}
       <td><a href="{% url browse category.skos_notation %}">{{ category.label }}</a></td>{% else %}
       <td>{{ category.label }}</td>{% endif %}{% endfor %}
     </tr>{% endif %}{% if subject.oo_organizationPart or subject.oo_formalOrganization %}
