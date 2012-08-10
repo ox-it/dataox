@@ -3,7 +3,7 @@
 <h3>
    <a href="{{ hit.source.uri|doc_url }}">{{ hit.source.label }}</a>
    {% if hit.source.quantity > 1 %} <span class="hidden">(</span><span class="equipment-quantity" title="{{ hit.source.quantity }} items">{{ hit.source.quantity }}</span><span class="hidden">)</span>{% endif %}
-   {% if hit.source.shareability %} <span class="hidden">(</span><span class="equipment-shareability equipment-shareability-{{ hit.source.shareability.notation }}" title="{{ hit.source.shareability.label }}">sharable: {{ hit.source.shareability.label }}</span><span class="hidden">)</span>{% endif %}
+   {% if hit.source.shareability %} <span class="hidden">(</span><span class="equipment-shareability equipment-shareability-{{ hit.source.shareability.notation }}" title="{{ hit.source.shareability.label }}">shareable: {{ hit.source.shareability.label }}</span><span class="hidden">)</span>{% endif %}
 </h3>
 
 <dl class="itemDetails">{% if hit.source.equipmentOf.label or hit.source.formalOrganisation.label %}
