@@ -460,7 +460,7 @@ body.equipment-search .results li {
 
 .facet-remove {
 text-decoration: none;
-background:url('images/facet-arrow.png') 5px -307px no-repeat; cursor: pointer;
+background:url('images/facet-arrow.png') 5px -303px no-repeat; cursor: pointer;
     padding-left: 20px !important;
 }
 
