@@ -40,6 +40,7 @@ class ContributeForm(forms.Form):
     model = forms.CharField()
     description = forms.CharField(widget=forms.Textarea,
                                   help_text="What kind of things can it do? If there are any alterations, list them here.")
+    category = forms.CharField(widget=forms.TextInput(attrs={'class': 'autocomplete', 'data-type': 'equipment-category'}))
     quantity = forms.IntegerField()
     srf = forms.CharField(label="Name of Research Facility",
                           help_text="If this equipment is part of an SRF or MRF, provide its name here.",
