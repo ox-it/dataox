@@ -107,9 +107,13 @@ class VacancyFileHandler(object):
 
         document.mimetype = headers.get('content-type')
 
-        last_modified = self.parse_http_date(headers['last-modified'])
-        last_modified_ts = time.mktime(last_modified.timetuple())
-        os.utime(filename, (last_modified_ts, last_modified_ts))
+        try:
+            last_modified = self.parse_http_date(headers['last-modified'])
+        except KeyError:
+            pass
+        else:
+            last_modified_ts = time.mktime(last_modified.timetuple())
+            os.utime(filename, (last_modified_ts, last_modified_ts))
 
         if not os.path.exists(os.path.dirname(file_path)):
             os.makedirs(os.path.dirname(file_path))
