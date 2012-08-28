@@ -138,6 +138,7 @@ else:
 UPDATE_TRANSFORMS += (
     'dataox.vacancy.transform.RetrieveVacancies',
     'dataox.vacancy.transform.RetrieveVacanciesChecker',
+    'dataox.oxpoints.transform.extents.OxpointsExtents',
 )
 
 UPDATE_FILES_DIRECTORY = os.path.join(MEDIA_ROOT, 'update-files')
