@@ -1,10 +1,8 @@
-from django.conf.urls.defaults import *
-from django.conf import settings
+from django.conf.urls.defaults import patterns, include, url
 from django.views.generic.simple import redirect_to
 from django.contrib.staticfiles.urls import staticfiles_urlpatterns
 
 from humfrey.desc import views as desc_views
-from humfrey.thumbnail import views as thumbnail_views
 from humfrey.misc import views as misc_views
 from humfrey.graphviz import views as graphviz_views
 from humfrey.elasticsearch import views as elasticsearch_views
@@ -41,7 +39,6 @@ urlpatterns = patterns('',
     (r'^sparql/', include('humfrey.sparql.urls.simple', 'sparql')),
     (r'^feeds/', include('dataox.feeds.urls', 'feeds')),
 
-    (r'^thumbnail/$', thumbnail_views.ThumbnailView.as_view(), {}, 'thumbnail'),
 
     (r'^graphviz/$', graphviz_views.GraphVizView.as_view(), {}, 'graphviz'),
 
