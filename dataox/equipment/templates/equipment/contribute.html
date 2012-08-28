@@ -13,9 +13,16 @@
 
   <form method="post" action=".">
 
-  	<table class="contribute">
-	  <tbody>
-        {{ form }}
+   <table class="contribute form">
+	  <tbody>{% for boundfield in form %}
+	    <tr class="{% if boundfield.field.required %}required {% endif %}{% if boundfield.errors %}errors{% endif %}">
+	      <th>{{ boundfield.label_tag }}</th>
+	      <td>
+	        {{ boundfield.errors }}
+	        {{ boundfield }}
+	        {% if boundfield.help_text %}<br><span class="helptext">{{ boundfield.help_text }}</span>{% endif %}
+	      </td>
+	    </tr>{% endfor %}
 	  </tbody>
 	  <tfoot>
 	    <tr>

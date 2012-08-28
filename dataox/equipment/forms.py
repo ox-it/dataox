@@ -36,19 +36,25 @@ def AdvancedSearchForm(*args, **kwargs):
     return form(*args, **kwargs)
 
 class ContributeForm(forms.Form):
-    manufacturer = forms.CharField()
-    model = forms.CharField()
+    manufacturer = forms.CharField(label="Manufacturer:")
+    model = forms.CharField(label="Model:")
     description = forms.CharField(widget=forms.Textarea,
+                                  label="Description:",
                                   help_text="What kind of things can it do? If there are any alterations, list them here.")
-    category = forms.CharField(widget=forms.TextInput(attrs={'class': 'autocomplete', 'data-type': 'equipment-category'}))
-    quantity = forms.IntegerField()
-    srf = forms.CharField(label="Name of Research Facility",
+    category = forms.CharField(widget=forms.TextInput(attrs={'class': 'autocomplete',
+                                                             'data-autocomplete-type': 'equipment-category'}),
+                               label="Category:",
+                               required=False)
+    quantity = forms.IntegerField(label="Quantity:")
+    srf = forms.CharField(label="Name of Research Facility:",
                           help_text="If this equipment is part of an SRF or MRF, provide its name here.",
                           required=False)
     availability = forms.CharField(widget=forms.Textarea,
+                                   label="Availability:",
                                    help_text="How much spare capacity does this equipment have?",
                                    required=False)
     access = forms.CharField(widget=forms.Textarea,
+                             label="Access:",
                              help_text="What groups of people are allowed to use it?",
                              required=False)
     useRestrictions = forms.CharField(widget=forms.Textarea,
@@ -56,27 +62,42 @@ class ContributeForm(forms.Form):
                                       help_text="e.g. funding body restrictions, training requirements, contamination issues",
                                       required=False)
 
-    page = forms.URLField(required=False, label="Web page:")
+    page = forms.URLField(label="Web page:",
+                          required=False)
     image = forms.URLField(label="Image URL:",
                            help_text="If there's a picture of this piece of equipment on the web, provide a link to it here.",
                            required=False)
 
-    department = forms.CharField(widget=forms.TextInput(attrs={'class': 'autocomplete', 'data-type': 'organization'}))
-    place = forms.CharField(widget=forms.TextInput(attrs={'class': 'autocomplete', 'data-type': 'spatial-thing'}),
+    department = forms.CharField(widget=forms.TextInput(attrs={'class': 'autocomplete',
+                                                               'data-autocomplete-type': 'organization',
+                                                               'data-autocomplete-filter.graph.uri': 'https://data.ox.ac.uk/graph/oxpoints/data'}),
+                                 label="Department:")
+    place = forms.CharField(widget=forms.TextInput(attrs={'class': 'autocomplete',
+                                                          'data-autocomplete-type': 'spatial-thing',
+                                                          'data-autocomplete-filter.graph.uri': 'https://data.ox.ac.uk/graph/oxpoints/data'}),
                             label="Location",
                             help_text="Most likely a building, but maybe a room.")
 
-    primary_contact_name = forms.CharField()
-    primary_contact_email = forms.EmailField()
+    primary_contact_name = forms.CharField(label="Primary contact name:")
+    primary_contact_email = forms.EmailField(label="Primary contact email:")
 
-    secondary_contact_name = forms.CharField(required=False)
-    secondary_contact_email = forms.EmailField(required=False)
+    secondary_contact_name = forms.CharField(label="Secondary contact name:",
+                                             required=False)
+    secondary_contact_email = forms.EmailField(label="Secondary contact email:",
+                                               required=False)
 
-    tertiary_contact_name = forms.CharField(required=False)
-    tertiary_contact_email = forms.EmailField(required=False)
+    tertiary_contact_name = forms.CharField(label="Tertiary contact name:",
+                                            required=False)
+    tertiary_contact_email = forms.EmailField(label="Tertiary contact email:",
+                                              required=False)
 
-    university = forms.BooleanField(label="Show to members of the University?", required=False)
-    seesec = forms.BooleanField(label="Show to members of other universities?", required=False)
-    public = forms.BooleanField(label="Show to everyone?", required=False)
+    university = forms.BooleanField(label="Show to members of the University?",
+                                    required=False)
+    seesec = forms.BooleanField(label="Show to members of other universities?",
+                                required=False)
+    public = forms.BooleanField(label="Show to everyone?",
+                                required=False)
 
-    notes = forms.CharField(widget=forms.Textarea, label="Anything else you'd like us to know?", required=False)
+    notes = forms.CharField(widget=forms.Textarea,
+                            label="Anything else you'd like us to know?",
+                            required=False)

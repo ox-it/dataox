@@ -737,3 +737,11 @@ ul.errorlist {
 
 ul.errorlist li {
 }
+
+table.form > tbody > tr > th {
+	font-weight: normal;
+}
+
+table.form > tbody > tr.required > th {
+	font-weight: bold;
+}
