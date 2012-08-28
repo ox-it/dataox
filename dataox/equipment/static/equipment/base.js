@@ -25,28 +25,32 @@ $(function() {
 
 $(function() {
 	$('.autocomplete').each(function(i, e) {
+		var defaultParams = {format: 'autocomplete'};
+		for (var i = 0; i < e.attributes.length; i++) {
+			var attribute = e.attributes[i];
+			if (attribute.name.slice(0, 18) == 'data-autocomplete-')
+				defaultParams[attribute.name.slice(18)] = attribute.value;
+		}
+
 		e = $(e);
 		var searchURL = e.attr('data-search-url') || window.searchURL;
 		var h = $('<input type="hidden">').attr('name', e.attr('name')).val(e.val());
 		e.attr('name', e.attr('name') + '-label').after(h);
+
 		if (e.val()) {
 			var originalVal = e.val();
 			e.val("looking up…");
-			$.get(searchURL, {
-				q: "uri:\""+originalVal+"\"",
-				format: 'autocomplete',
-				type: e.attr('data-type')
-			}, function(data) {
+			$.get(searchURL, $.extend({}, defaultParams, {
+				q: 'uri:"'+originalVal+'"'
+			}), function(data) {
 				e.val(data ? data[0].label : originalVal);
 			});
 		}
 		e.autocomplete({
 			source: function(request, callback) {
-				$.get(searchURL, {
-					q: request.term + '*',
-					format: 'autocomplete',
-					type: e.attr('data-type')
-				}, callback, 'json');
+				$.get(searchURL, $.extend({}, defaultParams, {
+					q: request.term + '*'
+				}), callback, 'json');
 			},
 			minLength: 2,
 			focus: function(event, ui) {
