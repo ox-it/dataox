@@ -1,6 +1,6 @@
 [submodule "dataox/static/jquery-collapsible-content"]
 	path = dataox/static/jquery-collapsible-content
-	url = git://github.com/oucs/jQuery-Collapsible-Content.git
+	url = git://github.com/ox-it/jQuery-Collapsible-Content.git
 [submodule "dataox/static/jquery-cookie"]
 	path = dataox/static/jquery-cookie
 	url = https://github.com/carhartl/jquery-cookie
