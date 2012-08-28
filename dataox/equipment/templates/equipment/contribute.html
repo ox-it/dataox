@@ -19,7 +19,7 @@
 	      <th>{{ boundfield.label_tag }}</th>
 	      <td>
 	        {{ boundfield.errors }}
-	        {{ boundfield }}
+	        {{ boundfield }}{% if boundfield.field.required %}<span class="hidden"> (required)</span>{% endif %}
 	        {% if boundfield.help_text %}<br><span class="helptext">{{ boundfield.help_text }}</span>{% endif %}
 	      </td>
 	    </tr>{% endfor %}
