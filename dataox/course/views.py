@@ -33,10 +33,9 @@ class CatalogListView(sparql_views.CannedQueryView, HTMLView, RDFView, MappingVi
         return sorted(map(self.resource, graph.subjects(NS.rdf.type, NS.xcri.catalog)), key=lambda x:x.label)
 
     def get_additional_context(self, request, renderers):
-        return {'renderers': [{'format': r.format,
-                               'name': r.name,
-                               'mimetypes': r.mimetypes} for r in renderers]}
-     
+        return {'feed_renderers': [{'format': r.format,
+                                    'name': r.name,
+                                    'mimetypes': r.mimetypes} for r in renderers]}
 
 class CatalogDetailView(sparql_views.CannedQueryView, RDFView, ContentNegotiatedView):
     query = """
@@ -140,4 +139,4 @@ class CatalogView(ContentNegotiatedView):
         if 'uri' in request.GET:
             return self.catalog_detail_view(request)
         else:
-            return self.catalog_list_view(request, self.catalog_detail_view._renderers)
+            return self.catalog_list_view(request, self.catalog_detail_view.conneg.renderers)

@@ -161,23 +161,11 @@ class VacancyView(FeedView, RDFView, StoreView, MappingView):
         self.graph = self.endpoint.query(self.query % {'unit': self.unit.n3(), 'filter': filter})
         if not self.graph:
             raise Http404
-
-        formats = {}
-        for renderer in self._renderers:
-            formats[renderer.format] = {'url': reverse(self.reverse_name, args=[oxpoints_id, renderer.format]),
-                                        'format': renderer.format,
-                                        'name': renderer.name,
-                                        'mimetypes': renderer.mimetypes}
-            if request.META['QUERY_STRING']:
-                formats[renderer.format]['url'] += '?' + request.META['QUERY_STRING']
-
         
-        self.context = {'unit': Resource(self.unit, self.graph, self.endpoint),
-                        'graph': self.graph,
-                        'formats': formats.values(),
-                        'format_mapping': formats,
-                        'all': self.all,
-                        'keyword': request.GET.get('keyword')}
+        self.context.update({'unit': Resource(self.unit, self.graph, self.endpoint),
+                             'graph': self.graph,
+                             'all': self.all,
+                             'keyword': request.GET.get('keyword')})
         
         return super(VacancyView, self).get(request, oxpoints_id=oxpoints_id, format=format)
         
@@ -213,6 +201,9 @@ class VacancyView(FeedView, RDFView, StoreView, MappingView):
 
     def get_locations(self, request, oxpoints_id, format=None):
         if not format:
-            format = self.get_renderers(request)[0].format
+            format = request.renderers[0].format
         return (request.build_absolute_uri(reverse(self.reverse_name, args=[oxpoints_id])),
                 request.build_absolute_uri(reverse(self.reverse_name, args=[oxpoints_id, format])))
+
+    def url_for_format(self, request, format):
+        return reverse(self.reverse_name, args=[self.kwargs['oxpoints_id'], format])
