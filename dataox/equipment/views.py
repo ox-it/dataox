@@ -32,10 +32,6 @@ class EquipmentView(object):
         else:
             return 'public'
 
-    @property
-    def index_name(self):
-        return '{0}/equipment'.format(self.store_name)
-
 class DescView(EquipmentView, desc_views.DescView):
     pass
 
