@@ -5,6 +5,8 @@ import rdflib
 from django.core.urlresolvers import reverse
 from django.http import Http404, HttpResponse
 from django.utils.feedgenerator import RssUserland091Feed, Rss201rev2Feed, Atom1Feed, rfc2822_date
+from django.shortcuts import render_to_response
+from django.template import RequestContext
 
 from django_conneg.decorators import renderer
 from django_conneg.views import HTMLView, JSONPView, ContentNegotiatedView
@@ -100,7 +102,7 @@ def add_root_elements(self, handler):
     if self.feed['ttl'] is not None:
         handler.addQuickElement(u"ttl", self.feed['ttl'])        
 
-class VacancyIndexView(HTMLView, CannedQueryView, ResultSetView):
+class VacancyIndexView(CannedQueryView, ResultSetView):
     query = """
       SELECT ?unit (SAMPLE(?unitLabel_) as ?unitLabel) (COUNT(DISTINCT ?vacancy) as ?vacancies) (SAMPLE(?subUnit_) as ?subUnit) WHERE {
         ?type rdfs:subClassOf* org:Organization
@@ -130,7 +132,7 @@ class VacancyView(FeedView, RDFView, StoreView, MappingView):
     @property
     def query(self):
         return """
-    DESCRIBE %%(unit)s ?unit ?vacancy ?salary WHERE {
+    DESCRIBE %%(unit)s ?unit ?vacancy ?salary ?contact ?tel WHERE {
       OPTIONAL {
         GRAPH <http://data.ox.ac.uk/graph/vacancies/current> {
           ?vacancy a vacancy:Vacancy .
@@ -141,6 +143,10 @@ class VacancyView(FeedView, RDFView, StoreView, MappingView):
           vacancy:applicationClosingDate ?closes ;
           rdfs:label ?label ;
           rdfs:comment ?description .
+        OPTIONAL {
+          ?vacancy oo:contact ?contact .
+          OPTIONAL { ?contact v:tel ?tel }
+        }
         FILTER (?closes > now()) .
         GRAPH <http://data.ox.ac.uk/graph/oxpoints/data> {
           ?unit org:subOrganizationOf%(cardinality)s %%(unit)s
@@ -162,9 +168,12 @@ class VacancyView(FeedView, RDFView, StoreView, MappingView):
         if not self.graph:
             raise Http404
         
+        subjects = [Resource(v, self.graph, self.endpoint) for v in self.graph.subjects(NS.rdf.type, NS.vacancy.Vacancy)]
+
         self.context.update({'unit': Resource(self.unit, self.graph, self.endpoint),
                              'graph': self.graph,
                              'all': self.all,
+                             'subjects': subjects,
                              'keyword': request.GET.get('keyword')})
         
         return super(VacancyView, self).get(request, oxpoints_id=oxpoints_id, format=format)
@@ -207,3 +216,10 @@ class VacancyView(FeedView, RDFView, StoreView, MappingView):
 
     def url_for_format(self, request, format):
         return reverse(self.reverse_name, args=[self.kwargs['oxpoints_id'], format])
+
+    @renderer(format='xml', mimetypes=('application/xml', 'text/xml'), name='XML')
+    def render_xml(self, request, context, template_name):
+        template_name = self.join_template_name(template_name, 'xml')
+        return render_to_response(template_name,
+                          context, context_instance=RequestContext(request),
+                          mimetype='application/xml')
