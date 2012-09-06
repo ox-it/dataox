@@ -51,7 +51,6 @@ class OxGarageConverter(object):
             L.append(value)
         L.append('--' + BOUNDARY + '--')
         L.append('')
-        print map(type, L)
         body = CRLF.join(L)
         content_type = 'multipart/form-data; boundary=%s' % BOUNDARY
         return content_type, body
