@@ -109,16 +109,10 @@ class SearchView(EquipmentView, elasticsearch_views.SearchView):
         #          'oxford': {'terms': {'field': 'oxfordUniversityEquipment'}},
 
     template_name = 'equipment/search'
+    default_types = ('equipment', 'facility', 'service')
 
     dependent_parameters = {'filter.category.uri': ('filter.subcategory.uri',),
                             'filter.formalOrganisation.uri': ('filter.equipmentOf.uri',)}
-
-    def get_query(self, parameters, cleaned_data, start, page_size):
-        query = super(SearchView, self).get_query(parameters, cleaned_data, start, page_size)
-        # Make sure things only come from the equipment, facility and service types.
-        if 'type' not in self.request.GET:
-            query['filter']['and'].append({'or': [{'type': {'value': t}} for t in ('equipment', 'facility', 'service')]})
-        return query
 
     def finalize_context(self, request, context):
         if not context.get('q'):
@@ -127,24 +121,7 @@ class SearchView(EquipmentView, elasticsearch_views.SearchView):
                                                        store=self.store)
         return context
 
-#class ItemView(EquipmentView, HTMLView, JSONPView):
-#    def get(self, request, id):
-#        try:
-#            url = ('http://%(host)s:%(port)s/%s/' % (settings.ELASTICSEARCH_SERVER, self.index_name)) + id
-#            item = elasticsearch_views.SearchView.Deunderscorer(json.load(urllib2.urlopen(url)))
-#        except urllib2.HTTPError, e:
-#            if e.code == httplib.NOT_FOUND:
-#                raise Http404
-#            raise
-#        
-#        more_like_this_url = url + '/_mlt?min_doc_freq=1'
-#        
-#        context = {'item': item,
-#                   'more_like_this': elasticsearch_views.SearchView.Deunderscorer(json.load(urllib2.urlopen(more_like_this_url)))}
-#        
-#        return self.render(request, context, 'equipment/item')
-
-class BrowseView(EquipmentView, HTMLView, RDFView, CannedQueryView, MappingView):
+class BrowseView(EquipmentView, RDFView, CannedQueryView, MappingView):
     concept_scheme = rdflib.URIRef('https://data.ox.ac.uk/id/equipment-category')
     datatype = rdflib.URIRef('https://data.ox.ac.uk/id/notation/equipment-category')
 
@@ -220,7 +197,7 @@ class BrowseView(EquipmentView, HTMLView, RDFView, CannedQueryView, MappingView)
 
         return context
 
-class FacilityListView(EquipmentView, HTMLView, RDFView, CannedQueryView, MappingView):
+class FacilityListView(EquipmentView, RDFView, CannedQueryView, MappingView):
     query = """
         DESCRIBE * WHERE {
           VALUES ?facilityType { cerif:Facility oo:Facility } .
