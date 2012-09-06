@@ -32,8 +32,8 @@ class Vacancy(models.Model):
     url = models.URLField(max_length=2048, blank=True)
     apply_url = models.URLField(max_length=2048, blank=True)
 
-    opening_date = models.DateTimeField()
-    closing_date = models.DateTimeField()
+    opening_date = models.CharField(max_length=25)
+    closing_date = models.CharField(max_length=25)
     
     internal = models.BooleanField()
     
@@ -49,10 +49,11 @@ class Vacancy(models.Model):
             (uri, NS.rdf.type, NS.vacancy.Vacancy),
             (uri, NS.foaf.homepage, rdflib.URIRef(self.url)),
             (uri, NS.oo.contact, contact_uri),
-            (uri, NS.vacancy.applicationOpeningDate, rdflib.Literal(self.opening_date)),
-            (uri, NS.vacancy.applicationClosingDate, rdflib.Literal(self.closing_date)),
+            (uri, NS.vacancy.applicationOpeningDate, rdflib.Literal(self.opening_date, datatype=NS.xsd.dateTime)),
+            (uri, NS.vacancy.applicationClosingDate, rdflib.Literal(self.closing_date, datatype=NS.xsd.dateTime)),
             (uri, NS.vacancy.internalApplicationsOnly, rdflib.Literal(self.internal)),
             (uri, NS.rdfs.label, rdflib.Literal(self.title)),
+            (uri, NS.skos.notation, rdflib.Literal(self.vacancy_id, datatype=NS.oxnotation.vacancy)),
         ]
 
         if self.contact_name or self.contact_email or self.contact_phone:
@@ -61,7 +62,7 @@ class Vacancy(models.Model):
         if self.contact_name:
             triples.append((contact_uri, NS.foaf.name, rdflib.Literal(self.contact_name)))
         if self.contact_email:
-            triples.append((contact_uri, NS.v.email, rdflib.URIRef(self.contact_email)))
+            triples.append((contact_uri, NS.v.email, rdflib.URIRef('mailto:' + self.contact_email)))
         if self.contact_phone:
             phone_uri = self.phone_uri
             triples += [(contact_uri, NS.v.tel, phone_uri),
@@ -105,6 +106,8 @@ class Vacancy(models.Model):
                 triples.append((salary_uri, NS.gr.hasMaxCurrencyValue, rdflib.Literal(self.salary_discretionary or self.salary_upper)))
                 if self.salary_upper == self.salary_lower:
                     triples.append((salary_uri, NS.gr.hasCurrencyValue, rdflib.Literal(self.salary_upper)))
+            if self.salary_grade:
+                triples.append((salary_uri, NS.adhoc.salaryGrade, rdflib.Literal(self.salary_grade)))
 
             triples += [
                 (uri, NS.vacancy.salary, salary_uri),
