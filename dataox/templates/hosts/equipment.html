@@ -69,13 +69,14 @@
   <script type="text/javascript" src="{{ STATIC_URL }}jquery-collapsible-content/js/jQuery.collapsible.js"></script>
   <script type="text/javascript" src="{{ STATIC_URL }}jquery-ui/js/jquery-ui-1.8.22.custom.min.js"></script>
   <script type="text/javascript" src="{{ STATIC_URL }}equipment/base.js"></script>
+  <script type="text/javascript" src="{{ STATIC_URL }}api-1.0.js"></script>
   {% block extra_head %}{% endblock %}
   
 
   <title>{% block title %}This gets replaced{% endblock %} | Research Facilities and Equipment at Oxford</title>
 </head>
 {% block body %}
-<body class="{% block body_class %}{% endblock %}">{% if 0 and staging %}{% include "staging/tab.html" %}{% endif %}
+<body dataox-search-url="{% url search %}" class="{% block body_class %}{% endblock %}">{% if 0 and staging %}{% include "staging/tab.html" %}{% endif %}
   <div id="page">
     <header class="pageHeader">
       <div class="siteTitle"><a href="{% url index %}" id="homeLink">Research Facilities and Equipment at Oxford</a></div>
