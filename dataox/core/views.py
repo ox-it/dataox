@@ -1,6 +1,7 @@
 from __future__ import division
 
 from django_conneg.views import HTMLView
+import rdflib
 
 from humfrey.utils.views import RedisView
 from humfrey.results.views.standard import RDFView, ResultSetView
@@ -10,12 +11,16 @@ from humfrey.linkeddata.resource import Resource
 from humfrey.linkeddata.views import MappingView
 
 class DatasetView(StoreView, MappingView, RDFView, HTMLView):
+    catalog = rdflib.URIRef("https://data.ox.ac.uk/id/catalogue")
+
     _QUERY = """
-        DESCRIBE ?dataset ?license ?publisher WHERE {
+        DESCRIBE {catalog} ?dataset ?license ?publisher ?contact WHERE {{
+            {catalog} ?dataset .
             ?dataset a void:Dataset .
-            OPTIONAL { ?dataset dcterms:license ?license } .
-            OPTIONAL { ?dataset dcterms:publisher ?publisher } .
-        }"""
+            OPTIONAL {{ ?dataset dcterms:license ?license }} .
+            OPTIONAL {{ ?dataset dcterms:publisher ?publisher }} .
+            OPTIONAL {{ ?dataset oo:contact ?contact }} .
+        }}""".format(catalog=catalog.n3())
 
     def get(self, request):
         graph = self.endpoint.query(self._QUERY)
