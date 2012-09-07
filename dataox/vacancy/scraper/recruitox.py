@@ -93,7 +93,7 @@ class RecruitOxScraper(Scraper):
             vacancy = Vacancy.objects.get(vacancy_id=vacancy_id)
         except Vacancy.DoesNotExist:
             vacancy = Vacancy(vacancy_id=vacancy_id,
-                              opening_date=self.site_timezone.localize(datetime.datetime.now()))
+                              opening_date=self.site_timezone.localize(datetime.datetime.now())).replace(microsecond=0).isoformat()
 
         params = self.detail_params.copy()
         params['p_recruitment_id'] = vacancy_id
@@ -137,7 +137,7 @@ class RecruitOxScraper(Scraper):
 
         location_td = html.xpath(".//td[@class='erq_searchv4_heading2']")
         location =  ' '.join(location_td[0].text.split()) if location_td else ''
-        if True or location != vacancy.location:
+        if location != vacancy.location:
             vacancy.location = location
             results = self.search_endpoint.query({'query': {'query_string': {'query': vacancy.location}}})
             hits = results['hits']['hits']
@@ -164,7 +164,7 @@ class RecruitOxScraper(Scraper):
         closing_date = meta.pop('Closing Date :')
         closing_date = datetime.datetime.strptime(closing_date, '%d-%b-%Y')
         closing_date = closing_date.replace(hour=closing_hour, minute=closing_minute)
-        vacancy.closing_date = self.site_timezone.localize(closing_date)
+        vacancy.closing_date = self.site_timezone.localize(closing_date).replace(microsecond=0).isoformat()
 
         vacancy.internal = 'INTERNAL APPLICANTS ONLY' in vacancy.description
 

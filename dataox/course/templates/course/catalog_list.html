@@ -23,8 +23,8 @@
         <td>{{ subject.label }}</td>
         <td>{{ subject.description|default:"" }}</td>
         <td>{{ subject.dcterms_publisher.label }}</td>
-        <td>{% for format in renderers %}
-          <a href="?uri={{ subject.uri|urlencode }}&amp;format={{ format.format}}">{{ format.name }}</a>{% endfor %}
+        <td>{% for renderer in feed_renderers %}
+          <a href="?uri={{ subject.uri|urlencode }}&amp;format={{ renderer.format}}">{{ renderer.name }}</a>{% endfor %}
         </td>
       </tr>{% endfor %}
     </tbody>
