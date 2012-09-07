@@ -27,7 +27,7 @@
 
     dcterms:license <http://creativecommons.org/publicdomain/zero/1.0/> ;
     dcterms:rightsHolder <http://oxpoints.oucs.ox.ac.uk/id/00000000> ;
-    dcterms:publisher <http://oxpoints.oucs.ox.ac.uk/id/23233567> ;
+    dcterms:publisher <http://oxpoints.oucs.ox.ac.uk/id/31337175> ;
 
     cc:license <http://creativecommons.org/publicdomain/zero/1.0/> ;
     cc:attributionName "University of Oxford"@en ;
