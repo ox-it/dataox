@@ -7,7 +7,7 @@
 @prefix skos:    <http://www.w3.org/2004/02/skos/core#> .
 @prefix sd:      <http://www.w3.org/ns/sparql-service-description#> .
 
-<https://data.ox.ac.uk/id/catalogue> a dcat:Catalog, dcat:Dataset, void:Dataset ;
+<https://data.ox.ac.uk/id/dataset/catalogue> a dcat:Catalog, dcat:Dataset, void:Dataset ;
   skos:notation "catalogue"^^oxnotation:dataset ;
   dcterms:title "Dataset catalogue for the University of Oxford" ;
   dcterms:publisher <http://oxpoints.oucs.ox.ac.uk/id/00000000> ;
@@ -16,7 +16,7 @@
   oo:contact <https://data.ox.ac.uk/id/open-data-team> .
 
 <https://data.ox.ac.uk/graph/catalogue/data> a sd:Graph ;
-  void:inDataset <https://data.ox.ac.uk/id/catalogue> ;
+  void:inDataset <https://data.ox.ac.uk/id/dataset/catalogue> ;
   dcterms:publisher <http://oxpoints.oucs.ox.ac.uk/id/00000000> .
 
 
