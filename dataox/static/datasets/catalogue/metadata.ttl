@@ -1,0 +1,18 @@
+@prefix dcterms: <http://purl.org/dc/terms/> .
+@prefix foaf:    <http://xmlns.com/foaf/0.1/> .
+@prefix oo:      <http://purl.org/openorg/> .
+@prefix dcat:    <http://www.w3.org/ns/dcat#> .
+@prefix void:    <http://rdfs.org/ns/void#> .
+
+<https://data.ox.ac.uk/id/catalogue> a dcat:Catalog, dcat:Dataset, void:Dataset ;
+  dcterms:title "Dataset catalogue for the University of Oxford" ;
+  dcterms:publisher <http://oxpoints.oucs.ox.ac.uk/id/00000000> ;
+  dcterms:license <http://creativecommons.org/publicdomain/zero/1.0/> ;
+  foaf:homepage <https://data.ox.ac.uk/datasets/> ;
+  oo:contact <https://data.ox.ac.uk/id/open-data-team> .
+
+<https://data.ox.ac.uk/graph/catalogue/data> a sd:Graph ;
+  void:inDataset <https://data.ox.ac.uk/id/catalogue> ;
+  dcterms:publisher <http://oxpoints.oucs.ox.ac.uk/id/00000000> .
+
+
