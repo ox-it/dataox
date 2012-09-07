@@ -5,6 +5,7 @@
 @prefix dcat:    <http://www.w3.org/ns/dcat#> .
 @prefix void:    <http://rdfs.org/ns/void#> .
 @prefix skos:    <http://www.w3.org/2004/02/skos/core#> .
+@prefix sd:      <http://www.w3.org/ns/sparql-service-description#> .
 
 <https://data.ox.ac.uk/id/catalogue> a dcat:Catalog, dcat:Dataset, void:Dataset ;
   skos:notation "catalogue"^^oxnotation:dataset ;

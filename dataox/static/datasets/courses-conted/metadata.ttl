@@ -10,6 +10,7 @@
 @prefix time: <http://www.w3.org/2006/time#> .
 @prefix skos: <http://www.w3.org/2004/02/skos/core#> .
 @prefix v: <http://www.w3.org/2006/vcard/ns#> .
+@prefix sd: <http://www.w3.org/ns/sparql-service-description#> .
 
 <https://data.ox.ac.uk/id/dataset/courses>
     void:subset <https://data.ox.ac.uk/id/dataset/courses/conted> .
