@@ -3,6 +3,7 @@
 @prefix dcterms: <http://purl.org/dc/terms/> .
 @prefix cc:      <http://creativecommons.org/ns#> .
 @prefix oo:      <http://purl.org/openorg/> .
+@prefix oxnotation: <https://data.ox.ac.uk/id/notation> .
 @prefix foaf: <http://xmlns.com/foaf/0.1/> .
 @prefix xcri: <http://xcri.org/profiles/1.2/> .
 @prefix mlo: <http://purl.org/net/mlo/> .
@@ -10,11 +11,12 @@
 @prefix skos: <http://www.w3.org/2004/02/skos/core#> .
 @prefix v: <http://www.w3.org/2006/vcard/ns#> .
 
-<http://data.ox.ac.uk/id/dataset/courses>
-    void:subset <http://data.ox.ac.uk/id/dataset/courses/conted> .
+<https://data.ox.ac.uk/id/dataset/courses>
+    void:subset <https://data.ox.ac.uk/id/dataset/courses/conted> .
 
-<http://data.ox.ac.uk/id/dataset/courses/conted> a void:Dataset ;
+<https://data.ox.ac.uk/id/dataset/courses/conted> a void:Dataset ;
     rdfs:label "Course catalogue for the Department for Continuing Education" ;
+    skos:notation "courses/conted"^^oxnotation:dataset ;
 
     dcterms:publisher <http://oxpoints.oucs.ox.ac.uk/id/23232568> ;
     dcterms:description "Upcoming courses offered by the Department for Continuing Education, modelled using XCRI-CAP." ;
@@ -27,10 +29,12 @@
                  foaf:name "Department for Continuing Education" ;
                  foaf:mbox <mailto:enquiries@conted.ox.ac.uk> ] .
 
-<http://data.ox.ac.uk/graph/courses/conted/data> a foaf:Document ;
-    void:inDataset <http://data.ox.ac.uk/id/dataset/courses/conted> .
+<https://data.ox.ac.uk/id/dataset/catalogue> dcat:dataset <https://data.ox.ac.uk/id/dataset/courses/conted> .
 
-<http://data.ox.ac.uk/graph/courses/conted/metadata> a foaf:Document ;
-    void:inDataset <http://data.ox.ac.uk/id/dataset/catalogue> ;
+<https://data.ox.ac.uk/graph/courses/conted/data> a sd:Graph ;
+    void:inDataset <https://data.ox.ac.uk/id/dataset/courses/conted> .
+
+<https://data.ox.ac.uk/graph/courses/conted/metadata> a sd:Graph ;
+    void:inDataset <https://data.ox.ac.uk/id/dataset/catalogue> ;
     dcterms:license <http://creativecommons.org/publicdomain/zero/1.0/> .
 
