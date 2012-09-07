@@ -3,6 +3,8 @@ from __future__ import with_statement
 
 import datetime
 import logging
+
+import dateutil.parser
 from django.conf import settings
 import pytz
 from humfrey.update.transform.base import Transform
@@ -56,7 +58,8 @@ class RetrieveVacancies(Transform):
             transform['sink'].start()
         
         for vacancy in Vacancy.objects.all():
-            if vacancy.opening_date < datetime.datetime.now() < vacancy.closing_date:
+            opening_date, closing_date = map(dateutil.parser.parse, (vacancy.opening_date, vacancy.closing_date))
+            if opening_date < self.site_timezone.localize(datetime.datetime.now()) < closing_date:
                 transform = transforms['current']
             else:
                 transform = transforms['archive']
