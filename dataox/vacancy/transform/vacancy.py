@@ -17,7 +17,7 @@ from ..models import Vacancy, Document
 logger = logging.getLogger(__name__)
 
 class RetrieveVacancies(Transform):
-    vacancy_base_uri = 'http://data.ox.ac.uk/id/vacancy/'
+    vacancy_base_uri = 'https://data.ox.ac.uk/id/vacancy/'
 
     site_timezone = pytz.timezone(settings.TIME_ZONE)
 
