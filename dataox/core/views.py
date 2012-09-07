@@ -15,7 +15,7 @@ class DatasetView(StoreView, MappingView, RDFView, HTMLView):
 
     _QUERY = """
         DESCRIBE {catalog} ?dataset ?license ?publisher ?contact WHERE {{
-            {catalog} ?dataset .
+            {catalog} dcat:dataset ?dataset .
             ?dataset a void:Dataset .
             OPTIONAL {{ ?dataset dcterms:license ?license }} .
             OPTIONAL {{ ?dataset dcterms:publisher ?publisher }} .
