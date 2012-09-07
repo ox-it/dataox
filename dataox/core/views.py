@@ -11,9 +11,9 @@ from humfrey.linkeddata.resource import Resource
 from humfrey.linkeddata.views import MappingView
 
 class DatasetView(StoreView, MappingView, RDFView, HTMLView):
-    catalog = rdflib.URIRef("https://data.ox.ac.uk/id/catalogue")
+    catalog = rdflib.URIRef("https://data.ox.ac.uk/id/dataset/catalogue")
 
-    _QUERY = """
+    query = """
         DESCRIBE {catalog} ?dataset ?license ?publisher ?contact WHERE {{
             {catalog} dcat:dataset ?dataset .
             ?dataset a void:Dataset .
@@ -23,7 +23,7 @@ class DatasetView(StoreView, MappingView, RDFView, HTMLView):
         }}""".format(catalog=catalog.n3())
 
     def get(self, request):
-        graph = self.endpoint.query(self._QUERY)
+        graph = self.endpoint.query(self.query)
         datasets = graph.subjects(NS['rdf'].type, NS['void'].Dataset)
         datasets = [Resource(uri, graph, self.endpoint) for uri in datasets]
         datasets.sort(key=lambda ds:unicode(ds.label))
