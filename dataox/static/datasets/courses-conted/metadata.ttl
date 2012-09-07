@@ -35,6 +35,6 @@
     void:inDataset <https://data.ox.ac.uk/id/dataset/courses/conted> .
 
 <https://data.ox.ac.uk/graph/courses/conted/metadata> a sd:Graph ;
-    void:inDataset <https://data.ox.ac.uk/id/dataset/catalogue> ;
+    void:inDataset <https://data.ox.ac.uk/id/dataset/catalogue> , <https://data.ox.ac.uk/id/dataset/courses/conted> ;
     dcterms:license <http://creativecommons.org/publicdomain/zero/1.0/> .
 
