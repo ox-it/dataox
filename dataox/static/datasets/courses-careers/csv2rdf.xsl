@@ -123,10 +123,7 @@
   </xsl:template>
 
   <xsl:template match="skills">
-    <dcterms:subject>
-      <xsl:text>https://data.ox.ac.uk/id/ox-rdf/descriptor/</xsl:text>
-      <xsl:value-of select="text()"/>
-    </dcterms:subject>
+    <dcterms:subject rdf:resource="https://data.ox.ac.uk/id/ox-rdf/descriptor/{text()}"/>
   </xsl:template>
 
   <xsl:template match="abstract">
