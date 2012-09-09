@@ -14,7 +14,7 @@
 @prefix dcat: <http://www.w3.org/ns/dcat#> .
 
 <https://data.ox.ac.uk/id/dataset/courses> a void:Dataset ;
-    rdfs:label "Course catalogue from the Daisy system" ;
+    rdfs:label "Course catalogue for the University of Oxford" ;
     skos:notation "courses"^^oxnotation:dataset ;
 
     dcterms:publisher <http://oxpoints.oucs.ox.ac.uk/id/00000000> ;
