@@ -154,5 +154,15 @@
     </xcri:venue>
   </xsl:template>
 
+  <xsl:template match="course-start" mode="presentation">
+    <mlo:start>
+      <time:Instant rdf:about="{$base}presentation/{../course-code/text()}/start">
+        <rdf:value rdf:datatype="&xsd;date">
+          <xsl:value-of select="concat(substring(., 7, 4), '-', substring(., 4, 2), '-', substring(., 1, 2))"/>
+        </rdf:value>
+      </time:Instant>
+    </mlo:start>
+  </xsl:template>
+
   <xsl:template match="*" mode="#all"/>
 </xsl:stylesheet>
