@@ -16,7 +16,7 @@ CONSTRUCT {
   { ?thing oxp:hasOUCSCode ?code .
     BIND(STRDT(?code, oxnotation:oucs) as ?notation) }
   UNION
-  { GRAPH <http://data.ox.ac.uk/graph/oxpoints/data> {
+  { GRAPH <https://data.ox.ac.uk/graph/oxpoints/data> {
       ?thing a ?type
     } .
     FILTER (REGEX(STR(?thing), '^http://oxpoints\\.oucs\\.ox\\.ac\\.uk/id/\\d{8}$')) .
