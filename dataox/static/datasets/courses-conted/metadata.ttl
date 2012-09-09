@@ -31,8 +31,6 @@
                  foaf:name "Department for Continuing Education" ;
                  foaf:mbox <mailto:enquiries@conted.ox.ac.uk> ] .
 
-<https://data.ox.ac.uk/id/dataset/catalogue> dcat:dataset <https://data.ox.ac.uk/id/dataset/courses/conted> .
-
 <https://data.ox.ac.uk/graph/courses/conted/data> a sd:Graph ;
     void:inDataset <https://data.ox.ac.uk/id/dataset/courses/conted> .
 

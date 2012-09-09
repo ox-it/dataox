@@ -32,8 +32,6 @@
       foaf:name "Social Sciences Division" ;
       v:email <mailto:daisy-support@socsci.ox.ac.uk> ] .
 
-<https://data.ox.ac.uk/id/dataset/catalogue> dcat:dataset <https://data.ox.ac.uk/id/dataset/courses/daisy> .
-
 <https://data.ox.ac.uk/graph/courses/daisy/data> a sd:Graph ;
     void:inDataset <https://data.ox.ac.uk/id/dataset/courses/daisy> .
 
