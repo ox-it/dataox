@@ -1,0 +1,77 @@
+@prefix void:    <http://rdfs.org/ns/void#> .
+@prefix rdfs:    <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix dcterms: <http://purl.org/dc/terms/> .
+@prefix cc:      <http://creativecommons.org/ns#> .
+@prefix oo:      <http://purl.org/openorg/> .
+@prefix vacancy:      <http://purl.org/openorg/vacancy/> .
+@prefix oxnotation: <https://data.ox.ac.uk/id/notation/> .
+@prefix foaf: <http://xmlns.com/foaf/0.1/> .
+@prefix xcri: <http://xcri.org/profiles/1.2/> .
+@prefix mlo: <http://purl.org/net/mlo/> .
+@prefix time: <http://www.w3.org/2006/time#> .
+@prefix skos: <http://www.w3.org/2004/02/skos/core#> .
+@prefix v: <http://www.w3.org/2006/vcard/ns#> .
+@prefix sd: <http://www.w3.org/ns/sparql-service-description#> .
+@prefix gr: <http://purl.org/goodrelations/v1#> .
+@prefix dcat: <http://www.w3.org/ns/dcat#> .
+
+<https://data.ox.ac.uk/id/dataset/vacancies> a void:Dataset ;
+    rdfs:label "Vacancy data from the University of Oxford" ;
+    skos:notation "vacancies"^^oxnotation:dataset ;
+
+    dcterms:publisher <http://oxpoints.oucs.ox.ac.uk/id/00000000> ;
+    dcterms:description "Vacancy advertisement information from the University of Oxford's central recruitment site, https://www.recruit.ox.ac.uk/. This dataset generally does not include collegiate advertisements." ;
+
+    void:vocabulary oo:, vacancy:, dcterms:, gr:, rdfs: ;
+
+    cc:attributionName "University of Oxford" ;
+    cc:attributionURL <https://data.ox.ac.uk/doc/vacancies> ;
+
+    oo:contact <https://data.ox.ac.uk/id/open-data-team> ;
+
+    void:subset <https://data.ox.ac.uk/id/dataset/vacancies/current> , <https://data.ox.ac.uk/id/dataset/vacancies/archive> .
+
+<https://data.ox.ac.uk/id/dataset/catalogue> dcat:dataset <https://data.ox.ac.uk/id/dataset/vacancies> .
+
+<https://data.ox.ac.uk/id/dataset/vacancies/current> a void:Dataset ;
+    rdfs:label "Current vacancies at the University of Oxford" ;
+    skos:notation "vacancies/current" ;
+
+    dcterms:publisher <http://oxpoints.oucs.ox.ac.uk/id/00000000> ;
+    dcterms:description "Current vacancy advertisement information from the University of Oxford's central recruitment site, https://www.recruit.ox.ac.uk/. This dataset generally does not include collegiate advertisements." ;
+
+    void:vocabulary oo:, vacancy:, dcterms:, gr:, rdfs: ;
+
+    cc:attributionName "University of Oxford" ;
+    cc:attributionURL <https://data.ox.ac.uk/doc/vacancies/current> ;
+
+    oo:contact <https://data.ox.ac.uk/id/open-data-team> .
+
+<https://data.ox.ac.uk/id/dataset/vacancies/archive> a void:Dataset ;
+    rdfs:label "Past vacancies at the University of Oxford" ;
+    skos:notation "vacancies/archive" ;
+
+    dcterms:publisher <http://oxpoints.oucs.ox.ac.uk/id/00000000> ;
+    dcterms:description "Previous vacancy advertisement information from the University of Oxford's central recruitment site, https://www.recruit.ox.ac.uk/. This dataset generally does not include collegiate advertisements." ;
+
+    void:vocabulary oo:, vacancy:, dcterms:, gr:, rdfs: ;
+
+    cc:attributionName "University of Oxford" ;
+    cc:attributionURL <https://data.ox.ac.uk/doc/vacancies/current> ;
+
+    oo:contact <https://data.ox.ac.uk/id/open-data-team> .
+
+<https://data.ox.ac.uk/graph/vacancies/current> a sd:Graph ;
+    void:inDataset <https://data.ox.ac.uk/id/dataset/vacancies/current> .
+
+<https://data.ox.ac.uk/graph/vacancies/archive> a sd:Graph ;
+    void:inDataset <https://data.ox.ac.uk/id/dataset/vacancies/archive> .
+
+<http://data.ox.ac.uk/graph/vacancies/metadata> a sd:Graph ;
+    void:inDataset
+        <https://data.ox.ac.uk/id/dataset/catalogue> ,
+        <https://data.ox.ac.uk/id/dataset/vacancies/current> ,
+        <https://data.ox.ac.uk/id/dataset/vacancies/archive> ,
+        <https://data.ox.ac.uk/id/dataset/vacancies> ;
+    dcterms:license <http://creativecommons.org/publicdomain/zero/1.0/> .
+
