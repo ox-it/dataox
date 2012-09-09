@@ -21,11 +21,19 @@
   <xsl:import href="xcri2rdf.xsl"/>
   <xsl:output method="xml" indent="yes"/>
 
+  <xsl:param name="store">public</xsl:param>
+
   <xsl:variable name="base">https://course.data.ox.ac.uk/id/daisy/</xsl:variable>
   <xsl:variable name="publisher-uri">http://oxpoints.oucs.ox.ac.uk/id/23232714</xsl:variable>
 
   <xsl:template match="catalog" mode="rdf-about">
     <xsl:value-of select="concat($base, 'catalogue')"/>
+  </xsl:template>
+
+  <xsl:template match="course">
+    <xsl:if test="$store='courses' or not(daisy:publicView/text()='0')">
+      <xsl:apply-imports/>
+    </xsl:if>
   </xsl:template>
 
   <xsl:template match="course" mode="rdf-about">
