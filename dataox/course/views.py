@@ -116,13 +116,13 @@ class CatalogDetailView(CourseView, sparql_views.CannedQueryView, RDFView, Conte
     """
 
     query = """
-        DESCRIBE %(uri)s ?provider ?course ?presentation ?organisation ?date ?venue ?courseTerm WHERE {
-          %(uri)s a xcri:catalog .
+        DESCRIBE ?catalog ?provider ?course ?presentation ?organisation ?date ?venue ?courseTerm WHERE {
+          %(uri)s skos:member* ?catalog . ?catalog a xcri:catalog .
           OPTIONAL {
-            %(uri)s dcterms:publisher ?organisation
+            ?catalog dcterms:publisher ?organisation
           } .
           OPTIONAL {
-            %(uri)s skos:member+ ?course .
+            ?catalog skos:member+ ?course .
             ?course a xcri:course .
             OPTIONAL {
               ?course mlo:specifies ?presentation .
