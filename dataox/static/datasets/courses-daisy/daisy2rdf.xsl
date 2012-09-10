@@ -16,6 +16,7 @@
     xmlns:mlo="http://purl.org/net/mlo/"
     xmlns:xcri="http://xcri.org/profiles/1.2/"
     xmlns:daisy="http://daisy.socsci.ox.ac.uk/ns/"
+    xmlns:humfrey="http://purl.org/NET/humfrey/ns/"
     xmlns="http://xcri.org/profiles/1.2/catalog"
     xpath-default-namespace="http://xcri.org/profiles/1.2/catalog">
   <xsl:import href="xcri2rdf.xsl"/>
@@ -42,5 +43,13 @@
 
   <xsl:template match="presentation" mode="rdf-about">
     <xsl:value-of select="concat($base, 'presentation/', dc:identifier/text())"/>
+  </xsl:template>
+
+  <xsl:template match="venue/provider/dc:title">
+    <xsl:apply-imports/>
+    <humfrey:searchNormalization rdf:parseType="Resource">
+      <humfrey:searchType>spatial-thing</humfrey:searchType>
+      <humfrey:searchQuery><xsl:value-of select="text()"/></humfrey:searchQuery>
+    </humfrey:searchNormalization>
   </xsl:template>
 </xsl:stylesheet>
