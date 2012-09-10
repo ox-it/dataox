@@ -30,7 +30,7 @@
     <xsl:value-of select="concat($base, 'catalogue')"/>
   </xsl:template>
 
-  <xsl:template match="course">
+  <xsl:template match="course" mode="in-catalog">
     <xsl:if test="$store='courses' or not(daisy:publicView/text()='0')">
       <xsl:apply-imports/>
     </xsl:if>
