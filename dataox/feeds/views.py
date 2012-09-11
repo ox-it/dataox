@@ -111,7 +111,7 @@ class VacancyIndexView(CannedQueryView, ResultSetView):
         }
         OPTIONAL { ?subUnit_ org:subOrganizationOf ?unit } .
         OPTIONAL {
-          GRAPH <http://data.ox.ac.uk/graph/vacancies/current> {
+          GRAPH <https://data.ox.ac.uk/graph/vacancies/current> {
             ?vacancy oo:organizationPart ?unit
           }
         }
@@ -134,7 +134,7 @@ class VacancyView(FeedView, RDFView, StoreView, MappingView):
         return """
     DESCRIBE %%(unit)s ?unit ?vacancy ?salary ?contact ?tel WHERE {
       OPTIONAL {
-        GRAPH <http://data.ox.ac.uk/graph/vacancies/current> {
+        GRAPH <https://data.ox.ac.uk/graph/vacancies/current> {
           ?vacancy a vacancy:Vacancy .
         }
         ?vacancy
