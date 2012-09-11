@@ -86,9 +86,9 @@
         <h3>Other formats</h3>
         
         <ul>
-{% for format in formats %}
+{% for renderer in renderers %}
           <li>
-            <a href="{{ format.url }}">{{ format.name }}</a>
+            <a href="{{ renderer.url }}">{{ renderer.name }}</a>
           </li>
 {% endfor %}
         </ul>

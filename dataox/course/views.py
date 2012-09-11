@@ -5,6 +5,7 @@ from django_conneg.views import HTMLView, ContentNegotiatedView
 from humfrey.elasticsearch import views as elasticsearch_views
 from humfrey.linkeddata.views import MappingView
 from humfrey.sparql import views as sparql_views
+from humfrey.sparql.models import Store
 from humfrey.results.views.standard import RDFView
 from humfrey.utils.namespaces import NS
 
@@ -12,15 +13,32 @@ import rdflib
 
 import xcri_rdf
 
-class SearchView(elasticsearch_views.SearchView):
-    index_name = 'search/courses'
+class CourseView(object):
+    """
+    Mixin to choose between public and internal indexes.
+    """
+
+    @property
+    def store_name(self):
+        try:
+            return self._store_name
+        except AttributeError:
+            store = Store.objects.get(slug='courses')
+            if self.request.user.has_perm('sparql.query_store', store):
+                self._store_name = 'courses'
+            else:
+                self._store_name = 'public'
+            return self._store_name
+
+class SearchView(CourseView, elasticsearch_views.SearchView):
+    default_types = ('course',)
 
     facets = {'subject': {'terms': {'field': 'subject.uri',
                                         'size': 20}},
               'offeredBy': {'terms': {'field': 'offeredBy.uri',
                                       'size': 20}}}
 
-class CatalogListView(sparql_views.CannedQueryView, HTMLView, RDFView, MappingView):
+class CatalogListView(CourseView, sparql_views.CannedQueryView, HTMLView, RDFView, MappingView):
     template_name = 'course/catalog_list'
 
     query = """
@@ -31,14 +49,12 @@ class CatalogListView(sparql_views.CannedQueryView, HTMLView, RDFView, MappingVi
 
     def get_subjects(self, request, graph, renderers):
         return sorted(map(self.resource, graph.subjects(NS.rdf.type, NS.xcri.catalog)), key=lambda x:x.label)
-
     def get_additional_context(self, request, renderers):
-        return {'renderers': [{'format': r.format,
-                               'name': r.name,
-                               'mimetypes': r.mimetypes} for r in renderers]}
-     
+        return {'feed_renderers': [{'format': r.format,
+                                    'name': r.name,
+                                    'mimetypes': r.mimetypes} for r in renderers]}
 
-class CatalogDetailView(sparql_views.CannedQueryView, RDFView, ContentNegotiatedView):
+class CatalogDetailView(CourseView, sparql_views.CannedQueryView, RDFView, ContentNegotiatedView):
     query = """
         CONSTRUCT {
           %(uri)s a xcri:catalog ;
@@ -100,18 +116,20 @@ class CatalogDetailView(sparql_views.CannedQueryView, RDFView, ContentNegotiated
     """
 
     query = """
-        DESCRIBE %(uri)s ?course ?presentation ?organisation ?date ?venue ?courseTerm WHERE {
-          %(uri)s a xcri:catalog .
+        DESCRIBE ?catalog ?provider ?course ?presentation ?organisation ?date ?venue ?courseTerm WHERE {
+          %(uri)s skos:member* ?catalog . ?catalog a xcri:catalog .
           OPTIONAL {
             ?catalog dcterms:publisher ?organisation
           } .
           OPTIONAL {
-            ?catalog skos:member ?course .
+            ?catalog skos:member+ ?course .
+            ?course a xcri:course .
             OPTIONAL {
               ?course mlo:specifies ?presentation .
               OPTIONAL { ?presentation mlo:start|xcri:end ?date } .
               OPTIONAL { ?presentation xcri:venue ?venue } .
             } .
+            OPTIONAL { ?provider mlo:offers ?course } .
             OPTIONAL { ?course dcterms:subject|xcri:attendanceMode|xcri:attendancePattern|xcri:stufyMode ?courseTerm } .
           }
         }
@@ -132,7 +150,7 @@ class CatalogDetailView(sparql_views.CannedQueryView, RDFView, ContentNegotiated
         serializer = xcri_rdf.XCRICAPSerializer(context['graph'], self.catalog_uri)
         return HttpResponse(serializer.generator(), mimetype='application/xcri-cap+xml')
 
-class CatalogView(ContentNegotiatedView):
+class CatalogView(CourseView, ContentNegotiatedView):
     catalog_detail_view = staticmethod(CatalogDetailView.as_view())
     catalog_list_view = staticmethod(CatalogListView.as_view())
 
@@ -140,4 +158,4 @@ class CatalogView(ContentNegotiatedView):
         if 'uri' in request.GET:
             return self.catalog_detail_view(request)
         else:
-            return self.catalog_list_view(request, self.catalog_detail_view._renderers)
+            return self.catalog_list_view(request, self.catalog_detail_view.conneg.renderers)

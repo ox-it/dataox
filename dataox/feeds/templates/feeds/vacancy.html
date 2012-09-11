@@ -12,8 +12,8 @@
     <aside class="toolbox">
     <section class="page-metadata">
       <h2>Other formats</h2>
-      <ul>{% for format in formats %}
-        <li><a href="{{ format.url }}">{{ format.name }}</a></li>{% endfor %}
+      <ul>{% for renderer in renderers %}
+        <li><a href="{{ renderer.url }}">{{ renderer.name }}</a></li>{% endfor %}
       </ul>
     </section>
     <section class="page-metadata">

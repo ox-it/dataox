@@ -1,0 +1,10 @@
+PREFIX oo:   <http://purl.org/openorg/>
+PREFIX void: <http://rdfs.org/ns/void#>
+
+CONSTRUCT {
+  ?dataset oo:usedClass ?class ; oo:usedPredicate ?predicate
+} WHERE {
+  ?dataset a void:Dataset .
+  ?graph void:inDataset/^void:subset* ?dataset .
+  GRAPH ?graph { { ?x a ?class } UNION { ?x ?predicate ?y } }
+}
