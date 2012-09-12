@@ -41,7 +41,7 @@ class ContributeForm(forms.Form):
     description = forms.CharField(widget=forms.Textarea,
                                   label="Description:",
                                   help_text="What kind of things can it do? If there are any alterations, list them here.")
-    category = forms.CharField(widget=forms.TextInput(attrs={'class': 'autocomplete',
+    category = forms.CharField(widget=forms.TextInput(attrs={'class': 'dataox-autocomplete',
                                                              'data-autocomplete-type': 'equipment-category'}),
                                label="Category:",
                                required=False)

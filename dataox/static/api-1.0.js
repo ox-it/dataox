@@ -1,11 +1,14 @@
-(function() {
+$(function() {
 	if (window.dataox == undefined)
 		window.dataox = {};
 	
 	$.extend(window.dataox, {
-		staticURL: "//static.data.ox.ac.uk/",
-		sparqlURL: "//data.ox.ac.uk/sparql/",
-		searchURL: "//data.ox.ac.uk/search/",
+		staticURL: $('body').attr('data-dataox-static-url') ||"//static.data.ox.ac.uk/",
+		sparqlURL: $('body').attr('data-dataox-sparql-url') ||"//data.ox.ac.uk/sparql/",
+		searchURL: $('body').attr('data-dataox-search-url') || "//data.ox.ac.uk/search/",
+		uriLookupURL: $('body').attr('data-dataox-uri-lookup-url') || "//data.ox.ac.uk/doc/",
+		defaultZoom: 14,
+		osmTiles: '//static.data.ox.ac.uk/osm-tiles/${z}/${x}/${y}.png',
 		getElement: function(e) {
 			if (typeof e == "string")
 				return $(getElementById(e));
@@ -25,7 +28,6 @@
 
 			searchURL = searchURL
 			         || e.attr('data-dataox-search-url')
-			         || $('body').attr('data-dataox-search-url')
 			         || window.dataox.searchURL;
 			
 			// build the default params for AJAX calls
@@ -66,28 +68,39 @@
 			});
 		},
 		lonLat: function(map, lon, lat) {
-			return new OpenLayers.LonLat(longitude, latitude)
+			return new OpenLayers.LonLat(lon, lat)
 				.transform(new OpenLayers.Projection("EPSG:4326"), // transform from WGS 1984
 				           map.getProjectionObject());
 		},
-		
-		map: function(e, lon, lat, zoom, label) {
+		// Maps. https://data.ox.ac.uk/docs/api/maps.html
+		map: function(e, options) {
+			options = options || {};
 			e = window.dataox.getElement(e);
 			var domElement = e.get(0);
 			if (!domElement.id)
 				domElement.id = window.dataox.generateId();
 		
 			var map = new OpenLayers.Map(domElement.id, { controls: [] });
-			map.addLayer(new OpenLayers.Layer.OSM());
+			map.addLayer(new OpenLayers.Layer.OSM("OpenStreetMap", window.dataox.osmTiles));
 			map.addControl(new OpenLayers.Control.Navigation());
 
-			var lonLat = window.lonLat(map,
-				lon || e.attr('data-lon'),
-				lat || e.attr('data-lat'));
-			zoom = zoom | e.attr('data-zoom');
-		 
 			var markers = new OpenLayers.Layer.Markers( "Markers" );
 			map.addLayer(markers);
+
+			var lon = options.lon || e.attr('data-lon');
+			var lat = options.lon || e.attr('data-lat');
+			var oxpointsID = options.oxpointsID || e.attr('data-oxpoints-id');
+			var uri = options.uri || e.attr('data-uri');
+			var zoom = options.zoom || e.attr('data-zoom') || window.dataox.defaultZoom;
+			if (!uri && oxpointsID) uri = "http://oxpoints.oucs.ox.ac.uk/id/" + oxpointsID;
+			if (uri) throw new Error("maps with uri lookup not yet supported.");
+
+			if (lon && lat) {
+				var lonLat = window.dataox.lonLat(map, lon, lat);
+				var label = options.window || e.attr('data-label');
+			} else
+				throw new Error("Couldn't determine lon and lat for map " + domElement.id);
+
 		 
 			var size = new OpenLayers.Size(21,25);
 			var offset = new OpenLayers.Pixel(-(size.w/2), -size.h);
@@ -111,9 +124,7 @@
 			});
 		}		
 	});
-})();
 
-$(function() {
 	$('.dataox-autocomplete').each(function(i, e) { dataox.autocomplete(e); });
 	$('.dataox-map').each(function(i, e) { dataox.map(e); });
 });

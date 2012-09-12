@@ -1,2 +1,1 @@
-  <div id="mapdiv" style="width:{{ width|default:"200px" }}; height:{{ height|default:"200px" }}; font-size:9pt;"></div>
-  <script type="text/javascript">$(function() { widgetMap("mapdiv", {{ subject.geo_long }}, {{ subject.geo_lat }}); });</script>
+  <div class="dataox-map" data-lon="{{ subject.geo_long }}" data-lat="{{ subject.geo_lat}}" style="width:{{ width|default:"200px" }}; height:{{ height|default:"200px" }}; font-size:9pt;"></div>
