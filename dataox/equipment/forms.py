@@ -41,7 +41,7 @@ class ContributeForm(forms.Form):
     description = forms.CharField(widget=forms.Textarea,
                                   label="Description:",
                                   help_text="What kind of things can it do? If there are any alterations, list them here.")
-    category = forms.CharField(widget=forms.TextInput(attrs={'class': 'autocomplete',
+    category = forms.CharField(widget=forms.TextInput(attrs={'class': 'dataox-autocomplete',
                                                              'data-autocomplete-type': 'equipment-category'}),
                                label="Category:",
                                required=False)
@@ -68,11 +68,11 @@ class ContributeForm(forms.Form):
                            help_text="If there's a picture of this piece of equipment on the web, provide a link to it here.",
                            required=False)
 
-    department = forms.CharField(widget=forms.TextInput(attrs={'class': 'autocomplete',
+    department = forms.CharField(widget=forms.TextInput(attrs={'class': 'dataox-autocomplete',
                                                                'data-autocomplete-type': 'organization',
                                                                'data-autocomplete-filter.graph.uri': 'https://data.ox.ac.uk/graph/oxpoints/data'}),
                                  label="Department:")
-    place = forms.CharField(widget=forms.TextInput(attrs={'class': 'autocomplete',
+    place = forms.CharField(widget=forms.TextInput(attrs={'class': 'dataox-autocomplete',
                                                           'data-autocomplete-type': 'spatial-thing',
                                                           'data-autocomplete-filter.graph.uri': 'https://data.ox.ac.uk/graph/oxpoints/data'}),
                             label="Location",

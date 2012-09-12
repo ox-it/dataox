@@ -5,7 +5,7 @@ class CollegeHall(object):
     @classmethod
     def _describe_patterns(cls):
         return [
-            '%(observation)s fhs:institution %(uri)s ; qb:dataset <http://data.ox.ac.uk/id/dataset/norrington>',
+#            '%(observation)s fhs:institution %(uri)s ; qb:dataset <http://data.ox.ac.uk/id/dataset/norrington>',
         ]
 
     def fhs_results(self):
@@ -38,13 +38,13 @@ class Place(object):
     @classmethod
     def _construct_patterns(cls):
         return [
-            '%(meterPoint)s meter:pertainsTo %(uri)s ; timeseries:timeSeries ?timeSeries',
+#            '%(meterPoint)s meter:pertainsTo %(uri)s ; timeseries:timeSeries ?timeSeries',
         ]
 
     @classmethod
     def _describe_patterns(cls):
         return [
-            "%(timeSeries)s meter:pertainsTo %(uri)s",
+#            "%(timeSeries)s meter:pertainsTo %(uri)s",
         ]
 
     def widget_templates(self):

@@ -1,29 +1,5 @@
 var sparqlEndpointURL = "/sparql/";
 
-function widgetMap(elementID, longitude, latitude) {
-  map = new OpenLayers.Map(elementID, { controls: [] });
-  map.addLayer(new OpenLayers.Layer.OSM());
-  map.addControl(new OpenLayers.Control.Navigation());
-  //map.addControl(new OpenLayers.Control.KeyboardDefaults());
-  map.addControl(new OpenLayers.Control.Attribution("D"));
- 
-  var lonLat = new OpenLayers.LonLat(longitude, latitude)
-    .transform(new OpenLayers.Projection("EPSG:4326"), // transform from WGS 1984
-               map.getProjectionObject() // to Spherical Mercator Projection
-              );
- 
-  var zoom=14;
- 
-  var markers = new OpenLayers.Layer.Markers( "Markers" );
-  map.addLayer(markers);
- 
-  var size = new OpenLayers.Size(21,25);
-  var offset = new OpenLayers.Pixel(-(size.w/2), -size.h);
-  var icon = new OpenLayers.Icon(staticURL + 'marker.png', size, offset);
-  markers.addMarker(new OpenLayers.Marker(lonLat, icon));
- 
-  map.setCenter (lonLat, zoom);
-}
 
 function supportsCORS() {
   return ('withCredentials' in new XMLHttpRequest());

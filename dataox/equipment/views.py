@@ -47,9 +47,7 @@ class ContributeView(HTMLView, MappingView, StoreView):
         return super(ContributeView, self).dispatch(request)
 
     def common(self, request):
-        if hasattr(self, 'context'):
-            return
-        self.context = {'form': forms.ContributeForm(request.POST or None)}
+        self.context.update({'form': forms.ContributeForm(request.POST or None)})
 
     def get(self, request):
         if 'submitted' in request.GET:
