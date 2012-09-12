@@ -106,7 +106,7 @@ class VacancyIndexView(CannedQueryView, ResultSetView):
     query = """
       SELECT ?unit (SAMPLE(?unitLabel_) as ?unitLabel) (COUNT(DISTINCT ?vacancy) as ?vacancies) (SAMPLE(?subUnit_) as ?subUnit) WHERE {
         ?type rdfs:subClassOf* org:Organization
-        GRAPH <http://data.ox.ac.uk/graph/oxpoints/data> {
+        GRAPH <https://data.ox.ac.uk/graph/oxpoints/data> {
             ?unit rdf:type ?type ; skos:prefLabel ?unitLabel_ .
         }
         OPTIONAL { ?subUnit_ org:subOrganizationOf ?unit } .
@@ -148,7 +148,7 @@ class VacancyView(FeedView, RDFView, StoreView, MappingView):
           OPTIONAL { ?contact v:tel ?tel }
         }
         FILTER (?closes > now()) .
-        GRAPH <http://data.ox.ac.uk/graph/oxpoints/data> {
+        GRAPH <https://data.ox.ac.uk/graph/oxpoints/data> {
           ?unit org:subOrganizationOf%(cardinality)s %%(unit)s
         } .
         %%(filter)s
