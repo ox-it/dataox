@@ -73,7 +73,7 @@ code {
 	font-size: 1.4em;
 }
 
-img, #mapdiv{
+.dataox-map, img {
 	border: 1px solid #999;
 	border-radius: 1px;
 	-moz-border-radius: 1px;
@@ -82,7 +82,7 @@ img, #mapdiv{
 	padding: 2px;
 }
 
-#mapdiv img {
+.dataox-map img {
 	border:
 	none;
 	margin: 0px;
