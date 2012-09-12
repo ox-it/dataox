@@ -219,3 +219,5 @@ ARCHIVE_STORES = ('public',)
 ANONYMOUS_USER_ID = 0
 
 RESOURCE_REGISTRY = 'dataox.resource.resource_registry'
+DATASET_NOTATION = 'oxnotation:dataset'
+GRAPH_BASE = 'https://data.ox.ac.uk/graph/'

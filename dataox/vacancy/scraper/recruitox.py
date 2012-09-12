@@ -93,7 +93,7 @@ class RecruitOxScraper(Scraper):
             vacancy = Vacancy.objects.get(vacancy_id=vacancy_id)
         except Vacancy.DoesNotExist:
             vacancy = Vacancy(vacancy_id=vacancy_id,
-                              opening_date=self.site_timezone.localize(datetime.datetime.now())).replace(microsecond=0).isoformat()
+                              opening_date=self.site_timezone.localize(datetime.datetime.now()).replace(microsecond=0).isoformat())
 
         params = self.detail_params.copy()
         params['p_recruitment_id'] = vacancy_id

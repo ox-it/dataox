@@ -196,14 +196,23 @@
         </td>
       </tr>
       <tr class="row-odd">
-        <th>As RDF:</th>
+        <th>RDF graphs:</th>
         <td>
          {% for document in subject.all.void_inDataset_inv %}
-           {{ document|node }}
+           <a href="{{ document.uri }}">{{ document.uri }}</a>
            {% if not forloop.last %}&#8226;{% endif %}
          {% empty %}
            <em>This dataset is not available as RDF through <strong>data.ox.ac.uk</strong>.</em>
          {% endfor %}
+        </td>
+      </tr>
+      <tr class="row-even">
+        <th>Data dump</th>
+        <td>{% if subject.void_dataDump %}
+          <a href="{{ subject.void_dataDump }}">{{ subject.void_dataDump }}</a>
+          {% else %}
+          <em>None available</em>
+          {% endif %}
         </td>
       </tr>
     </tbody>

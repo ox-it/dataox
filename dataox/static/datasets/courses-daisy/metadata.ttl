@@ -3,18 +3,22 @@
 @prefix dcterms: <http://purl.org/dc/terms/> .
 @prefix cc:      <http://creativecommons.org/ns#> .
 @prefix oo:      <http://purl.org/openorg/> .
+@prefix oxnotation: <https://data.ox.ac.uk/id/notation/> .
 @prefix foaf: <http://xmlns.com/foaf/0.1/> .
 @prefix xcri: <http://xcri.org/profiles/1.2/> .
 @prefix mlo: <http://purl.org/net/mlo/> .
 @prefix time: <http://www.w3.org/2006/time#> .
 @prefix skos: <http://www.w3.org/2004/02/skos/core#> .
 @prefix v: <http://www.w3.org/2006/vcard/ns#> .
+@prefix sd: <http://www.w3.org/ns/sparql-service-description#> .
+@prefix dcat: <http://www.w3.org/ns/dcat#> .
 
-<http://data.ox.ac.uk/id/dataset/courses>
-    void:subset <http://data.ox.ac.uk/id/dataset/courses/daisy> .
+<https://data.ox.ac.uk/id/dataset/courses>
+    void:subset <https://data.ox.ac.uk/id/dataset/courses/daisy> .
 
-<http://data.ox.ac.uk/id/dataset/courses/daisy> a void:Dataset ;
+<https://data.ox.ac.uk/id/dataset/courses/daisy> a void:Dataset ;
     rdfs:label "Course catalogue from the Daisy system" ;
+    skos:notation "courses/daisy"^^oxnotation:dataset ;
 
     dcterms:publisher <http://oxpoints.oucs.ox.ac.uk/id/23232714> ;
     dcterms:description "Upcoming courses managed in Daisy, modelled using XCRI-CAP." ;
@@ -28,10 +32,10 @@
       foaf:name "Social Sciences Division" ;
       v:email <mailto:daisy-support@socsci.ox.ac.uk> ] .
 
-<http://data.ox.ac.uk/graph/courses/daisy/data> a foaf:Document ;
-    void:inDataset <http://data.ox.ac.uk/id/dataset/daisy/conted> .
+<https://data.ox.ac.uk/graph/courses/daisy/data> a sd:Graph ;
+    void:inDataset <https://data.ox.ac.uk/id/dataset/courses/daisy> .
 
-<http://data.ox.ac.uk/graph/courses/daisy/metadata> a foaf:Document ;
-    void:inDataset <http://data.ox.ac.uk/id/dataset/catalogue> ;
+<https://data.ox.ac.uk/graph/courses/daisy/metadata> a sd:Graph ;
+    void:inDataset <https://data.ox.ac.uk/id/dataset/catalogue> , <https://data.ox.ac.uk/id/dataset/courses/daisy> ;
     dcterms:license <http://creativecommons.org/publicdomain/zero/1.0/> .
 

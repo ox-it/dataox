@@ -24,7 +24,7 @@
                 {{ publisher|node }}{% if not forloop.last %}<br/>{% endif %}
               {% endfor %}
             </td>
-            <td>{{ dataset.dcterms_license|node }}</td>
+            <td>{{ dataset.dcterms_license|node|default:"<em>unknown</em>" }}</td>
             <td>{{ dataset.dcterms_description|node|linebreaksbr }}</td>
             <td class="badges">
               {% if dataset.dcterms_license.foaf_logo %}

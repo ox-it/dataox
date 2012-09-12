@@ -7,6 +7,7 @@
 @prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
 @prefix foaf: <http://xmlns.com/foaf/0.1/> .
 @prefix oxp: <http://ns.ox.ac.uk/namespace/oxpoints/2009/02/owl#> .
+@prefix oxnotation: <https://data.ox.ac.uk/id/notation/> .
 @prefix oo: <http://purl.org/openorg/> .
 @prefix org: <http://www.w3.org/ns/org#> .
 @prefix skos: <http://www.w3.org/2004/02/skos/core#> .
@@ -17,6 +18,7 @@
 
 
 <https://data.ox.ac.uk/id/dataset/oxpoints> a void:Dataset, dcat:Dataset ;
+    skos:notation "oxpoints"^^oxnotation:dataset ;
     rdfs:label "OxPoints"@en ;
     dcterms:title "OxPoints"@en ;
     dcterms:description "OxPoints is the University's geospatial, temporal and organisational RDF store.\n\nOxPoints aims to contain information about most political and built entities within the University, including college, department, building and rooms." ;
@@ -25,7 +27,7 @@
 
     dcterms:license <http://creativecommons.org/publicdomain/zero/1.0/> ;
     dcterms:rightsHolder <http://oxpoints.oucs.ox.ac.uk/id/00000000> ;
-    dcterms:publisher <http://oxpoints.oucs.ox.ac.uk/id/23233567> ;
+    dcterms:publisher <http://oxpoints.oucs.ox.ac.uk/id/31337175> ;
 
     cc:license <http://creativecommons.org/publicdomain/zero/1.0/> ;
     cc:attributionName "University of Oxford"@en ;
@@ -62,10 +64,10 @@
 <https://data.ox.ac.uk/id/dataset/catalogue> dcat:dataset <https://data.ox.ac.uk/id/dataset/oxpoints> .
 
 <https://data.ox.ac.uk/graph/oxpoints/data> a foaf:Document ;
-    void:inDataset <https://data.ox.ac.uk/id/dataset/oxpoints> ;
+    void:inDataset <https://data.ox.ac.uk/id/dataset/oxpoints> , <https://data.ox.ac.uk/id/dataset/oxpoints> ;
     dcterms:license <http://creativecommons.org/publicdomain/zero/1.0/> .
 
 <https://data.ox.ac.uk/graph/oxpoints/metadata> a foaf:Document ;
-    void:inDataset <https://data.ox.ac.uk/id/dataset/catalogue> ;
+    void:inDataset <https://data.ox.ac.uk/id/dataset/catalogue> , <https://data.ox.ac.uk/id/dataset/oxpoints> ;
     dcterms:license <http://creativecommons.org/publicdomain/zero/1.0/> .
 

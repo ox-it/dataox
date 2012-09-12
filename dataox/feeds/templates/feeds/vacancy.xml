@@ -5,14 +5,9 @@
     <url>{{ vacancy.doc_url }}</url>
     <webpage>{{ vacancy.foaf_homepage }}</webpage>
     <label>{{ vacancy.label }}</label>
-    
     <opens>{{ vacancy.vacancy_applicationOpeningDate }}</opens>
-    <closes>{{ vacancy.vacancy_applicationClosingDate }}</closes>
-    
-    {% for description in vacancy.all.rdfs_comment  %}
-    <description format="{% if description.datatype|slice:":" == "http://purl.org/xtypes/Fragment-XHTML" %}application/xhtml+xml{% else %}text/plain{% endif %}">{{ description }}</description>
-    {% endfor %}
-    
+    <closes>{{ vacancy.vacancy_applicationClosingDate }}</closes>{% for description in vacancy.all.rdfs_comment  %}
+    <description format="{% if description.datatype|slice:":" == "http://purl.org/xtypes/Fragment-XHTML" %}application/xhtml+xml{% else %}text/plain{% endif %}">{{ description }}</description>{% endfor %}
     <organizationPart>{% with vacancy.oo_organizationPart as orgPart %}
       <uri>{{ orgPart.uri }}</uri>
       <url>{{ orgPart.doc_url }}</url>{% if orgPart.foaf_homepage %}
@@ -25,7 +20,6 @@
         <postal-code>{{ adr|property:"v:postal-code" }}</postal-code>{% endif %}
       </address>{% endif %}{% endwith %}
     {% endwith %}</organizationPart>
-    
     <salary>{% with vacancy.vacancy_salary as salary %}
       <label>{{ salary.label }}</label>{% if salary.adhoc_salaryGrade %}
       <grade>{{ salary.adhoc_salaryGrade }}</grade>{% endif %}{% if salary.gr_hasMinCurrencyValue %}
@@ -33,19 +27,13 @@
       <upper>{{ salary.gr_hasMaxCurrencyValue }}</upper>{% endif %}{% if salary.gr_hasCurrency %}
       <currency>{{ salary.gr_hasCurrency }}</currency>{% endif %}
     {% endwith %}</salary>
-    
     <contact>{% with vacancy.oo_contact as contact %}
       <label>{{ contact.label }}</label>{% if contact.v_email %}
       <email>{{ contact.v_email|slice:"7:" }}</email>{% endif %}{% if contact.v_tel.rdf_value %}
       <telephone>{{ contact.v_tel.rdf_value }}</telephone>{% endif %}
-    {% endwith %}</contact>
-    
-    {% if vacancy.vacancy_furtherParticulars %}
+    {% endwith %}</contact>{% if vacancy.vacancy_furtherParticulars %}
     <document_urls>{% for document in vacancy.all.vacancy_furtherParticulars %}
       <document_url>{{ document.uri }}</document_url>{% endfor %}
-    </document_urls>
-    {% endif %}
-      
-    
+    </document_urls>{% endif %}
   </vacancy>{% endfor %}
 </vacancies>

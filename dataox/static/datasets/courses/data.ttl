@@ -10,12 +10,16 @@
 @prefix skos: <http://www.w3.org/2004/02/skos/core#> .
 @prefix v: <http://www.w3.org/2006/vcard/ns#> .
 
-<http://course.data.ox.ac.uk/id/catalog> a xcri:catalog ;
+<https://course.data.ox.ac.uk/id/catalogue> a xcri:catalog ;
     rdfs:label "Course catalogue for the University of Oxford" ;
 
     dcterms:publisher <http://oxpoints.oucs.ox.ac.uk/id/00000000> ;
 
-    skos:member <http://course.data.ox.ac.uk/id/continuing-education/catalog> ,
-        <http://course.data.ox.ac.uk/id/itlp/catalog> ,
-        <http://course.data.ox.ac.uk/id/daisy/catalog> .
+    skos:member
+        <https://course.data.ox.ac.uk/id/continuing-education/catalogue> ,
+        <https://course.data.ox.ac.uk/id/itlp/catalogue> ,
+        <https://course.data.ox.ac.uk/id/daisy/catalogue> ,
+        <https://course.data.ox.ac.uk/id/careers/catalogue> ,
+        <https://course.data.ox.ac.uk/id/safety/catalogue> ,
+        <https://course.data.ox.ac.uk/id/hris/catalogue> .
 
