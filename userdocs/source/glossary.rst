@@ -18,6 +18,10 @@ Glossary
       part of the *web of data* (by analogy to the human-readable *web of
       documents*). See `the Wikipedia article
       <http://en.wikipedia.org/wiki/Linked_data>`_ for more information.
+      
+      If you're just getting started with linked data, the Open Data Team at
+      Southampton have put together this `useful guide for beginners
+      <http://openorg.ecs.soton.ac.uk/wiki/Linked_Data_Basics_for_Techies>`_.
    
    RDF
       See :term:`Resource Description Framework`.
@@ -27,6 +31,9 @@ Glossary
       useful when creating RDF using XML tools. For more information, see
       `this explanation of it's "stripedness" <http://www.w3.org/2001/10/stripes/>`_
       and the `format specification <http://www.w3.org/TR/REC-rdf-syntax/>`_.
+      
+      Examples of RDF/XML can be found `here <http://data.ox.ac.uk/doc:oxpoints/31337175.rdf>`_
+      and `here <http://data.ox.ac.uk/datasets/?format=rdf>`_.
 
    RDF serialization
       As RDF is just a data model, it doesn't have any one true concrete
@@ -39,7 +46,13 @@ Glossary
    
    Resource Description Framework
       The Resource Description Framework (RDF) is a metadata data model based
-      around *subject object predicate* :term:`triples <triple>`. 
+      around *subject object predicate* :term:`triples <triple>`. RDF is not
+      tied to representing any particular type of information, leading to an
+      information infrastructure that works for just about anything.
+      
+      RDF is generally queried using :term:`SPARQL`. You can read more about
+      RDF at the `W3C <http://www.w3.org/RDF/>`_ and
+      `Wikipedia <http://en.wikipedia.org/wiki/Resource_Description_Framework>`_.
    
    SPARQL
       A query language for RDF databases. SPARQL queries can return table-like
@@ -62,7 +75,7 @@ Glossary
       A triple store is a database for storing RDF
 
    Turtle
-      An :term:`RDF serialization` 
+      An :term:`RDF serialization`
 
    vocabulary
       A set of :term:`URI` terms that have a commonly-understood interpretation
