@@ -184,7 +184,7 @@
   </xsl:template>
 
   <xsl:template match="item/small-research-facility" mode="inside">
-    <xsl:if test="text()">
+    <xsl:if test="text() and lower-case(text())!='no'">
       <oo:relatedFacility>
         <cerif:Facility rdf:about="{../@uri}/facility">
           <rdfs:label>
