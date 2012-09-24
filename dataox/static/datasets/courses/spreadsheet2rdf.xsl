@@ -89,17 +89,6 @@
     <org:Organization rdf:about="https://course.data.ox.ac.uk/id/provider/{provider-identifier/text()}">
       <xsl:apply-templates mode="provider-metadata"/>
       <xsl:for-each-group select="current-group()" group-by="course-identifier">
-        <c id="{course-identifier}">
-          <xsl:for-each-group select="current-group()" group-by="presentation-start">
-            <xsl:sort select="presentation-start"/>
-            <p id="{presentation-start}">
-              <xsl:for-each-group select="current-group()" group-by="session-start">
-                <xsl:sort select="session-start"/>
-                <s id="{session-start}"/>
-              </xsl:for-each-group>
-            </p>
-          </xsl:for-each-group>
-        </c>
         <xsl:apply-templates select="." mode="in-provider">
           <xsl:with-param name="current-group" select="current-group()"/>
         </xsl:apply-templates>
