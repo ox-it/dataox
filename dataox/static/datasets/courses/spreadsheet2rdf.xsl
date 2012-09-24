@@ -340,7 +340,7 @@
     </xsl:for-each>
   </xsl:template>
 
-  <xsl:template match="course-descriptoin" mode="in-course">
+  <xsl:template match="course-description" mode="in-course">
     <dcterms:description>
       <xsl:value-of select="text()"/>
     </dcterms:description>
