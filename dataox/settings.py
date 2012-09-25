@@ -154,6 +154,7 @@ ADDITIONAL_NAMESPACES.update({
     'xcri': 'http://xcri.org/profiles/1.2/',
     'mlo': 'http://purl.org/net/mlo/',
     'spatialrelations': 'http://data.ordnancesurvey.co.uk/ontology/spatialrelations/',
+    'prog': 'http://purl.org/prog/',
 
 })
 
