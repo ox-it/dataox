@@ -190,6 +190,8 @@ class Vacancy(models.Model):
     def flatten(self, elem):
         return ''.join(self._flatten(elem))
 
+    class Meta:
+        verbose_name_plural = 'vacancies'
 
 class Document(models.Model):
     vacancy = models.ForeignKey(Vacancy)
