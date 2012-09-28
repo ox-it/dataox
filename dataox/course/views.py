@@ -11,7 +11,7 @@ from humfrey.utils.namespaces import NS
 
 import rdflib
 
-import xcri_rdf
+from .xcri_rdf import XCRICAPSerializer
 
 class CourseView(object):
     """
@@ -147,7 +147,7 @@ class CatalogDetailView(CourseView, sparql_views.CannedQueryView, RDFView, Conte
 
     @renderer(format='xcricap', mimetypes=('application/xcri-cap+xml',), name="XCRI-CAP 1.2")
     def render_xcricap(self, request, context, template_name):
-        serializer = xcri_rdf.XCRICAPSerializer(context['graph'], self.catalog_uri)
+        serializer = XCRICAPSerializer(context['graph'], self.catalog_uri)
         return HttpResponse(serializer.generator(), mimetype='application/xcri-cap+xml')
 
 class CatalogView(CourseView, ContentNegotiatedView):
