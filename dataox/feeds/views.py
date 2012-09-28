@@ -68,20 +68,20 @@ class FeedView(HTMLView, JSONPView):
             feed.add_item(item['title'], item['link'], item['description'], pubdate=item['date'])
         return HttpResponse(feed.writeString('utf-8'), mimetype=mimetype)
 
-    def simplify(self, value):
+    def simplify_for_json(self, value):
         if isinstance(value, BaseResource):
             return NotImplemented
         elif isinstance(value, rdflib.Literal) and value.datatype == NS.xsd.dateTime:
-            return self.simplify(dateutil.parser.parse(value))
+            return self.simplify_for_json(dateutil.parser.parse(value))
         elif isinstance(value, rdflib.Literal):
             value = value.toPython()
             if isinstance(value, rdflib.Literal):
                 value = unicode(value)
-            return self.simplify(value)
+            return self.simplify_for_json(value)
         elif isinstance(value, (rdflib.URIRef, rdflib.BNode)):
             return unicode(value)
         else:
-            return super(FeedView, self).simplify(value)
+            return super(FeedView, self).simplify_for_json(value)
 
 # This is a nasty workaround for the (known) bug in Django: 
 # https://code.djangoproject.com/ticket/14202
