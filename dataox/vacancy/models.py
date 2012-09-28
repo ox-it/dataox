@@ -2,6 +2,7 @@
 
 import locale
 import logging
+import re
 
 from lxml import etree
 import rdflib
@@ -12,6 +13,7 @@ from humfrey.elasticsearch.query import ElasticSearchEndpoint
 from humfrey.utils.namespaces import NS
 
 logger = logging.getLogger(__name__)
+email_re = re.compile(r'(?P<localpart>[a-zA-Z\d\-._]+)@(?P<host>[a-zA-Z\d\-.]+)')
 
 class Vacancy(models.Model):
     vacancy_id = models.CharField(max_length=10)
@@ -94,8 +96,9 @@ class Vacancy(models.Model):
                         (contact_uri, NS.rdf.type, NS.foaf.Agent)]
         if self.contact_name:
             triples.append((contact_uri, NS.foaf.name, rdflib.Literal(self.contact_name)))
-        if self.contact_email:
-            triples.append((contact_uri, NS.v.email, rdflib.URIRef('mailto:' + self.contact_email)))
+        # Sometimes we see more than one e-mail address in this field
+        for localpart, host in email_re.findall(self.contact_email):
+            triples.append((contact_uri, NS.v.email, rdflib.URIRef('mailto:{0}@{1}'.format(localpart, host.lower()))))
         if self.contact_phone:
             phone_uri = self.phone_uri
             triples += [(contact_uri, NS.v.tel, phone_uri),
