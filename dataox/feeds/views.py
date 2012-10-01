@@ -183,8 +183,8 @@ class VacancyView(FeedView, RDFView, StoreView, MappingView):
 
     @property
     def title(self):
-        return "Vacancies within " + self.graph.value(self.unit, NS.skos.prefLabel)
-    
+        return "Vacancies within {0}".format(self.graph.value(self.unit, NS.skos.prefLabel) or '[unknown]')
+
     @property
     def link(self):
         return self.base_location
