@@ -122,52 +122,55 @@ class VacancyIndexView(CannedQueryView, ResultSetView):
 class VacancyView(FeedView, RDFView, StoreView, MappingView):
     template_name = "feeds/vacancy"
     _json_indent=2
-    
+
     all = False
-    
+
     @property
     def reverse_name(self):
         return 'feeds:all-vacancies' if self.all else 'feeds:vacancies'
 
     @property
     def query(self):
-        return """
-    DESCRIBE %%(unit)s ?unit ?vacancy ?salary ?contact ?tel WHERE {
-      OPTIONAL {
-        GRAPH <https://data.ox.ac.uk/graph/vacancies/current> {
-          ?vacancy a vacancy:Vacancy .
-        }
-        ?vacancy
-          oo:organizationPart ?unit ;
-          vacancy:salary ?salary ;
-          vacancy:applicationClosingDate ?closes ;
-          rdfs:label ?label ;
-          rdfs:comment ?description .
-        OPTIONAL {
-          ?vacancy oo:contact ?contact .
-          OPTIONAL { ?contact v:tel ?tel }
-        }
-        FILTER (?closes > now()) .
-        GRAPH <https://data.ox.ac.uk/graph/oxpoints/data> {
-          ?unit org:subOrganizationOf%(cardinality)s %%(unit)s
-        } .
-        %%(filter)s
-      }
+        return """\
+    DESCRIBE ?unit ?childUnit ?vacancy ?salary ?contact ?tel WHERE {{
+      VALUES ?unit {{ {unit} }} .
+      OPTIONAL {{
+      ?childUnit org:subOrganizationOf{cardinality} ?unit .
+      GRAPH <https://data.ox.ac.uk/graph/vacancies/current> {{
+        ?vacancy oo:organizationPart ?unit ; a vacancy:Vacancy .
+      }}
+      ?vacancy
+        vacancy:salary ?salary ;
+        vacancy:applicationClosingDate ?closes ;
+        rdfs:label ?label ;
+        rdfs:comment ?description .
+      OPTIONAL {{
+        ?vacancy oo:contact ?contact .
+        OPTIONAL {{ ?contact v:tel ?tel }}
+      }}
+      FILTER (?closes > now()) .
+      {sparqlFilter}
+      }}
+    }}""".format(cardinality='*' if self.all else '{0}',
+                 unit=self.unit.n3(),
+                 sparqlFilter=self.sparqlFilter)
 
-    }""" % {'cardinality': '*' if self.all else '{0}'}
+    @property
+    def unit(self):
+        return rdflib.URIRef('http://oxpoints.oucs.ox.ac.uk/id/{0}'.format(self.kwargs['oxpoints_id']))
+
+    @property
+    def sparqlFilter(self):
+        if 'keyword' in self.request.GET:
+            keyword = rdflib.Literal(self.request.GET['keyword']).n3()
+            return "FILTER (regex(?label, %(keyword)s, 'i') || regex(?description, {0}, 'i'))".format(keyword)
+        return ""
 
     def get(self, request, oxpoints_id, format=None):
-        filter = []
-        if 'keyword' in request.GET:
-            keyword = rdflib.Literal(request.GET['keyword']).n3()
-            filter.append("FILTER (regex(?label, %(keyword)s, 'i') || regex(?description, %(keyword)s, 'i'))" % {'keyword': keyword})
-        filter = ' .\n      '.join(filter)
-        self.unit = rdflib.URIRef('http://oxpoints.oucs.ox.ac.uk/id/%s' % oxpoints_id)
-
-        self.graph = self.endpoint.query(self.query % {'unit': self.unit.n3(), 'filter': filter})
+        self.graph = self.endpoint.query(self.query)
         if not self.graph:
             raise Http404
-        
+
         subjects = [Resource(v, self.graph, self.endpoint) for v in self.graph.subjects(NS.rdf.type, NS.vacancy.Vacancy)]
 
         self.context.update({'unit': Resource(self.unit, self.graph, self.endpoint),
@@ -175,9 +178,9 @@ class VacancyView(FeedView, RDFView, StoreView, MappingView):
                              'all': self.all,
                              'subjects': subjects,
                              'keyword': request.GET.get('keyword')})
-        
+
         return super(VacancyView, self).get(request, oxpoints_id=oxpoints_id, format=format)
-        
+
     @property
     def title(self):
         return "Vacancies within " + self.graph.value(self.unit, NS.skos.prefLabel)
