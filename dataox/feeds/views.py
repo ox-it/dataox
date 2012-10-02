@@ -70,7 +70,7 @@ class FeedView(HTMLView, JSONPView):
 
     def simplify_for_json(self, value):
         if isinstance(value, BaseResource):
-            return NotImplemented
+            return value.uri
         elif isinstance(value, rdflib.Literal) and value.datatype == NS.xsd.dateTime:
             return self.simplify_for_json(dateutil.parser.parse(value))
         elif isinstance(value, rdflib.Literal):
@@ -156,6 +156,117 @@ class VacancyView(FeedView, RDFView, StoreView, MappingView):
                  sparqlFilter=self.sparqlFilter)
 
     @property
+    def query(self):
+        return """\
+CONSTRUCT {{
+  ?vacancy a ?vacancyType ;
+    rdfs:label ?vacancyLabel ;
+    rdfs:comment ?vacancyComment ;
+    skos:notation ?vacancyNotation ;
+    vacancy:salary ?salary ;
+    dc:spatial ?spatial ;
+    vacancy:applicationOpeningDate ?opening ;
+    vacancy:applicationClosingDate ?closing ;
+    oo:formalOrganization ?formalOrganization ;
+    oo:organizationPart ?organizationPart ;
+    foaf:based_near ?location ;
+    foaf:homepage ?homepage ;
+    oo:contact ?contact .
+  ?salary a ?salaryType ;
+    rdfs:label ?salaryLabel ;
+    gr:hasMinCurrencyValue ?salaryLower ;
+    gr:hasMaxCurrencyValue ?salaryUpper ;
+    gr:hasCurrency ?salaryCurrency ;
+    adhoc:salaryGrade ?salaryGrade .
+  ?organizationPart a ?organizationType ;
+    rdfs:label ?organizationLabel ;
+    rdfs:comment ?organizationComment ;
+    v:adr ?organizationAddress ;
+    foaf:homepage ?organizationHomepage ;
+    skos:notation ?organizationNotation .
+  ?location a ?locationType ;
+    rdfs:label ?locationLabel ;
+    v:adr ?locationAddress ;
+    skos:notation ?locationNotation ;
+    geo:lat ?locationLat ; geo:long ?locationLong .
+  ?address a ?addressType ;
+    v:street-address ?streetAddress ;
+    v:extended-address ?extendedAddress ;
+    v:locality ?locality ;
+    v:postal-code ?postalCode .
+  ?contact a ?contactType ;
+    rdfs:label ?contactLabel ;
+    v:email ?contactEmail ;
+    v:tel ?phone .
+  ?phone a ?phoneType ;
+    rdfs:label ?phoneLabel ;
+    rdf:value ?phoneValue .
+}} WHERE {{
+  VALUES ?unit {{ {unit} }} .
+  ?organizationPart org:subOrganizationOf{cardinality} ?unit .
+  OPTIONAL {{ ?organizationPart a ?organizationType }}
+  OPTIONAL {{ ?organizationPart dc:title ?organizationLabel }}
+  OPTIONAL {{ ?organizationPart skos:notation ?organizationNotation }}
+  OPTIONAL {{ ?organizationPart v:adr ?organizationAddress }}
+  OPTIONAL {{ ?organizationPart foaf:homepage ?organizationHomepage }}
+  OPTIONAL {{
+    GRAPH <https://data.ox.ac.uk/graph/vacancies/current> {{
+      ?vacancy oo:organizationPart ?organizationPart ; a vacancy:Vacancy .
+    }}
+    ?vacancy vacancy:applicationClosingDate ?closing .
+    FILTER (?closing > now()) .
+    OPTIONAL {{ ?vacancy a ?vacancyType }}
+    OPTIONAL {{ ?vacancy rdfs:label ?vacancyLabel }}
+    OPTIONAL {{ ?vacancy rdfs:comment ?vacancyComment }}
+    OPTIONAL {{ ?vacancy skos:notation ?vacancyNotation }}
+    OPTIONAL {{ ?vacancy vacancy:salary ?salary }}
+    OPTIONAL {{ ?vacancy dc:spatial ?spatial }}
+    OPTIONAL {{ ?vacancy vacancy:applicationOpeningDate ?opening }}
+    OPTIONAL {{ ?vacancy oo:formalOrganization ?formalOrganization }}
+    OPTIONAL {{ ?vacancy oo:organizationPart ?organizationPart }}
+    OPTIONAL {{ ?vacancy foaf:based_near ?location }}
+    OPTIONAL {{ ?vacancy foaf:homepage ?homepage }}
+    OPTIONAL {{ ?vacancy oo:contact ?contact }}
+    {sparqlFilter}
+
+    OPTIONAL {{ ?salary a ?salaryType }}
+    OPTIONAL {{ ?salary rdfs:label ?salaryLabel }}
+    OPTIONAL {{ ?salary gr:hasMinCurrencyValue ?salaryLower }}
+    OPTIONAL {{ ?salary gr:hasMaxCurrencyValue ?salaryUpper }}
+    OPTIONAL {{ ?salary gr:hasCurrency ?salaryCurrency }}
+    OPTIONAL {{ ?salary adhoc:salaryGrade ?salaryGrade }}
+
+    OPTIONAL {{ ?location a ?locationType }}
+    OPTIONAL {{ ?location dc:title ?locationLabel }}
+    OPTIONAL {{ ?location v:adr ?locationAddress }}
+    OPTIONAL {{ ?location skos:notation ?locationNotation }}
+    OPTIONAL {{ ?location geo:lat ?locationLat ; geo:long ?locationLong }}
+
+    OPTIONAL {{ ?contact a ?contactType }}
+    OPTIONAL {{ ?contact rdfs:label ?contactLabel }}
+    OPTIONAL {{ ?contact v:email ?contactEmail }}
+    OPTIONAL {{
+      ?contact v:tel ?phone
+      OPTIONAL {{ ?phone a ?phoneType }}
+      OPTIONAL {{ ?phone rdfs:label ?phoneLabel }}
+      OPTIONAL {{ ?phone rdf:value ?phoneValue }}
+    }}
+
+    OPTIONAL {{
+      ?vacancy (oo:organizationPart|foaf:based_near)/v:adr ?address .
+      ?address a ?addressType ;
+      OPTIONAL {{ ?address v:street-address ?streetAddress }}
+      OPTIONAL {{ ?address v:extended-address ?extendedAddress }}
+      OPTIONAL {{ ?address v:locality ?locality }}
+      OPTIONAL {{ ?address v:postal-code ?postalCode }}
+    }}
+    FILTER (BOUND(?vacancy) || ?unit = ?organizationPart)
+  }}
+}}""".format(cardinality='*' if self.all else '{0}',
+             unit=self.unit.n3(),
+             sparqlFilter=self.sparqlFilter)
+
+    @property
     def unit(self):
         return rdflib.URIRef('http://oxpoints.oucs.ox.ac.uk/id/{0}'.format(self.kwargs['oxpoints_id']))
 
@@ -163,11 +274,12 @@ class VacancyView(FeedView, RDFView, StoreView, MappingView):
     def sparqlFilter(self):
         if 'keyword' in self.request.GET:
             keyword = rdflib.Literal(self.request.GET['keyword']).n3()
-            return "FILTER (regex(?label, %(keyword)s, 'i') || regex(?description, {0}, 'i'))".format(keyword)
+            return "FILTER (regex(?vacancyLabel, %(keyword)s, 'i') || regex(?vacancyComment, {0}, 'i'))".format(keyword)
         return ""
 
     def get(self, request, oxpoints_id, format=None):
         self.graph = self.endpoint.query(self.query)
+        print self.query
         if not self.graph:
             raise Http404
 
@@ -177,13 +289,18 @@ class VacancyView(FeedView, RDFView, StoreView, MappingView):
                              'graph': self.graph,
                              'all': self.all,
                              'subjects': subjects,
-                             'keyword': request.GET.get('keyword')})
+                             'keyword': request.GET.get('keyword'),
+                             'vacancies': []})
+
+        for subject in subjects:
+            if hasattr(subject, 'get_json'):
+                self.context['vacancies'].append(subject.get_json())
 
         return super(VacancyView, self).get(request, oxpoints_id=oxpoints_id, format=format)
 
     @property
     def title(self):
-        return "Vacancies within {0}".format(self.graph.value(self.unit, NS.skos.prefLabel) or '[unknown]')
+        return "Vacancies within {0}".format(self.graph.value(self.unit, NS.rdfs.label) or '[unknown]')
 
     @property
     def link(self):
@@ -226,9 +343,3 @@ class VacancyView(FeedView, RDFView, StoreView, MappingView):
         return render_to_response(template_name,
                           context, context_instance=RequestContext(request),
                           mimetype='application/xml')
-
-    def simplify_for_json(self, value):
-        if isinstance(value, rdflib.Literal):
-            return unicode(value)
-        else:
-            return super(VacancyView, self).simplify_for_json(value)
