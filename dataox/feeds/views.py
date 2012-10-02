@@ -226,3 +226,9 @@ class VacancyView(FeedView, RDFView, StoreView, MappingView):
         return render_to_response(template_name,
                           context, context_instance=RequestContext(request),
                           mimetype='application/xml')
+
+    def simplify_for_json(self, value):
+        if isinstance(value, rdflib.Literal):
+            return unicode(value)
+        else:
+            return super(VacancyView, self).simplify_for_json(value)
