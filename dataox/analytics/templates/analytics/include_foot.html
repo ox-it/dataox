@@ -3,7 +3,8 @@
 <script type="text/javascript" src="//www.oucs.ox.ac.uk/shared/stylesheet/analytics/analytics.js"></script>
 <script type="text/javascript">
   optionalAnalytics({
-	  analyticsID: "{{ analytics_id|escapejs }}",
+	  analyticsID: "{{ analytics.id|escapejs }}",
+	  domain: "{{ analytics.hostname|escapejs }}",
 	  doNotTrack: {{ do_not_track|yesno:"true,false" }},
 	  privacyPolicyURL: "{% url legal %}#analytics",
 	  policy: "{{ user.is_authenticated|yesno:"opt-out,opt-in" }}"{% if analytics.login_possible %},
