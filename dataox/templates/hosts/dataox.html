@@ -4,6 +4,7 @@
   <head>
     <title>{% block entire_title %}{% block title %}Open Data about the University of Oxford{% endblock %} | data.ox.ac.uk{% endblock %}</title>
     <link rel="stylesheet" href="{{ STATIC_URL }}main.css" type="text/css"/>
+    {% include "analytics/include_head.html" %}
     <link rel="icon" href="{{ STATIC_URL }}favicon.ico" type="image/x-icon"/>{% if no_index %}
     <meta name="robots" content="noindex"/>{% endif %}{% for renderer in renderers %}{% for mimetype in renderer.mimetypes %}
     <link rel="alternate" type="{{ mimetype }}" href="{{ renderer.url }}">{% endfor %}{% endfor %}
@@ -19,7 +20,6 @@
     <script type="text/javascript" src="{{ STATIC_URL }}js/jquery.flot.js"></script>
     <script type="text/javascript" src="{{ STATIC_URL }}api-1.0.js"></script>
     <script type="text/javascript" src="{{ STATIC_URL }}js/base.js"></script>
-    {% include "analytics/include_head.html" %}
     {% block extra_head %}{% endblock %}
   </head>
 
