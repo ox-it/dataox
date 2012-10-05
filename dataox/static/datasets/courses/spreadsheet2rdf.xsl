@@ -182,9 +182,7 @@
   </xsl:template>
  
   <xsl:template match="provider-identifier" mode="in-provider">
-    <skos:notation rdf:datatype="https://data.ox.ac.uk/id/notation/department">
-      <xsl:value-of select="."/>
-    </skos:notation>
+    <xsl:apply-templates select="." mode="notation"/>
   </xsl:template>
 
   <xsl:template match="provider-title" mode="in-provider">
@@ -427,6 +425,21 @@
   </xsl:template>
 
   <xsl:template match="*" mode="#all"/>
+
+  <xsl:template match="*" mode="notation">
+    <skos:notation>
+      <xsl:attribute name="rdf:datatype">
+        <xsl:text>https://data.ox.ac.uk/id/notation/</xsl:text>
+        <xsl:choose>
+          <xsl:when test="matches(., '^[A-Z][A-Z\d]$')">twoThree</xsl:when>
+          <xsl:when test="matches(., '^\d{8}$')">oxpoints</xsl:when>
+          <xsl:when test="matches(., '^\d[A-Z]$')">division</xsl:when>
+		  <xsl:when test="matches(., '^\d[A-Z][A-Z\d]\d$')">department</xsl:when>
+		  <xsl:when test="matches(., '^\d{3}$')">estates</xsl:when>
+        </xsl:choose>
+      <xsl:value-of select="."/>
+    </skos:notation>
+  </xsl:template>
 
   <xsl:template name="instant">
     <xsl:param name="uri"/>
