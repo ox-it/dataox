@@ -53,5 +53,8 @@ class Vacancy(object):
                                            'extendedtAddress': adr.get('v:extended-address'),
                                            'locality': adr.get('v:locality'),
                                            'postalCode': adr.get('v:postal-code')}
+            if obj.get('geo:lat') and obj.get('geo:long'):
+                vacancy[key]['location'] = {'lat': obj.get('geo:lat'),
+                                            'long': obj.get('geo:long')}
 
         return vacancy
