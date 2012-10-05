@@ -132,10 +132,12 @@ class VacancyView(FeedView, RDFView, StoreView, MappingView):
     def first_query(self):
         return """\
 CONSTRUCT {{
-  ?vacancy a vacancy:Vacancy
+  ?vacancy a vacancy:Vacancy .
+  ?unit skos:prefLabel ?unitLabel
 }} WHERE {{
   VALUES ?unit {{ {unit} }} .
   ?organizationPart org:subOrganizationOf{cardinality} ?unit .
+  OPTIONAL {{ ?unit skos:prefLabel ?unitLabel }}
   OPTIONAL {{
     GRAPH <https://data.ox.ac.uk/graph/vacancies/current> {{
       ?vacancy oo:organizationPart ?organizationPart ; a vacancy:Vacancy .
