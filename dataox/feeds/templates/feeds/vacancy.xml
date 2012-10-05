@@ -21,7 +21,23 @@
         <locality>{{ adr.locality }}</locality>{% endif %}{% if adr.postalCode %}
         <postal-code>{{ adr.postalCode }}</postal-code>{% endif %}
       </address>{% endif %}{% endwith %}
-    {% endwith %}</organizationPart>
+    {% endwith %}</organizationPart>{% with vacancy.basedNear as basedNear %}{% if basedNear %}
+    <basedNear>
+      <uri>{{ basedNear.uri }}</uri>
+      <url>{{ basedNear.uri }}</url>
+      <webpage>{{ basedNear.webpage }}</webpage>
+      <label>{{ basedNear.label }}</label>{% with basedNear.address as adr %}{% if adr %}
+      <address>{% if adr.streetAddress %}
+        <street-address>{{ adr.streetAddress }}</street-address>{% endif %}{% if adr.extendedAddress %}
+        <extended-address>{{ adr.extendedAddress }}</extended-address>{% endif %}{% if adr.locality %}
+        <locality>{{ adr.locality }}</locality>{% endif %}{% if adr.postalCode %}
+        <postal-code>{{ adr.postalCode }}</postal-code>{% endif %}
+      </address>{% endif %}{% endwith %}{% if basedNear.location %}
+      <location>
+        <lat>{{ basedNear.location.lat }}</lat>
+        <long>{{ basedNear.location.long }}</long>
+      </location>{% endif %}
+    </basedNear>{% endif %}{% endwith %}
     <salary>{% with vacancy.salary as salary %}
       <label>{{ salary.label }}</label>{% if salary.grade %}
       <grade>{{ salary.grade }}</grade>{% endif %}{% if salary.lower %}
