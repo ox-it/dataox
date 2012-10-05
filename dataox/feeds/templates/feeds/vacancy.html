@@ -37,11 +37,11 @@
         <th>Salary</th>
       </tr>
     </thead>
-    <tbody>{% for vacancy in items %}
+    <tbody>{% for vacancy in vacancies %}
       <tr class="row-{% cycle "odd" "even" %}">
-        <td><a href="#vacancy-{{ vacancy.resource.hexhash }}">{{ vacancy.title }}</a></td>
-        <td>{{ vacancy.pubdate }}</td>
-        <td>{{ vacancy.resource.vacancy_salary.label|default:"not specified" }}</td>
+        <td><a href="#vacancy-{{ forloop.index }}">{{ vacancy.label }}</a></td>
+        <td>{{ vacancy.closes.toPython|default:"<em>unknown</em>" }}</td>
+        <td>{{ vacancy.salary.label|default:"<em>not specified</em>" }}</td>
       </tr>{% endfor %}
     </tbody>
   </table>
@@ -50,11 +50,11 @@
   {% endif %}
   
 
-{% for vacancy in items %}
-<section id="vacancy-{{ vacancy.resource.hexhash }}">
-  <h2><a href="{{ vacancy.link }}">{{ vacancy.title }}</a></h2>
-  <p>Closes: <strong>{{ vacancy.pubdate }}</strong>; salary: <strong>{{ vacancy.resource.vacancy_salary.label|default:"not specified" }}</strong></p>
-  {{ vacancy.description|sanitize_html }}
+{% for vacancy in vacancies %}
+<section id="vacancy-{{ forloop.index }}">
+  <h2>{% if vacancy.webpage %}<a href="{{ vacancy.webpage }}">{{ vacancy.label }}</a>{% else %}{{ vacancy.label }}{% endif %}</h2>
+  <p>Closes: <strong>{{ vacancy.closes.toPython|default:"<em>unknown</em>" }}</strong>; salary: <strong>{{ vacancy.salary.label|default:"<em>not specified</em>" }}</strong></p>{% if vacancy.html_description %}
+  {{ vacancy.html_description|sanitize_html }}{% endif %}
 </section>
 {% endfor %}
 

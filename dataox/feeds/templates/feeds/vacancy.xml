@@ -1,13 +1,13 @@
 {% load humfrey_desc %}<?xml version="1.0"?>
 <vacancies>{% for vacancy in vacancies %}
-  <vacancy id="{{ vacancy.id }}">
+  <vacancy{% if vacancy.id %} id="{{ vacancy.id }}"{% endif %}>
     <uri>{{ vacancy.uri }}</uri>
-    <url>{{ vacancy.url }}</url>
-    <webpage>{{ vacancy.webpage }}</webpage>
-    <label>{{ vacancy.label }}</label>
-    <opens>{{ vacancy.opens }}</opens>
-    <closes>{{ vacancy.closes }}</closes>
-    <location>{{ vacancy.location }}</location>{% if vacancy.html_description  %}
+    <url>{{ vacancy.url }}</url>{% if vacancy.webpage %}
+    <webpage>{{ vacancy.webpage }}</webpage>{% endif %}{% if vacancy.label %}
+    <label>{{ vacancy.label }}</label>{% endif %}{% if vacancy.opens %}
+    <opens>{{ vacancy.opens }}</opens>{% endif %}{% if vacancy.closes %}
+    <closes>{{ vacancy.closes }}</closes>{% endif %}{% if vacancy.location %}
+    <location>{{ vacancy.location }}</location>{% endif %}{% if vacancy.html_description  %}
     <description format="application/xhtml+xml">{{ vacancy.html_description }}</description>{% endif %}{% if vacancy.text_description  %}
     <description format="text/plain">{{ vacancy.text_description }}</description>{% endif %}
     <organizationPart>{% with vacancy.organizationPart as orgPart %}
@@ -37,19 +37,19 @@
         <lat>{{ basedNear.location.lat }}</lat>
         <long>{{ basedNear.location.long }}</long>
       </location>{% endif %}
-    </basedNear>{% endif %}{% endwith %}
-    <salary>{% with vacancy.salary as salary %}
+    </basedNear>{% endif %}{% endwith %}{% with vacancy.salary as salary %}{% if salary %}
+    <salary>
       <label>{{ salary.label }}</label>{% if salary.grade %}
       <grade>{{ salary.grade }}</grade>{% endif %}{% if salary.lower %}
       <lower>{{ salary.lower }}</lower>{% endif %}{% if salary.upper %}
       <upper>{{ salary.upper }}</upper>{% endif %}{% if salary.currency %}
       <currency>{{ salary.currency }}</currency>{% endif %}
-    {% endwith %}</salary>
-    <contact>{% with vacancy.contact as contact %}
+    </salary>{% endif %}{% endwith %}{% with vacancy.contact as contact %}{% if contact %}
+    <contact>
       <label>{{ contact.label }}</label>{% if contact.email %}
       <email>{{ contact.email }}</email>{% endif %}{% if contact.tel.rdf_value %}
       <telephone>{{ contact.v_tel.rdf_value }}</telephone>{% endif %}
-    {% endwith %}</contact>{% if vacancy.vacancy_furtherParticulars %}
+    </contact>{% endif %}{% endwith %}{% if vacancy.vacancy_furtherParticulars %}
     <document_urls>{% for document in vacancy.all.vacancy_furtherParticulars %}
       <document_url>{{ document.uri }}</document_url>{% endfor %}
     </document_urls>{% endif %}
