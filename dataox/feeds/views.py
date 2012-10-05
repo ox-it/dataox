@@ -132,32 +132,6 @@ class VacancyView(FeedView, RDFView, StoreView, MappingView):
     @property
     def query(self):
         return """\
-    DESCRIBE ?unit ?childUnit ?vacancy ?salary ?contact ?tel WHERE {{
-      VALUES ?unit {{ {unit} }} .
-      OPTIONAL {{
-      ?childUnit org:subOrganizationOf{cardinality} ?unit .
-      GRAPH <https://data.ox.ac.uk/graph/vacancies/current> {{
-        ?vacancy oo:organizationPart ?unit ; a vacancy:Vacancy .
-      }}
-      ?vacancy
-        vacancy:salary ?salary ;
-        vacancy:applicationClosingDate ?closes ;
-        rdfs:label ?label ;
-        rdfs:comment ?description .
-      OPTIONAL {{
-        ?vacancy oo:contact ?contact .
-        OPTIONAL {{ ?contact v:tel ?tel }}
-      }}
-      FILTER (?closes > now()) .
-      {sparqlFilter}
-      }}
-    }}""".format(cardinality='*' if self.all else '{0}',
-                 unit=self.unit.n3(),
-                 sparqlFilter=self.sparqlFilter)
-
-    @property
-    def query(self):
-        return """\
 CONSTRUCT {{
   ?vacancy a ?vacancyType ;
     rdfs:label ?vacancyLabel ;
