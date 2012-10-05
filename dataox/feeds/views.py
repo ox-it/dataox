@@ -222,11 +222,13 @@ FILTER (regex(?vacancyLabel, {0}, 'i') || regex(?vacancyComment, {0}, 'i'))""".f
             # Favour XHTML
             descriptions.sort(key=lambda description: description.datatype!=NS.xtypes['Fragment-XHTML'])
             resource = Resource(vacancy, self.graph, self.endpoint)
+            closing_date = self.graph.value(vacancy, NS.vacancy.applicationClosingDate)
+            pubdate = dateutil.parser.parse(closing_date) if closing_date else None
             items.append({'title': self.graph.value(vacancy, NS.rdfs.label),
                           'description': descriptions[0] if descriptions else None,
                           'link': self.graph.value(vacancy, NS.foaf.homepage),
-                          'date': dateutil.parser.parse(self.graph.value(vacancy, NS.vacancy.applicationClosingDate)),
-                          'pubdate': dateutil.parser.parse(self.graph.value(vacancy, NS.vacancy.applicationClosingDate)),
+                          'date': pubdate,
+                          'pubdate': pubdate,
                           'resource': resource,
                           'unique_id': resource.hexhash})
             if self.all and resource.get('oo:organizationalUnit'):

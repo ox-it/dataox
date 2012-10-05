@@ -6,7 +6,6 @@ class Vacancy(object):
     search_item_template_name = 'vacancy/search_item'
 
     def get_json(self):
-        salary = self.vacancy_salary
         html_description, text_description = None, None
         for comment in self.all.rdfs_comment:
             if comment.datatype in (NS.xtypes['Fragment-XHTML'], NS.xtypes['Fragment-HTML']):
@@ -22,11 +21,14 @@ class Vacancy(object):
                    'closes': self.vacancy_applicationClosingDate,
                    'location': self.dc_spatial,
                    'html_description': html_description,
-                   'text_description': text_description,
-                   'salary': {'lower': salary.gr_hasMinCurrencyValue,
-                              'upper': salary.gr_hasMaxCurrencyValue,
-                              'currency': salary.gr_hasCurrency,
-                              'label': salary.label}}
+                   'text_description': text_description}
+
+        salary = self.vacancy_salary
+        if salary:
+            vacancy['salary'] = {'lower': salary.gr_hasMinCurrencyValue,
+                                 'upper': salary.gr_hasMaxCurrencyValue,
+                                 'currency': salary.gr_hasCurrency,
+                                 'label': salary.label}
 
         contact = self.oo_contact
         if isinstance(contact, BaseResource):
