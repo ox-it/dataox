@@ -2,6 +2,7 @@ body {
     background-color: #E8E8E8;
     font: 14px/1.5 "Liberation Sans", Arial, sans-serif;
     color:#444;
+    margin: 0;
 }
 
 div.container {
