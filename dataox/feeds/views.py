@@ -208,7 +208,7 @@ FILTER (regex(?vacancyLabel, {0}, 'i') || regex(?vacancyComment, {0}, 'i'))""".f
 
     @property
     def title(self):
-        return "Vacancies within {0}".format(self.graph.value(self.unit, NS.rdfs.label) or '[unknown]')
+        return "Vacancies within {0}".format(self.graph.value(self.unit, NS.skos.prefLabel) or '[unknown]')
 
     @property
     def link(self):
@@ -228,9 +228,7 @@ FILTER (regex(?vacancyLabel, {0}, 'i') || regex(?vacancyComment, {0}, 'i'))""".f
                           'description': descriptions[0] if descriptions else None,
                           'link': self.graph.value(vacancy, NS.foaf.homepage),
                           'date': pubdate,
-                          'pubdate': pubdate,
-                          'resource': resource,
-                          'unique_id': resource.hexhash})
+                          'pubdate': pubdate})
             if self.all and resource.get('oo:organizationalUnit'):
                 subdepts = [r.label for r in resource.get_all('oo:organizationalUnit') if r.get('skos:prefLabel') and r._identifier != self.unit]
                 if subdepts:
