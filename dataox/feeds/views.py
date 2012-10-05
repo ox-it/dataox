@@ -9,7 +9,7 @@ from django.shortcuts import render_to_response
 from django.template import RequestContext
 
 from django_conneg.decorators import renderer
-from django_conneg.views import HTMLView, JSONPView, ContentNegotiatedView
+from django_conneg.views import HTMLView, JSONPView
 from humfrey.utils.namespaces import NS
 from humfrey.linkeddata.resource import Resource, BaseResource
 from humfrey.linkeddata.views import MappingView
