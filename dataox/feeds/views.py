@@ -208,7 +208,7 @@ FILTER (regex(?vacancyLabel, {0}, 'i') || regex(?vacancyComment, {0}, 'i'))""".f
 
     @property
     def title(self):
-        return "Vacancies within {0}".format(self.graph.value(self.unit, NS.skos.prefLabel) or '[unknown]')
+        return u"Vacancies within {0}".format(self.graph.value(self.unit, NS.skos.prefLabel) or u'[unknown]')
 
     @property
     def link(self):
