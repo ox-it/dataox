@@ -14,7 +14,7 @@
     </section>
     <section class="page-metadata">
       <h2>Filter</h2>
-      <form method="get" action="">
+      <form method="get" action="{{ link }}">
         <label for="keyword">Enter a keyword by which to filter:</label>
         <input id="keyword" name="keyword" value="{{ keyword|default:"" }}"/>
         <input type="submit" value="Go!"/>
@@ -35,7 +35,7 @@
     </thead>
     <tbody>{% for vacancy in vacancies %}
       <tr class="row-{% cycle "odd" "even" %}">
-        <td><a href="#vacancy-{{ forloop.index }}">{{ vacancy.label }}</a></td>
+        <td><a href="#vacancy-{{ vacancy.id }}">{{ vacancy.label }}</a></td>
         <td>{{ vacancy.closes.toPython|default:"<em>unknown</em>" }}</td>
         <td>{{ vacancy.salary.label|default:"<em>not specified</em>" }}</td>
       </tr>{% endfor %}
@@ -47,7 +47,7 @@
   
 
 {% for vacancy in vacancies %}
-<section id="vacancy-{{ forloop.index }}">
+<section id="vacancy-{{ vacancy.id }}">
   <h2>{% if vacancy.webpage %}<a href="{{ vacancy.webpage }}">{{ vacancy.label }}</a>{% else %}{{ vacancy.label }}{% endif %}</h2>
   <p>Closes: <strong>{{ vacancy.closes.toPython|default:"<em>unknown</em>" }}</strong>; salary: <strong>{{ vacancy.salary.label|default:"<em>not specified</em>" }}</strong></p>{% if vacancy.html_description %}
   {{ vacancy.html_description|sanitize_html }}{% endif %}
