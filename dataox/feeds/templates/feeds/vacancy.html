@@ -1,9 +1,5 @@
 {% extends "feeds/base.html" %}{% load humfrey_desc %}
 
-{% block extra_head %}
-<link rel="alternate" type="application/rss+xml" href="{{ format_mapping.rss.url }}" title="Vacancies within {{ unit.label }}"/>
-{% endblock %}
-
 {% block title %}Vacancies within {{ unit.label }}{% endblock %}
 
 {% block content %}
