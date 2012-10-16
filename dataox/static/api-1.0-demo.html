@@ -4,20 +4,27 @@
     <meta charset="UTF-8">
     <title>data.ox.ac.uk JavaScript API Demo 1.0</title>
     <link rel="stylesheet" type="text/css" href="jquery-ui/css/smoothness/jquery-ui-1.8.22.custom.css">
+
     <style type="text/css">
       div.place-metadata h3 { margin-bottom: 0; }
       div.place-metadata div.place-address { margin-top: 0; }
       section { padding: 0.5em; margin: 0.5em; border: 1px solid #aaa; border-radius: 0.5em; width: 500px; float:left; height: 300px}
+
+      .olControlLayerSwitcher { font-size: 8pt !important; width: auto !important; top: 0 !important; }
+      .olControlLayerSwitcher .layersDiv { background-color: rgba(0, 35, 60, 0.6) !important; }
+      .olControlLayerSwitcher input { margin: 0 3px 0 0 !important; }
+      .olControlLayerSwitcher label { vertical-align: top !important; }
     </style>
 
     <script type="text/javascript" src="js/jquery-1.7.2.min.js"></script>
     <script type="text/javascript" src="jquery-ui/js/jquery-ui-1.8.22.custom.min.js"></script>
     <script type="text/javascript" src="OpenLayers-2.12/OpenLayers.js"></script>
+    <script src="http://maps.google.com/maps/api/js?v=3.2&sensor=false"></script>
     <script type="text/javascript" src="api-1.0.js"></script>
   </head>
   <body>
     <h1>data.ox.ac.uk JavaScript API Demo 1.0</h1>
-    
+
     <!-- <div style="-moz-column-count: 2; -webkit-column-count: 2; column-count: 2;"> -->
 
     <section>
@@ -29,7 +36,7 @@
       <h2>Auto-completing organizations</h2>
       <input class="dataox-autocomplete" data-autocomplete-type="organization">
     </section>
-    
+
     <section>
       <h2>Auto-completing places, using metadata</h2>
       <!-- Note: this one has no dataox-autocomplete class as we'll do everything in JavaScript -->
@@ -67,12 +74,12 @@
       <h2>Simple map with zoom (just latitude/longitude)</h2>
       <div class="dataox-map" data-lon="-1.2" data-lat="51.76" data-zoom="10" style="width:200px; height: 200px"></div>
     </section>
-    
+
     <section>
       <h2>Map of a place with OxPoints ID</h2>
       <div class="dataox-map" data-oxpoints-id="40002001" style="width:200px; height: 200px"></div>
     </section>
-    
+
     <section>
       <h2>Map of lots of places with OxPoints IDs</h2>
       <div class="dataox-map" data-oxpoints-ids="40002001 23233672 23233665" style="width:200px; height: 200px"></div>
@@ -82,7 +89,7 @@
       <h2>Map of colleges (organizations) with OxPoints IDs</h2>
       <div class="dataox-map" data-oxpoints-ids="23232373 23232416 23232466" style="width:200px; height: 200px"></div>
     </section>
-    
+
     <section>
       <h2>Map of all PPHs using a selector</h2>
       <!-- data-selector takes a SPARQL graph pattern which should bind the variable "?uri".
@@ -90,14 +97,14 @@
            find everything with an estates ID (mostly buildings and rooms). -->
       <div class="dataox-map" data-selector="?uri a oxp:Hall" style="width:200px; height: 200px"></div>
     </section>
-    
+
     <section>
       <h2>Everywhere occupied by an organization</h2>
       <!-- The default for site-predicate is "org:hasPrimarySite"; "org:hasSite" provides links to
            everywhere occupied by an organization, not just the primary location -->
       <div class="dataox-map" data-oxpoints-id="31337175" data-site-predicate="org:hasSite" style="width:200px; height: 200px"></div>
     </section>
-    
+
     <section>
       <h2>Map with OxPoints IDs and callback</h2>
       <!-- Note: this one doesn't have a dataox-map class, as we'll apply 'mappiness' from JavaScript -->
@@ -124,6 +131,12 @@
       </script>
     </section>
     
+    <section>
+      <h2>Map with choice of layers</h2>
+      <!-- Note that we've overridden the CSS (see top) to make it more useful on small maps.
+           If you want to use Google Layers, you need to include the Google Maps JS, version 3. -->
+      <div class="dataox-map" data-oxpoints-id="40002001" data-layers="google-streets openstreetmap google-satellite google-hybrid google-physical opencyclemap transport mapquest-open" style="width:200px; height: 200px"></div>
+    </section>
 
     <!-- </div> -->
   </body>

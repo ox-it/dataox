@@ -8,7 +8,10 @@ $(function() {
 		searchURL: $('body').attr('data-dataox-search-url') || "https://data.ox.ac.uk/search/",
 		uriLookupURL: $('body').attr('data-dataox-uri-lookup-url') || "https://data.ox.ac.uk/doc/",
 		defaultZoom: 14,
-		osmTiles: 'https://static.data.ox.ac.uk/osm-tiles/${z}/${x}/${y}.png',
+		osmTiles: 'https://static.data.ox.ac.uk/osm-tiles/${z}/${x}/${y}.png', // OpenStreetMap
+		ocmTiles: 'https://static.data.ox.ac.uk/ocm-tiles/${z}/${x}/${y}.png', // OpenCycleMap
+		transportTiles: 'https://static.data.ox.ac.uk/ocm-tiles/${z}/${x}/${y}.png', // OpenCycleMap Transport
+		mapquestOpenTiles: 'https://static.data.ox.ac.uk/mapquestopen-tiles/${z}/${x}/${y}.png', // MapQuest Open
 		locationQuery: ["SELECT * WHERE {",
 		                "  [SELECTOR]",
 		                "  OPTIONAL { ?uri skos:prefLabel|rdfs:label ?label }",
@@ -128,6 +131,16 @@ $(function() {
 				.transform(new OpenLayers.Projection("EPSG:4326"), // transform from WGS 1984
 				           map.getProjectionObject());
 		},
+		mapLayers: {
+			"openstreetmap": function() { return new OpenLayers.Layer.OSM("OpenStreetMap", window.dataox.osmTiles) },
+			"opencyclemap": function() { return new OpenLayers.Layer.OSM("OpenCycleMap", window.dataox.ocmTiles) },
+			"mapquest-open": function() { return new OpenLayers.Layer.OSM("MapQuest Open", window.dataox.mapquestOpenTiles) },
+			"transport": function() { return new OpenLayers.Layer.OSM("Transport", window.dataox.transportTiles) },
+			"google-physical": function() { return new OpenLayers.Layer.Google("Google Physical", {type: google.maps.MapTypeId.TERRAIN})},
+			"google-streets": function() { return new OpenLayers.Layer.Google("Google Streets", {numZoomLevels: 20})},
+			"google-hybrid": function() { return new OpenLayers.Layer.Google("Google Hybrid", {numZoomLevels: 20, type: google.maps.MapTypeId.HYBRID})},
+			"google-satellite": function() { return new OpenLayers.Layer.Google("Google Satellite", {numZoomLevels: 22, type: google.maps.MapTypeId.SATELLITE})}
+		},
 		// Maps. https://data.ox.ac.uk/docs/api/maps.html
 		map: function(e, options) {
 			options = options || {};
@@ -136,9 +149,24 @@ $(function() {
 			if (!domElement.id)
 				domElement.id = window.dataox.generateId();
 
+			if (e.attr('data-layers'))
+				options.layers = e.attr('data-layers').split(" ");
+			else
+				options.layers = options.layers || ["openstreetmap"];
+
 			options.map = new OpenLayers.Map(domElement.id, { controls: [] });
-			options.map.addLayer(new OpenLayers.Layer.OSM("OpenStreetMap", window.dataox.osmTiles));
 			options.map.addControl(new OpenLayers.Control.Navigation());
+			if (options.layers.length > 1)
+				options.map.addControl(new OpenLayers.Control.LayerSwitcher());
+
+			for (var i=0; i<options.layers.length; i++) {
+				var layer = options.layers[i];
+				if (typeof layer == "string")
+					layer = window.dataox.mapLayers[layer]();
+				if (typeof layer != "object")
+					continue;
+				options.map.addLayer(layer);
+			}
 
 			options.markers = new OpenLayers.Layer.Markers( "Markers" );
 			options.map.addLayer(options.markers);
