@@ -89,7 +89,7 @@ DEFAULT_FROM_EMAIL = 'opendata@oucs.ox.ac.uk'
 AUTHENTICATION_BACKENDS = (
     'django.contrib.auth.backends.ModelBackend',
     'object_permissions.backend.ObjectPermBackend',
-    'django_webauth.backends.WebauthBackend',
+    'django_webauth.backends.webauth_ldap.WebauthLDAPBackend',
 )
 
 MIDDLEWARE_CLASSES += (
