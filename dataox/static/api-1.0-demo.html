@@ -12,7 +12,15 @@
 
       /* Prettify the layer switcher */
       .olControlLayerSwitcher { font-size: 8pt !important; width: auto !important; top: 0 !important; }
-      .olControlLayerSwitcher .layersDiv { background-color: rgba(0, 35, 60, 0.6) !important; }
+      .olControlLayerSwitcher .layersDiv {
+        background-color: rgba(0, 35, 60, 0.6) !important;
+        -webkit-border-top-left-radius: 3px;
+        -webkit-border-bottom-left-radius: 5px;
+        -moz-border-radius-topleft: 5px;
+        -moz-border-radius-bottomleft: 5px;
+        border-top-left-radius: 5px;
+        border-bottom-left-radius: 5px;
+      }
       .olControlLayerSwitcher input { margin: 0 3px 0 0 !important; }
       .olControlLayerSwitcher label { vertical-align: top !important; }
 
