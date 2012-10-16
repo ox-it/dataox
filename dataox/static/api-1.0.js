@@ -2,16 +2,18 @@ $(function() {
 	if (window.dataox == undefined)
 		window.dataox = {};
 
+	var https = (window.location.protocol == "https:");
+
 	$.extend(window.dataox, {
 		staticURL: $('body').attr('data-dataox-static-url') ||"https://static.data.ox.ac.uk/",
 		sparqlURL: $('body').attr('data-dataox-sparql-url') ||"https://data.ox.ac.uk/sparql/",
 		searchURL: $('body').attr('data-dataox-search-url') || "https://data.ox.ac.uk/search/",
 		uriLookupURL: $('body').attr('data-dataox-uri-lookup-url') || "https://data.ox.ac.uk/doc/",
 		defaultZoom: 14,
-		osmTiles: 'https://static.data.ox.ac.uk/osm-tiles/${z}/${x}/${y}.png', // OpenStreetMap
-		ocmTiles: 'https://static.data.ox.ac.uk/ocm-tiles/${z}/${x}/${y}.png', // OpenCycleMap
-		transportTiles: 'https://static.data.ox.ac.uk/ocm-tiles/${z}/${x}/${y}.png', // OpenCycleMap Transport
-		mapquestOpenTiles: 'https://static.data.ox.ac.uk/mapquestopen-tiles/${z}/${x}/${y}.png', // MapQuest Open
+		osmTiles: https ? 'https://static.data.ox.ac.uk/osm-tiles/${z}/${x}/${y}.png' : 'http://tile.openstreetmap.org/${z}/${x}/${y}.png' , // OpenStreetMap
+		ocmTiles: https ? 'https://static.data.ox.ac.uk/ocm-tiles/${z}/${x}/${y}.png' : 'http://tile.opencyclemap.org/cycle/${z}/${x}/${y}.png', // OpenCycleMap
+		transportTiles: https ? 'https://static.data.ox.ac.uk/ocm-tiles/${z}/${x}/${y}.png' : 'http://tile2.opencyclemap.org/transport/${z}/${x}/${y}.png', // OpenCycleMap Transport
+		mapquestOpenTiles: https ? 'https://static.data.ox.ac.uk/mapquestopen-tiles/${z}/${x}/${y}.png' : 'http://otile4.mqcdn.com/tiles/1.0.0/osm/${z}/${x}/${y}.png', // MapQuest Open
 		locationQuery: ["SELECT * WHERE {",
 		                "  [SELECTOR]",
 		                "  OPTIONAL { ?uri skos:prefLabel|rdfs:label ?label }",
