@@ -156,6 +156,7 @@ $(function() {
 
 			options.map = new OpenLayers.Map(domElement.id, { controls: [] });
 			options.map.addControl(new OpenLayers.Control.Navigation());
+			options.map.addControl(new OpenLayers.Control.Attribution());
 			if (options.layers.length > 1)
 				options.map.addControl(new OpenLayers.Control.LayerSwitcher());
 
