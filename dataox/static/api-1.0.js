@@ -132,14 +132,14 @@ $(function() {
 				           map.getProjectionObject());
 		},
 		mapLayers: {
-			"openstreetmap": function() { return new OpenLayers.Layer.OSM("OpenStreetMap", window.dataox.osmTiles) },
-			"opencyclemap": function() { return new OpenLayers.Layer.OSM("OpenCycleMap", window.dataox.ocmTiles) },
-			"mapquest-open": function() { return new OpenLayers.Layer.OSM("MapQuest Open", window.dataox.mapquestOpenTiles) },
-			"transport": function() { return new OpenLayers.Layer.OSM("Transport", window.dataox.transportTiles) },
-			"google-physical": function() { return new OpenLayers.Layer.Google("Google Physical", {type: google.maps.MapTypeId.TERRAIN})},
-			"google-streets": function() { return new OpenLayers.Layer.Google("Google Streets", {numZoomLevels: 20})},
-			"google-hybrid": function() { return new OpenLayers.Layer.Google("Google Hybrid", {numZoomLevels: 20, type: google.maps.MapTypeId.HYBRID})},
-			"google-satellite": function() { return new OpenLayers.Layer.Google("Google Satellite", {numZoomLevels: 22, type: google.maps.MapTypeId.SATELLITE})}
+			"openstreetmap": function() { return new OpenLayers.Layer.OSM("OpenStreetMap", window.dataox.osmTiles); },
+			"opencyclemap": function() { return new OpenLayers.Layer.OSM("OpenCycleMap", window.dataox.ocmTiles); },
+			"mapquest-open": function() { return new OpenLayers.Layer.OSM("MapQuest Open", window.dataox.mapquestOpenTiles, {attribution: "Tiles courtesy of <a href=\"http://www.mapquest.com/\">MapQuest</a>"}); },
+			"transport": function() { return new OpenLayers.Layer.OSM("Transport", window.dataox.transportTiles); },
+			"google-physical": function() { return new OpenLayers.Layer.Google("Google Physical", {type: google.maps.MapTypeId.TERRAIN}); },
+			"google-streets": function() { return new OpenLayers.Layer.Google("Google Streets", {numZoomLevels: 20}); },
+			"google-hybrid": function() { return new OpenLayers.Layer.Google("Google Hybrid", {numZoomLevels: 20, type: google.maps.MapTypeId.HYBRID}); },
+			"google-satellite": function() { return new OpenLayers.Layer.Google("Google Satellite", {numZoomLevels: 22, type: google.maps.MapTypeId.SATELLITE}); }
 		},
 		// Maps. https://data.ox.ac.uk/docs/api/maps.html
 		map: function(e, options) {
