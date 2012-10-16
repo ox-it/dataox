@@ -134,10 +134,10 @@ $(function() {
 				           map.getProjectionObject());
 		},
 		mapLayers: {
-			"openstreetmap": function() { return new OpenLayers.Layer.OSM("OpenStreetMap", window.dataox.osmTiles); },
-			"opencyclemap": function() { return new OpenLayers.Layer.OSM("OpenCycleMap", window.dataox.ocmTiles); },
+			"openstreetmap": function() { return new OpenLayers.Layer.OSM("OpenStreetMap", window.dataox.osmTiles, {attribution: "&copy; <a href=\"http://www.openstreetmap.org/copyright\">OpenStreetMap</a> contributors"}); },
+			"opencyclemap": function() { return new OpenLayers.Layer.OSM("OpenCycleMap", window.dataox.ocmTiles, {attribution: "&copy; <a href=\"http://www.thunderforest.com/opencyclemap/\">Thunderforest</a>, and <a href=\"http://www.openstreetmap.org/copyright\">OpenStreetMap</a> contributors"}); },
+			"transport": function() { return new OpenLayers.Layer.OSM("Transport", window.dataox.transportTiles, {attribution: "&copy; <a href=\"http://www.thunderforest.com/transport/\">Thunderforest</a>, and <a href=\"http://www.openstreetmap.org/copyright\">OpenStreetMap</a> contributors"}); },
 			"mapquest-open": function() { return new OpenLayers.Layer.OSM("MapQuest Open", window.dataox.mapquestOpenTiles, {attribution: "Tiles courtesy of <a href=\"http://www.mapquest.com/\">MapQuest</a>"}); },
-			"transport": function() { return new OpenLayers.Layer.OSM("Transport", window.dataox.transportTiles); },
 			"google-physical": function() { return new OpenLayers.Layer.Google("Google Physical", {type: google.maps.MapTypeId.TERRAIN}); },
 			"google-streets": function() { return new OpenLayers.Layer.Google("Google Streets", {numZoomLevels: 20}); },
 			"google-hybrid": function() { return new OpenLayers.Layer.Google("Google Hybrid", {numZoomLevels: 20, type: google.maps.MapTypeId.HYBRID}); },
