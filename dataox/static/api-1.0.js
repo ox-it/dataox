@@ -64,7 +64,7 @@ $(function() {
 
 			/* If false, we use the more minimal 'autocomplete' format,
 			 * otherwise we ask for full search results                 */
-			var fullContent = !!(options.fullContent || options.focus || options.select);
+			options.fullContent = !!(options.fullContent || options.focus || options.select);
 
 			e = window.dataox.getElement(e); // get the jQuery-wrapped version
 			var obj = e.get(0);              // and the original DOM object
@@ -74,7 +74,7 @@ $(function() {
 			         || window.dataox.searchURL;
 
 			// build the default params for AJAX calls
-			var defaultParams = {format: fullContent ? 'json' : 'autocomplete'};
+			var defaultParams = {format: options.fullContent ? 'json' : 'autocomplete'};
 			for (var i = 0; i < obj.attributes.length; i++) {
 				var attribute = obj.attributes[i];
 				if (attribute.name.slice(0, 18) == 'data-autocomplete-')
@@ -89,7 +89,7 @@ $(function() {
 				$.get(searchURL, $.extend({}, defaultParams, {
 					q: "uri:\""+originalVal+"\""
 				}), function(data) {
-					if (fullContent)
+					if (options.fullContent)
 						e.val(data.hits.total ? data.hits.hits[0].label : originalVal);
 					else
 						e.val(data ? data[0].label : originalVal);
@@ -100,7 +100,7 @@ $(function() {
 					$.get(searchURL, $.extend({}, defaultParams, {
 						q: request.term + '*'
 					}), function(data) {
-						if (fullContent) {
+						if (options.fullContent) {
 							for (var i=0; i<data.hits.hits.length; i++) {
 								data.hits.hits[i] = data.hits.hits[i]._source;
 								data.hits.hits[i].value = data.hits.hits[i].uri;
