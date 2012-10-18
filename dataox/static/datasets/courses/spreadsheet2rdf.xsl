@@ -437,6 +437,7 @@
 		  <xsl:when test="matches(., '^\d[A-Z][A-Z\d]\d$')">department</xsl:when>
 		  <xsl:when test="matches(., '^\d{3}$')">estates</xsl:when>
         </xsl:choose>
+      </xsl:attribute>
       <xsl:value-of select="."/>
     </skos:notation>
   </xsl:template>
