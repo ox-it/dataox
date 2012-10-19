@@ -387,3 +387,18 @@ div.subject-uri {
     top: 0.7em;
     right: 1em;
 }
+
+div.warning {
+	background-image: url('gnome-icons/32x32/dialog-warning.png');
+	background-position: 5px 50%;
+	background-repeat: no-repeat;
+	margin: 1em;
+	padding: 1em 1em 1em 50px;
+	border: 2px solid #E39D59;
+	font-weight: bold;
+	-moz-border-radius: 1em;
+	-webkit-border-radius: 1em;
+	border-radius: 1em;
+}
+
+}
