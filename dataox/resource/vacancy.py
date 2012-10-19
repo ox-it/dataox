@@ -1,9 +1,35 @@
+import datetime
+
+import dateutil.parser
 from humfrey.linkeddata.resource import BaseResource
 from humfrey.utils.namespaces import NS
-#
+import rdflib
+import pytz
+
 class Vacancy(object):
     types = ('vacancy:Vacancy',)
     search_item_template_name = 'vacancy/search_item'
+    template_name = 'doc/vacancy'
+
+    def is_closed(self):
+        now = pytz.utc.localize(datetime.datetime.utcnow())
+        if self.closes and self.closes < now:
+                return True
+        if self.opens and self.opens > now:
+                return True
+        return False
+
+    @property
+    def opens(self):
+        opens = self.get('vacancy:applicationOpeningDate')
+        if isinstance(opens, rdflib.Literal) and opens.datatype == NS.xsd.dateTime:
+            return dateutil.parser.parse(opens)
+    @property
+    def closes(self):
+        closes = self.get('vacancy:applicationClosingDate')
+        if isinstance(closes, rdflib.Literal) and closes.datatype == NS.xsd.dateTime:
+            return dateutil.parser.parse(closes)
+
 
     def get_json(self):
         html_description, text_description = None, None

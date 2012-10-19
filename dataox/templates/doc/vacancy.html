@@ -1,0 +1,18 @@
+{% extends "doc/base.html" %}{% load humfrey_desc %}
+
+{% block doc_intro %}
+  <h1>{{ subject.label }}</h1>
+  
+  {% if subject.is_closed %}
+    <div class="warning">Applications for this vacancy closed on {{ subject.closes|date:"j F Y \a\t h:iA" }}</div>
+  {% endif %}
+  
+  {% if subject.foaf_homepage %}
+    <p><a href="{{ subject.foaf_homepage.uri }}">View on recruitment website</a></p>
+  {% endif %}
+    
+  {% if subject.description %}
+    <div class="description">{{ subject.description|node }}</div>
+  {% endif %}
+
+{% endblock %}
