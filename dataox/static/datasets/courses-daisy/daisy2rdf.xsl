@@ -19,7 +19,7 @@
     xmlns:humfrey="http://purl.org/NET/humfrey/ns/"
     xmlns="http://xcri.org/profiles/1.2/catalog"
     xpath-default-namespace="http://xcri.org/profiles/1.2/catalog">
-  <xsl:import href="xcri2rdf.xsl"/>
+  <xsl:import href="../courses/xcri2rdf.xsl"/>
   <xsl:output method="xml" indent="yes"/>
 
   <xsl:param name="store">public</xsl:param>
@@ -38,7 +38,7 @@
   </xsl:template>
 
   <xsl:template match="course" mode="rdf-about">
-    <xsl:value-of select="concat($base, 'course/', dc:identifier[@daisy:type='assessmentUnitId']/text())"/>
+    <xsl:value-of select="concat($base, 'course/', dc:identifier[@daisy:type='assessmentUnitCode']/text())"/>
   </xsl:template>
 
   <xsl:template match="presentation" mode="rdf-about">

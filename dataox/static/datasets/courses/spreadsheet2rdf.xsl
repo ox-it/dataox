@@ -286,23 +286,23 @@
   </xsl:template>
   
   <xsl:template match="course-prerequisite" mode="in-course">
-    <mlo:prerequisite>
+    <xcri:regulations>
       <xsl:choose>
         <xsl:when test=".='PU'">Course open to the public.</xsl:when>
         <xsl:when test=".='OX'">Course open to members of the University of Oxford.</xsl:when>
         <xsl:when test=".='ST'">Course open to staff of the University of Oxford.</xsl:when>
       </xsl:choose>
-    </mlo:prerequisite>
-    <oxcap:prerequisite>
+    </xcri:regulations>
+    <oxcap:eligibility>
       <xsl:attribute name="rdf:resource">
-        <xsl:text>http://purl.ox.ac.uk/oxcap/ns/prerequisite-</xsl:text>
+        <xsl:text>http://purl.ox.ac.uk/oxcap/ns/eligibility-</xsl:text>
         <xsl:choose>
           <xsl:when test=".='PU'">public</xsl:when>
           <xsl:when test=".='OX'">members</xsl:when>
           <xsl:when test=".='ST'">staff</xsl:when>
         </xsl:choose>
       </xsl:attribute>
-    </oxcap:prerequisite>
+    </oxcap:eligibility>
   </xsl:template>
 
   <xsl:template match="course-prerequisite" mode="in-offering">
