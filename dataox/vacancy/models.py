@@ -1,10 +1,13 @@
 # -*- coding: utf-8 -*-
 
+import datetime
 import locale
 import logging
 import re
 
+import dateutil.parser
 from lxml import etree
+import pytz
 import rdflib
 
 from django.conf import settings
@@ -82,7 +85,6 @@ class Vacancy(models.Model):
 
         triples = [
             (uri, NS.rdf.type, NS.vacancy.Vacancy),
-            (uri, NS.foaf.homepage, rdflib.URIRef(self.url)),
             (uri, NS.oo.contact, contact_uri),
             (uri, NS.vacancy.applicationOpeningDate, rdflib.Literal(self.opening_date, datatype=NS.xsd.dateTime)),
             (uri, NS.vacancy.applicationClosingDate, rdflib.Literal(self.closing_date, datatype=NS.xsd.dateTime)),
@@ -90,6 +92,11 @@ class Vacancy(models.Model):
             (uri, NS.rdfs.label, rdflib.Literal(self.title)),
             (uri, NS.skos.notation, rdflib.Literal(self.vacancy_id, datatype=NS.oxnotation.vacancy)),
         ]
+
+        # Only include a URL if the vacancy is still being advertised.
+        if dateutil.parser.parse(self.closing_date) > pytz.utc.localize(datetime.datetime.utcnow()):
+            triples.append((uri, NS.foaf.homepage, rdflib.URIRef(self.url)))
+
 
         if self.contact_name or self.contact_email or self.contact_phone:
             triples += [(uri, NS.oo.contact, contact_uri),
