@@ -252,7 +252,7 @@
     <xsl:param name="presentation-uri"/>
     <xsl:if test="not(self::presentation-venue-text and ../presentation-venue)">
       <xcri:venue>
-        <geo:SpatialThing rdf:about="{$presentation-uri}/venue">
+        <geo:SpatialThing rdf:about="{$base}presentation-venue/{ex:slugify(if (../presentation-venue-text) then ../presentation-venue-text else ../presentation-venue)}">
           <xsl:if test="../presentation-venue-text">
             <rdfs:label>
               <xsl:value-of select="../presentation-venue-text"/>
