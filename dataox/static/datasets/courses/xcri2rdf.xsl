@@ -3,7 +3,7 @@
     xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
     xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
     xmlns:oxcap="http://purl.ox.ac.uk/oxcap/ns/">
-  <xsl:import href="https://github.com/ox-it/xcri-rdf/blob/master/stylesheets/xcri2rdf.xsl"/>
+  <xsl:import href="https://raw.github.com/ox-it/xcri-rdf/master/stylesheets/xcri2rdf.xsl"/>
 
   <xsl:template match="oxcap:bookingEndpoint">
     <oxcap:bookingEndpoint rdf:resource="{text()}"/>
