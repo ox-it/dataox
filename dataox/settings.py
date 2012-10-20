@@ -155,6 +155,7 @@ ADDITIONAL_NAMESPACES.update({
     'mlo': 'http://purl.org/net/mlo/',
     'spatialrelations': 'http://data.ordnancesurvey.co.uk/ontology/spatialrelations/',
     'prog': 'http://purl.org/prog/',
+    'oxcap': 'http://purl.ox.ac.uk/oxcap/ns/',
 
 })
 
