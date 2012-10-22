@@ -1,0 +1,9 @@
+prefix xcri: <http://xcri.org/profiles/1.2/> .
+prefix skos: <http://www.w3.org/2004/02/skos/core#> .
+
+<https://data.ox.ac.uk/id/courses/cobomo-catalogue> a xcri:catalog ;
+    dcterms:title "Course catalogue for bookings through Mobile Oxford" ;
+    dcterms:publisher <http://oxpoints.oucs.ox.ac.uk/id/00000000> ;
+    skos:member <https://course.data.ox.ac.uk/id/daisy/catalogue> ,
+        <https://course.data.ox.ac.uk/id/itlp/catalogue> ,
+        <https://course.data.ox.ac.uk/id/careers/catalogue> .
