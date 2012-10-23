@@ -182,7 +182,7 @@
     </event:Event>
   </xsl:template>
  
-  <xsl:template match="provider-identifier" mode="in-provider">
+  <xsl:template match="provider-identifier" mode="provider-metadata">
     <xsl:apply-templates select="." mode="notation"/>
   </xsl:template>
 
