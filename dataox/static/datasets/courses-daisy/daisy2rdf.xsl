@@ -42,7 +42,7 @@
   </xsl:template>
 
   <xsl:template match="presentation" mode="rdf-about">
-    <xsl:value-of select="concat($base, 'presentation/', dc:identifier/text())"/>
+    <xsl:value-of select="concat($base, 'presentation/', dc:identifier/text()[starts-with(., 'https://')])"/>
   </xsl:template>
 
   <xsl:template match="venue/provider/dc:title">
