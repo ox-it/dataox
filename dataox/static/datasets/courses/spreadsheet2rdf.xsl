@@ -449,7 +449,7 @@
     
     <time:Instant rdf:about="{$uri}">
       <xsl:if test="$value">
-        <rdf:value>
+        <xsl:element name="{if (string-length($value) &gt; 10) then 'xsd:inXSDDateTime' else 'rdf:value'}">
           <xsl:attribute name="rdf:datatype">
             <xsl:text>&xsd;</xsl:text>
             <xsl:choose>
@@ -458,7 +458,7 @@
             </xsl:choose>
           </xsl:attribute>
           <xsl:value-of select="$value"/>
-        </rdf:value>
+        </xsl:element>
       </xsl:if>
       <xsl:if test="$label">
         <rdfs:label><xsl:value-of select="$label"/></rdfs:label>
