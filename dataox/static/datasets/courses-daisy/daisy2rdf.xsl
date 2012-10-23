@@ -53,7 +53,7 @@
     </humfrey:searchNormalization>
   </xsl:template>
 
-  <xsl:template mathc="dc:identifier">
+  <xsl:template match="dc:identifier">
     <xsl:choose>
       <xsl:when test="matches(text(), '^\d[A-Z]$')">
         <skos:notation rdf:datatype="https://data.ox.ac.uk/id/notation/division">
