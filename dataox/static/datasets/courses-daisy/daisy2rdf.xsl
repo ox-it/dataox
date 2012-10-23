@@ -31,6 +31,11 @@
     <xsl:value-of select="concat($base, 'catalogue')"/>
   </xsl:template>
 
+  <xsl:template match="provider" mode="rdf-about">
+    <xsl:text>https://course.data.ox.ac.uk/id/daisy-provider/</xsl:text>
+    <xsl:value-of select="dc:identifier/text()[matches(., '^\d[A-Z]..$')]"/>
+  </xsl:template>
+
   <xsl:template match="course" mode="in-catalog">
     <xsl:if test="$store='courses' or not(daisy:publicView/text()='0')">
       <xsl:apply-imports/>
