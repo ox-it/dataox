@@ -52,4 +52,32 @@
       <humfrey:searchQuery><xsl:value-of select="text()"/></humfrey:searchQuery>
     </humfrey:searchNormalization>
   </xsl:template>
+
+  <xsl:template mathc="dc:identifier">
+    <xsl:choose>
+      <xsl:when test="matches(text(), '^\d[A-Z]$')">
+        <skos:notation rdf:datatype="https://data.ox.ac.uk/id/notation/division">
+          <xsl:value-of select="text()"/>
+        </skos:notation>
+      </xsl:when>
+      <xsl:when test="matches(text(), '^\d[A-Z]..$')">
+        <skos:notation rdf:datatype="https://data.ox.ac.uk/id/notation/department">
+          <xsl:value-of select="text()"/>
+        </skos:notation>
+      </xsl:when>
+      <xsl:when test="matches(text(), '^\d{8}$')">
+        <skos:notation rdf:datatype="https://data.ox.ac.uk/id/notation/oxpoints">
+          <xsl:value-of select="text()"/>
+        </skos:notation>
+      </xsl:when>
+      <xsl:when test="matches(text(), '^[A-Z][A-Z\d]$')">
+        <skos:notation rdf:datatype="https://data.ox.ac.uk/id/notation/twoThree">
+          <xsl:value-of select="text()"/>
+        </skos:notation>
+      </xsl:when>
+      <xsl:otherwise>
+        <xsl:apply-imports/>
+      </xsl:otherwise>
+    </xsl:choose>
+  </xsl:template>
 </xsl:stylesheet>
