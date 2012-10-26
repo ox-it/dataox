@@ -2,7 +2,7 @@ $(function() {
 	if (window.dataox == undefined)
 		window.dataox = {};
 
-	var https = (window.location.protocol == "https:");
+	var https = (window.location.protocol != "http:");
 
 	$.extend(window.dataox, {
 		staticURL: $('body').attr('data-dataox-static-url') ||"https://static.data.ox.ac.uk/",
