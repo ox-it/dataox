@@ -230,9 +230,9 @@ $(function() {
 						var newPlace = newPlaces[placeURI];
 						if (!(newPlace.lon && newPlace))
 							continue;
-						if (newPlace.containerLabel == newPlace.streetAddress || newPlace.containerLabel == newPlace.label)
+						if (newPlace.containerLabel == (newPlace.extendedAddress || newPlace.streetAddress) || newPlace.containerLabel == newPlace.label)
 							delete newPlace.containerLabel;
-						newPlace.address = [newPlace.containerLabel, newPlace.streetAddress, newPlace.extendedAddress, newPlace.locality, newPlace.postalCode, newPlace.CountryName];
+						newPlace.address = [newPlace.containerLabel, newPlace.extendedAddress, newPlace.streetAddress, newPlace.locality, newPlace.postalCode, newPlace.CountryName];
         				// Remove any elements of the address that are missing.
         				for (var i=newPlace.address.length-1; i>=0; i--)
         					if (!newPlace.address[i]) newPlace.address.splice(i, 1);
