@@ -230,7 +230,7 @@ $(function() {
 						var newPlace = newPlaces[placeURI];
 						if (!(newPlace.lon && newPlace))
 							continue;
-						if (newPlace.uri == newPlace.withAdr && newPlace.containerLabel)
+						if (newPlace.containerLabel == newPlace.streetAddress || newPlace.containerLabel == newPlace.label)
 							delete newPlace.containerLabel;
 						newPlace.address = [newPlace.containerLabel, newPlace.streetAddress, newPlace.extendedAddress, newPlace.locality, newPlace.postalCode, newPlace.CountryName];
         				// Remove any elements of the address that are missing.
