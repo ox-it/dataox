@@ -143,6 +143,7 @@ $(function() {
 			"google-hybrid": function() { return new OpenLayers.Layer.Google("Google Hybrid", {numZoomLevels: 20, type: google.maps.MapTypeId.HYBRID}); },
 			"google-satellite": function() { return new OpenLayers.Layer.Google("Google Satellite", {numZoomLevels: 22, type: google.maps.MapTypeId.SATELLITE}); }
 		},
+                maps: {}, // Stores mapping from element IDs to their options
 		// Maps. https://data.ox.ac.uk/docs/api/maps.html
 		map: function(e, options) {
 			options = options || {};
@@ -156,20 +157,27 @@ $(function() {
 			else
 				options.layers = options.layers || ["openstreetmap"];
 
-			options.map = new OpenLayers.Map(domElement.id, { controls: [] });
-			options.map.addControl(new OpenLayers.Control.Navigation());
-			options.map.addControl(new OpenLayers.Control.Attribution());
-			if (options.layers.length > 1)
-				options.map.addControl(new OpenLayers.Control.LayerSwitcher());
+			if (e.hasClass('olMap') && domElement.id in window.dataox.maps) {
+				var previousOptions = window.dataox.maps[domElement.id];
+				options.map = previousOptions.map;
+				options.map.removeLayer(previousOptions.markers);
+			} else {
+				options.map = new OpenLayers.Map(domElement.id, { controls: [] });
+				options.map.addControl(new OpenLayers.Control.Navigation());
+				options.map.addControl(new OpenLayers.Control.Attribution());
+				if (options.layers.length > 1)
+					options.map.addControl(new OpenLayers.Control.LayerSwitcher());
 
-			for (var i=0; i<options.layers.length; i++) {
-				var layer = options.layers[i];
-				if (typeof layer == "string")
-					layer = window.dataox.mapLayers[layer]();
-				if (typeof layer != "object")
-					continue;
-				options.map.addLayer(layer);
+				for (var i=0; i<options.layers.length; i++) {
+					var layer = options.layers[i];
+					if (typeof layer == "string")
+						layer = window.dataox.mapLayers[layer]();
+					if (typeof layer != "object")
+						continue;
+					options.map.addLayer(layer);
+				}
 			}
+			window.dataox.maps[domElement.id] = options;
 
 			options.markers = new OpenLayers.Layer.Markers( "Markers" );
 			options.map.addLayer(options.markers);
