@@ -262,7 +262,7 @@ $(function() {
 			}
 
 			if (options.places.length == 0) {
-				options.map.setCenter(window.dataox.lonLat(0, 0), 1);
+				options.map.setCenter(window.dataox.lonLat(options.map, 0, 0), 1);
 			} else if (options.places.length > 1) {
 				options.map.zoomToExtent(options.markers.getDataExtent(), false);
 			} else {
