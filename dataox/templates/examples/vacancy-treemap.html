@@ -3,180 +3,167 @@
 {% block title %}Vacancy Treemap{% endblock %}
 
 {% block extra_head %}
-  <script src="http://code.jquery.com/jquery-1.5.min.js" type="text/javascript"></script>
   <script type="text/javascript" src="https://www.google.com/jsapi"></script>
   <script type="text/javascript">
-    var endpointURL = 'http://data.ox.ac.uk/sparql/';
+(function() {
+	google.load("visualization", "1", {packages:["treemap"]});
 
-	var query = "SELECT ?unit (SAMPLE(?unitLabel_) as ?unitLabel) (count(?vacancy) as ?vacancies) ?parent (SAMPLE(?parentLabel_) as ?parentLabel) ?ancestor (SAMPLE(?ancestorLabel_) as ?ancestorLabel) WHERE {\n"
-              + "  GRAPH <http://data.ox.ac.uk/graph/vacancies/current> {\n" 
-              + "    ?vacancy a vacancy:Vacancy ;\n"
-              + "      vacancy:organizationalUnit ?unit ;\n"
-              + "      vacancy:applicationClosingDate ?closes .\n"
-              + "    FILTER (?closes > now()) .\n"
-              + "  } .\n"
-              + "  ?unit skos:prefLabel ?unitLabel_ .\n"
-              + "  OPTIONAL { ?unit org:subOrganizationOf* ?parent . ?parent skos:prefLabel ?parentLabel_ ."
-              + "             OPTIONAL {?parent org:subOrganizationOf ?ancestor . ?ancestor skos:prefLabel ?ancestorLabel_ } }\n"
-              + "} GROUP BY ?unit ?parent ?ancestor ORDER BY ?unit ?parent\n";
+	window.vacancyTreeMap = {
+		vacancyQuery: ["SELECT * WHERE {",
+		               "  ?vacancy a vacancy:Vacancy ;",
+		               "    rdfs:label ?label ;",
+		               "    oo:organizationPart ?unit ;",
+		               "    vacancy:applicationOpeningDate ?opening ;",
+		               "    vacancy:applicationClosingDate ?closing .",
+		               "    OPTIONAL { ?vacancy rdfs:comment ?description . FILTER (datatype(?description) != xtypes:Fragment-XHTML) }",
+		               "    OPTIONAL { ?vacancy vacancy:salary/rdfs:label ?salary }",
+		               "  BIND (?opening < now() && now() < ?closing AS ?open)",
+		               "}"].join("\n"),
 
+		organizationQuery: ["SELECT * WHERE {",
+		                    "  {",
+		                    "    SELECT DISTINCT ?unit WHERE {",
+		                    "      ?vacancy a vacancy:Vacancy ;",
+		                    "        oo:organizationPart ?organizationPart .",
+		                    "      ?organizationPart org:subOrganizationOf* ?unit",
+		                    "    }",
+		                    "  }",
+		                    "  ?unit dc:title ?label .",
+		                    "  OPTIONAL { ?unit org:subOrganizationOf ?parent . ?parent dc:title ?parentLabel }",
+		                    "}"].join("\n"),
+		vacancyResults: null,
+		organizationResults: null,
+		dataTable: null,
+		units: null,
+		unitsByRow: null,
+		init: function() {
+		    vacancyTreeMap.dataTable = new google.visualization.DataTable();
+			var dataTable = vacancyTreeMap.dataTable;
+			dataTable.addColumn('string', 'Unit');
+			dataTable.addColumn('string', 'Parent');
+			dataTable.addColumn('number', 'Number of Vacancies');
+			dataTable.addColumn('number', 'Colour');
+			
+			vacancyTreeMap.units = {};
 
-	var vacancyQuery = "SELECT ?vacancy (SAMPLE(?label_) as ?label) (SAMPLE(?description_) as ?description) (SAMPLE(?closing_) as ?closing) (SAMPLE(?salary_) as ?salary) (SAMPLE(?homepage_) as ?homepage) WHERE {\n"
-	                 + "  ?vacancy vacancy:organizationalUnit <UNIT> ;\n"
-                     + "    rdfs:label ?label_ .\n"
-                     + "  OPTIONAL {?vacancy rdfs:comment ?description_ . FILTER ( datatype(?description_) != xtypes:Fragment-XHTML ) }\n"
-                     + "  OPTIONAL {?vacancy vacancy:applicationClosingDate ?closing_ . }\n"
-                     + "  OPTIONAL {?vacancy vacancy:salary/rdfs:label ?salary_ . }\n"
-                     + "  OPTIONAL {?vacancy foaf:homepage ?homepage_ . }\n"
-                     + "} GROUP BY ?vacancy ORDER BY ASC(?closing)\n";
+			if (vacancyTreeMap.organizationResults)
+	    		vacancyTreeMap.processOrganizations();
+	    	else
+	    		dataox.sparql(vacancyTreeMap.organizationQuery, vacancyTreeMap.processOrganizations);
+		},
+	    processOrganizations: function(data) {
+	    	if (data)
+	    		vacancyTreeMap.organizationResults = data;
+	    	else
+	    		data = vacancyTreeMap.organizationResults;
 
-    google.load("visualization", "1", {packages:["treemap"]});
-  
-    $(function() {
-	 
-	    window.vacancyData = new google.visualization.DataTable();
-        window.vacancyData.addColumn('string', 'Unit');
-        window.vacancyData.addColumn('string', 'Parent');
-        window.vacancyData.addColumn('number', 'Number of Vacancies');
-	    window.vacancyData.addColumn('number', 'Colour');
-	  
-	    window.unitLookup = {};
+	    	vacancyTreeMap.treeMap = new google.visualization.TreeMap(document.getElementById('visualization'));
+	    	var dataTable = vacancyTreeMap.dataTable;
 
-        // Create and populate the data table.
-        $.get(endpointURL, {
-            'format': 'srj',
-            'query': query,
-            'common_prefixes': 'on'
-        }, function (data) {
-            window.vacancyTreeMap = new google.visualization.TreeMap(document.getElementById('visualization'));
-          
-            var vacancyData = {}, withChildren = {}, missingParents = 0;
-            for (var i in data.results.bindings) {
-                var binding = data.results.bindings[i];
-                if (binding.ancestor == undefined) {
-                    binding.ancestor = { "value": null };
-                    binding.ancestorLabel = { "value": null };
-                    if (vacancyData[binding.parent.value] == undefined)
-                        missingParents += 1;
-                }              
-                vacancyData[binding.parent.value] = {
-                    "self": binding.parent.value,
-                    "label": binding.parentLabel.value,
-                    "parent": binding.ancestor.value,
-                    "parentLabel": binding.ancestorLabel.value,
-                    "vacancies": 0
-                };
-                withChildren[binding.ancestor.value] = true;
-            }
-            if (missingParents > 1) {
-                for (var uri in vacancyData) {
-                    var datum = vacancyData[uri];
-                    if (datum.parent == null) {
-                        datum.parent = "Oxford";
-                        datum.parentLabel = "Oxford";
-                    }
-                }
-                vacancyData["Oxford"] = {
-                    "self": "Oxford",
-                    "label": "Oxford",
-                    "parent": null,
-                    "parentLabel": null,
-                    "vacancies": 0
-                };
-            }
-            for (var i in data.results.bindings) {
-                var binding = data.results.bindings[i];
-                if (withChildren[binding.unit.value]) {
-                    vacancyData[binding.unit.value + "+"] = {
-                        "self": binding.unit.value + "+",
-                        "label": binding.unitLabel.value + " (itself)",
-                        "parent": binding.unit.value,
-                        "parentLabel": binding.unitLabel.value,
-                        "vacancies": parseInt(binding.vacancies.value)
-                    };
-                } else {
-                    vacancyData[binding.unit.value].vacancies = parseInt(binding.vacancies.value);
-                }
-            }
-            for (var uri in vacancyData) {
-                var datum = vacancyData[uri];
-                var label = datum.label.replace(/^(Department|Faculty) (of|for)/, "");
-                var parentLabel = datum.parentLabel ? datum.parentLabel.replace(/^(Department|Faculty) (of|for)/, "") : null;
-                window.vacancyData.addRow([label, parentLabel, datum.vacancies, 0]);
-                window.unitLookup[label] = uri.replace("+", "");
-            }
+			var missingParents = [];
+			for (var i=0; i<data.results.bindings.length; i++) {
+				var binding = data.results.bindings[i];
+	    		if (!(binding.unit.value in vacancyTreeMap.units))
+	    			vacancyTreeMap.units[binding.unit.value] = {
+	    				label: null,
+	    				parent: null,
+	    				vacancies: [],
+	    				children: []
+	    			};
+	    		vacancyTreeMap.units[binding.unit.value].label = binding.label.value;
+				if (binding.parent) {
+					vacancyTreeMap.units[binding.unit.value].parent = binding.parent.value;
+				} else
+					missingParents.push(binding.unit.value);
+			}
+			for (var i in vacancyTreeMap.units) {
+				var unit = vacancyTreeMap.units[i];
+				if (unit.parent)
+					vacancyTreeMap.units[unit.parent].children.push(i);
+			}
+			if (missingParents.length > 1) {
+				vacancyTreeMap.units["root"] = {
+					label: "Oxford",
+					parent: null,
+					vacancies: [],
+					children: missingParents
+				};
+				for (var i=0; i<missingParents.length; i++) {
+					vacancyTreeMap.units[missingParents[i]].parent = "root";
+				}
+			}
+			
+			if (vacancyTreeMap.vacancyResults)
+	    		vacancyTreeMap.processVacancies();
+	    	else
+	    		dataox.sparql(vacancyTreeMap.vacancyQuery, vacancyTreeMap.processVacancies);
+		},
+		processVacancies: function(data) {
+	    	if (data)
+	    		vacancyTreeMap.vacancyResults = data;
+	    	else
+	    		data = vacancyTreeMap.vacancyResults;
+
+	    	for (var i=0; i<data.results.bindings.length; i++) {
+	    		var binding = data.results.bindings[i];
+	    		if (binding.unit.value in vacancyTreeMap.units)
+	    			vacancyTreeMap.units[binding.unit.value].vacancies.push(binding);
+	    	}
+			vacancyTreeMap.drawTreeMap();
+	    },
+		drawTreeMap: function() {
+			vacancyTreeMap.unitsByRow = [];
+			
+			for (var i in vacancyTreeMap.units) {
+				var unit = vacancyTreeMap.units[i];
+				vacancyTreeMap.dataTable.addRow([unit.label,
+				                                 unit.parent ? vacancyTreeMap.units[unit.parent].label : null,
+				                                 unit.children.length ? 0 : unit.vacancies.length,
+				                                 0]);
+				vacancyTreeMap.unitsByRow.push(i);
+				if (unit.children.length && unit.vacancies.length) {
+					vacancyTreeMap.dataTable.addRow([unit.label + " (itself)",
+					                                 unit.label,
+					                                 unit.vacancies.length,
+					                                 0]);
+					vacancyTreeMap.unitsByRow.push(i);
+				}
+			}
 		    
-            var nocolours = 0;
-		    for (i = 0; i < window.vacancyData.getNumberOfRows(); i = i + 1) {
-                var dept = window.vacancyData.getValue(i, 0);
-                var parent = window.vacancyData.getValue(i, 1);
-                if (parent == "University of Oxford" || (parent=="Oxford" && dept != "University of Oxford"))
-                    nocolours += 1;
-		    }
-		
-		    var coloursadded = 1;
-		    for (i = 0; i < window.vacancyData.getNumberOfRows(); i++) {
-		        var dept = window.vacancyData.getValue(i, 0);
-		        var parent = window.vacancyData.getValue(i, 1);
-                if (parent == "University of Oxford" || (parent=="Oxford" && dept != "University of Oxford")) {
-                    window.vacancyData.setCell(i, 3, (coloursadded));
-                    setChildren(dept, coloursadded);
-                    coloursadded += 1;
-                }
-            }
-		
-            function setChildren(dept, coloursadded) {
-                var j = 0;
-                for (j = 0; j < window.vacancyData.getNumberOfRows(); j++) {
-                    var new_dept = window.vacancyData.getValue(j, 0);
-                    var new_parent = window.vacancyData.getValue(j, 1);
-                    if (new_parent == dept) {
-                        window.vacancyData.setCell(j, 3, coloursadded);
-                        setChildren(new_dept, coloursadded);
-                    }
-                }
-            }
-            
-            window.vacancyTreeMap.draw(window.vacancyData, {
-                minColor: 'd4c665',
-                midColor: 'eeeeee',
-                maxColor: '6d6fc3',
-	    		maxDepth: 5,
-                headerHeight: 25,
-                fontColor: 'black',
-                showScale: false});
-		    google.visualization.events.addListener(window.vacancyTreeMap, 'select', showVacancyList);
-        }, 'json');
-    });
-    
+			vacancyTreeMap.treeMap.draw(vacancyTreeMap.dataTable, {
+				minColor: 'd4c665',
+				midColor: 'eeeeee',
+				maxColor: '6d6fc3',
+				maxDepth: 5,
+				headerHeight: 25,
+				fontColor: 'black',
+				showScale: false});
+			google.visualization.events.addListener(vacancyTreeMap.treeMap, 'select', vacancyTreeMap.showVacancyList);
+		},
+		showVacancyList: function(e) {
+			var unit = vacancyTreeMap.units[vacancyTreeMap.unitsByRow[vacancyTreeMap.treeMap.getSelection()[0].row]];
 
-    function showVacancyList(e) {
-        var unitLabel = window.vacancyData.getValue(window.vacancyTreeMap.getSelection()[0].row, 0);
-        var unit = window.unitLookup[unitLabel];
-        
-        $.get(endpointURL, {
-            'format': 'srj',
-            'query': vacancyQuery.replace("UNIT", unit),
-            'common_prefixes': 'on'
-        }, function (data) {
-            var vacancyTable = $('#vacancyTable');
-            var body = vacancyTable.find("tbody").empty();
-            vacancyTable.find("thead tr").html("<th>Title</th><th>Description</th><th>Salary</th><th>Closes</th>");
-            vacancyTable.children("caption").remove();
-            vacancyTable.prepend($('<caption/>').text("Current vacancies within " + unitLabel));
-            for (var i in data.results.bindings) {
-                var vacancy = data.results.bindings[i];
+			var vacancyTable = $('#vacancyTable');
+			var body = vacancyTable.find("tbody").empty();
+			vacancyTable.find("thead tr").html("<th>Title</th><th>Description</th><th>Salary</th><th>Closes</th>");
+			vacancyTable.children("caption").remove();
+			vacancyTable.prepend($('<caption/>').text("All vacancies within " + unit.label));
+
+			for (var i=0; i<unit.vacancies.length; i++) {
+                var vacancy = unit.vacancies[i];
                 var description = vacancy.description ? vacancy.description.value : "";
                 if (description.length > 200) description = description.substr(0, 200) + "…";
                 var row = $("<tr/>").append($("<td/>").append($("<a/>").attr("href", vacancy.vacancy.value).text(vacancy.label.value)))
                                     .append($("<td/>").html(description.replace("\n", "<br/>")))
-                                    .append($("<td/>").text(vacancy.salary.value))
+                                    .append($("<td/>").text(vacancy.salary ? vacancy.salary.value : ""))
                                     .append($("<td/>").text(vacancy.closing.value))
                                     .attr("class", i % 2 ? "row-even" : "row-odd");
                 body.append(row);
             }
-        }, "json");
-    }
+		}
+	}
+	$(vacancyTreeMap.init)
+})();
   </script>
   <style type="text/css">
    p#description {
