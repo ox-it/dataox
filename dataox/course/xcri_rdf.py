@@ -23,7 +23,7 @@ class XCRICAPSerializer(BaseXCRICAPSerializer):
                                    if predicate != NS.xcri.regulations]
 
     def serialize_common_descriptive_elements(self, xg, entity):
-        super(XCRICAPSerializer, self).serialize_common_descriptive_elements(xg, entity)
+        yield super(XCRICAPSerializer, self).serialize_common_descriptive_elements(xg, entity)
 
         # We add an attribute based on oxcap:eligibility
         regulations = self.graph.value(entity, NS.xcri.regulations)
@@ -42,11 +42,11 @@ class XCRICAPSerializer(BaseXCRICAPSerializer):
 
     def presentation_element(self, xg, presentation):
         xg.startElement('xcri:presentation', self.get_visibility_attrib(presentation))
-        yield self.course_content(xg, presentation)
+        yield self.presentation_content(xg, presentation)
         xg.endElement('xcri:presentation')
 
     def presentation_content(self, xg, presentation):
-        super(XCRICAPSerializer, self).presentation_content(xg, presentation)
+        yield super(XCRICAPSerializer, self).presentation_content(xg, presentation)
         self.serialize_memberApplyTo(xg, presentation)
 
     def get_visibility_attrib(self, entity):
