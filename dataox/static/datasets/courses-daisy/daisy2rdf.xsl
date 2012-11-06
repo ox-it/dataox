@@ -43,7 +43,7 @@
   </xsl:template>
 
   <xsl:template match="course" mode="rdf-about">
-    <xsl:value-of select="concat($base, 'course/', dc:identifier[@daisy:type='assessmentUnitCode']/text())"/>
+    <xsl:value-of select="concat($base, 'course/', dc:identifier[@daisy:type='teachingComponentId']/text())"/>
   </xsl:template>
 
   <xsl:template match="presentation" mode="rdf-about">
