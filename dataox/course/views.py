@@ -148,10 +148,16 @@ class CatalogDetailView(CourseView, sparql_views.CannedQueryView, RDFView, Conte
     def get_query(self, request):
         return self.query % {'uri': self.catalog_uri.n3()}
 
-    @renderer(format='xcricap', mimetypes=('application/xcri-cap+xml',), name="XCRI-CAP 1.2")
+    @renderer(format='xcricap', mimetypes=('application/xcri-cap+xml',), name="XCRI-CAP 1.2 (Simple)")
     def render_xcricap(self, request, context, template_name):
         serializer = XCRICAPSerializer(context['graph'], self.catalog_uri)
         return HttpResponse(serializer.generator(), mimetype='application/xcri-cap+xml')
+
+    @renderer(format='xcricap-full', mimetypes=(), name="XCRI-CAP 1.2 (Full)")
+    def render_xcricap_full(self, request, context, template_name):
+        serializer = XCRICAPSerializer(context['graph'], self.catalog_uri, simple=False)
+        return HttpResponse(serializer.generator(), mimetype='application/xcri-cap+xml')
+
 
 class CatalogView(CourseView, ContentNegotiatedView):
     catalog_detail_view = staticmethod(CatalogDetailView.as_view())
