@@ -119,7 +119,7 @@ class SearchView(EquipmentView, elasticsearch_views.SearchView):
                                                        store=self.store)
         return context
 
-class BrowseView(EquipmentView, RDFView, CannedQueryView, MappingView):
+class BrowseView(EquipmentView, RDFView, HTMLView, CannedQueryView, MappingView):
     concept_scheme = rdflib.URIRef('https://data.ox.ac.uk/id/equipment-category')
     datatype = rdflib.URIRef('https://data.ox.ac.uk/id/notation/equipment-category')
 
@@ -195,7 +195,7 @@ class BrowseView(EquipmentView, RDFView, CannedQueryView, MappingView):
 
         return context
 
-class FacilityListView(EquipmentView, RDFView, CannedQueryView, MappingView):
+class FacilityListView(EquipmentView, HTMLView, RDFView, CannedQueryView, MappingView):
     query = """
         DESCRIBE * WHERE {
           VALUES ?facilityType { cerif:Facility oo:Facility } .

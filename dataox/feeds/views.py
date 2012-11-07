@@ -102,7 +102,7 @@ def add_root_elements(self, handler):
     if self.feed['ttl'] is not None:
         handler.addQuickElement(u"ttl", self.feed['ttl'])        
 
-class VacancyIndexView(CannedQueryView, ResultSetView):
+class VacancyIndexView(HTMLView, CannedQueryView, ResultSetView):
     query = """
       SELECT ?unit (SAMPLE(?unitLabel_) as ?unitLabel) (COUNT(DISTINCT ?vacancy) as ?vacancies) (SAMPLE(?subUnit_) as ?subUnit) WHERE {
         ?type rdfs:subClassOf* org:Organization
