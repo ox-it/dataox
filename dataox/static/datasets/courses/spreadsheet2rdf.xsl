@@ -325,7 +325,7 @@
   
   <xsl:template match="course-subject" mode="in-course">
     <xsl:for-each select="tokenize(text(), ' ')">
-      <dcterms:subject rdf:resource="http://jacs.dataincubator.org/{.}"/>
+      <dcterms:subject rdf:resource="http://jacs.dataincubator.org/{lower-case(.)}"/>
     </xsl:for-each>
   </xsl:template>
   <xsl:template match="course-skill" mode="in-course">
