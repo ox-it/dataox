@@ -229,7 +229,7 @@
   </xsl:template>
 
   <xsl:template match="member-apply-to" mode="in-presentation">
-    <oxcap:applyTo rdf:resource="{.}"/>
+    <oxcap:memberApplyTo rdf:resource="{.}"/>
   </xsl:template>
 
   <xsl:template match="public-apply-to" mode="in-presentation">
