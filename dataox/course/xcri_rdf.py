@@ -32,8 +32,8 @@ class XCRICAPSerializer(BaseXCRICAPSerializer):
             if eligibility in eligibility_mapping:
                 attrib = {'oxcap:eligibility': eligibility_mapping[eligibility]}
             else:
-                attrib = None
-            self.descriptive_text_element(xg, 'xcri:eligibility', regulations, attrib)
+                attrib = {}
+            self.descriptive_text_element(xg, 'xcri:regulations', regulations, attrib)
 
     def course_element(self, xg, course):
         xg.startElement('xcri:course', self.get_visibility_attrib(course))
