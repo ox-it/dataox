@@ -116,7 +116,7 @@ class CatalogDetailView(CourseView, sparql_views.CannedQueryView, RDFView, Conte
     """
 
     query = """
-        DESCRIBE ?catalog ?provider ?course ?presentation ?organisation ?date ?venue ?courseTerm ?subject WHERE {
+        DESCRIBE ?catalog ?provider ?course ?presentation ?organisation ?date ?venue ?courseTerm ?cv ?subject WHERE {
           %(uri)s skos:member* ?catalog . ?catalog a xcri:catalog .
           OPTIONAL {
             ?catalog dcterms:publisher ?organisation
@@ -125,15 +125,15 @@ class CatalogDetailView(CourseView, sparql_views.CannedQueryView, RDFView, Conte
             ?catalog skos:member+ ?course .
             ?course a xcri:course .
             OPTIONAL {
-              ?course dcterms:subject/skos:related? ?subject
+              ?course dcterms:subject/skos:related?/skos:broader* ?subject
             } .
             OPTIONAL {
               ?course mlo:specifies ?presentation .
-              OPTIONAL { ?presentation mlo:start|xcri:end ?date } .
+              OPTIONAL { ?presentation mlo:start|xcri:end|xcri:applyFrom|xcri:applyUntil ?date } .
+              OPTIONAL { ?presentation xcri:attendanceMode|xcri:attendancePattern|xcri:studyMode ?cv } .
               OPTIONAL { ?presentation xcri:venue ?venue } .
             } .
             OPTIONAL { ?provider mlo:offers ?course } .
-            OPTIONAL { ?course dcterms:subject|xcri:attendanceMode|xcri:attendancePattern|xcri:stufyMode ?courseTerm } .
           }
         }
     """
