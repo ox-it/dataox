@@ -283,7 +283,7 @@
   </xsl:template>
   
   <xsl:template match="presentation-status" mode="in-course">
-    <xsl:if test="not(../presentation-start-text() or ../presentation-start-text/text())">
+    <xsl:if test="not(../presentation-start/text() or ../presentation-start-text/text())">
       <xsl:variable name="mapped">
         <xsl:choose>
           <xsl:when test="text()='AC'">active</xsl:when>
