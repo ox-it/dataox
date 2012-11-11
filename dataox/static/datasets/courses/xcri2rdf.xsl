@@ -12,9 +12,9 @@
   <xsl:template match="@oxcap:visibility">
     <xsl:variable name="mapped">
       <xsl:choose>
-        <xsl:when test="text()='AC'">active</xsl:when>
-        <xsl:when test="text()='DC'">discontinued</xsl:when>
-        <xsl:when test="text()='CN'">cancelled</xsl:when>
+        <xsl:when test=".='AC'">active</xsl:when>
+        <xsl:when test=".='DC'">discontinued</xsl:when>
+        <xsl:when test=".='CN'">cancelled</xsl:when>
       </xsl:choose>
     </xsl:variable>
     <oxcap:status rdf:resource="http://purl.ox.ac.uk/oxcap/ns/status-{$mapped}"/>
@@ -24,9 +24,9 @@
     <xsl:if test="regulations/@oxcap:eligibility">
       <xsl:variable name="mapped">
         <xsl:choose>
-          <xsl:when test="text()='OX'">members</xsl:when>
-          <xsl:when test="text()='ST'">staff</xsl:when>
-          <xsl:when test="text()='PU'">public</xsl:when>
+          <xsl:when test="regulations/@oxcap:eligibility='OX'">members</xsl:when>
+          <xsl:when test="regulations/@oxcap:eligibility='ST'">staff</xsl:when>
+          <xsl:when test="regulations/@oxcap:eligibility='PU'">public</xsl:when>
         </xsl:choose>
       </xsl:variable>
       <oxcap:eligibility rdf:resource="http://purl.ox.ac.uk/oxcap/ns/eligibility-{$mapped}"/>
