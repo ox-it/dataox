@@ -286,9 +286,9 @@
     <xsl:if test="not(../presentation-start-text() or ../presentation-start-text/text())">
       <xsl:variable name="mapped">
         <xsl:choose>
-          <xsl:when test="text()='AC'>active</xsl:when>
-          <xsl:when test="text()='DC'>discontinued</xsl:when>
-          <xsl:when test="text()='CN'>cancelled</xsl:when>
+          <xsl:when test="text()='AC'">active</xsl:when>
+          <xsl:when test="text()='DC'">discontinued</xsl:when>
+          <xsl:when test="text()='CN'">cancelled</xsl:when>
         </xsl:choose>
       </xsl:variable>
       <oxcap:status rdf:resource="http://purl.ox.ac.uk/oxcap/ns/status-{$mapped}"/>
@@ -298,9 +298,9 @@
   <xsl:template match="presentation-status" mode="in-presentation">
     <xsl:variable name="mapped">
       <xsl:choose>
-        <xsl:when test="text()='AC'>active</xsl:when>
-        <xsl:when test="text()='DC'>discontinued</xsl:when>
-        <xsl:when test="text()='CN'>cancelled</xsl:when>
+        <xsl:when test="text()='AC'">active</xsl:when>
+        <xsl:when test="text()='DC'">discontinued</xsl:when>
+        <xsl:when test="text()='CN'">cancelled</xsl:when>
       </xsl:choose>
     </xsl:variable>
     <oxcap:status rdf:resource="http://purl.ox.ac.uk/oxcap/ns/status-{$mapped}"/>
