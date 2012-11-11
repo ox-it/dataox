@@ -183,7 +183,7 @@
   </xsl:template>
  
   <xsl:template match="provider-identifier" mode="provider-metadata">
-    <xsl:apply-templates select="." mode="notation"/>
+    <xsl:apply-templates select="text()" mode="notation"/>
   </xsl:template>
 
   <xsl:template match="provider-title" mode="in-provider">
@@ -451,7 +451,7 @@
 
   <xsl:template match="*" mode="#all"/>
 
-  <xsl:template match="*" mode="notation">
+  <xsl:template match="text()" mode="notation">
     <skos:notation>
       <xsl:attribute name="rdf:datatype">
         <xsl:text>https://data.ox.ac.uk/id/notation/</xsl:text>
