@@ -8,8 +8,8 @@
   <xsl:template match="oxcap:bookingEndpoint">
     <oxcap:bookingEndpoint rdf:resource="{text()}"/>
   </xsl:template>
-  
-  <xsl:template match="@oxcap:visibility">
+
+  <xsl:template match="@oxcap:status">
     <xsl:variable name="mapped">
       <xsl:choose>
         <xsl:when test=".='AC'">active</xsl:when>
@@ -18,6 +18,17 @@
       </xsl:choose>
     </xsl:variable>
     <oxcap:status rdf:resource="http://purl.ox.ac.uk/oxcap/ns/status-{$mapped}"/>
+  </xsl:template>
+
+  <xsl:template match="@oxcap:visibility">
+    <xsl:variable name="mapped">
+      <xsl:choose>
+        <xsl:when test=".='PB'">public</xsl:when>
+        <xsl:when test=".='RS'">restricted</xsl:when>
+        <xsl:when test=".='PR'">private</xsl:when>
+      </xsl:choose>
+    </xsl:variable>
+    <oxcap:visibility rdf:resource="http://purl.ox.ac.uk/oxcap/ns/visibility-{$mapped}"/>
   </xsl:template>
 
   <xsl:template match="course">
