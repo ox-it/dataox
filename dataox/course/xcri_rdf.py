@@ -86,5 +86,5 @@ class XCRICAPSerializer(BaseXCRICAPSerializer):
         else:
             return {}
 
-    serialize_memberApplyTo = _find_first('oxcap:applyTo', (NS.oxcap.memberApplyTo,))
+    serialize_memberApplyTo = _find_first('oxcap:memberApplyTo', (NS.oxcap.memberApplyTo,))
     serialize_bookingEndpoint = _find_first('oxcap:bookingEndpoint', (NS.oxcap.bookingEndpoint,))
