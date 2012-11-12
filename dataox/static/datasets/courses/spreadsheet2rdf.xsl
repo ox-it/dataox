@@ -539,13 +539,13 @@
     <presentation-attendance-pattern/>
     <presentation-end/>
     <presentation-places/>
-    <!-- AE--AI -->
+    <!-- AE-AI -->
     <session-identififer/>
     <session-date/>
     <session-start/>
     <session-end/>
     <session-venue/>
-    <!-- AJ--AN -->
+    <!-- AJ-AN -->
     <session-venue-text/>
     <qualifications/>
   </xsl:variable>
