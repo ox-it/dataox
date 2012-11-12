@@ -150,13 +150,27 @@ class CatalogDetailView(CourseView, sparql_views.CannedQueryView, RDFView, Conte
 
     @renderer(format='xcricap', mimetypes=('application/xcri-cap+xml',), name="XCRI-CAP 1.2 (Simple)")
     def render_xcricap(self, request, context, template_name):
+        self.wrangle_itlp(context['graph'])
         serializer = XCRICAPSerializer(context['graph'], self.catalog_uri)
         return HttpResponse(serializer.generator(), mimetype='application/xcri-cap+xml')
 
     @renderer(format='xcricap-full', mimetypes=(), name="XCRI-CAP 1.2 (Full)")
     def render_xcricap_full(self, request, context, template_name):
+        self.wrangle_itlp(context['graph'])
         serializer = XCRICAPSerializer(context['graph'], self.catalog_uri, simple=False)
         return HttpResponse(serializer.generator(), mimetype='application/xcri-cap+xml')
+
+    def wrangle_itlp(self, graph):
+        """
+        Makes ITLP look like IT Services, as far as identifiers are concerned.
+
+        WebLearn requires every provider to have a two-three or department
+        code. This is a manky hack to add the two-three code for IT Services
+        to ITLP if it's in the feed.
+        """
+        itlp = rdflib.URIRef('http://oxpoints.oucs.ox.ac.uk/id/53505808')
+        if graph.value(itlp, NS.rdf.type):
+            graph.add(itlp, NS.skos.notation, rdflib.Literal('E2', datatype=NS.oxnotation.twoThree))
 
 
 class CatalogView(CourseView, ContentNegotiatedView):
