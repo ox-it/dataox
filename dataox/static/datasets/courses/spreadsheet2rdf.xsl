@@ -490,7 +490,7 @@
               <xsl:when test="string-length($value) = 10">date</xsl:when>
               <xsl:when test="string-length($value) = 7">gYearMonth</xsl:when>
               <xsl:when test="string-length($value) = 4">gYear</xsl:when>
-              <xsl:otherwise">string</xsl:otherwise>
+              <xsl:otherwise>string</xsl:otherwise>
             </xsl:choose>
           </xsl:attribute>
           <xsl:value-of select="$value"/>
