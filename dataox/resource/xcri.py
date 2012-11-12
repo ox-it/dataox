@@ -1,6 +1,6 @@
 class Course(object):
     types = ('xcri:course',)
-    template_name = 'doc/course'
+    #template_name = 'doc/course'
 
     @classmethod
     def _describe_patterns(cls):
