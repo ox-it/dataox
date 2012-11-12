@@ -34,6 +34,7 @@
   <xsl:output method="xml" indent="yes"/>
 
   <xsl:param name="store">public</xsl:param>
+  <xsl:param name="skip-first"/>
   <xsl:variable name="base"/>
   <xsl:variable name="publisher"/>
 
@@ -52,7 +53,14 @@
   <xsl:template match="/">
     <xsl:variable name="data">
       <courses>
-        <xsl:apply-templates select="/tei:TEI/tei:text/tei:body/tei:table/tei:row[position() &gt; 1]" mode="preprocess"/>
+        <xsl:choose>
+          <xsl:when test="$skip-first">
+            <xsl:apply-templates select="/tei:TEI/tei:text/tei:body/tei:table/tei:row[position() &gt; 1]" mode="preprocess"/>
+          </xsl:when>
+          <xsl:otherwise>
+            <xsl:apply-templates select="/tei:TEI/tei:text/tei:body/tei:table/tei:row" mode="preprocess"/>
+          </xsl:otherwise>
+        </xsl:choose>
       </courses>
     </xsl:variable>
     <rdf:RDF>
