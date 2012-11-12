@@ -314,8 +314,8 @@
     <oxcap:status rdf:resource="http://purl.ox.ac.uk/oxcap/ns/status-{$mapped}"/>
   </xsl:template>
 
-  <xsl:template match="course-abstract" mode="in-course">
-    <xcri:abstract><xsl:value-of select="text()"/></xcri:abstract>
+  <xsl:template match="course-learning-outcome" mode="in-course">
+    <xcri:learningOutcome><xsl:value-of select="text()"/></xcri:learningOutcome>
   </xsl:template>
   
   <xsl:template match="course-prerequisite" mode="in-course">
@@ -517,7 +517,7 @@
     <presentation-venue/>
     <presentation-venue-text/>
     <presentation-status/>
-    <course-abstract/>
+    <course-learning-outcome/>
     <course-prerequisite/>
     <course-audience/>
     <course-subject/>
