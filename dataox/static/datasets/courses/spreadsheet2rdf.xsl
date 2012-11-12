@@ -503,39 +503,50 @@
   </xsl:template>
 
   <xsl:variable name="columns">
+    <!-- A-E -->
     <provider-identifier/>
     <provider-title/>
     <provider-description/>
     <provider-url/>
     <course-title/>
+    <!-- F-J -->
     <course-identifier/>
     <course-visibility/>
     <member-apply-to/>
     <public-apply-to/>
     <presentation-start/>
+    <!-- K-0 -->
     <presentation-start-text/>
     <presentation-venue/>
     <presentation-venue-text/>
     <presentation-status/>
     <course-learning-outcome/>
+    <!-- P-T -->
     <course-prerequisite/>
     <course-audience/>
     <course-subject/>
     <course-skill/>
     <course-research-methods/>
+    <!-- U-Y -->
     <course-description/>
     <course-url/>
     <presentation-apply-from/>
     <presentation-apply-from-text/>
     <presentation-apply-until/>
+    <!-- Z-AD -->
     <presentation-apply-until-text/>
     <presentation-attendance-mode/>
     <presentation-attendance-pattern/>
     <presentation-end/>
     <presentation-places/>
+    <!-- AE--AI -->
     <session-identififer/>
     <session-date/>
     <session-start/>
     <session-end/>
+    <session-venue/>
+    <!-- AJ--AN -->
+    <session-venue-text/>
+    <qualifications/>
   </xsl:variable>
 </xsl:stylesheet>
