@@ -3,7 +3,8 @@ from __future__ import absolute_import
 from humfrey.utils.namespaces import NS
 import rdflib
 
-from xcri_rdf import XCRICAPSerializer as BaseXCRICAPSerializer, _find_first
+from lxml import builder
+from xcri_rdf import XCRICAPSerializer as BaseXCRICAPSerializer, _find_first, serialize_etree
 
 ELIGIBILITY = rdflib.Namespace("http://purl.ox.ac.uk/oxcap/ns/eligibility-")
 eligibility_mapping = {ELIGIBILITY.public: 'PU',
@@ -61,6 +62,7 @@ class XCRICAPSerializer(BaseXCRICAPSerializer):
         yield super(XCRICAPSerializer, self).presentation_content(xg, presentation)
         self.serialize_memberApplyTo(xg, presentation)
         self.serialize_bookingEndpoint(xg, presentation)
+        self.serialize_missing_applicationProcedure(xg, presentation)
         for session in self.graph.objects(presentation, NS.prog.has_event):
             yield self.session_element(xg, session)
 
@@ -85,6 +87,33 @@ class XCRICAPSerializer(BaseXCRICAPSerializer):
             return {'oxcap:status': status_mapping[status]}
         else:
             return {}
+
+    def serialize_missing_applicationProcedure(self, xg, presentation):
+        if self.graph.value(presentation, NS.xcri.applicationProcedure):
+            return
+        applyTo = self.graph.value(presentation, NS.xcri.applyTo)
+        memberApplyTo = self.graph.value(presentation, NS.oxcap.memberApplyTo)
+        if not applyTo and not memberApplyTo:
+            return
+        if memberApplyTo == applyTo:
+            memberApplyTo = None
+        E = builder.ElementMaker(namespace=self.xmlns['html'])
+        nodes = []
+        if memberApplyTo:
+            nodes.extend([u"Members of the University of Oxford should apply via ",
+                      E.a(unicode(memberApplyTo), href=unicode(memberApplyTo))])
+        if memberApplyTo and applyTo:
+            nodes.extend([u", and members of the public should apply via ",
+                      E.a(unicode(applyTo), href=unicode(applyTo))])
+        elif applyTo:
+            nodes.extend([u"Apply via ",
+                      E.a(unicode(applyTo), href=unicode(applyTo))])
+        nodes.append(u'.')
+        div = E.div(E.p(*nodes))
+        xg.startElement('xcri:applicationProcedure', {})
+        serialize_etree(div, xg, previous_nsmap=self.xmlns)
+        xg.endElement('xcri:applicationProcedure')
+
 
     serialize_memberApplyTo = _find_first('oxcap:memberApplyTo', (NS.oxcap.memberApplyTo,))
     serialize_bookingEndpoint = _find_first('oxcap:bookingEndpoint', (NS.oxcap.bookingEndpoint,))
