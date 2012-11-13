@@ -170,7 +170,7 @@ class CatalogDetailView(CourseView, sparql_views.CannedQueryView, RDFView, Conte
         """
         itlp = rdflib.URIRef('http://oxpoints.oucs.ox.ac.uk/id/53505808')
         if graph.value(itlp, NS.rdf.type):
-            graph.add(itlp, NS.skos.notation, rdflib.Literal('E2', datatype=NS.oxnotation.twoThree))
+            graph.add((itlp, NS.skos.notation, rdflib.Literal('E2', datatype=NS.oxnotation.twoThree)))
 
 
 class CatalogView(CourseView, ContentNegotiatedView):
