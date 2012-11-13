@@ -60,6 +60,8 @@
 
   <xsl:template match="dc:identifier">
     <xsl:choose>
+      <!-- Ignore URIs from Daisy -->
+      <xsl:when test="matches(text(), '^https?:')"/>
       <xsl:when test="matches(text(), '^\d[A-Z]$')">
         <skos:notation rdf:datatype="https://data.ox.ac.uk/id/notation/division">
           <xsl:value-of select="text()"/>
