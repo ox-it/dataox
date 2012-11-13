@@ -6,4 +6,6 @@
   <xsl:variable name="base">https://course.data.ox.ac.uk/id/language-centre/</xsl:variable>
   <xsl:variable name="publisher">http://oxpoints.oucs.ox.ac.uk/id/23233557</xsl:variable>
   <xsl:variable name="publisher-name">the Language Centre</xsl:variable>
+  <xsl:variable name="course-notation">https://data.ox.ac.uk/id/notation/language-centre-course</xsl:variable>
+  <xsl:variable name="presentation-notation">https://data.ox.ac.uk/id/notation/language-centre-presentation</xsl:variable>
 </xsl:stylesheet>

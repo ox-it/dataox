@@ -37,6 +37,8 @@
   <xsl:param name="skip-first"/>
   <xsl:variable name="base"/>
   <xsl:variable name="publisher"/>
+  <xsl:variable name="course-notation">https://data.ox.ac.uk/id/notation/daisy-course</xsl:variable>
+  <xsl:variable name="presentation-notation">https://data.ox.ac.uk/id/notation/daisy-presentation</xsl:variable>
 
   <xsl:function name="ex:slugify">
     <xsl:param name="term"/>
@@ -159,6 +161,9 @@
     <xsl:param name="current-group"/>
     <xsl:variable name="presentation-uri" select="concat($base, 'presentation/', course-identifier/text(), '/', position())"/>
     <xcri:presentation rdf:about="{$presentation-uri}">
+      <skos:notation rdf:datatype="{$presentation-notation}">
+        <xsl:value-of select="concat(course-identifier/text(), '-', position())"/>
+      </skos:notation>
       <xsl:apply-templates select="*[text()]" mode="in-presentation">
         <xsl:with-param name="presentation-uri" select="$presentation-uri"/>
       </xsl:apply-templates>
@@ -218,7 +223,7 @@
   </xsl:template>
 
   <xsl:template match="course-identifier" mode="in-course">
-    <skos:notation rdf:datatype="https://data.ox.ac.uk/id/notation/daisy-course">
+    <skos:notation rdf:datatype="{$course-notation}">
       <xsl:value-of select="."/>
     </skos:notation>
   </xsl:template>
