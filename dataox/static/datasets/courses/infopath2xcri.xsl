@@ -2,6 +2,7 @@
 <xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform" 
     xmlns:xhtml="http://www.w3.org/1999/xhtml" 
     xmlns:xs="http://www.w3.org/2001/XMLSchema"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
   xpath-default-namespace="http://schemas.microsoft.com/office/infopath/2003/myXSD/2012-03-17T23:37:18"
     version="2.0">
   <xsl:output indent="yes"/>
@@ -32,6 +33,20 @@
         </xsl:choose>
         <xsl:if test="txt_url"><dc:identifier><xsl:value-of select="txt_url"/></dc:identifier></xsl:if>
         <xsl:if test="string-length(normalize-space(txt_identifier)) gt 4"><xsl:message>txt_identifier is more than 4 characters!</xsl:message></xsl:if>
+        
+        <xsl:variable name="provider-identifier" select="normalize-space(txt_identifier)"/>
+        <xsl:choose>
+          <xsl:when test="string-length($provider-identifier) = 4">
+            <dc:identifier xsi:type="oxnotation:department"><xsl:value-of select="$provider-identifier"/></dc:identifier>
+          </xsl:when>
+          <xsl:when test="string-length($provider-identifier) = 6">
+            <dc:identifier xsi:type="oxnotation:twoThree"><xsl:value-of select="substring($provider-identifier, 5, 2)"/></dc:identifier>
+          </xsl:when>
+          <xsl:when test="string-length($provider-identifier) = 8">
+            <dc:identifier xsi:type="oxnotation:oxpoints"><xsl:value-of select="$provider-identifier"/></dc:identifier>
+          </xsl:when>
+        </xsl:choose>
+          
         
         <!-- ptitle -->
         <dc:title><xsl:value-of select="txt_ptitle"/></dc:title>
@@ -177,7 +192,6 @@
             <!-- Venue -->
             <venue>
                 <provider>
-                  <dc:identifier xmlns:ns="http://data.ox.ac.uk/id/notation/" xsi:type="ns:oxpoints"><xsl:value-of select="txt_venue"/></dc:identifier>
                   <dc:identifier xmlns:ns="https://data.ox.ac.uk/id/notation/" xsi:type="ns:oxpoints"><xsl:value-of select="txt_venue"/></dc:identifier>
                 </provider>
               </venue>
@@ -186,14 +200,14 @@
               <applyFrom><xsl:if test="dt_applyfrom"><xsl:attribute name="dtf"><xsl:value-of select="normalize-space(dt_applyfrom)"/></xsl:attribute></xsl:if>
                 <xsl:choose>
                   <xsl:when test="string-length(normalize-space(txt_applyfromtext)) gt 0"><xsl:value-of  select="txt_applyfromtext"/></xsl:when>
-                  <xsl:when test="dt_applyfrom"><xsl:value-of select="format-date(xs:date(dt_applyfrom), '[F] [D] [MNn] [Y]')"/></xsl:when>
+                  <xsl:when test="dt_applyfrom[not(@xsi:nil)]"><xsl:value-of select="format-date(xs:date(dt_applyfrom), '[F] [D] [MNn] [Y]')"/></xsl:when>
                   <xsl:otherwise><xsl:message>Error: Missing start date!</xsl:message></xsl:otherwise>
                 </xsl:choose>
               </applyFrom>
               <applyUntil><xsl:if test="dt_applyuntil"><xsl:attribute name="dtf"><xsl:value-of select="normalize-space(dt_applyuntil)"/></xsl:attribute></xsl:if>
                 <xsl:choose>
                   <xsl:when test="string-length(normalize-space(txt_capplyuntiltext)) gt 0"><xsl:value-of  select="txt_capplyuntiltext"/></xsl:when>
-                  <xsl:when test="dt_applyuntil"><xsl:value-of select="format-date(xs:date(dt_applyuntil), '[F] [D] [MNn] [Y]')"/></xsl:when>
+                  <xsl:when test="dt_applyuntil[not(@xsi:nil)]"><xsl:value-of select="format-date(xs:date(dt_applyuntil), '[F] [D] [MNn] [Y]')"/></xsl:when>
                   <xsl:otherwise><xsl:message>Error: Missing end date!</xsl:message></xsl:otherwise>
                 </xsl:choose>
               </applyUntil>
@@ -230,7 +244,6 @@
               <mlo:places><xsl:choose><xsl:when test="string-length(normalize-space(txt_places)) gt 0"><xsl:value-of select="txt_places"/></xsl:when>
               <xsl:otherwise>There is no specific information on the number of places.</xsl:otherwise>
               </xsl:choose></mlo:places>
-            </presentation>
             
             <xsl:if test="group5/group6">
               <xsl:for-each select="group5/group6">
@@ -246,7 +259,7 @@
                 </xsl:for-each>
             </xsl:if>
             
-            <!-- Sessions here when Adam provides example! -->
+            </presentation>
             
           </course>
       </provider>
@@ -261,8 +274,9 @@
       <xsl:apply-templates/>
     </xsl:copy>
   </xsl:template>
-
-
-
+  
+  <xsl:template match="/">
+    <xsl:apply-templates select=".//myFields"/>
+  </xsl:template>
 
 </xsl:stylesheet>
