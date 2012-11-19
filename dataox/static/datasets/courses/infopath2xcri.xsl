@@ -11,7 +11,8 @@
     xmlns:oxcap="http://purl.ox.ac.uk/oxcap/ns/"
     xmlns:credit="http://purl.org/net/cm" 
     xmlns:mlo="http://purl.org/net/mlo" 
-    xmlns:courseDataProgramme="http://xcri.co.uk" 
+    xmlns:courseDataProgramme="http://xcri.co.uk"
+    xmlns:oxnotation="https://data.ox.ac.uk/id/notation/" 
     xpath-default-namespace="http://schemas.microsoft.com/office/infopath/2003/myXSD/2012-03-17T23:37:18"
     version="2.0">
   <xsl:output indent="yes"/>
@@ -57,8 +58,15 @@
                   Course gives unknown visibility of <xsl:value-of select="cmb_visibility"/></xsl:message></xsl:otherwise>
           </xsl:choose>
             <xsl:if test="string-length(normalize-space(cmb_status)) gt 0 and not(normalize-space(cmb_status) = 'CN')"><xsl:attribute name="oxcap:status"><xsl:value-of select="normalize-space(cmb_status)"/></xsl:attribute></xsl:if>
-              
-            <dc:identifier xsi:type="courseDataProgramme:internalID"><xsl:value-of select="txt_cidentifier"/></dc:identifier>
+
+            <dc:identifier>
+              <xsl:text>https://course.data.ox.ac.uk/id/sharepoint/course/</xsl:text>
+              <xsl:value-of select="txt_cidentifier"/>
+            </dc:identifier>
+            <dc:identifier xsi:type="oxnotation:sharepoint-course">
+              <xsl:value-of select="txt_cidentifier"/>
+            </dc:identifier>
+            
             <dc:title><xsl:value-of select="txt_ctitle"/></dc:title>
             <mlo:url><xsl:value-of select="txt_curl"/></mlo:url>
           
@@ -154,7 +162,14 @@
             
         <!-- presentation with oxcap:status if CN -->            
             <presentation><xsl:if test="string-length(normalize-space(cmb_status)) gt 0 and normalize-space(cmb_status) = 'CN'"><xsl:attribute name="oxcap:status"><xsl:value-of select="normalize-space(cmb_status)"/></xsl:attribute></xsl:if>
-              <dc:identifier  xsi:type="courseDataProgramme:internalID"><xsl:value-of select="txt_cidentifier"/></dc:identifier>
+              <dc:identifier>
+                <xsl:text>https://course.data.ox.ac.uk/id/sharepoint/presentation/</xsl:text>
+                <xsl:value-of select="txt_cidentifier"/>
+              </dc:identifier>
+              <dc:identifier xsi:type="oxnotation:sharepoint-presentation">
+                <xsl:value-of select="txt_cidentifier"/>
+              </dc:identifier>
+
               <!--<dc:identifier ><xsl:value-of select="txt_curl"/></dc:identifier>-->
               
               <!-- Start /end -->
@@ -186,7 +201,7 @@
             <!-- Venue -->
             <venue>
                 <provider>
-                  <dc:identifier xmlns:ns="https://data.ox.ac.uk/id/notation/" xsi:type="ns:oxpoints"><xsl:value-of select="txt_venue"/></dc:identifier>
+                  <dc:identifier xsi:type="oxnotation:oxpoints"><xsl:value-of select="txt_venue"/></dc:identifier>
                 </provider>
               </venue>
                        
@@ -242,7 +257,17 @@
             <xsl:if test="group5/group6">
               <xsl:for-each select="group5/group6">
                 <oxcap:session>
-                  <dc:identifier><xsl:value-of select="txt_sessionid"/></dc:identifier>
+                  <dc:identifier>
+                    <xsl:text>https://course.data.ox.ac.uk/id/sharepoint/session/</xsl:text>
+                    <xsl:value-of select="txt_cidentifier"/>
+                    <xsl:text>/</xsl:text>
+                    <xsl:value-of select="txt_sessionid"/>
+                  </dc:identifier>
+                  <dc:identifier xsi:type="oxnotation:sharepoint-session">
+                    <xsl:value-of select="txt_cidentifier"/>
+                    <xsl:text>-</xsl:text>
+                    <xsl:value-of select="txt_sessionid"/>
+                  </dc:identifier>
                   <mlo:start dtf="{normalize-space(tm_sessionid_starttime)}">
                     <xsl:value-of select="format-dateTime(xs:dateTime(tm_sessionid_starttime), '[F] [D] [MNn] [Y] at [H]:[m]')"/>
                   </mlo:start>
@@ -272,6 +297,10 @@
     <catalog
         xsi:schemaLocation="http://xcri.org/profiles/1.2/catalog http://www.xcri.co.uk/bindings/xcri_cap_1_2.xsd http://xcri.org/profiles/1.2/catalog/terms  http://www.xcri.co.uk/bindings/xcri_cap_terms_1_2.xsd http://xcri.co.uk http://www.xcri.co.uk/bindings/coursedataprogramme.xsd" 
         generated="{current-dateTime()}">
+      <dc:title>Course data stored in SharePoint</dc:title>
+      <dc:provider>
+        <dc:identifier xsi:type="oxnotation:oxpoints">31337175</dc:identifier>
+      </dc:provider>
       <dc:contributor><xsl:value-of select="txt_ptitle"/></dc:contributor>
       <dc:description>from SP InfoPath docs</dc:description>
 
