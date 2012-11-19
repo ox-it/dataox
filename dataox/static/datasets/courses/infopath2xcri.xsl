@@ -1,9 +1,18 @@
 <?xml version="1.0" encoding="utf-8"?>
 <xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform" 
-    xmlns:xhtml="http://www.w3.org/1999/xhtml" 
     xmlns:xs="http://www.w3.org/2001/XMLSchema"
     xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-  xpath-default-namespace="http://schemas.microsoft.com/office/infopath/2003/myXSD/2012-03-17T23:37:18"
+    xmlns="http://xcri.org/profiles/1.2/catalog" 
+    xmlns:xcriTerms="http://xcri.org/profiles/catalog/terms"
+    xmlns:xcri="http://xcri.org/profiles/1.2/catalog"
+    xmlns:xhtml="http://www.w3.org/1999/xhtml" 
+    xmlns:dc="http://purl.org/dc/elements/1.1/" 
+    xmlns:dcterms="http://purl.org/dc/terms/" 
+    xmlns:oxcap="http://purl.ox.ac.uk/oxcap/ns/"
+    xmlns:credit="http://purl.org/net/cm" 
+    xmlns:mlo="http://purl.org/net/mlo" 
+    xmlns:courseDataProgramme="http://xcri.co.uk" 
+    xpath-default-namespace="http://schemas.microsoft.com/office/infopath/2003/myXSD/2012-03-17T23:37:18"
     version="2.0">
   <xsl:output indent="yes"/>
   
@@ -11,27 +20,12 @@
   <!-- Should we change so stylesheet iterates over all files in the directory? Or just call multiple times (e.g. for file in *.xml) -->
   
   <xsl:template match="myFields">
-    <catalog xmlns="http://xcri.org/profiles/1.2/catalog" 
-        xmlns:xcriTerms="http://xcri.org/profiles/catalog/terms"
-        xmlns:xcri="http://xcri.org/profiles/1.2/catalog"
-        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
-        xmlns:xhtml="http://www.w3.org/1999/xhtml" 
-        xmlns:dc="http://purl.org/dc/elements/1.1/" 
-        xmlns:dcterms="http://purl.org/dc/terms/" 
-        xmlns:oxcap="http://purl.ox.ac.uk/oxcap/ns/"
-        xmlns:credit="http://purl.org/net/cm" 
-        xmlns:mlo="http://purl.org/net/mlo" 
-        xmlns:courseDataProgramme="http://xcri.co.uk" 
-        xsi:schemaLocation="http://xcri.org/profiles/1.2/catalog http://www.xcri.co.uk/bindings/xcri_cap_1_2.xsd http://xcri.org/profiles/1.2/catalog/terms  http://www.xcri.co.uk/bindings/xcri_cap_terms_1_2.xsd http://xcri.co.uk http://www.xcri.co.uk/bindings/coursedataprogramme.xsd" 
-        generated="{current-dateTime()}">
-      <dc:contributor><xsl:value-of select="txt_ptitle"/></dc:contributor>
-      <dc:description>from SP InfoPath docs</dc:description>
       <provider>
         <xsl:choose>
             <xsl:when test="txt_description"><dc:description><xsl:apply-templates select="txt_description"/></dc:description></xsl:when>
             <xsl:otherwise><dc:description>University of Oxford</dc:description></xsl:otherwise>
         </xsl:choose>
-        <xsl:if test="txt_url"><dc:identifier><xsl:value-of select="txt_url"/></dc:identifier></xsl:if>
+        <!--<xsl:if test="txt_url"><dc:identifier><xsl:value-of select="txt_url"/></dc:identifier></xsl:if>-->
         <xsl:if test="string-length(normalize-space(txt_identifier)) gt 4"><xsl:message>txt_identifier is more than 4 characters!</xsl:message></xsl:if>
         
         <xsl:variable name="provider-identifier" select="normalize-space(txt_identifier)"/>
@@ -51,7 +45,7 @@
         <!-- ptitle -->
         <dc:title><xsl:value-of select="txt_ptitle"/></dc:title>
         
-        <mlo:url><xsl:value-of select="txt_curl"/></mlo:url>
+        <mlo:url><xsl:value-of select="txt_url"/></mlo:url>
     
     
     <!-- course, with oxcap:visibility and possibly oxcap:status attributes -->
@@ -263,7 +257,6 @@
             
           </course>
       </provider>
-    </catalog>
   </xsl:template>
   <xsl:template match="xhtml:html">
     <xsl:apply-templates/>
@@ -276,7 +269,14 @@
   </xsl:template>
   
   <xsl:template match="/">
-    <xsl:apply-templates select=".//myFields"/>
+    <catalog
+        xsi:schemaLocation="http://xcri.org/profiles/1.2/catalog http://www.xcri.co.uk/bindings/xcri_cap_1_2.xsd http://xcri.org/profiles/1.2/catalog/terms  http://www.xcri.co.uk/bindings/xcri_cap_terms_1_2.xsd http://xcri.co.uk http://www.xcri.co.uk/bindings/coursedataprogramme.xsd" 
+        generated="{current-dateTime()}">
+      <dc:contributor><xsl:value-of select="txt_ptitle"/></dc:contributor>
+      <dc:description>from SP InfoPath docs</dc:description>
+
+      <xsl:apply-templates select=".//myFields"/>
+    </catalog>
   </xsl:template>
 
 </xsl:stylesheet>
