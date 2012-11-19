@@ -12,7 +12,9 @@
     xmlns:credit="http://purl.org/net/cm" 
     xmlns:mlo="http://purl.org/net/mlo" 
     xmlns:courseDataProgramme="http://xcri.co.uk"
-    xmlns:oxnotation="https://data.ox.ac.uk/id/notation/" 
+    xmlns:oxnotation="https://data.ox.ac.uk/id/notation/"
+    xmlns:ox-rm="https://data.ox.ac.uk/id/ox-rm/"
+    xmlns:ox-rdf="https://data.ox.ac.uk/id/ox-rdf/"
     xpath-default-namespace="http://schemas.microsoft.com/office/infopath/2003/myXSD/2012-03-17T23:37:18"
     version="2.0">
   <xsl:output indent="yes"/>
