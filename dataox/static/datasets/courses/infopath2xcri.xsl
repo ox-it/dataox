@@ -270,7 +270,7 @@
                 <oxcap:session>
                   <dc:identifier>
                     <xsl:text>https://course.data.ox.ac.uk/id/sharepoint/session/</xsl:text>
-                    <xsl:value-of select="txt_cidentifier"/>
+                    <xsl:value-of select="../../txt_cidentifier"/>
                     <xsl:text>/</xsl:text>
                     <xsl:value-of select="txt_sessionid"/>
                   </dc:identifier>
