@@ -29,12 +29,18 @@
             <xsl:otherwise><dc:description>University of Oxford</dc:description></xsl:otherwise>
         </xsl:choose>
         <!--<xsl:if test="txt_url"><dc:identifier><xsl:value-of select="txt_url"/></dc:identifier></xsl:if>-->
-        <xsl:if test="string-length(normalize-space(txt_identifier)) gt 4"><xsl:message>txt_identifier is more than 4 characters!</xsl:message></xsl:if>
         
         <xsl:variable name="provider-identifier" select="normalize-space(txt_identifier)"/>
+        <dc:identifier>
+          <xsl:text>https://course.data.ox.ac.uk/id/sharepoint/provider/</xsl:text>
+          <xsl:value-of select="$provider-identifier"/>
+        </dc:identifier>
         <xsl:choose>
+          <xsl:when test="string-length($provider-identifier) = 2">
+            <dc:identifier xsi:type="oxnotation:twoThree"><xsl:value-of select="upper-case($provider-identifier)"/></dc:identifier>
+          </xsl:when>
           <xsl:when test="string-length($provider-identifier) = 4">
-            <dc:identifier xsi:type="oxnotation:department"><xsl:value-of select="$provider-identifier"/></dc:identifier>
+            <dc:identifier xsi:type="oxnotation:department"><xsl:value-of select="upper-case($provider-identifier)"/></dc:identifier>
           </xsl:when>
           <xsl:when test="string-length($provider-identifier) = 6">
             <dc:identifier xsi:type="oxnotation:twoThree"><xsl:value-of select="substring($provider-identifier, 5, 2)"/></dc:identifier>
@@ -42,6 +48,9 @@
           <xsl:when test="string-length($provider-identifier) = 8">
             <dc:identifier xsi:type="oxnotation:oxpoints"><xsl:value-of select="$provider-identifier"/></dc:identifier>
           </xsl:when>
+          <xsl:otherwise>
+            <xsl:message>provider identifier '<xsl:value-of select="$provider-identifier"/>' not recognized.</xsl:message>
+          </xsl:otherwise>
         </xsl:choose>
           
         
