@@ -156,7 +156,7 @@
               <dc:description>
                 <div xmlns="http://www.w3.org/1999/xhtml">
                   <xsl:apply-templates  select="txt_ccdescription/xhtml:html"/>
-                  <xsl:if test="string-length(normalize-space(txt_intended)) gt 0"><p>Intended Audience: <xsl:apply-templates select="txt_intended"/></p></xsl:if>
+                  <xsl:if test="string-length(normalize-space(txt_intended)) gt 0"><xhtml:p>Intended Audience: <xsl:apply-templates select="txt_intended"/></xhtml:p></xsl:if>
                 </div>
               </dc:description>
             </xsl:if>
