@@ -312,6 +312,7 @@
       <dc:provider>
         <dc:identifier xsi:type="oxnotation:oxpoints">31337175</dc:identifier>
       </dc:provider>
+      <dc:identifier>https://course.data.ox.ac.uk/id/sharepoint/catalogue</dc:identifier>
       <dc:contributor><xsl:value-of select="txt_ptitle"/></dc:contributor>
       <dc:description>from SP InfoPath docs</dc:description>
 
