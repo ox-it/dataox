@@ -179,20 +179,20 @@
   
   <xsl:template match="course" mode="in-presentation">
     <xsl:param name="session-uri"/>
-    <prog:has_event>
+    <oxcap:consistsOf>
       <xsl:apply-templates select="." mode="session">
         <xsl:with-param name="session-uri" select="$session-uri"/>
       </xsl:apply-templates>
-    </prog:has_event>
+    </oxcap:consistsOf>
   </xsl:template>
   
   <xsl:template match="course" mode="session">
     <xsl:param name="session-uri"/>
-    <event:Event rdf:about="{$session-uri}">
+    <oxcap:Session rdf:about="{$session-uri}">
       <xsl:apply-templates select="*[text()]" mode="in-session">
         <xsl:with-param name="session-uri" select="$session-uri"/>
       </xsl:apply-templates>
-    </event:Event>
+    </oxcap:Session>
   </xsl:template>
  
   <xsl:template match="provider-identifier" mode="provider-metadata">
@@ -444,22 +444,16 @@
   
   <xsl:template match="session-start|session-end" mode="in-session">
     <xsl:param name="session-uri"/>
-    <xsl:if test="not(self::session-end and ../session-start)">
-      <event:time>
-        <tl:Interval rdf:about="{$session-uri}/interval">
-          <xsl:if test="../session-start">
-            <tl:start rdf:datatype="&xsd;dateTime">
-              <xsl:value-of select="../session-start"/>
-            </tl:start>
-          </xsl:if>
-          <xsl:if test="../session-end">
-            <tl:end rdf:datatype="&xsd;dateTime">
-              <xsl:value-of select="../session-end"/>
-            </tl:end>
-          </xsl:if>
-        </tl:Interval>
-      </event:time>
-    </xsl:if>
+    <xsl:node name="{if (self::session-start) then mlo:start else xcri:end}">
+      <xsl:attribute name="rdf:about">
+        <xsl:value-of select="concat($session-uri, if (self::session-start) then '/start' else '/end')"/>
+      </xsl:attribute>
+      <time:Instant>
+        <time:inXSDDateTime rdf:datatype="&xsd;dateTime">
+          <xsl:value-of select="../session-start"/>
+        </time:inXSDDateTime>
+      </time:Instant>
+    </xsl:node>
   </xsl:template>
 
   <xsl:template match="*" mode="#all"/>
