@@ -659,6 +659,7 @@ ul.equipmentList li {
 }
 
 ul.equipmentList li h3 {
+	background: #414E5D;
 	filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#414E5D', endColorstr='#59708A');
 	background: -webkit-gradient(linear, left top, left bottom, from(#414E5D), to(#59708A));
 	background: -moz-linear-gradient(top, #414E5D, #59708A);
