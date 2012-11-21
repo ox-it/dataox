@@ -21,6 +21,10 @@
     <oxcap:bookingEndpoint rdf:resource="{text()}"/>
   </xsl:template>
 
+  <xsl:template match="oxcap:memberApplyTo">
+    <oxcap:memberApplyTo rdf:resource="{text()}"/>
+  </xsl:template>
+
   <xsl:template match="@oxcap:status">
     <xsl:variable name="mapped">
       <xsl:choose>
