@@ -14,7 +14,8 @@
     xmlns:dc="http://purl.org/dc/elements/1.1/"
     xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
     xmlns:tl="http://purl.org/NET/c4dm/timeline.owl#"
-    xmlns:oxcap="http://purl.ox.ac.uk/oxcap/ns/">
+    xmlns:oxcap="http://purl.ox.ac.uk/oxcap/ns/"
+    xpath-default-namespace="http://xcri.org/profiles/1.2/catalog">
   <xsl:import href="https://raw.github.com/ox-it/xcri-rdf/master/stylesheets/xcri2rdf.xsl"/>
 
   <xsl:template match="oxcap:bookingEndpoint">
@@ -48,17 +49,21 @@
   </xsl:template>
 
   <xsl:template match="course">
-    <xsl:if test="regulations/@oxcap:eligibility">
-      <xsl:variable name="mapped">
-        <xsl:choose>
-          <xsl:when test="regulations/@oxcap:eligibility='OX'">members</xsl:when>
-          <xsl:when test="regulations/@oxcap:eligibility='ST'">staff</xsl:when>
-          <xsl:when test="regulations/@oxcap:eligibility='PU'">public</xsl:when>
-        </xsl:choose>
-      </xsl:variable>
-      <oxcap:eligibility rdf:resource="http://purl.ox.ac.uk/oxcap/ns/eligibility-{$mapped}"/>
-    </xsl:if>
-    <xsl:apply-imports/>
+    <xcri:course>
+      <xsl:apply-templates select="." mode="rdf-about-attribute"/>
+      <xsl:apply-templates select="." mode="order-annotation"/>
+      <xsl:apply-templates select="*"/>
+      <xsl:if test="regulations/@oxcap:eligibility">
+        <xsl:variable name="mapped">
+          <xsl:choose>
+            <xsl:when test="regulations/@oxcap:eligibility='OX'">members</xsl:when>
+            <xsl:when test="regulations/@oxcap:eligibility='ST'">staff</xsl:when>
+            <xsl:when test="regulations/@oxcap:eligibility='PU'">public</xsl:when>
+          </xsl:choose>
+        </xsl:variable>
+        <oxcap:eligibility rdf:resource="http://purl.ox.ac.uk/oxcap/ns/eligibility-{$mapped}"/>
+      </xsl:if>
+    </xcri:course>
   </xsl:template>
 
   <xsl:template match="oxcap:session">
