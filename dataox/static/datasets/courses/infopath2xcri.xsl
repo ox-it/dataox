@@ -265,7 +265,6 @@
                   <xsl:value-of select="txt_places"/>
                 </mlo:places>
               </xsl:if>
-            </presentation>
             
             <xsl:if test="group5/group6">
               <xsl:for-each select="group5/group6">
