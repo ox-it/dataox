@@ -260,10 +260,12 @@
                   </xsl:choose>
                 </xsl:variable><xsl:value-of select="$attendancePatternText"/></attendancePattern>
         
-              <!-- Places with default text if empty -->
-              <mlo:places><xsl:choose><xsl:when test="string-length(normalize-space(txt_places)) gt 0"><xsl:value-of select="txt_places"/></xsl:when>
-              <xsl:otherwise>There is no specific information on the number of places.</xsl:otherwise>
-              </xsl:choose></mlo:places>
+              <xsl:if test="string-length(normalize-space(txt_places)) gt 0">
+                <mlo:places>
+                  <xsl:value-of select="txt_places"/>
+                </mlo:places>
+              </xsl:if>
+            </presentation>
             
             <xsl:if test="group5/group6">
               <xsl:for-each select="group5/group6">
