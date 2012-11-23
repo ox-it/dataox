@@ -119,7 +119,8 @@
             </xsl:for-each>
             
             <!-- research methods -->
-            <xsl:variable name="rmIn" select="normalize-space(researchmethods_drop)"/>
+<xsl:for-each select="my:group8/my:researchmethods_drop">
+            <xsl:variable name="rmIn" select="normalize-space(.)"/>
             <xsl:if test="string-length($rmIn) gt 0">
               <dc:subject identifier="{$rmIn}" 
                 xsi:type="ox-rm:notation" 
@@ -131,7 +132,7 @@
                   </xsl:choose>
                 </xsl:variable><xsl:value-of select="$rmText"/></dc:subject>
             </xsl:if>
-            
+</xsl:for-each>            
             
             <!-- prerequisite e.g. regulations -->
             <regulations oxcap:eligibility="{normalize-space(cmb_prerequisite)}">
