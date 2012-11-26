@@ -119,7 +119,7 @@
             </xsl:for-each>
             
             <!-- research methods -->
-<xsl:for-each select="my:group8/my:researchmethods_drop">
+<xsl:for-each select="group8/researchmethods_drop">
             <xsl:variable name="rmIn" select="normalize-space(.)"/>
             <xsl:if test="string-length($rmIn) gt 0">
               <dc:subject identifier="{$rmIn}" 
