@@ -444,7 +444,7 @@
   
   <xsl:template match="session-start|session-end" mode="in-session">
     <xsl:param name="session-uri"/>
-    <xsl:element name="{if (self::session-start) then mlo:start else xcri:end}">
+    <xsl:element name="{if (self::session-start) then 'mlo:start' else 'xcri:end'}">
       <xsl:attribute name="rdf:about">
         <xsl:value-of select="concat($session-uri, if (self::session-start) then '/start' else '/end')"/>
       </xsl:attribute>
