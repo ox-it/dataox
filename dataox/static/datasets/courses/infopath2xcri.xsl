@@ -211,11 +211,25 @@
                     
             
             <!-- Venue -->
-            <venue>
+            <xsl:if select="txt_venue/text()">
+              <venue>
                 <provider>
-                  <dc:identifier xsi:type="oxnotation:oxpoints"><xsl:value-of select="txt_venue"/></dc:identifier>
+                  <xsl:choose>
+                    <xsl:when test="matches(txt_venue, '^\d{8}$')">
+                      <dc:identifier xsi:type="oxnotation:oxpoints"><xsl:value-of select="txt_venue"/></dc:identifier>
+                    </xsl:when>
+                    <xsl:when test="matches(txt_venue, '^\d{3}$')">
+                      <dc:identifier xsi:type="oxnotation:estates"><xsl:value-of select="txt_venue"/></dc:identifier>
+                    </xsl:when>
+                    <xsl:otherwise>
+                      <dc:title>
+                        <xsl:value-of select="txt_venue"/>
+                      </dc:title>
+                    </xsl:otherwise>
+                  </xsl:choose>
                 </provider>
               </venue>
+            </xsl:if>
                        
               <!-- apply from/until with formatted date if text not provided -->
               <applyFrom><xsl:if test="dt_applyfrom"><xsl:attribute name="dtf"><xsl:value-of select="normalize-space(dt_applyfrom)"/></xsl:attribute></xsl:if>
