@@ -444,7 +444,7 @@
   
   <xsl:template match="session-start|session-end" mode="in-session">
     <xsl:param name="session-uri"/>
-    <xsl:node name="{if (self::session-start) then mlo:start else xcri:end}">
+    <xsl:element name="{if (self::session-start) then mlo:start else xcri:end}">
       <xsl:attribute name="rdf:about">
         <xsl:value-of select="concat($session-uri, if (self::session-start) then '/start' else '/end')"/>
       </xsl:attribute>
@@ -453,7 +453,7 @@
           <xsl:value-of select="../session-start"/>
         </time:inXSDDateTime>
       </time:Instant>
-    </xsl:node>
+    </xsl:element>
   </xsl:template>
 
   <xsl:template match="*" mode="#all"/>
