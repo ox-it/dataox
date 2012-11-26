@@ -6,6 +6,7 @@
 ]>
 <xsl:stylesheet version="2.0"
     xmlns="http://xcri.org/profiles/1.2/catalog"
+    xmlns:xcri="http://xcri.org/profiles/1.2/"
     xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
     xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
     xmlns:xmlo="http://purl.org/net/mlo"
