@@ -384,6 +384,9 @@
   
   <xsl:template match="course-url" mode="in-course">
     <foaf:page rdf:resource="{.}"/>
+    <xsl:if test="not(public-apply-to/text())">
+      <xcri:applyTo rdf:resource="{.}"/>
+    </xsl:if>
   </xsl:template>
 
   <xsl:template match="presentation-apply-from|presentation-apply-from-text" mode="in-presentation">
