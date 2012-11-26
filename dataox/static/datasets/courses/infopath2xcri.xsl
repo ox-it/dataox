@@ -211,7 +211,7 @@
                     
             
             <!-- Venue -->
-            <xsl:if select="txt_venue/text()">
+            <xsl:if test="txt_venue/text()">
               <venue>
                 <provider>
                   <xsl:choose>
