@@ -15,6 +15,7 @@
     xmlns:oxnotation="https://data.ox.ac.uk/id/notation/"
     xmlns:ox-rm="https://data.ox.ac.uk/id/ox-rm/"
     xmlns:ox-rdf="https://data.ox.ac.uk/id/ox-rdf/"
+    xmlns:sharepoint="https://github.com/ox-it/python-sharepoint/"
     xpath-default-namespace="http://schemas.microsoft.com/office/infopath/2003/myXSD/2012-03-17T23:37:18"
     version="2.0">
   <xsl:output indent="yes"/>
@@ -70,12 +71,13 @@
           </xsl:choose>
             <xsl:if test="string-length(normalize-space(cmb_status)) gt 0 and not(normalize-space(cmb_status) = 'CN')"><xsl:attribute name="oxcap:status"><xsl:value-of select="normalize-space(cmb_status)"/></xsl:attribute></xsl:if>
 
+			<xsl:variable name="course-id" select="ancestor::sharepoint:row/@id"/>
             <dc:identifier>
               <xsl:text>https://course.data.ox.ac.uk/id/sharepoint/course/</xsl:text>
-              <xsl:value-of select="txt_cidentifier"/>
+              <xsl:value-of select="$course-id"/>
             </dc:identifier>
             <dc:identifier xsi:type="oxnotation:sharepoint-course">
-              <xsl:value-of select="txt_cidentifier"/>
+              <xsl:value-of select="$course-id"/>
             </dc:identifier>
             
             <dc:title><xsl:value-of select="txt_ctitle"/></dc:title>
@@ -176,10 +178,10 @@
             <presentation><xsl:if test="string-length(normalize-space(cmb_status)) gt 0 and normalize-space(cmb_status) = 'CN'"><xsl:attribute name="oxcap:status"><xsl:value-of select="normalize-space(cmb_status)"/></xsl:attribute></xsl:if>
               <dc:identifier>
                 <xsl:text>https://course.data.ox.ac.uk/id/sharepoint/presentation/</xsl:text>
-                <xsl:value-of select="txt_cidentifier"/>
+                <xsl:value-of select="$course-id"/>
               </dc:identifier>
               <dc:identifier xsi:type="oxnotation:sharepoint-presentation">
-                <xsl:value-of select="txt_cidentifier"/>
+                <xsl:value-of select="$course-id"/>
               </dc:identifier>
 
               <!--<dc:identifier ><xsl:value-of select="txt_curl"/></dc:identifier>-->
@@ -286,14 +288,10 @@
                 <oxcap:session>
                   <dc:identifier>
                     <xsl:text>https://course.data.ox.ac.uk/id/sharepoint/session/</xsl:text>
-                    <xsl:value-of select="../../txt_cidentifier"/>
-                    <xsl:text>/</xsl:text>
-                    <xsl:value-of select="txt_sessionid"/>
+                    <xsl:value-of select="concat($course-id, '/', txt_sessionid)"/>
                   </dc:identifier>
                   <dc:identifier xsi:type="oxnotation:sharepoint-session">
-                    <xsl:value-of select="txt_cidentifier"/>
-                    <xsl:text>-</xsl:text>
-                    <xsl:value-of select="txt_sessionid"/>
+                    <xsl:value-of select="concat($course-id, '/', txt_sessionid)"/>
                   </dc:identifier>
                   <mlo:start dtf="{normalize-space(tm_sessionid_starttime)}">
                     <xsl:value-of select="format-dateTime(xs:dateTime(tm_sessionid_starttime), '[F] [D] [MNn] [Y] at [H]:[m]')"/>
