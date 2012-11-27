@@ -288,10 +288,10 @@
                 <oxcap:session>
                   <dc:identifier>
                     <xsl:text>https://course.data.ox.ac.uk/id/sharepoint/session/</xsl:text>
-                    <xsl:value-of select="concat($course-identifier '/', txt_sessionid)"/>
+                    <xsl:value-of select="concat($course-identifier, '/', txt_sessionid)"/>
                   </dc:identifier>
                   <dc:identifier xsi:type="oxnotation:sharepoint-session">
-                    <xsl:value-of select="concat($course-identifier '/', txt_sessionid)"/>
+                    <xsl:value-of select="concat($course-identifier, '/', txt_sessionid)"/>
                   </dc:identifier>
                   <mlo:start dtf="{normalize-space(tm_sessionid_starttime)}">
                     <xsl:value-of select="format-dateTime(xs:dateTime(tm_sessionid_starttime), '[F] [D] [MNn] [Y] at [H]:[m]')"/>
