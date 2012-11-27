@@ -63,7 +63,7 @@ class XCRICAPSerializer(BaseXCRICAPSerializer):
         self.serialize_memberApplyTo(xg, presentation)
         self.serialize_bookingEndpoint(xg, presentation)
         self.serialize_missing_applicationProcedure(xg, presentation)
-        for session in self.graph.objects(presentation, NS.prog.has_event):
+        for session in self.graph.objects(presentation, NS.oxcap.consistsOf):
             yield self.session_element(xg, session)
 
     def session_element(self, xg, session):
@@ -72,7 +72,9 @@ class XCRICAPSerializer(BaseXCRICAPSerializer):
         xg.endElement('oxcap:session')
 
     def session_content(self, xg, session):
-        pass
+        self.serialize_common_descriptive_elements(xg, session)
+        self.serialize_date(xg, session, NS.mlo.start, 'mlo:start')
+        self.serialize_date(xg, session, NS.xcri.end, 'xcri:end')
 
     def get_visibility_attrib(self, entity):
         visibility = self.graph.value(entity, NS.oxcap.visibility)
