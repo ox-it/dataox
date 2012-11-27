@@ -196,7 +196,7 @@
               </mlo:start>
               <end><xsl:if test="dt_end"><xsl:attribute name="dtf"><xsl:value-of select="normalize-space(dt_end)"/></xsl:attribute></xsl:if>
                 <xsl:choose>
-                  <xsl:when test="dt_end"><xsl:value-of select="format-date(xs:date(dt_end), '[F] [D] [MNn] [Y]')"/></xsl:when>
+                  <xsl:when test="string-length(normalize-space(dt_start)) gt 0"><xsl:value-of select="format-date(xs:date(dt_end), '[F] [D] [MNn] [Y]')"/></xsl:when>
                   <xsl:otherwise><xsl:message>Error: Missing end date!</xsl:message></xsl:otherwise>
                 </xsl:choose>
               </end>
