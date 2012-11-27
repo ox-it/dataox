@@ -190,7 +190,7 @@
               <mlo:start><xsl:if test="dt_start"><xsl:attribute name="dtf"><xsl:value-of select="normalize-space(dt_start)"/></xsl:attribute></xsl:if>
                 <xsl:choose>
                   <xsl:when test="string-length(normalize-space(txt_applyfromtext)) gt 0"><xsl:value-of  select="txt_starttext"/></xsl:when>
-                  <xsl:when test="dt_start/text()"><xsl:value-of select="format-date(xs:date(dt_start), '[F] [D] [MNn] [Y]')"/></xsl:when>
+                  <xsl:when test="string-length(normalize-space(dt_start)) gt 0"><xsl:value-of select="format-date(xs:date(dt_start), '[F] [D] [MNn] [Y]')"/></xsl:when>
                   <xsl:otherwise><xsl:message>Error: Missing start date!</xsl:message></xsl:otherwise>
                 </xsl:choose>
               </mlo:start>
