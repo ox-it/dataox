@@ -70,7 +70,7 @@
         map.addControl(new OpenLayers.Control.Attribution());
         var highlight_style = { fillColor:'#99CCFF', strokeColor:'#3399FF', fillOpacity:0.7 };
         window.vectors = new OpenLayers.Layer.Vector("Buildings");
-		map.addLayer(new OpenLayers.Layer.OSM("OSM"));
+		map.addLayer(new OpenLayers.Layer.OSM("OpenStreetMap", 'https://static.data.ox.ac.uk/osm-tiles/${z}/${x}/${y}.png', {attribution: "&copy; <a href=\"http://www.openstreetmap.org/copyright\">OpenStreetMap</a> contributors"}));
 		myBaseLayer = new OpenLayers.Layer.Google("Google",
 				  {'sphericalMercator': true,
 				   'maxExtent': new OpenLayers.Bounds(-20037508.34,-20037508.34,20037508.34,20037508.34)
