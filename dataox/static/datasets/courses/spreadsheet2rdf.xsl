@@ -179,11 +179,13 @@
   
   <xsl:template match="course" mode="in-presentation">
     <xsl:param name="session-uri"/>
-    <oxcap:consistsOf>
-      <xsl:apply-templates select="." mode="session">
-        <xsl:with-param name="session-uri" select="$session-uri"/>
-      </xsl:apply-templates>
-    </oxcap:consistsOf>
+    <xsl:if test="session-identifiier/text()">
+      <oxcap:consistsOf>
+        <xsl:apply-templates select="." mode="session">
+          <xsl:with-param name="session-uri" select="$session-uri"/>
+        </xsl:apply-templates>
+      </oxcap:consistsOf>
+    </xsl:if>
   </xsl:template>
   
   <xsl:template match="course" mode="session">
