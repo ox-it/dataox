@@ -21,5 +21,7 @@
         <https://course.data.ox.ac.uk/id/daisy/catalogue> ,
         <https://course.data.ox.ac.uk/id/careers/catalogue> ,
         <https://course.data.ox.ac.uk/id/safety/catalogue> ,
+        <https://course.data.ox.ac.uk/id/medsci/catalogue> ,
+        <https://course.data.ox.ac.uk/id/language-centre/catalogue> ,
         <https://course.data.ox.ac.uk/id/hris/catalogue> .
 

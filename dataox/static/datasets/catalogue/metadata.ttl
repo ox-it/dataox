@@ -15,7 +15,7 @@
   foaf:homepage <https://data.ox.ac.uk/datasets/> ;
   oo:contact <https://data.ox.ac.uk/id/open-data-team> .
 
-<https://data.ox.ac.uk/graph/catalogue/data> a sd:Graph ;
+<https://data.ox.ac.uk/graph/catalogue/metadata> a sd:Graph ;
   void:inDataset <https://data.ox.ac.uk/id/dataset/catalogue> ;
   dcterms:publisher <http://oxpoints.oucs.ox.ac.uk/id/00000000> .
 

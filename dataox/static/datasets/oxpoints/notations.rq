@@ -16,6 +16,12 @@ CONSTRUCT {
   { ?thing oxp:hasOUCSCode ?code .
     BIND(STRDT(?code, oxnotation:oucs) as ?notation) }
   UNION
+  { ?thing oxp:hasDivisionCode ?code .
+    BIND(STRDT(?code, oxnotation:division) as ?notation) }
+  UNION
+  { ?thing oxp:hasDepartmentCode ?code .
+    BIND(STRDT(?code, oxnotation:department) as ?notation) }
+  UNION
   { GRAPH <https://data.ox.ac.uk/graph/oxpoints/data> {
       ?thing a ?type
     } .

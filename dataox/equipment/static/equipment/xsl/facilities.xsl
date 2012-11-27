@@ -24,10 +24,10 @@
   <xsl:import href="common.xsl"/>
 
   <xsl:variable name="type">cerif:Facility</xsl:variable>
-  <xsl:variable name="group-column">1</xsl:variable>
+  <xsl:variable name="group-column">3</xsl:variable>
   <xsl:template name="uri">
     <xsl:text>https://data.ox.ac.uk/id/facility/</xsl:text>
-    <xsl:value-of select="tei:cell[1]/text()"/>
+    <xsl:value-of select="ex:slugify(tei:cell[3]/text())"/>
   </xsl:template>
 
   <xsl:template match="item/name-of-facility-service" mode="inside">

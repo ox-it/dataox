@@ -1,0 +1,40 @@
+@prefix void:    <http://rdfs.org/ns/void#> .
+@prefix rdfs:    <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix dcterms: <http://purl.org/dc/terms/> .
+@prefix cc:      <http://creativecommons.org/ns#> .
+@prefix oo:      <http://purl.org/openorg/> .
+@prefix oxnotation: <https://data.ox.ac.uk/id/notation/> .
+@prefix foaf: <http://xmlns.com/foaf/0.1/> .
+@prefix xcri: <http://xcri.org/profiles/1.2/> .
+@prefix mlo: <http://purl.org/net/mlo/> .
+@prefix time: <http://www.w3.org/2006/time#> .
+@prefix skos: <http://www.w3.org/2004/02/skos/core#> .
+@prefix v: <http://www.w3.org/2006/vcard/ns#> .
+@prefix sd: <http://www.w3.org/ns/sparql-service-description#> .
+@prefix dcat: <http://www.w3.org/ns/dcat#> .
+
+<https://data.ox.ac.uk/id/dataset/courses>
+    void:subset <https://data.ox.ac.uk/id/dataset/courses/language-centre> .
+
+<https://data.ox.ac.uk/id/dataset/courses/language-centre> a void:Dataset ;
+    rdfs:label "Course catalogue for the Language Centre" ;
+    skos:notation "courses/itlp"^^oxnotation:dataset ;
+
+    dcterms:publisher <http://oxpoints.oucs.ox.ac.uk/id/23233557> ;
+    dcterms:description "Upcoming courses offered by the Language Centre, modelled using XCRI-CAP." ;
+
+    void:vocabulary xcri:, mlo:, dcterms:, v:, foaf:, rdfs:, time: ;
+
+    cc:attributionName "Language Centre, University of Oxford" ;
+    cc:attributionURL <http://www.lang.ox.ac.uk/> ;
+    oo:contact [ a foaf:Agent;
+                 foaf:name "Language Centre" ;
+                 foaf:mbox <mailto:admin@lang.ox.ac.uk> ] .
+
+<https://data.ox.ac.uk/graph/courses/language-centre/data> a sd:Graph ;
+    void:inDataset <https://data.ox.ac.uk/id/dataset/courses/language-centre> .
+
+<https://data.ox.ac.uk/graph/courses/language-centre/metadata> a sd:Graph ;
+    void:inDataset <https://data.ox.ac.uk/id/dataset/catalogue> , <https://data.ox.ac.uk/id/dataset/courses/language-centre> ;
+    dcterms:license <http://creativecommons.org/publicdomain/zero/1.0/> .
+

@@ -54,6 +54,9 @@ class RecruitOxScraper(Scraper):
                      'p_refresh_search': 'Y'}
     detail_salary_re = re.compile(ur'^(Grade|Salary)[^\dA-Z]+(?P<grade>[^:]+)[-:][^£]*£? ?(?P<lower>[\d,]+)(?:[^£]*£ ?(?P<upper>[\d,]+)(?:[^£]+£(?P<discretionary>[\d,]+))?)?')
 
+    def __init__(self, transform_manager):
+        super(RecruitOxScraper, self).__init__(transform_manager)
+
     @classmethod
     def get_html(cls, url, params):
         url = '%s?%s' % (url, urllib.urlencode(params))
@@ -139,15 +142,7 @@ class RecruitOxScraper(Scraper):
         location =  ' '.join(location_td[0].text.split()) if location_td else ''
         if location != vacancy.location:
             vacancy.location = location
-            results = self.search_endpoint.query({'query': {'query_string': {'query': vacancy.location}}})
-            hits = results['hits']['hits']
-            if hits:
-                hit = hits[0]['_source']
-                vacancy.organizationPart = hit['uri']
-                try:
-                    vacancy.formalOrganization = hit['rootOrganization']['uri']
-                except KeyError:
-                    pass
+            vacancy.update_location_fields(self.transform_manager.store.slug)
 
         closing_time = re.findall(r'\b(\d{1,2})[.:](\d{2})(?:\s*([ap]m))?\b', vacancy.description, re.I)
         if closing_time and not re.search('\W(noon|midday)\W', vacancy.description, re.I):

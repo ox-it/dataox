@@ -89,7 +89,7 @@ DEFAULT_FROM_EMAIL = 'opendata@oucs.ox.ac.uk'
 AUTHENTICATION_BACKENDS = (
     'django.contrib.auth.backends.ModelBackend',
     'object_permissions.backend.ObjectPermBackend',
-    'django_webauth.backends.WebauthBackend',
+    'django_webauth.backends.webauth_ldap.WebauthLDAPBackend',
 )
 
 MIDDLEWARE_CLASSES += (
@@ -107,6 +107,7 @@ THUMBNAIL_HEIGHTS = (120, 80,)
 
 ID_MAPPING = (
     ('http://data.ox.ac.uk/id/', 'http://data.ox.ac.uk/doc/', True),
+    ('http://course.data.ox.ac.uk/id/', 'http://course.data.ox.ac.uk/doc/', True),
     ('https://data.ox.ac.uk/id/equipment/', 'https://www.research-facilities.ox.ac.uk/view/', True),
     ('http://oxpoints.oucs.ox.ac.uk/id/', 'http://data.ox.ac.uk/doc:oxpoints/', False),
     ('http://id.conted.ox.ac.uk/', 'http://course.data.ox.ac.uk/doc:conted/', False),
@@ -154,6 +155,8 @@ ADDITIONAL_NAMESPACES.update({
     'xcri': 'http://xcri.org/profiles/1.2/',
     'mlo': 'http://purl.org/net/mlo/',
     'spatialrelations': 'http://data.ordnancesurvey.co.uk/ontology/spatialrelations/',
+    'prog': 'http://purl.org/prog/',
+    'oxcap': 'http://purl.ox.ac.uk/oxcap/ns/',
 
 })
 

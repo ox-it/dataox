@@ -35,7 +35,7 @@
 
 <https://data.ox.ac.uk/id/dataset/vacancies/current> a void:Dataset ;
     rdfs:label "Current vacancies at the University of Oxford" ;
-    skos:notation "vacancies/current" ;
+    skos:notation "vacancies/current"^^oxnotation:dataset ;
 
     dcterms:publisher <http://oxpoints.oucs.ox.ac.uk/id/00000000> ;
     dcterms:description "Current vacancy advertisement information from the University of Oxford's central recruitment site, https://www.recruit.ox.ac.uk/. This dataset generally does not include collegiate advertisements." ;
@@ -49,7 +49,7 @@
 
 <https://data.ox.ac.uk/id/dataset/vacancies/archive> a void:Dataset ;
     rdfs:label "Past vacancies at the University of Oxford" ;
-    skos:notation "vacancies/archive" ;
+    skos:notation "vacancies/archive"^^oxnotation:dataset ;
 
     dcterms:publisher <http://oxpoints.oucs.ox.ac.uk/id/00000000> ;
     dcterms:description "Previous vacancy advertisement information from the University of Oxford's central recruitment site, https://www.recruit.ox.ac.uk/. This dataset generally does not include collegiate advertisements." ;

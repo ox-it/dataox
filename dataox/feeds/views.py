@@ -9,7 +9,7 @@ from django.shortcuts import render_to_response
 from django.template import RequestContext
 
 from django_conneg.decorators import renderer
-from django_conneg.views import HTMLView, JSONPView, ContentNegotiatedView
+from django_conneg.views import HTMLView, JSONPView
 from humfrey.utils.namespaces import NS
 from humfrey.linkeddata.resource import Resource, BaseResource
 from humfrey.linkeddata.views import MappingView
@@ -68,20 +68,20 @@ class FeedView(HTMLView, JSONPView):
             feed.add_item(item['title'], item['link'], item['description'], pubdate=item['date'])
         return HttpResponse(feed.writeString('utf-8'), mimetype=mimetype)
 
-    def simplify(self, value):
+    def simplify_for_json(self, value):
         if isinstance(value, BaseResource):
-            return NotImplemented
+            return value.uri
         elif isinstance(value, rdflib.Literal) and value.datatype == NS.xsd.dateTime:
-            return self.simplify(dateutil.parser.parse(value))
+            return self.simplify_for_json(dateutil.parser.parse(value))
         elif isinstance(value, rdflib.Literal):
             value = value.toPython()
             if isinstance(value, rdflib.Literal):
                 value = unicode(value)
-            return self.simplify(value)
+            return self.simplify_for_json(value)
         elif isinstance(value, (rdflib.URIRef, rdflib.BNode)):
             return unicode(value)
         else:
-            return super(FeedView, self).simplify(value)
+            return super(FeedView, self).simplify_for_json(value)
 
 # This is a nasty workaround for the (known) bug in Django: 
 # https://code.djangoproject.com/ticket/14202
@@ -102,7 +102,7 @@ def add_root_elements(self, handler):
     if self.feed['ttl'] is not None:
         handler.addQuickElement(u"ttl", self.feed['ttl'])        
 
-class VacancyIndexView(CannedQueryView, ResultSetView):
+class VacancyIndexView(HTMLView, CannedQueryView, ResultSetView):
     query = """
       SELECT ?unit (SAMPLE(?unitLabel_) as ?unitLabel) (COUNT(DISTINCT ?vacancy) as ?vacancies) (SAMPLE(?subUnit_) as ?subUnit) WHERE {
         ?type rdfs:subClassOf* org:Organization
@@ -122,66 +122,94 @@ class VacancyIndexView(CannedQueryView, ResultSetView):
 class VacancyView(FeedView, RDFView, StoreView, MappingView):
     template_name = "feeds/vacancy"
     _json_indent=2
-    
+
     all = False
-    
+
     @property
     def reverse_name(self):
         return 'feeds:all-vacancies' if self.all else 'feeds:vacancies'
 
-    @property
-    def query(self):
-        return """
-    DESCRIBE %%(unit)s ?unit ?vacancy ?salary ?contact ?tel WHERE {
-      OPTIONAL {
-        GRAPH <https://data.ox.ac.uk/graph/vacancies/current> {
-          ?vacancy a vacancy:Vacancy .
-        }
-        ?vacancy
-          oo:organizationPart ?unit ;
-          vacancy:salary ?salary ;
-          vacancy:applicationClosingDate ?closes ;
-          rdfs:label ?label ;
-          rdfs:comment ?description .
-        OPTIONAL {
-          ?vacancy oo:contact ?contact .
-          OPTIONAL { ?contact v:tel ?tel }
-        }
-        FILTER (?closes > now()) .
-        GRAPH <https://data.ox.ac.uk/graph/oxpoints/data> {
-          ?unit org:subOrganizationOf%(cardinality)s %%(unit)s
-        } .
-        %%(filter)s
-      }
+    def first_query(self):
+        return """\
+CONSTRUCT {{
+  ?vacancy a vacancy:Vacancy .
+  ?unit skos:prefLabel ?unitLabel
+}} WHERE {{
+  VALUES ?unit {{ {unit} }} .
+  ?organizationPart org:subOrganizationOf{cardinality} ?unit .
+  OPTIONAL {{ ?unit skos:prefLabel ?unitLabel }}
+  OPTIONAL {{
+    GRAPH <https://data.ox.ac.uk/graph/vacancies/current> {{
+      ?vacancy oo:organizationPart ?organizationPart ; a vacancy:Vacancy .
+    }}
+    ?vacancy vacancy:applicationClosingDate ?closing .
+    FILTER (?closing > now()) .
+    {sparqlFilter}
+  }}
+  FILTER (BOUND(?vacancy) || ?unit = ?organizationPart) .
+  OPTIONAL {{ ?organizationPart skos:prefLabel ?organizationLabel }}
+}}""".format(cardinality='*' if self.all else '{0}',
+             unit=self.unit.n3(),
+             sparqlFilter=self.sparqlFilter)
 
-    }""" % {'cardinality': '*' if self.all else '{0}'}
+    def second_query(self, vacancies):
+        return """\
+DESCRIBE ?vacancy ?organizationPart ?location ?address ?contact ?phone ?salary {{
+  VALUES ?vacancy {{ {vacancies} }} .
+  {{ }}
+  UNION
+  {{ ?vacancy oo:organizationPart ?organizationPart
+     OPTIONAL {{ ?organizationPart v:adr ?address }} }}
+  UNION
+  {{ ?vacancy foaf:based_near ?location
+     OPTIONAL {{ ?location v:adr ?address }} }}
+  UNION
+  {{ ?vacancy oo:contact ?contact
+     OPTIONAL {{ ?contact v:tel ?phone }} }}
+  UNION
+  {{ ?vacancy vacancy:salary ?salary }}
+}}""".format(vacancies=" ".join(vacancy.n3() for vacancy in vacancies))
+
+    @property
+    def unit(self):
+        return rdflib.URIRef('http://oxpoints.oucs.ox.ac.uk/id/{0}'.format(self.kwargs['oxpoints_id']))
+
+    @property
+    def sparqlFilter(self):
+        if 'keyword' in self.request.GET:
+            keyword = rdflib.Literal(self.request.GET['keyword']).n3()
+            return """\
+?vacancy rdfs:label ?vacancyLabel ;
+  rdfs:comment ?vacancyComment .
+FILTER (regex(?vacancyLabel, {0}, 'i') || regex(?vacancyComment, {0}, 'i'))""".format(keyword)
+        return ""
 
     def get(self, request, oxpoints_id, format=None):
-        filter = []
-        if 'keyword' in request.GET:
-            keyword = rdflib.Literal(request.GET['keyword']).n3()
-            filter.append("FILTER (regex(?label, %(keyword)s, 'i') || regex(?description, %(keyword)s, 'i'))" % {'keyword': keyword})
-        filter = ' .\n      '.join(filter)
-        self.unit = rdflib.URIRef('http://oxpoints.oucs.ox.ac.uk/id/%s' % oxpoints_id)
-
-        self.graph = self.endpoint.query(self.query % {'unit': self.unit.n3(), 'filter': filter})
+        self.graph = self.endpoint.query(self.first_query())
         if not self.graph:
             raise Http404
-        
+        self.graph += self.endpoint.query(self.second_query(self.graph.subjects(NS.rdf.type, NS.vacancy.Vacancy)))
+
         subjects = [Resource(v, self.graph, self.endpoint) for v in self.graph.subjects(NS.rdf.type, NS.vacancy.Vacancy)]
+        subjects.sort(key=lambda v: (v.vacancy_applicationClosingDate, v.label, v.uri))
 
         self.context.update({'unit': Resource(self.unit, self.graph, self.endpoint),
                              'graph': self.graph,
                              'all': self.all,
                              'subjects': subjects,
-                             'keyword': request.GET.get('keyword')})
-        
+                             'keyword': request.GET.get('keyword'),
+                             'vacancies': []})
+
+        for subject in subjects:
+            if hasattr(subject, 'get_json'):
+                self.context['vacancies'].append(subject.get_json())
+
         return super(VacancyView, self).get(request, oxpoints_id=oxpoints_id, format=format)
-        
+
     @property
     def title(self):
-        return "Vacancies within " + self.graph.value(self.unit, NS.skos.prefLabel)
-    
+        return u"Vacancies within {0}".format(self.graph.value(self.unit, NS.skos.prefLabel) or u'[unknown]')
+
     @property
     def link(self):
         return self.base_location
@@ -194,13 +222,13 @@ class VacancyView(FeedView, RDFView, StoreView, MappingView):
             # Favour XHTML
             descriptions.sort(key=lambda description: description.datatype!=NS.xtypes['Fragment-XHTML'])
             resource = Resource(vacancy, self.graph, self.endpoint)
+            closing_date = self.graph.value(vacancy, NS.vacancy.applicationClosingDate)
+            pubdate = dateutil.parser.parse(closing_date) if closing_date else None
             items.append({'title': self.graph.value(vacancy, NS.rdfs.label),
                           'description': descriptions[0] if descriptions else None,
                           'link': self.graph.value(vacancy, NS.foaf.homepage),
-                          'date': dateutil.parser.parse(self.graph.value(vacancy, NS.vacancy.applicationClosingDate)),
-                          'pubdate': dateutil.parser.parse(self.graph.value(vacancy, NS.vacancy.applicationClosingDate)),
-                          'resource': resource,
-                          'unique_id': resource.hexhash})
+                          'date': pubdate,
+                          'pubdate': pubdate})
             if self.all and resource.get('oo:organizationalUnit'):
                 subdepts = [r.label for r in resource.get_all('oo:organizationalUnit') if r.get('skos:prefLabel') and r._identifier != self.unit]
                 if subdepts:

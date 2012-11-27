@@ -9,6 +9,12 @@
 
   <p>Please note that the linked files may be rather large.</p>
 
+  <p><i>XCRI-CAP (Full)</i> contains multiple provider elements per catalogue,
+     whereas <i>XCRI-CAP (Simple)</i> provides a single provider to meet the
+     requirements of the
+     <a href="http://www.jisc.ac.uk/whatwedo/programmes/elearning/coursedata/stage2.aspx">JISC
+     Course Data Programme</a>.</p>
+
   <table>
     <thead>
       <tr>
@@ -24,7 +30,7 @@
         <td>{{ subject.description|default:"" }}</td>
         <td>{{ subject.dcterms_publisher.label }}</td>
         <td>{% for renderer in feed_renderers %}
-          <a href="?uri={{ subject.uri|urlencode }}&amp;format={{ renderer.format}}">{{ renderer.name }}</a>{% endfor %}
+          <a href="?uri={{ subject.uri|urlencode }}&amp;format={{ renderer.format}}">{{ renderer.name }}</a>{% if not forloop.last %} •{% endif %}{% endfor %}
         </td>
       </tr>{% endfor %}
     </tbody>

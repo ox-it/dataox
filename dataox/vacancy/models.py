@@ -1,13 +1,22 @@
 # -*- coding: utf-8 -*-
 
+import datetime
 import locale
+import logging
+import re
 
+import dateutil.parser
 from lxml import etree
+import pytz
 import rdflib
 
 from django.conf import settings
 from django.db import models
+from humfrey.elasticsearch.query import ElasticSearchEndpoint
 from humfrey.utils.namespaces import NS
+
+logger = logging.getLogger(__name__)
+email_re = re.compile(r'(?P<localpart>[a-zA-Z\d\-._]+)@(?P<host>[a-zA-Z\d\-.]+)')
 
 class Vacancy(models.Model):
     vacancy_id = models.CharField(max_length=10)
@@ -16,6 +25,7 @@ class Vacancy(models.Model):
     location = models.CharField(max_length=1024)
     organizationPart = models.CharField(max_length=256, blank=True)
     formalOrganization = models.CharField(max_length=256, blank=True)
+    basedNear = models.CharField(max_length=256, blank=True)
     
     description = models.TextField()
     
@@ -40,6 +50,34 @@ class Vacancy(models.Model):
     def __unicode__(self):
         return u'{0}: {1}'.format(self.vacancy_id, self.title)
 
+    def update_location_fields(self, store_slug):
+        # Perform a query against ElasticSearch to find an organization for this location
+        search_endpoint = ElasticSearchEndpoint(store_slug, 'organization')
+        results = search_endpoint.query({'query': {'query_string': {'query': self.location}}})
+        hits = results['hits']['hits']
+        if hits:
+            hit = hits[0]['_source']
+            self.organizationPart = hit['uri']
+            try:
+                self.formalOrganization = hit['rootOrganization']['uri']
+            except KeyError:
+                pass
+            logger.debug("Matched '%s' to organization '%s' (%s)", self.location, hit.get('label'), hit['uri'])
+            site_uris = [site['uri'] for site in hit.get('site', [])]
+        else:
+            site_uris = []
+
+        # And now find a location
+        search_endpoint = ElasticSearchEndpoint(store_slug, 'spatial-thing')
+        results = search_endpoint.query({'query': {'bool': {'must': {'query_string': {'query': self.location}},
+                                                            'should': [{'terms': {'uri': site_uris}}]}}})
+        hits = results['hits']['hits']
+        if hits:
+            hit = hits[0]['_source']
+            logger.debug("Matched '%s' to spatial-thing '%s' (%s)", self.location, hit.get('label'), hit['uri'])
+            self.basedNear = hit['uri']
+
+
     def triples(self, base_uri):
         uri = rdflib.URIRef(base_uri + self.vacancy_id)
         contact_uri = rdflib.URIRef(uri + '/contact')
@@ -47,7 +85,6 @@ class Vacancy(models.Model):
 
         triples = [
             (uri, NS.rdf.type, NS.vacancy.Vacancy),
-            (uri, NS.foaf.homepage, rdflib.URIRef(self.url)),
             (uri, NS.oo.contact, contact_uri),
             (uri, NS.vacancy.applicationOpeningDate, rdflib.Literal(self.opening_date, datatype=NS.xsd.dateTime)),
             (uri, NS.vacancy.applicationClosingDate, rdflib.Literal(self.closing_date, datatype=NS.xsd.dateTime)),
@@ -56,13 +93,19 @@ class Vacancy(models.Model):
             (uri, NS.skos.notation, rdflib.Literal(self.vacancy_id, datatype=NS.oxnotation.vacancy)),
         ]
 
+        # Only include a URL if the vacancy is still being advertised.
+        if dateutil.parser.parse(self.closing_date) > pytz.utc.localize(datetime.datetime.utcnow()):
+            triples.append((uri, NS.foaf.homepage, rdflib.URIRef(self.url)))
+
+
         if self.contact_name or self.contact_email or self.contact_phone:
             triples += [(uri, NS.oo.contact, contact_uri),
                         (contact_uri, NS.rdf.type, NS.foaf.Agent)]
         if self.contact_name:
             triples.append((contact_uri, NS.foaf.name, rdflib.Literal(self.contact_name)))
-        if self.contact_email:
-            triples.append((contact_uri, NS.v.email, rdflib.URIRef('mailto:' + self.contact_email)))
+        # Sometimes we see more than one e-mail address in this field
+        for localpart, host in email_re.findall(self.contact_email):
+            triples.append((contact_uri, NS.v.email, rdflib.URIRef('mailto:{0}@{1}'.format(localpart, host.lower()))))
         if self.contact_phone:
             phone_uri = self.phone_uri
             triples += [(contact_uri, NS.v.tel, phone_uri),
@@ -74,10 +117,14 @@ class Vacancy(models.Model):
                 (uri, NS.rdfs.comment, rdflib.Literal(self.description, datatype=NS.xtypes['Fragment-XHTML'])),
                 (uri, NS.rdfs.comment, rdflib.Literal(self.plain_description)),
             ]
+        if self.location:
+            triples.append((uri, NS.dc.spatial, rdflib.Literal(self.location)))
         for formalOrganization in self.formalOrganization.split():
             triples.append((uri, NS.oo.formalOrganization, rdflib.URIRef(formalOrganization)))
         for organizationPart in self.organizationPart.split():
             triples.append((uri, NS.oo.organizationPart, rdflib.URIRef(organizationPart)))
+        for basedNear in self.basedNear.split():
+            triples.append((uri, NS.foaf.based_near, rdflib.URIRef(basedNear)))
 
         for document in self.document_set.all():
             document_uri = rdflib.URIRef(document.local_url)
@@ -150,6 +197,8 @@ class Vacancy(models.Model):
     def flatten(self, elem):
         return ''.join(self._flatten(elem))
 
+    class Meta:
+        verbose_name_plural = 'vacancies'
 
 class Document(models.Model):
     vacancy = models.ForeignKey(Vacancy)

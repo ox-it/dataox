@@ -9,15 +9,16 @@
   li { cursor:pointer}
   </style>
   <script type="text/javascript">
-    var query = "SELECT DISTINCT ?building ?building_name ?spatial ?unit ?unit_name WHERE {"
-              + "  ?building "//a oxp:Building ;"
-              + "            dcterms:isPartOf+ <http://oxpoints.oucs.ox.ac.uk/id/59030245> ;"
-              + "            dc:title ?building_name ;"
-              + "            dcterms:spatial ?spatial ."
-              + "  FILTER (datatype(?spatial) = <http://www.openlinksw.com/schemas/virtrdf#Geometry>) ."
-              + "  ?unit oxp:occupies/dcterms:isPartOf* ?building ;"
-              + "        dc:title ?unit_name ."
-              + "} ORDER BY ?occupant_name";
+    var query = ["PREFIX geom: <http://data.ordnancesurvey.co.uk/ontology/geometry/>",
+                 "SELECT DISTINCT ?building ?building_name ?spatial ?unit ?unit_name WHERE {",
+                 "  ?building ",
+                 "    spatialrelations:within+ <http://oxpoints.oucs.ox.ac.uk/id/59030245> ;",
+                 "    a oxp:Building ;",
+                 "    dc:title ?building_name ;",
+                 "    geom:extent/geom:asWKT ?spatial .",
+                 "  ?unit oxp:occupies/spatialrelations:within* ?building ;",
+                 "        dc:title ?unit_name .",
+                 "} ORDER BY ?occupant_name"].join("\n");
 	
 	function highlightBuilding(e, lielement)
 		{
@@ -58,12 +59,7 @@
 		}		
 			  
     $(function() {
-      $.get('/sparql/', {
-        format: 'srj',
-        query: query,
-        datatype: 'json',
-        common_prefixes: 'on',
-      }, function(data) {
+      dataox.sparql(query, function(data) {
         var map = new OpenLayers.Map("map", {
 				  controls: [],
 				  projection: new OpenLayers.Projection("EPSG:900913")
@@ -161,8 +157,7 @@
         map.addControl(sf);
         sf.activate();
 
-        
-        lonLat = (new OpenLayers.LonLat(	-1.254918 , 51.759575 )).transform(proj_from, proj_to);
+        lonLat = (new OpenLayers.LonLat(-1.254918 , 51.759575 )).transform(proj_from, proj_to);
         map.setCenter(lonLat, 16);
       });
     });

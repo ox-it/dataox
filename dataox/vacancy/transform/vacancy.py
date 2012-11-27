@@ -44,7 +44,10 @@ class RetrieveVacancies(Transform):
         logger.debug("Finished importing vacancies; retrieving %d new documents", documents.count())
         file_handler = VacancyFileHandler()
         for document in documents:
-            file_handler.retrieve(document)
+            try:
+                file_handler.retrieve(document)
+            except Exception:
+                logger.exception("Could not retrieve file: %s", document.url)
         
         logger.debug("Finished retrieving documents; starting to serialize")
 

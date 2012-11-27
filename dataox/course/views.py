@@ -11,7 +11,7 @@ from humfrey.utils.namespaces import NS
 
 import rdflib
 
-import xcri_rdf
+from .xcri_rdf import XCRICAPSerializer
 
 class CourseView(object):
     """
@@ -116,7 +116,7 @@ class CatalogDetailView(CourseView, sparql_views.CannedQueryView, RDFView, Conte
     """
 
     query = """
-        DESCRIBE ?catalog ?provider ?course ?presentation ?organisation ?date ?venue ?courseTerm WHERE {
+        DESCRIBE ?catalog ?provider ?course ?presentation ?organisation ?date ?venue ?courseTerm ?cv ?subject WHERE {
           %(uri)s skos:member* ?catalog . ?catalog a xcri:catalog .
           OPTIONAL {
             ?catalog dcterms:publisher ?organisation
@@ -125,12 +125,15 @@ class CatalogDetailView(CourseView, sparql_views.CannedQueryView, RDFView, Conte
             ?catalog skos:member+ ?course .
             ?course a xcri:course .
             OPTIONAL {
+              ?course dcterms:subject/skos:related?/skos:broader* ?subject
+            } .
+            OPTIONAL {
               ?course mlo:specifies ?presentation .
-              OPTIONAL { ?presentation mlo:start|xcri:end ?date } .
+              OPTIONAL { ?presentation mlo:start|xcri:end|xcri:applyFrom|xcri:applyUntil ?date } .
+              OPTIONAL { ?presentation xcri:attendanceMode|xcri:attendancePattern|xcri:studyMode ?cv } .
               OPTIONAL { ?presentation xcri:venue ?venue } .
             } .
             OPTIONAL { ?provider mlo:offers ?course } .
-            OPTIONAL { ?course dcterms:subject|xcri:attendanceMode|xcri:attendancePattern|xcri:stufyMode ?courseTerm } .
           }
         }
     """
@@ -145,10 +148,30 @@ class CatalogDetailView(CourseView, sparql_views.CannedQueryView, RDFView, Conte
     def get_query(self, request):
         return self.query % {'uri': self.catalog_uri.n3()}
 
-    @renderer(format='xcricap', mimetypes=('application/xcri-cap+xml',), name="XCRI-CAP 1.2")
+    @renderer(format='xcricap', mimetypes=('application/xcri-cap+xml',), name="XCRI-CAP 1.2 (Simple)")
     def render_xcricap(self, request, context, template_name):
-        serializer = xcri_rdf.XCRICAPSerializer(context['graph'], self.catalog_uri)
+        self.wrangle_itlp(context['graph'])
+        serializer = XCRICAPSerializer(context['graph'], self.catalog_uri)
         return HttpResponse(serializer.generator(), mimetype='application/xcri-cap+xml')
+
+    @renderer(format='xcricap-full', mimetypes=(), name="XCRI-CAP 1.2 (Full)")
+    def render_xcricap_full(self, request, context, template_name):
+        self.wrangle_itlp(context['graph'])
+        serializer = XCRICAPSerializer(context['graph'], self.catalog_uri, simple=False)
+        return HttpResponse(serializer.generator(), mimetype='application/xcri-cap+xml')
+
+    def wrangle_itlp(self, graph):
+        """
+        Makes ITLP look like IT Services, as far as identifiers are concerned.
+
+        WebLearn requires every provider to have a two-three or department
+        code. This is a manky hack to add the two-three code for IT Services
+        to ITLP if it's in the feed.
+        """
+        itlp = rdflib.URIRef('http://oxpoints.oucs.ox.ac.uk/id/53505808')
+        if graph.value(itlp, NS.rdf.type):
+            graph.add((itlp, NS.skos.notation, rdflib.Literal('E2', datatype=NS.oxnotation.twoThree)))
+
 
 class CatalogView(CourseView, ContentNegotiatedView):
     catalog_detail_view = staticmethod(CatalogDetailView.as_view())

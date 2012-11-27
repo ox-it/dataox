@@ -1,0 +1,47 @@
+@prefix oxcap:   <http://purl.ox.ac.uk/oxcap/ns/> .
+@prefix rdfs:    <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix foaf:    <http://xmlns.com/foaf/0.1/> .
+@prefix dcterms: <http://purl.org/dc/terms/> .
+@prefix skos:    <http://www.w3.org/2004/02/skos/core#> .
+@prefix rdf:     <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix owl:     <http://www.w3.org/2002/07/owl#> .
+@prefix xcri:    <http://xcri.org/profiles/1.2/> .
+
+oxcap: a owl:Ontology ;
+  rdfs:label "The OxCAP ontology"@en ;
+  rdfs:comment "Additional (generally Oxford-specific) terms required for describing courses for the OxCAP project."@en ;
+  dcterms:publisher <http://oxpoints.oucs.ox.ac.uk/id/31337175> .
+
+oxcap:eligibility a rdf:Property, owl:ObjectProperty ;
+  rdfs:label "eligibility" ;
+  rdfs:comment "The groups of people that are eligible to attend a course" ;
+  rdfs:domain xcri:course ;
+  rdfs:range oxcap:Eligibility ;
+  rdfs:isDefinedBy oxcap: .
+
+oxcap:eligibility-notation a rdfs:Datatype ;
+  rdfs:label "eligibility code" ;
+  rdfs:comment "Code used for an eligibility requirement in Oxford-specific systems." ;
+  dcterms:publisher <http://oxpoints.oucs.ox.ac.uk/id/31337175> ;
+  rdfs:isDefinedBy oxcap: .
+
+oxcap:Eligibility a rdfs:Class, owl:Class ;
+  rdfs:label "eligibility" ;
+  rdfs:subClassOf skos:Concept , foaf:Group ;
+  rdfs:isDefinedBy oxcap: .
+
+oxcap:eligibility-public a oxcap:Eligibility ;
+  skos:prefLabel "public" ;
+  skos:notation "PU"^^oxcap:eligibility-notation ;
+  rdfs:isDefinedBy oxcap: .
+
+oxcap:eligibility-members a oxcap:Eligibility ;
+  skos:prefLabel "members" ;
+  skos:notation "OX"^^oxcap:eligibility-notation ;
+  rdfs:isDefinedBy oxcap: .
+
+oxcap:eligibility-staff a oxcap:Eligibility ;
+  skos:prefLabel "staff" ;
+  skos:notation "ST"^^oxcap:eligibility-notation ;
+  rdfs:isDefinedBy oxcap: .
+

@@ -64,7 +64,7 @@ if settings.STAGING:
     original_doc_forwards = uri.doc_forwards
     def new_doc_forwards(*args, **kwargs):
         urls = original_doc_forwards(*args, **kwargs)
-        return uri.DocURLs(urls._base.split(':/', 1)[-1], urls._format_pattern.split(':/', 1)[-1])
+        return uri.DocURLs('/'+urls._base.split('//', 1)[-1], '/'+urls._format_pattern.split('//', 1)[-1])
     uri.doc_forwards = new_doc_forwards
 
     from humfrey.desc.views import IdView, DocView
