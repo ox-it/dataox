@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Vacancies</title>
+    <meta charset="utf-8">
+    <link rel="alternate" type="application/rss+xml" href="/feeds/all-vacancies/31337175.rss">
+    <style>
+      body { font-family: sans-serif; }
+      td, th { border: 1px solid #aaa; padding: 5px; }
+      table { border: 1px solid #888; border-collapse: collapse }
+      ul { padding-left: 0; list-style: none }
+      .vacancy { margin: 1em 0; }
+      .vacancy-title { margin-bottom: 0; }
+      .vacancy-byline { font-size: 80%; font-style: italic; margin-top: 0; margin-bottom: 0.5em; }
+    </style>
+    <script type="text/javascript" src="https://static.data.ox.ac.uk/js/jquery-1.7.2.min.js"></script>
+    <script type="text/javascript">
+      $(function() {
+        var months = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
+        var status = $('div#vacancy-status').html("Loading vacancies&hellip;");
+        $.ajax("https://data.ox.ac.uk/feeds/all-vacancies/31337175.js", {
+          success: function(data) {
+            var ul = $('ul#vacancy-list');
+            var summary = $('table#vacancy-summary');
+            if (data.vacancies.length == 0) {
+              status.text("There are no vacancies at the moment.");
+              return;
+            }
+            for (var i=0; i<data.vacancies.length; i++) {
+              var vacancy = data.vacancies[i];
+              var closes = new Date(vacancy.closes);
+              var closesFormatted = closes.getDate() + " " + months[closes.getMonth()] + " " + closes.getFullYear() + ", " + closes.getHours() + ":" + (closes.getMinutes() < 10 ? "0" : "") + closes.getMinutes();
+              summary.append($('<tr/>').append($('<td/>').append($('<a/>').attr('href', '#vacancy-'+vacancy.id)
+                                                                          .text(vacancy.label)))
+                                       .append($('<td/>').text(closesFormatted))
+                                       .append($('<td/>').text(vacancy.salary.label)));
+              ul.append($('<li/>').addClass('vacancy')
+                                  .attr('id', 'vacancy-'+vacancy.id)
+                                  .append($('<h2/>').addClass('vacancy-title')
+                                                    .append($('<a/>').attr('href', vacancy.webpage)
+                                                                     .text(vacancy.label)))
+                .append($('<div class="vacancy-byline"/>').text("Closes: " + closesFormatted + "; " + vacancy.salary.label))
+                .append($(vacancy.html_description)));
+            }
+            status.hide();
+            summary.show();
+            ul.show();
+          },
+          dataType: 'jsonp'
+        });
+      });
+    </script>
+  </head>
+  <body>
+    <h1>Jobs</h1>
+
+    <div id="vacancy-status"></div>
+
+    <table style="display: none" id="vacancy-summary">
+      <thead>
+        <tr>
+          <th>Title</th>
+          <th>Closing date</th>
+          <th>Salary</th>
+        </tr>
+      </thead>
+      <tbody>
+      </tbody>
+    </table>
+
+    <ul style="display: none" id="vacancy-list"></ul>
+
+    <noscript>
+      <p>
+        You need JavaScript enabled to see vacancies on this page. However, you
+        can view them without JavaScript at
+        <a href="https://data.ox.ac.uk/feeds/all-vacancies/31337175">data.ox.ac.uk</a>.
+      </p>
+    </noscript>
+  </body>
+</html>
