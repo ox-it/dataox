@@ -115,3 +115,13 @@ If you notice that a job hasn't appeared, search for the vacancy ID at
 https://data.ox.ac.uk/search/ to make sure it's been ingested. If it
 has — and has been matched wrongly — contact opendata@oucs.ox.ac.uk to
 get it fixed.
+
+
+Examples of this dataset in use
+-------------------------------
+
+A number of departments are currently using vacancy feeds:
+
+* `Department of Oncology <http://www.oncology.ox.ac.uk/opportunities>`_
+* `Gray Institute for Radiation Oncology and Biology <http://www.rob.ox.ac.uk/opportunities>`_
+* `IT Services <http://www.it.ox.ac.uk/about/jobs/>`_
