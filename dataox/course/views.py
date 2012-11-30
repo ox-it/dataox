@@ -125,7 +125,7 @@ class CatalogDetailView(CourseView, sparql_views.CannedQueryView, RDFView, Conte
             ?catalog skos:member+ ?course .
             ?course a xcri:course .
             OPTIONAL {
-              ?course dcterms:subject/skos:related?/skos:broader* ?subject
+              ?course dcterms:subject/skos:related?/(^skos:narrower|skos:broader)* ?subject
             } .
             OPTIONAL {
               ?course mlo:specifies ?presentation .
