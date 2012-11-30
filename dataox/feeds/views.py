@@ -25,12 +25,11 @@ class FeedView(HTMLView, JSONPView):
     link = None
     description = None
     template_name = None
-    context = {}
     
     def get(self, request, *args, **kwargs):
         self.base_location, self.content_location = self.get_locations(request, *args, **kwargs)
         
-        context = self.context.copy()
+        context = self.context
         context.update({'title': self.title,
                         'link': self.link,
                         'description': self.description,
