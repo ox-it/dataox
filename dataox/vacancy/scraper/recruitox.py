@@ -8,6 +8,7 @@ import urllib
 import urllib2
 import urlparse
 
+import dateutil.parser
 from lxml import etree
 import pytz
 
@@ -74,6 +75,14 @@ class RecruitOxScraper(Scraper):
                 self.import_vacancy(vacancy_id)
             except Exception:
                 logger.exception("Unable to parse vacancy %r", vacancy_id)
+
+        # If vacancies have disappeared, say that they've just closed.
+        now = self.site_timezone.localize(datetime.datetime.now()).replace(microsecond=0)
+        for vacancy in Vacancy.objects.all():
+            closes = dateutil.parser.parse(vacancy.closing_date)
+            if closes > now and vacancy.id not in vacancy_identifiers:
+                vacancy.closing_date = now.isoformat()
+                vacancy.save()
 
     def get_vacancy_identifiers(self):
         vacancy_identifiers = set()
