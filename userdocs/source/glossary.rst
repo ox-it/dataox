@@ -69,13 +69,17 @@ Glossary
       <http://jena.apache.org/documentation/query/index.html>`_.
 
    triple
-      An atom of information in `RDF <Resource Description Framework>`.
+      An atom of information in `RDF <Resource Description Framework>`. A
+      triple consists of a subject, predicate and object, such as "Alice (S)
+      knows (P) Bob (O)". These units of information are then composed to
+      produce 
 
    triple store
-      A triple store is a database for storing RDF
+      A triple store is a database for storing RDF. See the `Wikipedia article
+      <http://en.wikipedia.org/wiki/Triplestore>`_ for more information.
 
    Turtle
-      An :term:`RDF serialization`
+      An :term:`RDF serialization`, 
 
    vocabulary
       A set of :term:`URI` terms that have a commonly-understood interpretation
