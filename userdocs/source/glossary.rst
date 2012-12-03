@@ -132,6 +132,14 @@ Glossary
       article <http://en.wikipedia.org/wiki/Turtle_%28syntax%29>`_ for a more
       in-depth explanation.
 
+   URI
+      In RDF, URIs (Uniform Resource Identifiers) are used to refer to both
+      documents on the web (web pages, images, etc) and things. By each being
+      globally unique we are able to create a commonly vocabulary in which to
+      describe the world around us. See the Wikipedia section on `resource
+      identification <http://en.wikipedia.org/wiki/Resource_Description_Format#Resource_identification>`_
+      for more information.
+
    vocabulary
       A set of :term:`URI` terms that have a commonly-understood interpretation
       and so can be used to describe things in RDF. A vocabulary generally
