@@ -23,6 +23,12 @@ Glossary
       Southampton have put together this `useful guide for beginners
       <http://openorg.ecs.soton.ac.uk/wiki/Linked_Data_Basics_for_Techies>`_.
 
+   N-Triples
+      A simple :term:`RDF serialization`, and a subset of :term:`Turtle` (i.e.
+      every N-Triples file is also valid Turtle). Often used for streaming RDF
+      data between systems. See `the Wikipedia page
+      <http://en.wikipedia.org/wiki/N-Triples>`_ for more information.
+
    open data stars
       The stars represent the extent to which a dataset is part of the linked
       open data web. These were the definitions used by Tim Berners-Lee during
@@ -62,6 +68,11 @@ Glossary
 
    RDF
       See :term:`Resource Description Framework`.
+
+   RDF/JSON
+      A serialization of RDF into JSON. See `the documentation
+      <http://docs.api.talis.com/platform-api/output-types/rdf-json>`_
+      for more information.
 
    RDF/XML
       A serialization of RDF into XML. Generally not considered pretty, but
@@ -112,11 +123,14 @@ Glossary
       produce 
 
    triple store
-      A triple store is a database for storing RDF. See the `Wikipedia article
+      A triple store is a database for storing RDF. See `the Wikipedia article
       <http://en.wikipedia.org/wiki/Triplestore>`_ for more information.
 
    Turtle
-      An :term:`RDF serialization`, 
+      An :term:`RDF serialization` which is generally found to be
+      more comprehensible to humans than :term:`RDF/XML`. See `the Wikipedia
+      article <http://en.wikipedia.org/wiki/Turtle_%28syntax%29>`_ for a more
+      in-depth explanation.
 
    vocabulary
       A set of :term:`URI` terms that have a commonly-understood interpretation
