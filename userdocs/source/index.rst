@@ -3,8 +3,8 @@
    You can adapt this file completely to your liking, but it should at least
    contain the root `toctree` directive.
 
-Welcome to Open Data Service's documentation!
-=============================================
+Welcome to the Open Data Service's documentation!
+=================================================
 
 The Open Data Service exists to make available institutional data of the
 University of Oxford.
