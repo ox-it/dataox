@@ -22,7 +22,44 @@ Glossary
       If you're just getting started with linked data, the Open Data Team at
       Southampton have put together this `useful guide for beginners
       <http://openorg.ecs.soton.ac.uk/wiki/Linked_Data_Basics_for_Techies>`_.
-   
+
+   open data stars
+      The stars represent the extent to which a dataset is part of the linked
+      open data web. These were the definitions used by Tim Berners-Lee during
+      his `Gov 2.0 talk <http://www.youtube.com/watch?v=ga1aSJXCFe0>`_ in 2010,
+      and have since become widely accepted as an ideal to work towards.
+
+      .. raw:: html
+
+         <table>
+           <tbody>
+             <tr>
+               <td><img src="https://static.data.ox.ac.uk/desc/stars/data-badge-0.png" alt="0 stars"/></td>
+               <td>Data available, but not openly licensed</td>
+             </tr>
+             <tr>
+               <td><img src="https://static.data.ox.ac.uk/desc/stars/data-badge-1.png" alt="1 star"/></td>
+               <td>Put your data on the web with an open license (in any format)</td>
+             </tr>
+             <tr>
+               <td><img src="https://static.data.ox.ac.uk/desc/stars/data-badge-2.png" alt="2 stars"/></td>
+               <td>Make it available in a machine readable format (i.e. no image scans!)</td>
+             </tr>
+             <tr>
+               <td><img src="https://static.data.ox.ac.uk/desc/stars/data-badge-3.png" alt="3 stars"/></td>
+               <td>Use a open, standard format (eg JSON)</td>
+             </tr>
+             <tr>
+               <td><img src="https://static.data.ox.ac.uk/desc/stars/data-badge-4.png" alt="4 stars"/></td>
+               <td>Use an open, linked data format (URIs for everything so people can point to your data)</td>
+             </tr>
+             <tr>
+               <td><img src="https://static.data.ox.ac.uk/desc/stars/data-badge-5.png" alt="5 stars"/></td>
+               <td>Link your data to other people’s data</td>
+             </tr>
+           </tbody>
+         </table>
+
    RDF
       See :term:`Resource Description Framework`.
 
