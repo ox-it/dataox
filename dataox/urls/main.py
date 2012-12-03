@@ -24,7 +24,6 @@ urlpatterns = patterns('',
     (r'^datasets/$', DatasetView.as_view(), {}, 'datasets'),
 
     (r'^contact/$', misc_views.SimpleView.as_view(template_name='contact'), {}, 'contact'),
-    (r'^help/$', misc_views.SimpleView.as_view(template_name='help'), {}, 'help'),
     (r'^legal-and-privacy/$', misc_views.SimpleView.as_view(template_name='legal'), {}, 'legal'),
     (r'^forbidden/$', misc_views.SimpleView.as_view(template_name='forbidden', context={'status_code': 403}), {}, 'forbidden'),
 
