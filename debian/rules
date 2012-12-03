@@ -8,9 +8,8 @@
 
 override_dh_clean:
 	dh_clean
-	rm -rf build
+	rm -rf build userdocs/build
 
-override_dh_build:
-	dh_build
+override_dh_installdocs:
 	(cd userdocs ; make html)
-
+	dh_installdocs userdocs/build/html/
