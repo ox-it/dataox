@@ -3,6 +3,7 @@ Section: python
 Priority: extra
 Maintainer: Alexander Dutton <alexander.dutton@it.ox.ac.uk>
 Build-Depends: debhelper (>= 7.0.50~),
+               python-sphinx,
                python-all,
                python-support
 #               python-django-humfrey

@@ -1,12 +1,15 @@
 #!/usr/bin/make -f
 
 %:
-	dh $@ --with python2
+	dh $@ --with python2, sphinxdoc
 
 #override_dh_auto_test:
 #	django-admin test --settings=humfrey.tests.settings --pythonpath=.
 
 override_dh_clean:
 	dh_clean
-	rm -rf build
+	rm -rf build userdocs/build
 
+override_dh_installdocs:
+	(cd userdocs ; make html)
+	dh_installdocs userdocs/build/html/

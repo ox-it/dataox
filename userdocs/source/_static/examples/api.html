@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html lang="en-GB">
+  <head>
+    <meta charset="UTF-8">
+    <title>data.ox.ac.uk JavaScript API Demo 1.0</title>
+    <link rel="stylesheet" type="text/css" href="jquery-ui/css/smoothness/jquery-ui-1.8.22.custom.css">
+
+    <style type="text/css">
+      div.place-metadata h3 { margin-bottom: 0; }
+      div.place-metadata div.place-address { margin-top: 0; }
+      section { padding: 0.5em; margin: 0.5em; border: 1px solid #aaa; border-radius: 0.5em; width: 500px; float:left; height: 300px}
+
+      /* Prettify the layer switcher */
+      .olControlLayerSwitcher { font-size: 8pt !important; width: auto !important; top: 0 !important; }
+      .olControlLayerSwitcher .layersDiv {
+        background-color: rgba(0, 35, 60, 0.6) !important;
+        -webkit-border-top-left-radius: 3px;
+        -webkit-border-bottom-left-radius: 5px;
+        -moz-border-radius-topleft: 5px;
+        -moz-border-radius-bottomleft: 5px;
+        border-top-left-radius: 5px;
+        border-bottom-left-radius: 5px;
+      }
+      .olControlLayerSwitcher input { margin: 0 3px 0 0 !important; }
+      .olControlLayerSwitcher label { vertical-align: top !important; }
+
+      /* Tidy the attribution control into the corner */
+      .olControlAttribution { right: 0 !important; bottom: 0 !important; background-color: rgba(255, 255, 255, 0.8); font-size: 7pt !important; padding: 1px; font-family: sans-serif; }
+    </style>
+
+    <script type="text/javascript" src="https://static.data.ox.ac.uk/js/jquery-1.7.2.min.js"></script>
+    <script type="text/javascript" src="https://static.data.ox.ac.uk/jquery-ui/js/jquery-ui-1.8.22.custom.min.js"></script>
+    <script type="text/javascript" src="https://static.data.ox.ac.uk/OpenLayers-2.12/OpenLayers.js"></script>
+    <script src="https://maps.google.com/maps/api/js?v=3.2&amp;sensor=false"></script>
+    <script type="text/javascript" src="https://static.data.ox.ac.uk/api-1.0.js"></script>
+  </head>
+  <body data-dataox-sparql-url="/data.ox.ac.uk/sparql/">
+    <h1>data.ox.ac.uk JavaScript API Demo 1.0</h1>
+
+    <!-- <div style="-moz-column-count: 2; -webkit-column-count: 2; column-count: 2;"> -->
+
+    <section>
+      <h2>Auto-completing places</h2>
+      <input class="dataox-autocomplete" data-autocomplete-type="spatial-thing">
+    </section>
+
+    <section>
+      <h2>Auto-completing organizations</h2>
+      <input class="dataox-autocomplete" data-autocomplete-type="organization">
+    </section>
+
+    <section>
+      <h2>Auto-completing places, using metadata</h2>
+      <!-- Note: this one has no dataox-autocomplete class as we'll do everything in JavaScript -->
+      <input id="autocomplete-with-callback" data-autocomplete-type="spatial-thing">
+      <div id="autocomplete-with-callback-metadata"></div>
+      <script type="text/javascript">
+        $(function() {
+        	dataox.autocomplete("autocomplete-with-callback", {
+        		select: function(event, ui) {
+        			var dl = $('<dl>');
+        			var metadata = $('#autocomplete-with-callback-metadata').empty().append(dl);
+        			if (ui.item.address) {
+        				var address = [ui.item.address.containerLabel, ui.item.address.street, ui.item.address.extended, ui.item.address.locality, ui.item.address.postCode, ui.item.address.countryName];
+        				for (var i=address.length-1; i>=0; i--)
+        					if (!address[i]) address.splice(i, 1);
+        				dl.append($('<dt>').text('Address:'))
+        				  .append($('<dd>').html(address.join('<br>')));
+        			}
+        			if (ui.item.estates) {
+        				dl.append($('<dt>').text('Estates code:'))
+      				      .append($('<dd>').text(ui.item.estates));
+        			}
+        		}
+        	});
+        });
+      </script>
+    </section>
+
+    <section>
+      <h2>Simple map (just latitude/longitude)</h2>
+      <div class="dataox-map" data-lon="-1.2" data-lat="51.76" style="width:200px; height: 200px"></div>
+    </section>
+
+    <section>
+      <h2>Simple map with zoom (just latitude/longitude)</h2>
+      <div class="dataox-map" data-lon="-1.2" data-lat="51.76" data-zoom="10" style="width:200px; height: 200px"></div>
+    </section>
+
+    <section>
+      <h2>Map of a place with OxPoints ID</h2>
+      <div class="dataox-map" data-oxpoints-id="40002001" style="width:200px; height: 200px"></div>
+    </section>
+
+    <section>
+      <h2>Map of lots of places with OxPoints IDs</h2>
+      <div class="dataox-map" data-oxpoints-ids="40002001 23233672 23233665" style="width:200px; height: 200px"></div>
+    </section>
+
+    <section>
+      <h2>Map of colleges (organizations) with OxPoints IDs</h2>
+      <div class="dataox-map" data-oxpoints-ids="23232373 23232416 23232466" style="width:200px; height: 200px"></div>
+    </section>
+
+    <section>
+      <h2>Map of all PPHs using a selector</h2>
+      <!-- data-selector takes a SPARQL graph pattern which should bind the variable "?uri".
+           This could be more complicated, e.g. "?uri oxp:hasEstatesIdentifier ?estates", to
+           find everything with an estates ID (mostly buildings and rooms). -->
+      <div class="dataox-map" data-selector="?uri a oxp:Hall" style="width:200px; height: 200px"></div>
+    </section>
+
+    <section>
+      <h2>Everywhere occupied by an organization</h2>
+      <!-- The default for site-predicate is "org:hasPrimarySite"; "org:hasSite" provides links to
+           everywhere occupied by an organization, not just the primary location -->
+      <div class="dataox-map" data-oxpoints-id="31337175" data-site-predicate="org:hasSite" style="width:200px; height: 200px"></div>
+    </section>
+
+    <section>
+      <h2>Map with OxPoints IDs and callback</h2>
+      <!-- Note: this one doesn't have a dataox-map class, as we'll apply 'mappiness' from JavaScript -->
+      <div id="with-oxpoints-ids-and-callback" data-oxpoints-ids="40002001 23233672 23233665" style="width:200px; height: 200px; float: left"></div>
+      <div id="with-oxpoints-ids-and-callback-metadata" style="margin-left: 220px"></div>
+      <script type="text/javascript">
+        $(function() {
+        	dataox.map("with-oxpoints-ids-and-callback", {
+        		complete: function(options) {
+        			var metadata = $('#with-oxpoints-ids-and-callback-metadata');
+        			for (var i=0; i<options.places.length; i++) {
+        				var place = options.places[i];
+        				// If the place has the same name as the first line of the address, don't show the first line.
+        				if (place.address.length && place.address[0] == place.label)
+        					place.address.splice(0, 1);
+        				metadata.append($('<div/>').addClass("place-metadata")
+        										   .append($('<h3>').text(place.label))
+        										   .append($('<div>').addClass("place-address")
+        												   			 .html(place.address.join('<br>'))));
+        			} 
+        		}
+        	});
+        });
+      </script>
+    </section>
+    
+    <section>
+      <h2>Map with choice of layers</h2>
+      <!-- Note that we've overridden the CSS (see top) to make it more useful on small maps.
+           If you want to use Google Layers, you need to include the Google Maps JS, version 3. -->
+      <div class="dataox-map" data-oxpoints-id="40002001" data-layers="google-streets openstreetmap google-satellite google-hybrid google-physical opencyclemap transport mapquest-open" style="width:200px; height: 200px"></div>
+    </section>
+
+    <!-- </div> -->
+  </body>
+</html>

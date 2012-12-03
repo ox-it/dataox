@@ -34,7 +34,7 @@
       <p class="title">Open Data about the University of Oxford</p>
       <p>data.ox.ac.uk</p>
       {% endblock %}
-      <a href="{% host_url help on data %}#beta"><img src="{{ STATIC_URL }}beta.png" alt="beta" title="data.ox.ac.uk is currently in beta" id="beta-badge"/></a>
+      <a href="https://docs.data.ox.ac.uk/overview.html#service-status"><img src="{{ STATIC_URL }}beta.png" alt="beta" title="data.ox.ac.uk is currently in beta" id="beta-badge"/></a>
     </header>
     
     <nav>
@@ -44,7 +44,7 @@
         <li><a href="{% host_url datasets on data  %}">datasets</a></li>
         <li><a href="{% host_url explore on data  %}">explore</a></li>
         <li><a href="{% host_url sparql:endpoint on data  %}">sparql</a></li>
-        <li><a href="{% host_url help on data  %}">help</a></li>
+        <li><a href="https://docs.data.ox.ac.uk/">documentation</a></li>
         <li><a href="{% host_url contact on data  %}">contact</a></li>
 {% endblock %}
       </ul>
