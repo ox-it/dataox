@@ -80,7 +80,7 @@ class RecruitOxScraper(Scraper):
         now = self.site_timezone.localize(datetime.datetime.now()).replace(microsecond=0)
         for vacancy in Vacancy.objects.all():
             closes = dateutil.parser.parse(vacancy.closing_date)
-            if closes > now and vacancy.id not in vacancy_identifiers:
+            if closes > now and vacancy.vacancy_id not in vacancy_identifiers:
                 vacancy.closing_date = now.isoformat()
                 vacancy.save()
 
