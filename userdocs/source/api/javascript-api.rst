@@ -11,6 +11,11 @@ The JavaScript API provides simple support for:
 The API uses annotations on HTML elements to work out what to do, meaning that
 for simple cases you don't need to write any JavaScript of your own. 
 
+.. note::
+
+   To show you what the API's capable of, we've built `a demonstation page
+   <../_static/examples/api.html>`_.
+
 Getting started
 ---------------
 
@@ -34,13 +39,6 @@ If you don't intend to use the auto-completion you can omit ``jquery-ui``, and
 if you're not going to be displaying maps, you can omit ``OpenLayers``. If
 you'd prefer to use another version of jQuery or jQuery UI you should be aware
 that we can't guarantee compatibility.
-
-.. warning::
-
-   At the moment the API only supports OpenLayers and OpenStreetMap for
-   displaying maps. If you'd like support for Google Maps, :doc:`contact us
-   </contact>` and ask, or `submit a pull request on GitHub
-   <https://github.com/ox-it/dataox/blob/master/dataox/static/api-1.0.js>`_.
 
 Displaying maps
 ---------------
@@ -76,6 +74,16 @@ Here's another example:
 The first parameter to ``dataox.map()`` can be either an element ID, an HTML
 DOM element, or a jQuery object. The second parameter is a JavaScript object
 with ``lon`` and ``lat`` attributes, and optionally a ``zoom`` parameter.
+
+Using OxPoints IDs
+~~~~~~~~~~~~~~~~~~
+
+If you know the OxPoints IDs of some places you want to show, you can specify
+them as an attribute, and the API will look them up:
+
+.. code-block:: html
+
+   <div class="dataox-map" data-oxpoints-ids="23232373 40002001" style="width:300px; height:300px"></div>
 
 
 Performing SPARQL queries
@@ -118,4 +126,8 @@ Here's an example, using data from the :doc:`vacancy dataset </datasets/vacancy>
 callback as its second. The callback will receive a JavaScript object
 containing the results as `SPARQL Results JSON
 <http://www.w3.org/TR/rdf-sparql-json-res/>`_.
+
+For convenience, this function also sends the ``common_prefixes`` parameter,
+which means you don't need to specify prefixes for a lot of prefixes.
+
 
