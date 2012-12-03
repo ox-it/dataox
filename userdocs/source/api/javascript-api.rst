@@ -5,8 +5,9 @@ The JavaScript API provides simple support for:
 
 * Displaying maps
 * :doc:`SPARQL queries </api/sparql>`
-* :doc:`Searching </api/search>`
 * :doc:`Auto-completion </api/autocomplete>`
+
+.. And not yet: * :doc:`Searching </api/search>`
 
 The API uses annotations on HTML elements to work out what to do, meaning that
 for simple cases you don't need to write any JavaScript of your own. 
@@ -129,5 +130,3 @@ containing the results as `SPARQL Results JSON
 
 For convenience, this function also sends the ``common_prefixes`` parameter,
 which means you don't need to specify prefixes for a lot of prefixes.
-
-
