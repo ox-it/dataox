@@ -9,6 +9,13 @@ from humfrey.elasticsearch import views as elasticsearch_views
 
 from dataox.core.views import DatasetView, ExploreView, ExampleDetailView, ExampleResourceView, ExampleQueryView
 
+search_args = {'opensearch_meta': {'ShortName': 'data.ox.ac.uk',
+                                   'LongName': 'Open Data Service',
+                                   'Description': 'Linked Open Data about the University of Oxford',
+                                   'Contact': 'opendata@oucs.ox.ac.uk',
+                                   'SyndicationRight': 'open'},
+               'opensearch_images': [{'url': 'https://static.data.ox.ac.uk/favicon.ico'}]}
+
 urlpatterns = patterns('',
     (r'^$', misc_views.FeedView.as_view(rss_url='http://blogs.oucs.ox.ac.uk/opendata/feed/',
                                         template_name='index'), {}, 'index'),
@@ -19,7 +26,7 @@ urlpatterns = patterns('',
     (r'^doc/$', desc_views.DocView.as_view(), {}, 'doc-generic'),
     (r'^desc/$', desc_views.DescView.as_view(), {}, 'desc'),
 
-    url(r'^search/$', elasticsearch_views.SearchView.as_view(), name='search'),
+    url(r'^search/$', elasticsearch_views.SearchView.as_view(**search_args), name='search'),
 
     (r'^datasets/$', DatasetView.as_view(), {}, 'datasets'),
 
