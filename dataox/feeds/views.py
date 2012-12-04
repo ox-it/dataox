@@ -25,7 +25,7 @@ class FeedView(HTMLView, JSONPView):
     link = None
     description = None
     template_name = None
-    
+
     def get(self, request, *args, **kwargs):
         self.base_location, self.content_location = self.get_locations(request, *args, **kwargs)
         
@@ -124,6 +124,13 @@ class VacancyView(FeedView, RDFView, StoreView, MappingView):
 
     all = False
 
+    def preprocess_context_for_json(self, context):
+        del context['items']
+        del context['title']
+        del context['description']
+        del context['subjects']
+        return context
+
     @property
     def reverse_name(self):
         return 'feeds:all-vacancies' if self.all else 'feeds:vacancies'
@@ -157,7 +164,7 @@ DESCRIBE ?vacancy ?organizationPart ?location ?address ?contact ?phone ?salary {
   VALUES ?vacancy {{ {vacancies} }} .
   {{ }}
   UNION
-  {{ ?vacancy oo:organizationPart ?organizationPart
+  {{ ?vacancy oo:organizationPart|oo:formalOrganization ?organizationPart
      OPTIONAL {{ ?organizationPart v:adr ?address }} }}
   UNION
   {{ ?vacancy foaf:based_near ?location

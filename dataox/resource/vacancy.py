@@ -68,21 +68,23 @@ class Vacancy(object):
                    ('organizationPart', 'oo:organizationPart'),
                    ('basedNear', 'foaf:based_near'))
         for key, predicate in related:
-            obj = self.get(predicate)
-            if not obj:
-                continue
-            vacancy[key] = {'label': obj.label,
-                            'uri': obj.uri,
-                            'url': obj.doc_url,
-                            'webpage': obj.foaf_homepage}
-            adr = obj.get('v:adr')
-            if adr:
-                vacancy[key]['address'] = {'streetAddress': adr.get('v:street-address'),
-                                           'extendedtAddress': adr.get('v:extended-address'),
-                                           'locality': adr.get('v:locality'),
-                                           'postalCode': adr.get('v:postal-code')}
-            if obj.get('geo:lat') and obj.get('geo:long'):
-                vacancy[key]['location'] = {'lat': obj.get('geo:lat'),
-                                            'long': obj.get('geo:long')}
+            for obj in self.get_all(predicate):
+                data = {'label': obj.label,
+                        'uri': obj.uri,
+                        'url': obj.doc_url,
+                        'webpage': obj.foaf_homepage}
+                adr = obj.get('v:adr')
+                if adr:
+                    data['address'] = {'streetAddress': adr.get('v:street-address'),
+                                       'extendedtAddress': adr.get('v:extended-address'),
+                                       'locality': adr.get('v:locality'),
+                                       'postalCode': adr.get('v:postal-code')}
+                if obj.get('geo:lat') and obj.get('geo:long'):
+                    data['location'] = {'lat': obj.get('geo:lat'),
+                                        'long': obj.get('geo:long')}
+
+                if key not in vacancy:
+                    vacancy[key] = []
+                vacancy[key].append(data)
 
         return vacancy

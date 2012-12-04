@@ -9,8 +9,8 @@
     <closes>{{ vacancy.closes }}</closes>{% endif %}{% if vacancy.location %}
     <location>{{ vacancy.location }}</location>{% endif %}{% if vacancy.html_description  %}
     <description format="application/xhtml+xml">{{ vacancy.html_description }}</description>{% endif %}{% if vacancy.text_description  %}
-    <description format="text/plain">{{ vacancy.text_description }}</description>{% endif %}
-    <organizationPart>{% with vacancy.organizationPart as orgPart %}
+    <description format="text/plain">{{ vacancy.text_description }}</description>{% endif %}{% for orgPart in vacancy.organizationPart %}
+    <organizationPart>
       <uri>{{ orgPart.uri }}</uri>
       <url>{{ orgPart.url }}</url>{% if orgPart.webpage %}
       <webpage>{{ orgPart.webpage }}</webpage>{% endif %}
@@ -21,11 +21,23 @@
         <locality>{{ adr.locality }}</locality>{% endif %}{% if adr.postalCode %}
         <postal-code>{{ adr.postalCode }}</postal-code>{% endif %}
       </address>{% endif %}{% endwith %}
-    {% endwith %}</organizationPart>{% with vacancy.basedNear as basedNear %}{% if basedNear %}
+    </organizationPart>{% endfor %}{% for formalOrganization in vacancy.formalOrganization %}
+    <formalOrganization>
+      <uri>{{ formalOrganization.uri }}</uri>
+      <url>{{ formalOrganization.url }}</url>{% if orgPart.webpage %}
+      <webpage>{{ formalOrganization.webpage }}</webpage>{% endif %}
+      <label>{{ formalOrganization.label }}</label>{% with formalOrganization.address as adr %}{% if adr %}
+      <address>{% if adr.streetAddress %}
+        <street-address>{{ adr.streetAddress }}</street-address>{% endif %}{% if adr.extendedAddress %}
+        <extended-address>{{ adr.extendedAddress }}</extended-address>{% endif %}{% if adr.locality %}
+        <locality>{{ adr.locality }}</locality>{% endif %}{% if adr.postalCode %}
+        <postal-code>{{ adr.postalCode }}</postal-code>{% endif %}
+      </address>{% endif %}{% endwith %}
+    </formalOrganization>{% endfor %}{% for basedNear in vacancy.basedNear %}
     <basedNear>
       <uri>{{ basedNear.uri }}</uri>
-      <url>{{ basedNear.uri }}</url>
-      <webpage>{{ basedNear.webpage }}</webpage>
+      <url>{{ basedNear.uri }}</url>{% if basedNear.webpage %}
+      <webpage>{{ basedNear.webpage }}</webpage>{% endif %}
       <label>{{ basedNear.label }}</label>{% with basedNear.address as adr %}{% if adr %}
       <address>{% if adr.streetAddress %}
         <street-address>{{ adr.streetAddress }}</street-address>{% endif %}{% if adr.extendedAddress %}
@@ -37,7 +49,7 @@
         <lat>{{ basedNear.location.lat }}</lat>
         <long>{{ basedNear.location.long }}</long>
       </location>{% endif %}
-    </basedNear>{% endif %}{% endwith %}{% with vacancy.salary as salary %}{% if salary %}
+    </basedNear>{% endfor %}{% with vacancy.salary as salary %}{% if salary %}
     <salary>
       <label>{{ salary.label }}</label>{% if salary.grade %}
       <grade>{{ salary.grade }}</grade>{% endif %}{% if salary.lower %}
