@@ -133,30 +133,44 @@ class VacancyView(FeedView, RDFView, StoreView, MappingView):
 
     @property
     def reverse_name(self):
+        if not self.kwargs.get('oxpoints_id'):
+            return 'feeds:vacancies-all'
         return 'feeds:all-vacancies' if self.all else 'feeds:vacancies'
 
     def first_query(self):
-        return """\
-CONSTRUCT {{
-  ?vacancy a vacancy:Vacancy .
-  ?unit skos:prefLabel ?unitLabel
-}} WHERE {{
-  VALUES ?unit {{ {unit} }} .
-  ?organizationPart org:subOrganizationOf{cardinality} ?unit .
-  OPTIONAL {{ ?unit skos:prefLabel ?unitLabel }}
-  OPTIONAL {{
-    GRAPH <https://data.ox.ac.uk/graph/vacancies/current> {{
-      ?vacancy oo:organizationPart ?organizationPart ; a vacancy:Vacancy .
-    }}
-    ?vacancy vacancy:applicationClosingDate ?closing .
-    FILTER (?closing > now()) .
-    {sparqlFilter}
-  }}
-  FILTER (BOUND(?vacancy) || ?unit = ?organizationPart) .
-  OPTIONAL {{ ?organizationPart skos:prefLabel ?organizationLabel }}
-}}""".format(cardinality='*' if self.all else '{0}',
-             unit=self.unit.n3(),
-             sparqlFilter=self.sparqlFilter)
+        if self.unit:
+            return """\
+    CONSTRUCT {{
+      ?vacancy a vacancy:Vacancy .
+      ?unit skos:prefLabel ?unitLabel
+    }} WHERE {{
+      VALUES ?unit {{ {unit} }} .
+      ?organizationPart org:subOrganizationOf{cardinality} ?unit .
+      OPTIONAL {{ ?unit skos:prefLabel ?unitLabel }}
+      OPTIONAL {{
+        GRAPH <https://data.ox.ac.uk/graph/vacancies/current> {{
+          ?vacancy oo:organizationPart ?organizationPart ; a vacancy:Vacancy .
+        }}
+        ?vacancy vacancy:applicationClosingDate ?closing .
+        FILTER (?closing > now()) .
+        {sparqlFilter}
+      }}
+      FILTER (BOUND(?vacancy) || ?unit = ?organizationPart) .
+      OPTIONAL {{ ?organizationPart skos:prefLabel ?organizationLabel }}
+    }}""".format(cardinality='*' if self.all else '{0}',
+                 unit=self.unit.n3(),
+                 sparqlFilter=self.sparqlFilter)
+        else:
+            return """\
+    CONSTRUCT {
+      ?vacancy a vacancy:Vacancy
+    } WHERE {
+      GRAPH <https://data.ox.ac.uk/graph/vacancies/current> {
+          ?vacancy a vacancy:Vacancy .
+      }
+      ?vacancy vacancy:applicationClosingDate ?closing .
+      FILTER (?closing > now()) .
+    }"""
 
     def second_query(self, vacancies):
         return """\
@@ -178,7 +192,8 @@ DESCRIBE ?vacancy ?organizationPart ?location ?address ?contact ?phone ?salary {
 
     @property
     def unit(self):
-        return rdflib.URIRef('http://oxpoints.oucs.ox.ac.uk/id/{0}'.format(self.kwargs['oxpoints_id']))
+        if 'oxpoints_id' in self.kwargs:
+            return rdflib.URIRef('http://oxpoints.oucs.ox.ac.uk/id/{0}'.format(self.kwargs['oxpoints_id']))
 
     @property
     def sparqlFilter(self):
@@ -190,7 +205,7 @@ DESCRIBE ?vacancy ?organizationPart ?location ?address ?contact ?phone ?salary {
 FILTER (regex(?vacancyLabel, {0}, 'i') || regex(?vacancyComment, {0}, 'i'))""".format(keyword)
         return ""
 
-    def get(self, request, oxpoints_id, format=None):
+    def get(self, request, oxpoints_id=None, format=None):
         self.graph = self.endpoint.query(self.first_query())
         if not self.graph:
             raise Http404
@@ -199,7 +214,7 @@ FILTER (regex(?vacancyLabel, {0}, 'i') || regex(?vacancyComment, {0}, 'i'))""".f
         subjects = [Resource(v, self.graph, self.endpoint) for v in self.graph.subjects(NS.rdf.type, NS.vacancy.Vacancy)]
         subjects.sort(key=lambda v: (v.vacancy_applicationClosingDate, v.label, v.uri))
 
-        self.context.update({'unit': Resource(self.unit, self.graph, self.endpoint),
+        self.context.update({'unit': Resource(self.unit, self.graph, self.endpoint) if self.unit else None,
                              'graph': self.graph,
                              'all': self.all,
                              'subjects': subjects,
@@ -245,11 +260,17 @@ FILTER (regex(?vacancyLabel, {0}, 'i') || regex(?vacancyComment, {0}, 'i'))""".f
     def get_locations(self, request, oxpoints_id, format=None):
         if not format:
             format = request.renderers[0].format
-        return (request.build_absolute_uri(reverse(self.reverse_name, args=[oxpoints_id])),
-                request.build_absolute_uri(reverse(self.reverse_name, args=[oxpoints_id, format])))
+
+        kwargs_generic, kwargs_format = self.kwargs.copy(), self.kwargs.copy()
+        kwargs_generic.pop('format', None)
+        kwargs_format['format'] = format
+        return (request.build_absolute_uri(reverse(self.reverse_name, kwargs=kwargs_generic)),
+                request.build_absolute_uri(reverse(self.reverse_name, kwargs=kwargs_format)))
 
     def url_for_format(self, request, format):
-        return reverse(self.reverse_name, args=[self.kwargs['oxpoints_id'], format])
+        kwargs = self.kwargs.copy()
+        kwargs['format'] = format
+        return reverse(self.reverse_name, kwargs=kwargs)
 
     @renderer(format='xml', mimetypes=('application/xml', 'text/xml'), name='XML')
     def render_xml(self, request, context, template_name):

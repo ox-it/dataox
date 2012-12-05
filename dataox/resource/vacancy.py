@@ -72,7 +72,8 @@ class Vacancy(object):
                 data = {'label': obj.label,
                         'uri': obj.uri,
                         'url': obj.doc_url,
-                        'webpage': obj.foaf_homepage}
+                        'webpage': obj.foaf_homepage,
+                        'logo': obj.foaf_logo}
                 adr = obj.get('v:adr')
                 if adr:
                     data['address'] = {'streetAddress': adr.get('v:street-address'),

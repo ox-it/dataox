@@ -3,7 +3,7 @@
 {% block title %}Vacancies within {{ unit.label }}{% endblock %}
 
 {% block content %}
-  <h1>{% if all %}All v{% else %}V{% endif %}acancies within {{ unit|node }}</h1>
+  <h1>{% if unit %}{% if all %}All v{% else %}V{% endif %}acancies within {{ unit|node }}{% else %}All vacancies{% endif %}</h1>
   
     <aside class="toolbox">
     <section class="page-metadata">
@@ -23,7 +23,7 @@
   </aside>
   
   {% if items %}
-  <p>There are currently {{ items|length }} vacancies within {{ unit.label }}{% if keyword %} that mention '<strong>{{ keyword }}</strong>'{% endif %}:</p>
+  <p>There are currently {{ items|length }} vacancies{% if unit %} within {{ unit.label }}{% if keyword %} that mention '<strong>{{ keyword }}</strong>'{% endif %}{% endif %}:</p>
   
   <table class="sparql-results">
     <thead>
