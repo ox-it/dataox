@@ -13,7 +13,8 @@
     <organizationPart>
       <uri>{{ orgPart.uri }}</uri>
       <url>{{ orgPart.url }}</url>{% if orgPart.webpage %}
-      <webpage>{{ orgPart.webpage }}</webpage>{% endif %}
+      <webpage>{{ orgPart.webpage }}</webpage>{% endif %}{% if orgPart.logo %}
+      <logo>{{ formalOrganization.logo }}</logo>{% endif %}
       <label>{{ orgPart.label }}</label>{% with orgPart.address as adr %}{% if adr %}
       <address>{% if adr.streetAddress %}
         <street-address>{{ adr.streetAddress }}</street-address>{% endif %}{% if adr.extendedAddress %}
@@ -24,8 +25,9 @@
     </organizationPart>{% endfor %}{% for formalOrganization in vacancy.formalOrganization %}
     <formalOrganization>
       <uri>{{ formalOrganization.uri }}</uri>
-      <url>{{ formalOrganization.url }}</url>{% if orgPart.webpage %}
-      <webpage>{{ formalOrganization.webpage }}</webpage>{% endif %}
+      <url>{{ formalOrganization.url }}</url>{% if formalOrganization.webpage %}
+      <webpage>{{ formalOrganization.webpage }}</webpage>{% endif %}{% if formalOrganization.logo %}
+      <logo>{{ formalOrganization.logo }}</logo>{% endif %}
       <label>{{ formalOrganization.label }}</label>{% with formalOrganization.address as adr %}{% if adr %}
       <address>{% if adr.streetAddress %}
         <street-address>{{ adr.streetAddress }}</street-address>{% endif %}{% if adr.extendedAddress %}
@@ -36,7 +38,7 @@
     </formalOrganization>{% endfor %}{% for basedNear in vacancy.basedNear %}
     <basedNear>
       <uri>{{ basedNear.uri }}</uri>
-      <url>{{ basedNear.uri }}</url>{% if basedNear.webpage %}
+      <url>{{ basedNear.url }}</url>{% if basedNear.webpage %}
       <webpage>{{ basedNear.webpage }}</webpage>{% endif %}
       <label>{{ basedNear.label }}</label>{% with basedNear.address as adr %}{% if adr %}
       <address>{% if adr.streetAddress %}
