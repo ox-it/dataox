@@ -54,3 +54,16 @@
 
 :staff a foaf:Group, gr:BusinessEntityType ;
   foaf:name "staff of the University of Oxford" .
+
+:itss a foaf:Group, gr:BusinessEntityType ;
+  foaf:name "IT Support Staff of the University of Oxford" .
+
+:staff-retired a foaf:Group, gr:BusinessEntityType ;
+  foaf:name "retired staff of the University of Oxford" .
+
+:staff-administrative a foaf:Group, gr:BusinessEntityType ;
+  foaf:name "administrative staff of the University of Oxford" .
+
+:staff-research a foaf:Group, gr:BusinessEntityType ;
+  foaf:name "research staff of the University of Oxford" .
+
