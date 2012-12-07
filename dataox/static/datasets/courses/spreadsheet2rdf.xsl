@@ -214,7 +214,7 @@
   </xsl:template>
 
   <xsl:template match="provider-url" mode="in-provider">
-    <foaf:homepage rdf:resource="{.}"/>
+    <foaf:homepage rdf:resource="{normalize-space(.)}"/>
   </xsl:template>
 
 
@@ -385,9 +385,9 @@
   </xsl:template>
   
   <xsl:template match="course-url" mode="in-course">
-    <foaf:page rdf:resource="{.}"/>
-    <xsl:if test="not(public-apply-to/text())">
-      <xcri:applyTo rdf:resource="{.}"/>
+    <foaf:page rdf:resource="{normalize-space(.)}"/>
+    <xsl:if test="not(../public-apply-to/text())">
+      <xcri:applyTo rdf:resource="{normalize-space(.)}"/>
     </xsl:if>
   </xsl:template>
 
