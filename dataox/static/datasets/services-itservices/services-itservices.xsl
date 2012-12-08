@@ -18,7 +18,7 @@
   <xsl:output method="xml" indent="yes"/>
 
   <xsl:variable name="service-base-uri">https://data.ox.ac.uk/id/itservices/</xsl:variable>
-  <xsl:variable name="group-base-uri">https://data.ox.ac.uk/id/group/membership/</xsl:variable>
+  <xsl:variable name="group-base-uri">https://data.ox.ac.uk/id/group/unit-member/</xsl:variable>
   <xsl:variable name="it-services">http://oxpoints.oucs.ox.ac.uk/id/31337175</xsl:variable>
   <xsl:variable name="university-of-oxford">http://oxpoints.oucs.ox.ac.uk/id/00000000</xsl:variable>
 
