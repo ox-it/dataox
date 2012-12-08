@@ -189,7 +189,7 @@
 
   <xsl:template match="user">
     <xsl:if test="d:ContentType = 'DomainGroup'">
-      <gr:BusinessEntityType rdf:resource="{$group-base-uri}{substring-after(d:Account, 'AD-OAK\group_')}">
+      <gr:BusinessEntityType rdf:about="{$group-base-uri}{substring-after(d:Account, 'AD-OAK\group_')}">
         <rdfs:label>
           <xsl:value-of select="substring-before(d:Name, ' Group')"/>
         </rdfs:label>
