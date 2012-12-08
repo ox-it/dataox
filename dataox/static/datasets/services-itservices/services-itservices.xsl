@@ -126,9 +126,9 @@
     <xsl:variable name="prefix">
       <!-- From page 6 of the Internal Telephone Directory ("Extensions") -->
       <xsl:choose>
-        <xsl:when test="starts-with($extension, '1')">+18656</xsl:when>
-        <xsl:when test="starts-with($extension, '7')">+18652</xsl:when>
-        <xsl:when test="starts-with($extension, '8')">+18652</xsl:when>
+        <xsl:when test="starts-with($extension, '1')">+4418656</xsl:when>
+        <xsl:when test="starts-with($extension, '7')">+4418652</xsl:when>
+        <xsl:when test="starts-with($extension, '8')">+4418652</xsl:when>
       </xsl:choose>
     </xsl:variable>
     <xsl:if test="$prefix">
