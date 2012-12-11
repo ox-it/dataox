@@ -99,6 +99,10 @@
     </xsl:for-each>
   </xsl:template>
 
+  <xsl:template match="field[@name='Service_x0020_URL']/url" mode="in-service">
+    <foaf:homepage rdf:resource="{@href}"/>
+  </xsl:template>
+
   <xsl:template match="field[@name='Documentation_x0020_URL']/url" mode="in-service">
     <adhoc:serviceInformationPage rdf:resource="{@href}"/>
   </xsl:template>
