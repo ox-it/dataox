@@ -7,6 +7,11 @@ by consumers both within and without the University to integrate into services
 that require institutional data, and aggregated to provide cross-institutional
 services.
 
+The Open Data Service does not own or maintain datasets; it is a platform for
+(re-)publishing data that already exist in other systems. The value comes in
+providing links between datasets and providing standardised APIs for querying
+the data within them.
+
 
 Scope
 -----
