@@ -98,7 +98,7 @@ class Vacancy(models.Model):
             triples.append((uri, NS.foaf.homepage, rdflib.URIRef(self.url)))
 
 
-        if self.contact_name or self.contact_email or self.contact_phone:
+        if self.contact_name or self.contact_email or self.phone_uri:
             triples += [(uri, NS.oo.contact, contact_uri),
                         (contact_uri, NS.rdf.type, NS.foaf.Agent)]
         if self.contact_name:
