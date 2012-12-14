@@ -106,7 +106,7 @@ class Vacancy(models.Model):
         # Sometimes we see more than one e-mail address in this field
         for localpart, host in email_re.findall(self.contact_email):
             triples.append((contact_uri, NS.v.email, rdflib.URIRef('mailto:{0}@{1}'.format(localpart, host.lower()))))
-        if self.contact_phone:
+        if self.phone_uri:
             phone_uri = self.phone_uri
             triples += [(contact_uri, NS.v.tel, phone_uri),
                         (phone_uri, NS.rdf.type, NS.v.Voice),
@@ -178,7 +178,8 @@ class Vacancy(models.Model):
         if phone.startswith('0'):
             phone = '+44' + phone[1:]
         phone = ''.join(d for d in phone if d.isdigit() or d == '+')
-        return rdflib.URIRef('tel:' + phone)
+        if phone:
+            return rdflib.URIRef('tel:' + phone)
 
     @property
     def plain_description(self):
