@@ -283,8 +283,12 @@
                 </mlo:places>
               </xsl:if>
             
-            <xsl:if test="group5/group6">
-              <xsl:for-each select="group5/group6">
+            <xsl:for-each select="group5/group6">
+              <xsl:if test="normalize-space(dt_sessionid) and normalize-space(tm_sessionid_starttime)">
+                <!-- Time fields have a date component, presumably the date when the field was updated.
+                     Here, we replace it with the date from dt_sessionid -->
+                <xsl:variable name="start" select="concat(normalize-space(dt_sessionid), 'T', substring-after(normalize-space(tm_sessionid_starttime), 'T'))"/>
+                <xsl:variable name="end" select="concat(normalize-space(dt_sessionid), 'T', substring-after(normalize-space(tm_sessionid_endtime), 'T'))"/>
                 <oxcap:session>
                   <dc:identifier>
                     <xsl:text>https://course.data.ox.ac.uk/id/sharepoint/session/</xsl:text>
@@ -293,15 +297,17 @@
                   <dc:identifier xsi:type="oxnotation:sharepoint-session">
                     <xsl:value-of select="concat($course-identifier, '/', txt_sessionid)"/>
                   </dc:identifier>
-                  <mlo:start dtf="{normalize-space(tm_sessionid_starttime)}">
-                    <xsl:value-of select="format-dateTime(xs:dateTime(tm_sessionid_starttime), '[F] [D] [MNn] [Y] at [H]:[m]')"/>
+                  <mlo:start dtf="{$start}">
+                    <xsl:value-of select="format-dateTime(xs:dateTime($start), '[F] [D] [MNn] [Y] at [H]:[m]')"/>
                   </mlo:start>
-                  <end dtf="{normalize-space(tm_sessionid_endtime)}">
-                    <xsl:value-of select="format-dateTime(xs:dateTime(tm_sessionid_endtime), '[F] [D] [MNn] [Y] at [H]:[m]')"/>
-                  </end>
-                  </oxcap:session>
-                </xsl:for-each>
-            </xsl:if>
+                  <xsl:if test="normalize-space(tm_sessionid_endtime)">
+                    <end dtf="{$end}">
+                      <xsl:value-of select="format-dateTime(xs:dateTime($end), '[F] [D] [MNn] [Y] at [H]:[m]')"/>
+                    </end>
+                  </xsl:if>
+                </oxcap:session>
+              </xsl:if>
+            </xsl:for-each>
             
             </presentation>
             
