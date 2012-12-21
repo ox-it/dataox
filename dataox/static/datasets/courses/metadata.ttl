@@ -19,6 +19,7 @@
 
     dcterms:publisher <http://oxpoints.oucs.ox.ac.uk/id/00000000> ;
     dcterms:description "Upcoming courses from the University of Oxford" ;
+    dcterms:license <http://reference.data.gov.uk/id/open-government-licence> ;
 
     void:vocabulary xcri:, mlo:, dcterms:, v:, foaf:, rdfs:, time: ;
 
