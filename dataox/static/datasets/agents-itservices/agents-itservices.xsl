@@ -147,7 +147,7 @@
 
   <xsl:template match="d:WorkPhone" mode="in-person">
     <v:tel>
-      <v:Voice rdf:resource="tel:+44{substring(., 2)}"/>
+      <v:Voice rdf:about="tel:+44{substring(., 2)}"/>
     </v:tel>
     <adhoc:oxfordExtensionNumber>
       <xsl:value-of select="substring(., 7)"/>
