@@ -13,11 +13,16 @@
     xmlns:v="http://www.w3.org/2006/vcard/ns#"
     xmlns:ex="http://www.example.org/"
     xmlns:d="http://schemas.microsoft.com/ado/2007/08/dataservices"
+    xmlns:m="http://schemas.microsoft.com/ado/2007/08/dataservices/metadata"
     xpath-default-namespace="https://github.com/ox-it/python-sharepoint/"
     version="2.0">
   <xsl:output method="xml" indent="yes"/>
 
+  <xsl:param name="store"/>
+  <xsl:variable name="internal" select="$store='itservices'"/>
+
   <xsl:variable name="service-base-uri">https://data.ox.ac.uk/id/itservices/</xsl:variable>
+  <xsl:variable name="person-base-uri">https://data.ox.ac.uk/id/person/</xsl:variable>
   <xsl:variable name="group-base-uri">https://data.ox.ac.uk/id/group/unit-member/</xsl:variable>
   <xsl:variable name="it-services">http://oxpoints.oucs.ox.ac.uk/id/31337175</xsl:variable>
   <xsl:variable name="university-of-oxford">http://oxpoints.oucs.ox.ac.uk/id/00000000</xsl:variable>
@@ -35,6 +40,26 @@
         <xsl:value-of select="replace(lower-case(normalize-space($term)), '[^a-z0-9]+', '-')"/>
       </xsl:otherwise>
     </xsl:choose>
+  </xsl:function>
+
+  <xsl:function name="ex:agent-uri">
+    <xsl:param name="element"/>
+    <xsl:for-each select="$element">
+      <xsl:variable name="user" select="key('users', @id)"/>
+      <xsl:choose>
+        <xsl:when test="$user/d:ContentType='DomainGroup'">
+          <xsl:value-of select="$group-base-uri"/>
+          <xsl:value-of select="substring-after($user/d:Account, 'AD-OAK\group_')"/>
+        </xsl:when>
+        <xsl:when test="$user/d:ContentType='Person'">
+          <xsl:value-of select="$person-base-uri"/>
+          <xsl:value-of select="$user/d:UserName"/>
+        </xsl:when>
+        <xsl:otherwise>
+          <xsl:message terminate="yes">Unexpected d:ContentType: "<xsl:value-of select="$user/d:ContentType"/>" on user <xsl:value-of select="@id"/>; terminating.</xsl:message>
+        </xsl:otherwise>
+      </xsl:choose>
+    </xsl:for-each>
   </xsl:function>
 
   <xsl:template match="/">
@@ -160,12 +185,14 @@
   </xsl:template>
 
   <xsl:template match="field[@name='Specific_x0020_user_x0020_bases']/user" mode="in-offering">
-    <xsl:variable name="user" select="key('users', @id)"/>
-    <xsl:if test="$user/d:ContentType = 'DomainGroup'">
-      <gr:eligibleCustomerTypes rdf:resource="{$group-base-uri}{substring-after($user/d:Account, 'AD-OAK\group_')}"/>
-    </xsl:if>
+    <gr:eligibleCustomerTypes rdf:resource="{ex:agent-uri(.)}"/>
   </xsl:template>
 
+  <xsl:template match="field[@name='Escalate_x0020_to']/user" mode="in-service">
+    <xsl:if test="$internal">
+      <adhoc:serviceEscalationContact rdf:resource="{ex:agent-uri(.)}"/>
+    </xsl:if>
+  </xsl:template>
 
   <xsl:template match="list[@name='Service activity categories']/rows">
     <skos:ConceptScheme rdf:about="{$service-base-uri}activity-category">
@@ -191,14 +218,4 @@
     </skos:prefLabel>
   </xsl:template>
 
-  <xsl:template match="user">
-    <xsl:if test="d:ContentType = 'DomainGroup'">
-      <gr:BusinessEntityType rdf:about="{$group-base-uri}{substring-after(d:Account, 'AD-OAK\group_')}">
-        <rdfs:label>
-          <xsl:value-of select="substring-before(d:Name, ' Group')"/>
-        </rdfs:label>
-      </gr:BusinessEntityType>
-    </xsl:if>
-  </xsl:template>
-        
 </xsl:stylesheet>
