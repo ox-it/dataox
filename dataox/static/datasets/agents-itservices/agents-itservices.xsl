@@ -96,7 +96,7 @@
   <xsl:template match="users/user">
     <xsl:if test="$internal or d:ContentType = 'DomainGroup'">
       <xsl:element name="{if (d:ContentType = 'DomainGroup') then 'gr:BusinessEntityType' else 'foaf:Person'}">
-        <xsl:attribute name="rdf:resource">
+        <xsl:attribute name="rdf:about">
           <xsl:value-of select="ex:agent-uri(.)"/>
         </xsl:attribute>
         <xsl:choose>
