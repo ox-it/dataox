@@ -146,11 +146,12 @@
   </xsl:template>
 
   <xsl:template match="d:WorkPhone" mode="in-person">
+    <xsl:variable name="phone" select="replace(., '[^\d]', '')"/>
     <v:tel>
-      <v:Voice rdf:about="tel:+44{substring(., 2)}"/>
+      <v:Voice rdf:about="tel:+44{substring($phone, 2)}"/>
     </v:tel>
     <adhoc:oxfordExtensionNumber>
-      <xsl:value-of select="substring(., 7)"/>
+      <xsl:value-of select="substring($phone, 6)"/>
     </adhoc:oxfordExtensionNumber>
   </xsl:template>
 </xsl:stylesheet>
