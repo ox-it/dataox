@@ -22,6 +22,7 @@
 
     dcterms:publisher <http://oxpoints.oucs.ox.ac.uk/id/53505808> ;
     dcterms:description "Upcoming courses offered by the IT Learning Programme, modelled using XCRI-CAP." ;
+    dcterms:license <http://reference.data.gov.uk/id/open-government-licence> ;
 
     void:vocabulary xcri:, mlo:, dcterms:, v:, foaf:, rdfs:, time: ;
 
@@ -32,7 +33,8 @@
                  foaf:mbox <mailto:courses@it.ox.ac.uk> ] .
 
 <https://data.ox.ac.uk/graph/courses/itlp/data> a sd:Graph ;
-    void:inDataset <https://data.ox.ac.uk/id/dataset/courses/itlp> .
+    void:inDataset <https://data.ox.ac.uk/id/dataset/courses/itlp> ;
+    dcterms:license <http://reference.data.gov.uk/id/open-government-licence> .
 
 <https://data.ox.ac.uk/graph/courses/itlp/metadata> a sd:Graph ;
     void:inDataset <https://data.ox.ac.uk/id/dataset/catalogue> , <https://data.ox.ac.uk/id/dataset/courses/itlp> ;
