@@ -151,7 +151,7 @@
       <v:Voice rdf:about="tel:+44{substring($phone, 2)}"/>
     </v:tel>
     <adhoc:oxfordExtensionNumber>
-      <xsl:value-of select="substring($phone, 6)"/>
+      <xsl:value-of select="substring($phone, 7)"/>
     </adhoc:oxfordExtensionNumber>
   </xsl:template>
 </xsl:stylesheet>
