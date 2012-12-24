@@ -19,6 +19,7 @@ INSTALLED_APPS += (
     'dataox.feeds',
     'dataox.equipment',
     'dataox.analytics',
+    'dataox.oauth2',
     'dataox.vacancy',
     'humfrey.update',
     'humfrey.graphviz',
@@ -29,6 +30,7 @@ INSTALLED_APPS += (
     'object_permissions',
     'django_webauth',
     'djcelery',
+    'oauth2app'
 )
 
 DATABASES = {
@@ -93,6 +95,7 @@ AUTHENTICATION_BACKENDS = (
 )
 
 MIDDLEWARE_CLASSES += (
+    'dataox.oauth2.middleware.OAuth2Middleware',
     'django_conneg.support.middleware.BasicAuthMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'dataox.analytics.middleware.DoNotTrackMiddleware',

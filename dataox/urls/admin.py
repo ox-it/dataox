@@ -18,8 +18,9 @@ urlpatterns = patterns('',
     url(r'^login/', auth_views.login, name='login'),
     url(r'^logout/', LogoutView.as_view(), name='logout'),
     url(r'^webauth/', include('django_webauth.urls', 'webauth')),
+    url(r'^oauth2/', include('dataox.oauth2.urls', 'oauth2')),
     url(r'^admin/', admin.site.urls),
 ) + staticfiles_urlpatterns()
 
 handler404 = misc_views.SimpleView.as_view(template_name='404', context={'status_code':404})
-handler500 = misc_views.SimpleView.as_view(template_name='500', context={'status_code':500})
+#handler500 = misc_views.SimpleView.as_view(template_name='500', context={'status_code':500}, _force_fallback_format='html')
