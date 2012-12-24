@@ -53,7 +53,7 @@ class Vacancy(models.Model):
     def update_location_fields(self, store_slug):
         # Perform a query against ElasticSearch to find an organization for this location
         search_endpoint = ElasticSearchEndpoint(store_slug, 'organization')
-        results = search_endpoint.query({'query': {'query_string': {'query': self.location}}})
+        results = search_endpoint.query({'query': {'query_string': {'query': self.location.replace('-', ' ')}}})
         hits = results['hits']['hits']
         if hits:
             hit = hits[0]['_source']
