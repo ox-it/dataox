@@ -146,12 +146,22 @@
   </xsl:template>
 
   <xsl:template match="d:WorkPhone" mode="in-person">
-    <xsl:variable name="phone" select="replace(., '[^\d]', '')"/>
-    <v:tel>
-      <v:Voice rdf:about="tel:+44{substring($phone, 2)}"/>
-    </v:tel>
+    <xsl:variable name="extension" select="substring(., string-length(.)-5)"/>
+    <xsl:variable name="prefix">
+      <!-- From page 6 of the Internal Telephone Directory ("Extensions") -->
+      <xsl:choose>
+        <xsl:when test="starts-with($extension, '1')">+4418656</xsl:when>
+        <xsl:when test="starts-with($extension, '7')">+4418652</xsl:when>
+        <xsl:when test="starts-with($extension, '8')">+4418652</xsl:when>
+      </xsl:choose>
+    </xsl:variable>
+    <xsl:if test="$prefix">
+      <v:tel>
+        <v:Voice rdf:about="tel:{$prefix}{$extension}"/>
+      </v:tel>
+    </xsl:if>
     <adhoc:oxfordExtensionNumber>
-      <xsl:value-of select="substring($phone, 7)"/>
+      <xsl:value-of select="$extension"/>
     </adhoc:oxfordExtensionNumber>
   </xsl:template>
 </xsl:stylesheet>
