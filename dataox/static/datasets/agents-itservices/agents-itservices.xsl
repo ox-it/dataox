@@ -142,7 +142,7 @@
   </xsl:template>
 
   <xsl:template match="d:WorkEMail" mode="in-person">
-    <foaf:email rdf:resource="mailto:{.}"/>
+    <foaf:mbox rdf:resource="mailto:{.}"/>
   </xsl:template>
 
   <xsl:template match="d:WorkPhone" mode="in-person">
