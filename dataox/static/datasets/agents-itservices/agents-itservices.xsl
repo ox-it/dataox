@@ -146,7 +146,8 @@
   </xsl:template>
 
   <xsl:template match="d:WorkPhone" mode="in-person">
-    <xsl:variable name="extension" select="substring(., string-length(.)-5)"/>
+    <!-- Last five characters. Remember strings are 1-indexed, not 0-indexed. -->
+    <xsl:variable name="extension" select="substring(., string-length(.)-4)"/>
     <xsl:variable name="prefix">
       <!-- From page 6 of the Internal Telephone Directory ("Extensions") -->
       <xsl:choose>
