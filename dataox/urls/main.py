@@ -7,7 +7,7 @@ from humfrey.misc import views as misc_views
 from humfrey.graphviz import views as graphviz_views
 from humfrey.elasticsearch import views as elasticsearch_views
 
-from dataox.core.views import DatasetView, ExploreView, ExampleDetailView, ExampleResourceView, ExampleQueryView
+from dataox.core import views as core_views
 
 search_args = {'opensearch_meta': {'ShortName': 'data.ox.ac.uk',
                                    'LongName': 'Open Data Service',
@@ -28,17 +28,17 @@ urlpatterns = patterns('',
 
     url(r'^search/$', elasticsearch_views.SearchView.as_view(**search_args), name='search'),
 
-    (r'^datasets/$', DatasetView.as_view(), {}, 'datasets'),
+    (r'^datasets/$', core_views.DatasetView.as_view(), {}, 'datasets'),
 
     (r'^contact/$', misc_views.SimpleView.as_view(template_name='contact'), {}, 'contact'),
     (r'^legal-and-privacy/$', misc_views.SimpleView.as_view(template_name='legal'), {}, 'legal'),
     (r'^forbidden/$', misc_views.SimpleView.as_view(template_name='forbidden', context={'status_code': 403}), {}, 'forbidden'),
 
-    (r'^explore/$', ExploreView.as_view(), {}, 'explore'),
-    (r'^explore/resources/$', ExampleResourceView.as_view(), {}, 'explore-resource'),
-    (r'^explore/queries/$', ExampleQueryView.as_view(), {}, 'explore-query'),
+    (r'^explore/$', core_views.ExploreView.as_view(), {}, 'explore'),
+    (r'^explore/resources/$', core_views.ExampleResourceView.as_view(), {}, 'explore-resource'),
+    (r'^explore/queries/$', core_views.ExampleQueryView.as_view(), {}, 'explore-query'),
 
-    (r'^explore/(?P<slug>[a-z\d-]+)/$', ExampleDetailView.as_view(), {}, 'example-detail'),
+    (r'^explore/(?P<slug>[a-z\d-]+)/$', core_views.ExampleDetailView.as_view(), {}, 'example-detail'),
     (r'^explore/example:(?P<slug>[a-z\d-]+)/$', redirect_to, {'url': '/explore/%(slug)s/'}),
 
     (r'^pingback/', include('humfrey.pingback.urls', 'pingback')),
@@ -53,5 +53,5 @@ urlpatterns = patterns('',
 ) + staticfiles_urlpatterns()
 
 handler404 = misc_views.SimpleView.as_view(template_name='404', context={'status_code':404})
-handler500 = misc_views.SimpleView.as_view(template_name='500', context={'status_code':500})
+handler500 = core_views.ServerErrorView.as_view()
 

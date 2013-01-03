@@ -9,7 +9,7 @@ from humfrey.misc import views as misc_views
 from dataox.equipment import views as equipment_views
 from dataox.equipment.resource import resource_registry
 
-from humfrey.misc.views import SimpleView
+from .main import handler404, handler500
 
 mapping_kwargs = {'id_mapping': (('https://data.ox.ac.uk/id/equipment/', 'https://www.research-facilities.ox.ac.uk/view:equipment/', True),
                                  ('https://data.ox.ac.uk/id/facility/', 'https://www.research-facilities.ox.ac.uk/view:facility/', True),
@@ -41,6 +41,3 @@ urlpatterns = patterns('',
     url(r'^legal-and-privacy/$', misc_views.SimpleView.as_view(template_name='legal'), name='legal'),
     
 ) + staticfiles_urlpatterns()
-
-handler404 = SimpleView.as_view(template_name='404', context={'status_code':404})
-handler500 = SimpleView.as_view(template_name='500', context={'status_code':500})

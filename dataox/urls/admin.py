@@ -7,6 +7,8 @@ from django.contrib.staticfiles.urls import staticfiles_urlpatterns
 from humfrey.misc import views as misc_views
 from django_webauth.views import LogoutView
 
+from .main import handler404, handler500
+
 admin.autodiscover()
 
 urlpatterns = patterns('',
@@ -21,6 +23,3 @@ urlpatterns = patterns('',
     url(r'^oauth2/', include('dataox.oauth2.urls', 'oauth2')),
     url(r'^admin/', admin.site.urls),
 ) + staticfiles_urlpatterns()
-
-handler404 = misc_views.SimpleView.as_view(template_name='404', context={'status_code':404})
-handler500 = misc_views.SimpleView.as_view(template_name='500', context={'status_code':500})

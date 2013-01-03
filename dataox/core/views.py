@@ -106,8 +106,19 @@ class ExampleDetailView(HTMLView):
         return self.render(request, {}, 'examples/%s' % slug)
 
 class ForbiddenView(HTMLView):
-    def get(self, request):
-        context = {
-            'status_code': 403,
-        }
-        return self.render(request, context, 'forbidden')
+    template_name = 'forbidden'
+    _force_fallback_format = 'html'
+    
+    def dispatch(self, request):
+        self.context = {'status_code': 403}
+        setattr(self, request.method.lower(), self.render)
+        return super(ServerErrorView, self).dispatch(request)
+
+class ServerErrorView(HTMLView):
+    template_name = '500'
+    _force_fallback_format = 'html'
+    
+    def dispatch(self, request):
+        self.context = {'status_code': 500}
+        setattr(self, request.method.lower(), self.render)
+        return super(ServerErrorView, self).dispatch(request)
