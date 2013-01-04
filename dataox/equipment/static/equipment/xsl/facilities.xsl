@@ -68,7 +68,9 @@
             <xsl:value-of select="../contact-name/text()"/>
           </foaf:name>
         </xsl:if>
-        <vcard:email rdf:resource="mailto:{text()}"/>
+        <xsl:for-each select="tokenize(text())">
+          <vcard:email rdf:resource="mailto:{.}"/>
+        </xsl:for-each>
       </foaf:Agent>
     </oo:contact>
   </xsl:template>
