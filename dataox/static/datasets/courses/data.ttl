@@ -9,9 +9,21 @@
 @prefix time: <http://www.w3.org/2006/time#> .
 @prefix skos: <http://www.w3.org/2004/02/skos/core#> .
 @prefix v: <http://www.w3.org/2006/vcard/ns#> .
+@prefix xtypes: <http://purl.org/xtypes/> .
 
 <https://course.data.ox.ac.uk/id/catalogue> a xcri:catalog ;
     rdfs:label "Course catalogue for the University of Oxford" ;
+    rdfs:comment """<div xmlns="http://www.w3.org/1999/xhtml">
+  <p>Training courses offered at the University of Oxford, from the following providers:</p>
+  <ul>
+    <li><a href="http://www.conted.ox.ac.uk/">Continuing Education</a></li>
+    <li><a href="http://courses.it.ox.ac.uk/">IT Learning Programme</a></li>
+    <li><a href="http://www.careers.ox.ac.uk/">Careers Service</a></li>
+    <li><a href="https://www.admin.ox.ac.uk/safety/">Safety Office</a></li>
+    <li><a href="http://www.medsci.ox.ac.uk/">Medical Sciences Division</a></li>
+    <li><a href="http://www.lang.ox.ac.uk/">Language Centre</a></li>
+  </ul>
+</div>"""^^xtypes:Fragment-XHTML ;
 
     dcterms:publisher <http://oxpoints.oucs.ox.ac.uk/id/00000000> ;
 
