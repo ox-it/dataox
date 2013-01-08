@@ -64,7 +64,7 @@
 <https://data.ox.ac.uk/id/dataset/catalogue> dcat:dataset <https://data.ox.ac.uk/id/dataset/oxpoints> .
 
 <https://data.ox.ac.uk/graph/oxpoints/data> a foaf:Document ;
-    void:inDataset <https://data.ox.ac.uk/id/dataset/oxpoints> , <https://data.ox.ac.uk/id/dataset/oxpoints> ;
+    void:inDataset <https://data.ox.ac.uk/id/dataset/oxpoints> ;
     dcterms:license <http://creativecommons.org/publicdomain/zero/1.0/> .
 
 <https://data.ox.ac.uk/graph/oxpoints/metadata> a foaf:Document ;
