@@ -1,0 +1,12 @@
+@prefix wai: <http://purl.org/wai#> .
+
+<http://oxpoints.oucs.ox.ac.uk/id/23232838>
+  wai:profiles <http://oxpoints.oucs.ox.ac.uk/id/10000000> , <http://oxpoints.oucs.ox.ac.uk/id/10000001> .
+
+<http://oxpoints.oucs.ox.ac.uk/id/10000000> a wai:Profile ;
+  rdfs:label "Philosophy Faculty Library" ;
+  skos:notation "10000000"^^oxnotation:oxpoints .
+
+<http://oxpoints.oucs.ox.ac.uk/id/10000001> a wai:Profile ;
+  rdfs:label "Theology Faculty Library" ;
+  skos:notation "10000001"^^oxnotation:oxpoints .
