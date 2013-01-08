@@ -3,6 +3,7 @@
 @prefix skos:    <http://www.w3.org/2004/02/skos/core#> .
 @prefix void:    <http://rdfs.org/ns/void#> .
 @prefix dcterms: <http://purl.org/dc/terms/> .
+@prefix oxnotation: <https://data.ox.ac.uk/id/notation/> .
 
 <http://oxpoints.oucs.ox.ac.uk/id/23232838>
   wai:profiles <http://oxpoints.oucs.ox.ac.uk/id/10000000> , <http://oxpoints.oucs.ox.ac.uk/id/10000001> .
