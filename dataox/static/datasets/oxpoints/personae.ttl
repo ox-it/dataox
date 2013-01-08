@@ -4,6 +4,7 @@
 @prefix void:    <http://rdfs.org/ns/void#> .
 @prefix dcterms: <http://purl.org/dc/terms/> .
 @prefix oxnotation: <https://data.ox.ac.uk/id/notation/> .
+@prefix foaf:    <http://xmlns.com/foaf/0.1/> .
 
 <http://oxpoints.oucs.ox.ac.uk/id/23232838>
   wai:profiles <http://oxpoints.oucs.ox.ac.uk/id/10000000> , <http://oxpoints.oucs.ox.ac.uk/id/10000001> .
