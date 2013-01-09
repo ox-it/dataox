@@ -1,4 +1,4 @@
-{% extends "course/base.html" %}
+{% extends "course/base.html" %}{% load humfrey_desc %}
 
 {% block title %}Course catalogs{% endblock %}
 
@@ -27,7 +27,7 @@
     <tbody>{% for subject in subjects %}
       <tr>
         <td>{{ subject.label }}</td>
-        <td>{{ subject.description|default:"" }}</td>
+        <td>{{ subject.description|default:""|node }}</td>
         <td>{{ subject.dcterms_publisher.label }}</td>
         <td>{% for renderer in feed_renderers %}
           <a href="?uri={{ subject.uri|urlencode }}&amp;format={{ renderer.format}}">{{ renderer.name }}</a>{% if not forloop.last %} •{% endif %}{% endfor %}
