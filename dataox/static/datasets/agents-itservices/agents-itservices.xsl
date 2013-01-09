@@ -156,7 +156,7 @@
         <xsl:when test="starts-with($extension, '8')">+4418652</xsl:when>
       </xsl:choose>
     </xsl:variable>
-    <xsl:if test="$prefix">
+    <xsl:if test="string-length($prefix) &gt; 0">
       <v:tel>
         <v:Voice rdf:about="tel:{$prefix}{$extension}"/>
       </v:tel>
