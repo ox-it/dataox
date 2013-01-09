@@ -154,27 +154,34 @@ class CatalogDetailView(CourseView, sparql_views.CannedQueryView, RDFView, Conte
 
     @renderer(format='xcricap', mimetypes=('application/xcri-cap+xml',), name="XCRI-CAP 1.2 (Simple)")
     def render_xcricap(self, request, context, template_name):
-        self.wrangle_itlp(context['graph'])
+        self.wrangle_two_three_codes(context['graph'])
         serializer = XCRICAPSerializer(context['graph'], self.catalog_uri)
         return HttpResponse(serializer.generator(), mimetype='application/xcri-cap+xml')
 
     @renderer(format='xcricap-full', mimetypes=(), name="XCRI-CAP 1.2 (Full)")
     def render_xcricap_full(self, request, context, template_name):
-        self.wrangle_itlp(context['graph'])
+        self.wrangle_two_three_codes(context['graph'])
         serializer = XCRICAPSerializer(context['graph'], self.catalog_uri, simple=False)
         return HttpResponse(serializer.generator(), mimetype='application/xcri-cap+xml')
 
-    def wrangle_itlp(self, graph):
+    def wrangle_two_three_codes(self, graph):
         """
-        Makes ITLP look like IT Services, as far as identifiers are concerned.
+        Pretend an OxPoints ID is a two-three code where one doesn't exist
 
         WebLearn requires every provider to have a two-three or department
-        code. This is a manky hack to add the two-three code for IT Services
-        to ITLP if it's in the feed.
+        code. This is a manky hack to add a fake two-three code cotaining the
+        OxPoints ID where a two-three code doesn't already exist.
         """
-        itlp = rdflib.URIRef('http://oxpoints.oucs.ox.ac.uk/id/53505808')
-        if graph.value(itlp, NS.rdf.type):
-            graph.add((itlp, NS.skos.notation, rdflib.Literal('E2', datatype=NS.oxnotation.twoThree)))
+        # Find all things with an OxPoints ID...
+        for s, o in graph.subject_objects(NS.skos.notation):
+            if getattr(o, 'datatype', None) == NS.oxnotation.oxpoints:
+                # ... check they don't have a two-three code ...
+                if not any(n for n in graph.objects(s, NS.skos.notation)
+                             if getattr(n, 'datatype', None) == NS.oxnotation.twoThree):
+                    # ... and add a fake two-three code using the OxPoints ID
+                    graph.add((s,
+                               NS.skos.notation,
+                               rdflib.Literal(o, datatype=NS.oxnotation.twoThree)))
 
 
 class CatalogView(CourseView, ContentNegotiatedView):
