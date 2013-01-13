@@ -3,7 +3,9 @@ Vacancies
 
 The Open Data Service imports advertised vacancy information from the central
 recruitment portal at `https://www.recruit.ox.ac.uk/
-<https://www.recruit.ox.ac.uk/>`_.
+<https://www.recruit.ox.ac.uk/>`_. If you represent a college or other
+affiliated institution and want your vacancies included, please see
+:ref:`adding-vacancies`. 
 
 .. note ::
 
@@ -92,6 +94,7 @@ Here's an example entry in an XML feed:
 	  …
 	</vacancies>
 
+
 Data
 ----
 
@@ -124,4 +127,44 @@ A number of departments are currently using vacancy feeds:
 
 * `Department of Oncology <http://www.oncology.ox.ac.uk/opportunities>`_
 * `Gray Institute for Radiation Oncology and Biology <http://www.rob.ox.ac.uk/opportunities>`_
+* `Department of Pharmacology <http://www.pharm.ox.ac.uk/jobvacancies>`_
 * `IT Services <http://www.it.ox.ac.uk/about/jobs/>`_
+
+Vacancies are also syndicated to the following job sites:
+
+* `Simply Hired <http://www.simplyhired.co.uk/>`_
+
+.. _adding-vacancies:
+
+Adding your vacancies to the dataset
+------------------------------------
+
+If you have vacancy data in a structured format that isn't in the recruit.ox
+dataset, we'd be very interested in including them. We'd then provide combined
+feeds and automatically syndicate your vacancy information to external sites.
+
+Examples of structured formats include:
+
+* An RSS feed
+* A SharePoint list
+* A web page generated from a data source in a structured way
+
+If you don't have anything structured, we'd be happy to help you set up a
+SharePoint list to capture the required information.
+
+At a minimum, we'd like the following fields:
+
+* Job title
+* Job description or advertisement text (plain text or HTML)
+* A URL for a page with more information
+* Salary information (even if just "Competitive salary" for some vacancies)
+* Closing date and time
+* Contact name (a person, or e.g. "Recruitment team")
+* Some contact method (e.g. e-mail, phone)
+* Organisation offering the role
+* The place at which the vacancy is based
+
+Anything else you feel is relevant could also be included.
+
+To find out more, or to express your interest, please contact the Open Data
+Team at opendata@oucs.ox.ac.uk.
