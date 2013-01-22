@@ -19,16 +19,16 @@
     </tr>
   </thead>
   <tbody>
-{% for result in results %}
+{% for binding in results.get_bindings %}
     <tr class="row-{% cycle "odd" "even" %}">
-      <td>{{ result.unitLabel }}</td>
-      {% if result.subUnit %}
-      <td style="text-align:center"><a href="{% url feeds:vacancies result.unit|slice:"-8:" %}">exclude sub-units</a></td>
-      <td style="text-align:center"><a href="{% url feeds:all-vacancies result.unit|slice:"-8:" %}">include sub-units</a></td>
+      <td>{{ binding.unitLabel }}</td>
+      {% if binding.subUnit %}
+      <td style="text-align:center"><a href="{% url feeds:vacancies binding.unit|slice:"-8:" %}">exclude sub-units</a></td>
+      <td style="text-align:center"><a href="{% url feeds:all-vacancies binding.unit|slice:"-8:" %}">include sub-units</a></td>
       {% else %}
-      <td colspan="2" style="text-align:center"><a href="{% url feeds:vacancies result.unit|slice:"-8:" %}">vacancies</a></td>
+      <td colspan="2" style="text-align:center"><a href="{% url feeds:vacancies binding.unit|slice:"-8:" %}">vacancies</a></td>
       {% endif %}
-      <td style="text-align:center">{{ result.vacancies|default:"" }}</td>
+      <td style="text-align:center">{{ binding.vacancies|default:"" }}</td>
       
     </tr>
 {% endfor %}
