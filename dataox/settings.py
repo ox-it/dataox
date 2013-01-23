@@ -6,7 +6,7 @@ import os
 from humfrey.settings.common import *
 
 STAGING = True
-DEBUG=False
+DEBUG=True
 
 ENDPOINT_URL = 'http://localhost:3030/public/query'
 GRAPH_URL = 'http://localhost:3030/public/data'
