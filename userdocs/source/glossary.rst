@@ -79,39 +79,39 @@ Glossary
       useful when creating RDF using XML tools. For more information, see
       `this explanation of it's "stripedness" <http://www.w3.org/2001/10/stripes/>`_
       and the `format specification <http://www.w3.org/TR/REC-rdf-syntax/>`_.
-      
+
       Examples of RDF/XML can be found `here <http://data.ox.ac.uk/doc:oxpoints/31337175.rdf>`_
       and `here <http://data.ox.ac.uk/datasets/?format=rdf>`_.
 
    RDF serialization
       As RDF is just a data model, it doesn't have any one true concrete
       syntax. RDF triple serializations include:
-      
+
       * :term:`RDF/XML`
       * :term:`Turtle`
       * :term:`N-Triples`
       * :term:`RDF/JSON`
-   
+
    Resource Description Framework
       The Resource Description Framework (RDF) is a metadata data model based
       around *subject object predicate* :term:`triples <triple>`. RDF is not
       tied to representing any particular type of information, leading to an
       information infrastructure that works for just about anything.
-      
+
       RDF is generally queried using :term:`SPARQL`. You can read more about
       RDF at the `W3C <http://www.w3.org/RDF/>`_ and
       `Wikipedia <http://en.wikipedia.org/wiki/Resource_Description_Framework>`_.
-   
+
    SPARQL
       A query language for RDF databases. SPARQL queries can return table-like
       results (like SQL ``SELECT`` queries), or :term:`RDF <Resource Description Framework>`.
-      
+
       Cambridge Semantics' `SPARQL by Example
       <http://www.cambridgesemantics.com/2008/09/sparql-by-example/>`_ provides
       a good introduction to the language. `answers.semantic.web
       <http://answers.semanticweb.com/>`_ is also a good resource if you get
       stuck.
-      
+
       The Open Data Service supports all of
       `SPARQL 1.1 <http://www.w3.org/TR/sparql11-query/>`_ through `Jena ARQ
       <http://jena.apache.org/documentation/query/index.html>`_.
@@ -120,7 +120,7 @@ Glossary
       An atom of information in `RDF <Resource Description Framework>`. A
       triple consists of a subject, predicate and object, such as "Alice (S)
       knows (P) Bob (O)". These units of information are then composed to
-      produce 
+      produce.
 
    triple store
       A triple store is a database for storing RDF. See `the Wikipedia article
