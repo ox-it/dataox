@@ -8,7 +8,7 @@ import pytz
 
 class Vacancy(object):
     types = ('vacancy:Vacancy',)
-    search_item_template_name = 'vacancy/search_item'
+    #search_item_template_name = 'vacancy/search_item'
     template_name = 'doc/vacancy'
 
     def is_closed(self):
