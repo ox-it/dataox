@@ -170,7 +170,9 @@
     </adhoc:oxfordExtensionNumber>
   </xsl:template>
   <xsl:template match="field[@name='Initial_x0020_Contact_x0020_Emai']" mode="service-contact">
-    <v:email rdf:resource="mailto:{text/text()}"/>
+    <xsl:for-each select="tokenize(text/text(), '\s+')">
+      <v:email rdf:resource="mailto:{.}"/>
+    </xsl:for-each>
   </xsl:template>
   <xsl:template match="field[@name='Initial_x0020_Contact_x0020_Form']" mode="service-contact">
     <oo:contactForm rdf:resource="{url/@href}"/>
