@@ -132,6 +132,7 @@ A number of departments are currently using vacancy feeds:
 
 Vacancies are also syndicated to the following job sites:
 
+* `Jobrapido <http://uk.jobrapido.com/?w=www.ox.ac.uk&p=1&shm=all>`_
 * `Simply Hired <http://www.simplyhired.co.uk/>`_
 
 .. _adding-vacancies:
