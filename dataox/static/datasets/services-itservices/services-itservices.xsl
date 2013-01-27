@@ -175,7 +175,9 @@
     </xsl:for-each>
   </xsl:template>
   <xsl:template match="field[@name='Initial_x0020_Contact_x0020_Form']" mode="service-contact">
-    <oo:contactForm rdf:resource="{url/@href}"/>
+    <xsl:for-each select="tokenize(url/@href, '\s+')">
+      <oo:contactForm rdf:resource="{.}"/>
+    </xsl:for-each>
   </xsl:template>
 
   <xsl:template match="field[@name='Activity_x0020_category']/lookup" mode="in-service">
