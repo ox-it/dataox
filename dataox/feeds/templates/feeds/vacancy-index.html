@@ -29,7 +29,6 @@
       <td colspan="2" style="text-align:center"><a href="{% url feeds:vacancies binding.unit|slice:"-8:" %}">vacancies</a></td>
       {% endif %}
       <td style="text-align:center">{{ binding.vacancies|default:"" }}</td>
-      
     </tr>
 {% endfor %}
   </tbody>
