@@ -2,13 +2,14 @@
 from __future__ import with_statement
 
 import datetime
+import itertools
 import logging
 
 import dateutil.parser
 from django.conf import settings
 import pytz
 from humfrey.update.transform.base import Transform
-from humfrey.streaming.rdfxml import RDFXMLSink
+from humfrey.streaming import RDFXMLSerializer
 
 from ..scraper import RecruitOxScraper, JobsAcScraper
 from ..files import VacancyFileHandler
@@ -48,29 +49,30 @@ class RetrieveVacancies(Transform):
                 file_handler.retrieve(document)
             except Exception:
                 logger.exception("Could not retrieve file: %s", document.url)
-        
+
         logger.debug("Finished retrieving documents; starting to serialize")
 
         transforms = {'current': {'file': open(transform_manager('rdf'), 'w'),
-                                  'transform': self.current_transform},
+                                  'transform': self.current_transform,
+                                  'vacancies': []},
                       'archive': {'file': open(transform_manager('rdf'), 'w'),
-                                  'transform': self.archive_transform}}
+                                  'transform': self.archive_transform,
+                                  'vacancies': []}}
 
         for transform in transforms.values():
-            transform['sink'] = RDFXMLSink(transform['file'])
-            transform['sink'].start()
-        
+            transform['serializer'] = RDFXMLSerializer(transform['file'])
+
         for vacancy in Vacancy.objects.all():
             opening_date, closing_date = map(dateutil.parser.parse, (vacancy.opening_date, vacancy.closing_date))
             if opening_date < self.site_timezone.localize(datetime.datetime.now()) < closing_date:
-                transform = transforms['current']
+                transforms['current']['vacancies'].append(vacancy)
             else:
-                transform = transforms['archive']
-            transform['sink'].triples(vacancy.triples(self.vacancy_base_uri))
-        
+                transforms['archive']['vacancies'].append(vacancy)
+
         for name, transform in transforms.items():
-            transform['sink'].end()
+            triples = itertools.chain(*[v.triples(self.vacancy_base_uri) for v in transform['vacancies']])
+            RDFXMLSerializer(triples).serialize(transform['file'])
             logger.debug("Finished serializing %s graph (%d bytes)", name, transform['file'].tell())
             transform['file'].close()
-            
+
             transform['transform'].execute(transform_manager, transform['file'].name)
