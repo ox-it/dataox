@@ -16,7 +16,7 @@ INSTALLED_APPS += (
     'dataox.core',
     'dataox.course',
     'dataox.resource',
-    'dataox.feeds',
+    'dataox.old_feeds',
     'dataox.equipment',
     'dataox.analytics',
     'dataox.oauth2',

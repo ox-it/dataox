@@ -1,6 +1,6 @@
 from django.conf.urls.defaults import patterns
 
-from dataox.feeds import views
+from . import views
 
 urlpatterns = patterns('',
     (r'^$', views.IndexView.as_view(), {}, 'index'),

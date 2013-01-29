@@ -18,7 +18,7 @@ from humfrey.sparql.views import CannedQueryView, StoreView
 
 class IndexView(HTMLView):
     def get(self, request):
-        return self.render(request, {}, 'feeds/index')
+        return self.render(request, {}, 'old_feeds/index')
 
 class FeedView(HTMLView, JSONPView):
     title = None
@@ -28,16 +28,16 @@ class FeedView(HTMLView, JSONPView):
 
     def get(self, request, *args, **kwargs):
         self.base_location, self.content_location = self.get_locations(request, *args, **kwargs)
-        
+
         context = self.context
         context.update({'title': self.title,
                         'link': self.link,
                         'description': self.description,
                         'items': self.items})
-        
+
         if self.content_location:
             context['additional_headers'] = {'Content-location': self.content_location}
-        
+
         if kwargs.get('format'):
             return self.render_to_format(request, context, self.template_name, kwargs['format'])
         else: 
@@ -46,15 +46,15 @@ class FeedView(HTMLView, JSONPView):
     @renderer(format='rss1', mimetypes=('application/rss+xml',), name='RSS 0.9 Feed')
     def render_rss1(self, request, context, template_name):
         return self.renderGeneralFeed(request, context, RssUserland091Feed, 'application/rss+xml')    
-    
+
     @renderer(format='rss', mimetypes=('application/rss+xml',), name='RSS 2.01 Feed')
     def render_rss2(self, request, context, template_name):
         return self.renderGeneralFeed(request, context, Rss201rev2Feed, 'application/rss+xml')
-    
+
     @renderer(format='atom', mimetypes=('application/atom+xml',), name='Atom Feed')
     def render_atom(self, request, context, template_name):
         return self.renderGeneralFeed(request, context, Atom1Feed, 'application/atom+xml')
-    
+
     def renderGeneralFeed(self, request, context, feed_class, mimetype):
         feed = feed_class(context['title'],
                           context['link'],
@@ -116,10 +116,10 @@ class VacancyIndexView(HTMLView, CannedQueryView, ResultSetView):
         }
       } GROUP BY ?unit ORDER BY ?unitLabel
     """
-    template_name = "feeds/vacancy-index"
+    template_name = "old_feeds/vacancy-index"
 
 class VacancyView(FeedView, RDFView, StoreView, MappingView):
-    template_name = "feeds/vacancy"
+    template_name = "old_feeds/vacancy"
     _json_indent=2
 
     all = False
@@ -134,8 +134,8 @@ class VacancyView(FeedView, RDFView, StoreView, MappingView):
     @property
     def reverse_name(self):
         if not self.kwargs.get('oxpoints_id'):
-            return 'feeds:vacancies-all'
-        return 'feeds:all-vacancies' if self.all else 'feeds:vacancies'
+            return 'old-feeds:vacancies-all'
+        return 'old-feeds:all-vacancies' if self.all else 'old-feeds:vacancies'
 
     def first_query(self):
         if self.unit:

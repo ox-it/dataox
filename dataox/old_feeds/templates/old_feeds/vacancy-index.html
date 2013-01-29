@@ -8,7 +8,7 @@
   <p>Find the unit you are interested in from the list below. If the unit has
      sub-units, you can choose whether to include vacancies from those units.</p>
      
-  <p>Vacancies across the whole University are listed <a href="{% url feeds:all-vacancies "00000000" %}">here</a>.</p>
+  <p>Vacancies across the whole University are listed <a href="{% url old-feeds:all-vacancies "00000000" %}">here</a>.</p>
 
 <table class="sparql-results">
   <thead>
@@ -23,10 +23,10 @@
     <tr class="row-{% cycle "odd" "even" %}">
       <td>{{ binding.unitLabel }}</td>
       {% if binding.subUnit %}
-      <td style="text-align:center"><a href="{% url feeds:vacancies binding.unit|slice:"-8:" %}">exclude sub-units</a></td>
-      <td style="text-align:center"><a href="{% url feeds:all-vacancies binding.unit|slice:"-8:" %}">include sub-units</a></td>
+      <td style="text-align:center"><a href="{% url old-feeds:vacancies binding.unit|slice:"-8:" %}">exclude sub-units</a></td>
+      <td style="text-align:center"><a href="{% url old-feeds:all-vacancies binding.unit|slice:"-8:" %}">include sub-units</a></td>
       {% else %}
-      <td colspan="2" style="text-align:center"><a href="{% url feeds:vacancies binding.unit|slice:"-8:" %}">vacancies</a></td>
+      <td colspan="2" style="text-align:center"><a href="{% url old-feeds:vacancies binding.unit|slice:"-8:" %}">vacancies</a></td>
       {% endif %}
       <td style="text-align:center">{{ binding.vacancies|default:"" }}</td>
     </tr>
