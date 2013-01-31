@@ -4,7 +4,7 @@ from .main import handler404, handler500
 
 urlpatterns = patterns(
     url('^main/', include('dataox.urls.main', 'host-data')),
-    url('^admin/', include('dataox.urls.admin', 'host-admin')),
+    url('^backstage/', include('dataox.urls.backstage', 'host-backstage')),
     url('^equipment/', include('dataox.urls.equipment', 'host-equipment')),
     url('^time-series/', include('dataox.urls.timeseries', 'host-timeseries')),
 )

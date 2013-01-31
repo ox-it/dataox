@@ -1,7 +1,7 @@
 __all__ = ['base_template_chooser']
 
 _base_templates = {'data': 'hosts/dataox.html',
-                   'admin': 'hosts/admin.html',
+                   'backstage': 'hosts/backstage.html',
                    'timeseries': 'hosts/timeseries.html',
                    'course': 'hosts/course.html',
                    'equipment': 'hosts/equipment.html',
