@@ -44,6 +44,7 @@ urlpatterns = patterns('',
     (r'^pingback/', include('humfrey.pingback.urls', 'pingback')),
     (r'^sparql/', include('humfrey.sparql.urls.simple', 'sparql')),
     (r'^feeds/', include('dataox.old_feeds.urls', 'old-feeds')),
+    (r'^syndicate/', include('humfrey.feeds.urls', 'feeds')),
 
 
     (r'^graphviz/$', graphviz_views.GraphVizView.as_view(), {}, 'graphviz'),

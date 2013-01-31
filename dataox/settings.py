@@ -21,6 +21,8 @@ INSTALLED_APPS += (
     'dataox.analytics',
     'dataox.oauth2',
     'dataox.vacancy',
+    'dataox.feeds',
+    'humfrey.feeds',
     'humfrey.update',
     'humfrey.graphviz',
     'humfrey.manage',
@@ -194,6 +196,10 @@ VOCABULARY_URL_OVERRIDES = {
     'oxnotation': None,
     'oxp': 'http://oxpoints.oucs.ox.ac.uk/ns.ttl',
     'pf': None,
+}
+
+HUMFREY_FEEDS = {
+    'organization': 'dataox.feeds.organization.OrganizationFeedView',
 }
 
 # Celery
