@@ -26,7 +26,7 @@
   <xsl:variable name="team-base-uri">https://data.ox.ac.uk/id/itservices/team/</xsl:variable>
   <xsl:variable name="group-base-uri">https://data.ox.ac.uk/id/group/unit-member/</xsl:variable>
 
-  <xsl:key name="users" match="/site/users/user" use="@id"/>
+  <xsl:key name="users" match="/site/lists/list[@name='User Information List']/rows/row" use="@id"/>
   <xsl:key name="teams" match="/site/lists/list[@name='Teams']/rows/row" use="@id"/>
   <xsl:key name="memberships" match="/site/lists/list[@name='Teams']/rows/row" use="fields/field[@name='Members']/user/@id"/>
   <xsl:key name="managerships" match="/site/lists/list[@name='Teams']/rows/row" use="fields/field[@name='Managers']/user/@id"/>
@@ -36,16 +36,16 @@
     <xsl:for-each select="$element">
       <xsl:variable name="user" select="key('users', @id)"/>
       <xsl:choose>
-        <xsl:when test="$user/d:ContentType='DomainGroup'">
+        <xsl:when test="$user//field[@name='ContentType']/text='DomainGroup'">
           <xsl:value-of select="$group-base-uri"/>
-          <xsl:value-of select="substring-after($user/d:Account, 'AD-OAK\group_')"/>
+          <xsl:value-of select="substring-after($user//field[@name='Name']/text, 'AD-OAK\group_')"/>
         </xsl:when>
-        <xsl:when test="$user/d:ContentType='Person'">
+        <xsl:when test="$user//field[@name='ContentType']/text='Person'">
           <xsl:value-of select="$person-base-uri"/>
-          <xsl:value-of select="$user/d:UserName"/>
+          <xsl:value-of select="$user//field[@name='UserName']/text"/>
         </xsl:when>
         <xsl:otherwise>
-          <xsl:message terminate="yes">Unexpected d:ContentType: "<xsl:value-of select="$user/d:ContentType"/>" on user <xsl:value-of select="@id"/>; terminating.</xsl:message>
+          <xsl:message terminate="yes">Unexpected ContentType: "<xsl:value-of select="$user//field[@name='ContentType']/text"/>" on user <xsl:value-of select="@id"/>; terminating.</xsl:message>
         </xsl:otherwise>
       </xsl:choose>
     </xsl:for-each>
@@ -93,18 +93,19 @@
     <org:subOrganizationOf rdf:resource="{ex:team-uri(key('teams', @id))}"/>
   </xsl:template>
 
-  <xsl:template match="users/user">
-    <xsl:if test="$internal or d:ContentType = 'DomainGroup'">
-      <xsl:element name="{if (d:ContentType = 'DomainGroup') then 'gr:BusinessEntityType' else 'foaf:Person'}">
+  <xsl:template match="list[@name='User Information List']/rows/row">
+    <xsl:variable name="content-type" select=".//field[@name='ContentType']/text/text()"/>
+    <xsl:if test="$internal or $content-type = 'DomainGroup'">
+      <xsl:element name="{if ($content-type = 'DomainGroup') then 'gr:BusinessEntityType' else 'foaf:Person'}">
         <xsl:attribute name="rdf:about">
           <xsl:value-of select="ex:agent-uri(.)"/>
         </xsl:attribute>
         <xsl:choose>
-          <xsl:when test="d:ContentType = 'DomainGroup'">
-            <xsl:apply-templates select="*[not(@m:null='true')]" mode="in-domain-group"/>
+          <xsl:when test="$content-type = 'DomainGroup'">
+            <xsl:apply-templates select=".//field" mode="in-domain-group"/>
           </xsl:when>
-          <xsl:when test="d:ContentType = 'Person'">
-            <xsl:apply-templates select="*[not(@m:null='true')]" mode="in-person"/>
+          <xsl:when test="$content-type = 'Person'">
+            <xsl:apply-templates select=".//field" mode="in-person"/>
             <xsl:for-each select="key('managerships', @id)">
               <org:headOf rdf:resource="{ex:team-uri(.)}"/>
             </xsl:for-each>
@@ -117,35 +118,35 @@
     </xsl:if>
   </xsl:template>
 
-  <xsl:template match="d:Name" mode="in-domain-group">
+  <xsl:template match="field[@name='Title']/text" mode="in-domain-group">
     <rdfs:label>
       <xsl:value-of select="substring-before(., ' Group')"/>
     </rdfs:label>
   </xsl:template>
 
-  <xsl:template match="d:Name" mode="in-person">
+  <xsl:template match="field[@name='Title']/text" mode="in-person">
     <foaf:name>
       <xsl:value-of select="."/>
     </foaf:name>
   </xsl:template>
 
-  <xsl:template match="d:FirstName" mode="in-person">
+  <xsl:template match="field[@name='FirstName']/text" mode="in-person">
     <foaf:firstName>
       <xsl:value-of select="."/>
     </foaf:firstName>
   </xsl:template>
 
-  <xsl:template match="d:LastName" mode="in-person">
+  <xsl:template match="field[@name='LastName']/text" mode="in-person">
     <foaf:lastName>
       <xsl:value-of select="."/>
     </foaf:lastName>
   </xsl:template>
 
-  <xsl:template match="d:WorkEMail" mode="in-person">
+  <xsl:template match="field[@name='EMail']/text" mode="in-person">
     <foaf:mbox rdf:resource="mailto:{.}"/>
   </xsl:template>
 
-  <xsl:template match="d:WorkPhone" mode="in-person">
+  <xsl:template match="field[@name='WorkPhone']/text" mode="in-person">
     <!-- Last five characters. Remember strings are 1-indexed, not 0-indexed. -->
     <xsl:variable name="extension" select="substring(., string-length(.)-4)"/>
     <xsl:variable name="prefix">
