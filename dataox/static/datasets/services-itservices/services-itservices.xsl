@@ -28,7 +28,7 @@
   <xsl:variable name="university-of-oxford">http://oxpoints.oucs.ox.ac.uk/id/00000000</xsl:variable>
 
   <xsl:key name="user-bases" match="/site/lists/list[@name='User bases']/rows/row" use="@id"/>
-  <xsl:key name="users" match="/site/users/user" use="@id"/>
+  <xsl:key name="users" match="/site/lists/list[@name='User Information List']/rows/row" use="@id"/>
 
   <xsl:function name="ex:slugify">
     <xsl:param name="term"/>
@@ -47,16 +47,16 @@
     <xsl:for-each select="$element">
       <xsl:variable name="user" select="key('users', @id)"/>
       <xsl:choose>
-        <xsl:when test="$user/d:ContentType='DomainGroup'">
+        <xsl:when test="$user//field[@name='ContentType']/text='DomainGroup'">
           <xsl:value-of select="$group-base-uri"/>
-          <xsl:value-of select="substring-after($user/d:Account, 'AD-OAK\group_')"/>
+          <xsl:value-of select="substring-after($user//field[@name='Name']/text, 'AD-OAK\group_')"/>
         </xsl:when>
-        <xsl:when test="$user/d:ContentType='Person'">
+        <xsl:when test="$user//field[@name='ContentType']/text='Person'">
           <xsl:value-of select="$person-base-uri"/>
-          <xsl:value-of select="$user/d:UserName"/>
+          <xsl:value-of select="$user//field[@name='UserName']/text"/>
         </xsl:when>
         <xsl:otherwise>
-          <xsl:message terminate="yes">Unexpected d:ContentType: "<xsl:value-of select="$user/d:ContentType"/>" on user <xsl:value-of select="@id"/>; terminating.</xsl:message>
+          <xsl:message terminate="yes">Unexpected ContentType: "<xsl:value-of select="$user//field[@name='ContentType']/text"/>" on user <xsl:value-of select="@id"/>; terminating.</xsl:message>
         </xsl:otherwise>
       </xsl:choose>
     </xsl:for-each>
