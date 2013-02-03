@@ -1,4 +1,5 @@
 import inspect
+import urlparse
 
 from django.conf import settings
 
@@ -65,7 +66,12 @@ if settings.STAGING:
     def new_doc_forwards(*args, **kwargs):
         urls = original_doc_forwards(*args, **kwargs)
         return uri.DocURLs('/'+urls._base.split('//', 1)[-1], '/'+urls._format_pattern.split('//', 1)[-1])
-    uri.doc_forwards = new_doc_forwards
+    #uri.doc_forwards = new_doc_forwards
+
+    def _new_get_host_path(url):
+        parsed_url = urlparse.urlparse(url)
+        return '/{0}{1}'.format(parsed_url.netloc, parsed_url.path)
+    uri._get_host_path = _new_get_host_path
 
     from humfrey.desc.views import IdView, DocView
 
@@ -73,6 +79,6 @@ if settings.STAGING:
     def new_override_redirect(self, request, description_url, mimetypes):
         return original_override_redirect(self, request, '/' + description_url, mimetypes)
     IdView.override_redirect = new_override_redirect
-    
+
     DocView.check_canonical = False
 
