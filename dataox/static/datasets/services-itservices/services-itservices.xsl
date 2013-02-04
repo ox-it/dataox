@@ -76,9 +76,11 @@
   <xsl:template match="list[@name='Service Catalogue']/rows">
     <gr:BusinessEntity rdf:about="{$it-services}">
       <xsl:for-each select="row">
-        <gr:offers>
-          <xsl:apply-templates select="."/>
-        </gr:offers>
+        <xsl:if test="not(.//field[@name='Archived']/boolean = 'true')">
+          <gr:offers>
+            <xsl:apply-templates select="."/>
+          </gr:offers>
+        </xsl:if>
       </xsl:for-each>
     </gr:BusinessEntity>
   </xsl:template>
