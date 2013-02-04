@@ -200,6 +200,14 @@
     </xsl:if>
   </xsl:template>
 
+  <xsl:template match="field[@name='Status_x0020_ID']/text" mode="in-service">
+    <xsl:if test="string-length(text()) &gt; 0">
+      <skos:notation rdf:datatype="https://data.ox.ac.uk/id/notation/status-ox-ac-uk-service">
+        <xsl:value-of select="text()"/>
+      </skos:notation>
+    </xsl:if>
+  </xsl:template>
+
   <xsl:template match="list[@name='Service activity categories']/rows">
     <skos:ConceptScheme rdf:about="{$service-base-uri}activity-category">
       <skos:prefLabel>Activity categories</skos:prefLabel>
