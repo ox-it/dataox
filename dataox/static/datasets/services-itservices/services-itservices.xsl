@@ -76,9 +76,11 @@
   <xsl:template match="list[@name='Service Catalogue']/rows">
     <gr:BusinessEntity rdf:about="{$it-services}">
       <xsl:for-each select="row">
-        <gr:offers>
-          <xsl:apply-templates select="."/>
-        </gr:offers>
+        <xsl:if test="not(.//field[@name='Archived']/boolean = 'true')">
+          <gr:offers>
+            <xsl:apply-templates select="."/>
+          </gr:offers>
+        </xsl:if>
       </xsl:for-each>
     </gr:BusinessEntity>
   </xsl:template>
@@ -195,6 +197,14 @@
   <xsl:template match="field[@name='Escalate_x0020_to']/user" mode="in-service">
     <xsl:if test="$internal">
       <adhoc:serviceEscalationContact rdf:resource="{ex:agent-uri(.)}"/>
+    </xsl:if>
+  </xsl:template>
+
+  <xsl:template match="field[@name='Status_x0020_ID']/text" mode="in-service">
+    <xsl:if test="string-length(text()) &gt; 0">
+      <skos:notation rdf:datatype="https://data.ox.ac.uk/id/notation/status-ox-ac-uk-service">
+        <xsl:value-of select="text()"/>
+      </skos:notation>
     </xsl:if>
   </xsl:template>
 
