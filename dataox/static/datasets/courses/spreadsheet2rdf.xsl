@@ -114,7 +114,7 @@
         <xsl:with-param name="current-group" select="$current-group"/>
       </xsl:apply-templates>
     </mlo:offers>
-    <!-- 
+    <!--
     <xsl:for-each-group select="current-group()" group-by="presentation-start">
       <xsl:variable name="presentation-uri" select="concat($base, 'presentation/', course-identifier/text(), '/', position())"/>
       <xsl:variable name="offering-uri" select="concat($presentation-uri, '/offering')"/>
@@ -145,7 +145,7 @@
       </xsl:for-each-group>
     </xcri:course>
   </xsl:template>
-  
+
   <xsl:template match="course" mode="in-course">
     <xsl:param name="current-group"/>
     <xsl:if test="presentation-start/text()">
@@ -156,7 +156,7 @@
       </mlo:specifies>
     </xsl:if>
   </xsl:template>
-  
+
   <xsl:template match="course" mode="presentation">
     <xsl:param name="current-group"/>
     <xsl:variable name="presentation-uri" select="concat($base, 'presentation/', course-identifier/text(), '/', position())"/>
@@ -176,7 +176,7 @@
       </xsl:for-each>
     </xcri:presentation>
   </xsl:template>
-  
+
   <xsl:template match="course" mode="in-presentation">
     <xsl:param name="session-uri"/>
     <xsl:if test="session-identifiier/text()">
@@ -187,7 +187,7 @@
       </oxcap:consistsOf>
     </xsl:if>
   </xsl:template>
-  
+
   <xsl:template match="course" mode="session">
     <xsl:param name="session-uri"/>
     <oxcap:Session rdf:about="{$session-uri}">
@@ -196,7 +196,7 @@
       </xsl:apply-templates>
     </oxcap:Session>
   </xsl:template>
- 
+
   <xsl:template match="provider-identifier" mode="provider-metadata">
     <xsl:apply-templates select="text()" mode="notation"/>
   </xsl:template>
@@ -234,11 +234,11 @@
     <oxcap:visibility>
       <xsl:attribute name="rdf:resource">
         <xsl:text>http://purl.ox.ac.uk/oxcap/ns/visibility-</xsl:text>
-	    <xsl:choose>
-	      <xsl:when test=".='PB'">public</xsl:when>
-	      <xsl:when test=".='RS'">restricted</xsl:when>
-	      <xsl:when test=".='PR'">private</xsl:when>
-    	</xsl:choose>
+        <xsl:choose>
+          <xsl:when test=".='PB'">public</xsl:when>
+          <xsl:when test=".='RS'">restricted</xsl:when>
+          <xsl:when test=".='PR'">private</xsl:when>
+        </xsl:choose>
       </xsl:attribute>
     </oxcap:visibility>
   </xsl:template>
@@ -250,7 +250,7 @@
   <xsl:template match="public-apply-to" mode="in-presentation">
     <xcri:applyTo rdf:resource="{.}"/>
   </xsl:template>
-  
+
   <xsl:template match="presentation-start|presentation-start-text" mode="in-presentation">
     <xsl:param name="presentation-uri"/>
     <xsl:if test="not(self::presentation-start-text and ../presentation-start)">
@@ -296,7 +296,7 @@
       </xcri:venue>
     </xsl:if>
   </xsl:template>
-  
+
   <xsl:template match="presentation-status" mode="in-course">
     <xsl:if test="not(../presentation-start/text() or ../presentation-start-text/text())">
       <xsl:variable name="mapped">
@@ -322,9 +322,11 @@
   </xsl:template>
 
   <xsl:template match="course-learning-outcome" mode="in-course">
-    <xcri:learningOutcome><xsl:value-of select="text()"/></xcri:learningOutcome>
+    <xcri:learningOutcome>
+      <xsl:apply-templates select="text()" mode="rich-text-element"/>
+    </xcri:learningOutcome>
   </xsl:template>
-  
+
   <xsl:template match="course-prerequisite" mode="in-course">
     <xcri:regulations>
       <xsl:choose>
@@ -359,9 +361,9 @@
   </xsl:template>
 
   <xsl:template match="course-audience" mode="in-course">
-    <!-- TODO: Where does this go? --> 
+    <!-- TODO: Where does this go? -->
   </xsl:template>
-  
+
   <xsl:template match="course-subject" mode="in-course">
     <xsl:for-each select="tokenize(text(), ' ')">
       <dcterms:subject rdf:resource="http://jacs.dataincubator.org/{lower-case(.)}"/>
@@ -379,15 +381,11 @@
   </xsl:template>
 
   <xsl:template match="course-description" mode="in-course">
-    <xsl:variable name="description" select="normalize-space(text())"/>
     <dcterms:description>
-      <xsl:if test="starts-with($description, '&lt;')">
-        <xsl:attribute name="rdf:datatype">http://purl.org/xtypes/Fragment-XHTML</xsl:attribute>
-      </xsl:if>
-      <xsl:value-of select="$description"/>
+      <xsl:apply-templates select="text()" mode="rich-text-element"/>
     </dcterms:description>
   </xsl:template>
-  
+
   <xsl:template match="course-url" mode="in-course">
     <foaf:page rdf:resource="{normalize-space(.)}"/>
     <xsl:if test="not(../public-apply-to/text())">
@@ -450,7 +448,7 @@
       <xsl:value-of select="."/>
     </dcterms:date>
   </xsl:template>
-  
+
   <xsl:template match="session-start|session-end" mode="in-session">
     <xsl:param name="session-uri"/>
     <xsl:element name="{if (self::session-start) then 'mlo:start' else 'xcri:end'}">
@@ -483,11 +481,20 @@
     </skos:notation>
   </xsl:template>
 
+  <xsl:template match="text()" mode="rich-text-element">
+    <xsl:variable name="text" select="normalize-space(.)"/>
+      <xsl:if test="starts-with($text, '&lt;')">
+        <xsl:attribute name="rdf:datatype">http://purl.org/xtypes/Fragment-XHTML</xsl:attribute>
+      </xsl:if>
+    <xsl:value-of select="$text"/>
+  </xsl:template>
+
+
   <xsl:template name="instant">
     <xsl:param name="uri"/>
     <xsl:param name="value"/>
     <xsl:param name="label"/>
-    
+
     <time:Instant rdf:about="{$uri}">
       <xsl:if test="$value">
         <xsl:element name="{if (string-length($value) &gt; 10) then 'xsd:inXSDDateTime' else 'rdf:value'}">
