@@ -99,7 +99,7 @@
   <xsl:template match="course" mode="provider">
     <org:Organization rdf:about="https://course.data.ox.ac.uk/id/provider/{provider-identifier/text()}">
       <xsl:apply-templates mode="provider-metadata"/>
-      <xsl:for-each-group select="current-group()" group-by="course-identifier">
+      <xsl:for-each-group select="current-group()" group-adjacent="course-title">
         <xsl:apply-templates select="." mode="in-provider">
           <xsl:with-param name="current-group" select="current-group()"/>
         </xsl:apply-templates>
