@@ -381,7 +381,7 @@
   <xsl:template match="course-description" mode="in-course">
     <xsl:variable name="description" select="normalize-space(text())"/>
     <dcterms:description>
-      <xsl:if test="starts-with($description, '&gt;')">
+      <xsl:if test="starts-with($description, '&lt;')">
         <xsl:attribute name="rdf:datatype">http://purl.org/xtypes/Fragment-XHTML</xsl:attribute>
       </xsl:if>
       <xsl:value-of select="$description"/>
