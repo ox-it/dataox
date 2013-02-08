@@ -67,7 +67,7 @@
     </xsl:variable>
     <rdf:RDF>
       <xcri:catalog rdf:about="{$base}catalogue">
-        <rdfs:label>Courses from <xsl:value-of select="$publisher-name"/> at the University of Oxford</rdfs:label>
+        <dcterms:title>Courses from <xsl:value-of select="$publisher-name"/> at the University of Oxford</dcterms:title>
         <dcterms:publisher rdf:resource="{$publisher}"/>
         <xsl:for-each select="$data/courses/course">
           <skos:member rdf:resource="{$base}course/{course-identifier/text()}"/>
@@ -219,9 +219,9 @@
 
 
   <xsl:template match="course-title" mode="in-course">
-    <rdfs:label>
+    <dcterms:title>
       <xsl:value-of select="text()"/>
-    </rdfs:label>
+    </dcterms:title>
   </xsl:template>
 
   <xsl:template match="course-identifier" mode="in-course">
