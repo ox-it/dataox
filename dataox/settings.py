@@ -115,7 +115,6 @@ ID_MAPPING = (
     ('http://course.data.ox.ac.uk/id/', 'http://course.data.ox.ac.uk/doc/', True),
     ('https://data.ox.ac.uk/id/equipment/', 'https://www.research-facilities.ox.ac.uk/view/', True),
     ('http://oxpoints.oucs.ox.ac.uk/id/', 'http://data.ox.ac.uk/doc:oxpoints/', False),
-    ('http://id.conted.ox.ac.uk/', 'http://course.data.ox.ac.uk/doc:conted/', False),
 )
 
 HTML_MIMETYPES = ('application/xhtml+xml', 'text/html')
