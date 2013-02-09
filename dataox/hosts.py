@@ -1,7 +1,6 @@
 from django_hosts import patterns, host
 
 host_patterns = patterns('',
-    host(r'id.conted.ox.ac.uk', 'dataox.urls.id', name='conted-id'),
     host(r'data.ox.ac.uk', 'dataox.urls.main', name='data'),
     host(r'backstage.data.ox.ac.uk', 'dataox.urls.backstage', name='backstage'),
     host(r'static.data.ox.ac.uk', 'dataox.urls.static', name='static'),
