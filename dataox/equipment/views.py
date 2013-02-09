@@ -3,6 +3,7 @@ import functools
 from django.conf import settings
 from django.http import Http404
 from django.template import loader, RequestContext
+from django.core.urlresolvers import reverse
 from django.core.mail import EmailMessage
 from django.utils.decorators import method_decorator
 from django.contrib.auth.decorators import login_required
@@ -39,6 +40,20 @@ class EquipmentView(object):
     @property
     def doc_view(self):
         return reverse_full('equipment', 'doc')
+
+    id_mapping = (('https://data.ox.ac.uk/id/equipment/', 'https://www.research-facilities.ox.ac.uk/view:equipment/', True),
+                  ('https://data.ox.ac.uk/id/facility/', 'https://www.research-facilities.ox.ac.uk/view:facility/', True),
+                  ('http://id.southampton.ac.uk/', 'https://www.research-facilities.ox.ac.uk/view:soton/', False),
+                  ('http://oxpoints.oucs.ox.ac.uk/id/', 'https://www.research-facilities.ox.ac.uk/view:oxpoints/', False))
+    resource_registry = resource.resource_registry
+
+    @property
+    def desc_url(self):
+        return reverse('desc')
+
+    @property
+    def doc_url(self):
+        return reverse('doc-generic')
 
     @property
     def store_name(self):
