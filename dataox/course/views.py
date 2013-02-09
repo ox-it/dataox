@@ -1,7 +1,9 @@
 from django.http import HttpResponse, Http404
 from django_conneg.decorators import renderer
 from django_conneg.views import HTMLView, ContentNegotiatedView
+from django_hosts import reverse_full
 
+from humfrey.desc import views as desc_views
 from humfrey.elasticsearch import views as elasticsearch_views
 from humfrey.linkeddata.views import MappingView
 from humfrey.sparql import views as sparql_views
@@ -19,6 +21,14 @@ class CourseView(object):
     """
 
     @property
+    def desc_view(self):
+        return reverse_full('data', 'desc')
+
+    @property
+    def doc_view(self):
+        return reverse_full('data', 'doc-generic')
+
+    @property
     def store_name(self):
         try:
             return self._store_name
@@ -29,6 +39,9 @@ class CourseView(object):
             else:
                 self._store_name = 'public'
             return self._store_name
+
+class IdView(CourseView, desc_views.IdView): pass
+class DocView(CourseView, desc_views.DocView): pass
 
 class SearchView(CourseView, elasticsearch_views.SearchView):
     default_types = ('course',)
