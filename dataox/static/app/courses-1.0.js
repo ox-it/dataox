@@ -1,26 +1,41 @@
-/*
-
-Copyright (c) 2013 University of Oxford
-
-All rights reserved.
-
-Redistribution and use in source and binary forms, with or without modification, are permitted provided that the following conditions are met:
-
-* Redistributions of source code must retain the above copyright notice, this list of conditions and the following disclaimer.
-* Redistributions in binary form must reproduce the above copyright notice, this list of conditions and the following disclaimer in the documentation and/or other materials provided with the distribution.
-* Neither the name of the University of Oxford nor the names of its contributors may be used to endorse or promote products derived from this software without specific prior written permission.
-
-THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
-
-*/
-
+/**
+ * Copyright (c) 2013 University of Oxford
+ *
+ * All rights reserved.
+ *
+ * Redistribution and use in source and binary forms, with or without
+ * modification, are permitted provided that the following conditions are met:
+ *
+ * * Redistributions of source code must retain the above copyright notice, this
+ *   list of conditions and the following disclaimer.
+ *
+ * * Redistributions in binary form must reproduce the above copyright notice,
+ *   this list of conditions and the following disclaimer in the documentation
+ *   and/or other materials provided with the distribution.
+ *
+ * * Neither the name of the University of Oxford nor the names of its
+ *   contributors may be used to endorse or promote products derived from this
+ *   software without specific prior written permission.
+ *
+ * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
+ * AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
+ * IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
+ * ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS BE
+ * LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR
+ * CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF
+ * SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS
+ * INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN
+ * CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)
+ * ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
+ * POSSIBILITY OF SUCH DAMAGE.
+ */
 
 (function() {
 
 // Localize jQuery variable
 var jQuery;
 
-/* Load jQuery if not present 
+/* Load jQuery if not present
 */
 if (window.jQuery === undefined || window.jQuery.fn.jquery !== '1.8.2') {
     var script_tag = document.createElement('script');
@@ -44,7 +59,7 @@ if (window.jQuery === undefined || window.jQuery.fn.jquery !== '1.8.2') {
     main();
 }
 
-/* Called once jQuery has loaded 
+/* Called once jQuery has loaded
 */
 function scriptLoadHandler() {
     // Restore $ and window.jQuery to their previous values and store the
@@ -52,7 +67,7 @@ function scriptLoadHandler() {
     jQuery = window.jQuery.noConflict(true);
 
     // Call our main function
-    main(); 
+    main();
 }
 
 /* Object converter - borrowed from http://snook.ca/archives/javascript/testing_for_a_v
@@ -67,49 +82,49 @@ function oc(a)
     return o;
 }
 
-/* Our main function 
+/* Our main function
 */
-function main() { 
+function main() {
 
     jQuery(document).ready(function($) {
-    
-    		var dataTables = false; 
+
+    		var dataTables = false;
 
 				if (jQuery.isFunction(jQuery.fn.dataTable) ) {
 				  var dataTables = true;
 				}
 
 				if (dataTables) {
-	        var dataTable_css_link = $("<link>", { 
-	            rel: "stylesheet", 
-	            type: "text/css", 
-	            href: "dataTables/css/jquery.dataTables.css" 
+	        var dataTable_css_link = $("<link>", {
+	            rel: "stylesheet",
+	            type: "text/css",
+	            href: "dataTables/css/jquery.dataTables.css"
 	        });
 	        dataTable_css_link.appendTo('head');
 				}
 
-        var css_link = $("<link>", { 
-            rel: "stylesheet", 
-            type: "text/css", 
-            href: "courses.css" 
+        var css_link = $("<link>", {
+            rel: "stylesheet",
+            type: "text/css",
+            href: "courses.css"
         });
         css_link.appendTo('head');
 
 				// add the loading icon
 
-				        
+
         var paddedValue = function(v) {
           if (v < 10 ) {
           		v = "0"+v;
           }
           return v;
         }
-        
-        var now = function() {        
-          d = new Date(); 
+
+        var now = function() {
+          d = new Date();
           return d.getFullYear() + "-" + paddedValue(d.getMonth()+1) + "-" + paddedValue(d.getDate()) + "T" + paddedValue(d.getHours()) + ":" + paddedValue(d.getMinutes()) + ":" + paddedValue(d.getSeconds());
         }
-        
+
         // creates an options object with parameters from the containing div attributes
         // and then passes the element and the options on to getData
         var setUp = function(e) {
@@ -119,35 +134,35 @@ function main() {
 	         options.displayColumns = ($(e).attr("data-displayColumns"))? $(e).attr("data-displayColumns") : "";
 	         options.unit = ($(e).attr("data-providedBy"))? $(e).attr("data-providedBy") : "";
 	         options.skill = ($(e).attr("data-skill"))? "https://data.ox.ac.uk/id/ox-rdf/descriptor/" + $(e).attr("data-skill") : "";
-	         options.researchMethod = ($(e).attr("data-researchMethod"))? "https://data.ox.ac.uk/id/ox-rm/descriptor/" + $(e).attr("data-researchMethod") : "";	         
+	         options.researchMethod = ($(e).attr("data-researchMethod"))? "https://data.ox.ac.uk/id/ox-rm/descriptor/" + $(e).attr("data-researchMethod") : "";
 	         options.eligibilities = ($(e).attr("data-eligibilities"))? $(e).attr("data-eligibilities") : "";//"PU";
 	         options.startingBefore = ($(e).attr("data-startingBefore"))? $(e).attr("data-startingBefore") : "";
 	         options.startingAfter = ($(e).attr("data-startingAfter"))? $(e).attr("data-startingAfter") : "now";
-	         
+
 	         if (options.startingAfter == "now") options.startingAfter = now();
-	         
+
  					 $(e).append('<h2 class="courses-widget-title">'+options.title+'</h2>');
 	         $(e).append('<div class="courses-widget-wait" style="font-family:\'Helvetica\';" align="center">Loading courses...<br/><img src="ajax-loader.gif" alt="please wait"/></div>');
 
 	         getData(e, options);
         }
-                
+
         // constructs the query from options and sends it
         var getData = function(e, options) {
-        
-        
+
+
           var subjectFilterValue = options.skill;
           if (options.researchMethod) {
              subjectFilterValue = options.researchMethod;
           }
-          
+
 					var unitUri  = (options.unit)? options.unit : "http://oxpoints.oucs.ox.ac.uk/id/00000000";
 					var subjectFilter = (subjectFilterValue) ? "FILTER (bound(?courseSubject) && ?courseSubject = <" + subjectFilterValue + ">)" : "";
 					var eligibilityFilter = (options.eligibilities)? "EXISTS { ?course oxcap:eligibility/skos:notation ?eligibilityNotation. FILTER (datatype(?eligibilityNotation)=oxcap:eligibility && str(?eligibilityNotation) in ('" + options.eligibilities.split(" ").join("', '") + "'))}" : "";
 					var startingBeforeFilter = (options.startingBefore && !options.noDates) ? "FILTER (bound(?start) && ((datatype(?start) = xsd:date && ?start <= \"" + options.startingBefore.substring(0, 10) + "\"^^xsd:date) || (tz(?start) && ?start <= \"" + options.startingBefore + "\"^^xsd:dateTime) || (?start <= \"" + options.startingBefore.substring(0, 19) + "\")))" : "";
 					var startingAfterFilter = (options.startingAfter && !options.noDates) ? "FILTER (bound(?start) && ((datatype(?start) = xsd:date && ?start >= \"" + options.startingAfter.substring(0, 10) + "\"^^xsd:date) || (tz(?start) && ?start >= \"" + options.startingAfter + "\"^^xsd:dateTime) || (?start >= \"" + options.startingAfter.substring(0, 19) + "\")))" : "";
 					var noDatesFilter = (options.noDates) ? "FILTER (!bound(?start))" : "";
- 
+
 					var query = [
 						"SELECT DISTINCT * WHERE {",
 					  "VALUES ?unit { <"+ unitUri+"> }",
@@ -166,14 +181,14 @@ function main() {
 					  "  ?course dcterms:subject/skos:related? ?courseSubject",
 					  "  OPTIONAL { ?courseSubject skos:prefLabel ?courseSubjectLabel }",
 					  "}",
-					  "OPTIONAL {", 
+					  "OPTIONAL {",
 					  "  ?course oxcap:eligibility ?eligibility .",
 					  "  OPTIONAL { ?eligibility skos:prefLabel ?eligibilityLabel}",
 					  " }",
 					  // instances of the course being run
 					  "OPTIONAL {",
 					  " ?course mlo:specifies ?presentation .",
-					  // start date 
+					  // start date
 					  " OPTIONAL {",
 					  "    ?presentation mlo:start ?presentationStart .",
 					  "    OPTIONAL { ?presentation xcri:applyTo ?presentationApplyTo }",
@@ -181,7 +196,7 @@ function main() {
 					  "    OPTIONAL { ?presentationStart rdfs:label ?presentationStartLabel }",
 					  "  }",
 					  "  OPTIONAL {",
-					  "   ?presentation xcri:venue ?presentationVenue .", 
+					  "   ?presentation xcri:venue ?presentationVenue .",
 					  // venue name
 					  "   OPTIONAL { ?presentationVenue rdfs:label|dc:title ?presentationVenueLabel }",
 					  // venue lat lon
@@ -195,7 +210,7 @@ function main() {
 					  // venue address
 					  "   OPTIONAL {",
 					  "     ?presentationVenue spatialrelations:within* ?withAdr . ?withAdr v:adr ?adr .",
-					  
+
 					  "     OPTIONAL {",
 					  "       ?withAdr skos:prefLabel|rdfs:label ?containerLabel",
 					  "     }",
@@ -218,7 +233,7 @@ function main() {
 					  noDatesFilter,
 						"} ORDER BY ASC(?courseTitle)"
 					].join("\n");
-										
+
 					$.ajax({
 						url: "https://data.ox.ac.uk/sparql/",
 						    type: "GET",
@@ -236,18 +251,18 @@ function main() {
 					});
 				}
 
-        // handles the query results 
+        // handles the query results
  				var handleData = function(e, options, data) {
- 				
+ 
 
-			    /* *** uncomment for debugging: *** 
+			    /* *** uncomment for debugging: ***
                 if (window.jsDump) {
 		    	  jsDump.HTML = true;
 		    	  var dumped = jsDump.parse(data);
 		    	  $('#debug').html(dumped);
                 }
 			    /* ******************************** */
-				
+
 	        var columnsAvailable = { 'start': '<th class="course-presentation-start">Start date</th>',
 						'title': '<th class="course-title">Title</th>',
 						'subject': '<th class="course-subject">Subject</th>',
@@ -257,7 +272,7 @@ function main() {
 						'eligibility': '<th class="course-eligibility">Eligibility</th>',
 						'info': '<th class="course-info">Further information</th>',
 					};
-	
+
 					var tableHeaderCells = "";
 					var columnsToDisplay = [];
 					if (options.displayColumns != "") {
@@ -270,30 +285,30 @@ function main() {
 					for (var i in columnsToDisplay) {
 					    tableHeaderCells += columnsAvailable[i];
 					}
-	
+
 					var tableHead = '<table class="course-results-table">' +
 	                                                 '<thead>' +
 						          '<tr>' +
 						          tableHeaderCells +
 	                                                  '</tr>' +
-	                                                 '</thead>' + 
+	                                                 '</thead>' +
 					                 '<tbody>';
-	
+
 					var tableRows = [];
 					var months = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
 					var weekday = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
-					
+
 					var presentations = [];
-	
+
 				  for (var i=0, max=data.results.bindings.length; i<max; i++) {
-             
+
 				    // for each result:
 					  var binding = data.results.bindings[i];
 					  var rowToDisplay = columnsToDisplay;
-					    
+
 					  if ($.inArray(binding.presentation.value, presentations) == -1) {
 
-              presentations.push(binding.presentation.value); 
+              presentations.push(binding.presentation.value);
 
 						  if ('start' in columnsToDisplay) {
 						      var presentationStart = "";
@@ -304,7 +319,7 @@ function main() {
 							  if (presentationStartFormatted.match(/, 0:00/)) {
 								  presentationStartFormatted = presentationStartFormatted.replace('\, 0:00', '')
 							  }
-	
+
 						      }
 						      rowToDisplay.start = '<td class="course-presentation-start">' + presentationStartFormatted + '</td>';
 						  }
@@ -317,7 +332,7 @@ function main() {
 						      }
 						      rowToDisplay.title = '<td class="course-title">' + courseTitle + '</td>';
 						  }
-	
+
 						  if ('subject' in columnsToDisplay) {
 						      var courseSubject = "";
 						      if (binding.courseSubject) {
@@ -360,28 +375,28 @@ function main() {
 						      }
 						      rowToDisplay.info = '<td class="course-info">' + courseInfo + '</td>';
 						  }
-						  
+
 						  var row = "<tr>";
-	
+
 						  for(var column in rowToDisplay) {
 						       row += rowToDisplay[column];
 						  }
-	
+
 						  row += "</tr>";
 						  tableRows.push(row);
 						}
-					}		
-	  
+					}
+
 					var tableFoot = '</tbody></table>';
-					
-					
+
+
 					var linkTitle = (options.noDates)? "courses with specific dates" : "courses without specific dates";
 					var $noDatesToggle = $('<a class="courses-widget-no-date-toggle-link" href="#">' + linkTitle + '</a>').click(function () {
 	           options.noDates = (options.noDates)? false : true;
 	           $(e).children('.course-results-table').remove();
 	           $(e).children('.dataTables_wrapper').remove();
-	           $(this).remove(); 
-	           getData(e, options);	           
+	           $(this).remove();
+	           getData(e, options);
 	           return false;
 	         });
 
@@ -393,9 +408,9 @@ function main() {
 					}
 
 				}
-				 
+
         $('.courses-widget-container').each(function(i, e){ setUp(e);});
     });
 }
 
-})(); 
+})();
