@@ -270,7 +270,7 @@ function main() {
 						'description': '<th class="course-description">Description</th>',
 						'venue': '<th class="course-presentation-venue">Venue</th>',
 						'eligibility': '<th class="course-eligibility">Eligibility</th>',
-						'info': '<th class="course-info">Further information</th>',
+						'info': '<th class="course-info">Further information</th>'
 					};
 
 					var tableHeaderCells = "";
