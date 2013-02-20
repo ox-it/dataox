@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+{% load compressed %}<!DOCTYPE html>
 <!--[if lt IE 7 ]> <html lang="en" class="ie ie6"> <![endif]-->
 <!--[if IE 7 ]>    <html lang="en" class="ie ie7"> <![endif]-->
 <!--[if IE 8 ]>    <html lang="en" class="ie ie8"> <![endif]-->
@@ -12,7 +12,7 @@
   <script src="{{ STATIC_URL }}js/html5shiv.js"></script>
   <![endif]-->
 
-  <link rel="stylesheet" type="text/css" href="{{ STATIC_URL }}jquery-ui/css/smoothness/jquery-ui-1.8.22.custom.css"></script>
+  <link rel="stylesheet" type="text/css" href="{{ STATIC_URL }}lib/jquery-ui/themes/base/jquery.ui.all.css"></script>
 
   <!-- print stylesheet for print stlying -->
   <link media="print" href="{{ STATIC_URL }}equipment/css/print.css" rel="stylesheet" type="text/css" />
@@ -65,11 +65,11 @@
     var staticURL = "{{ STATIC_URL|escapejs }}";
     var searchURL = "{% url search %}";
   </script>
-  <script type="text/javascript" src="{{ STATIC_URL }}js/jquery-1.7.2.min.js"></script>
-  <script type="text/javascript" src="{{ STATIC_URL }}jquery-collapsible-content/js/jQuery.collapsible.js"></script>
-  <script type="text/javascript" src="{{ STATIC_URL }}jquery-ui/js/jquery-ui-1.8.22.custom.min.js"></script>
-  <script type="text/javascript" src="{{ STATIC_URL }}equipment/base.js"></script>
-  <script type="text/javascript" src="{{ STATIC_URL }}api-1.0.js"></script>
+  {% compressed_js 'jquery' %}
+  {% compressed_js 'jquery.collapsible' %}
+  {% compressed_js 'jquery-ui' %}
+  {% compressed_js 'dataox' %}
+  {% compressed_js 'equipment' %}
   {% block extra_head %}{% endblock %}
   
 

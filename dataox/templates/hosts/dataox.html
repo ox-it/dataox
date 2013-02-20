@@ -1,5 +1,4 @@
-{% load hosts %}
-<!DOCTYPE html>
+{% load hosts %}{% load compressed %}<!DOCTYPE html>
 <html lang="en-GB">
   <head>
     <meta charset="utf-8">
@@ -15,10 +14,9 @@
     <script type="text/javascript">
       var staticURL = "{{ STATIC_URL|escapejs }}";
     </script>
-    <script type="text/javascript" src="{{ STATIC_URL }}js/jquery-1.7.2.min.js"></script>
-    <script type="text/javascript" src="{{ STATIC_URL }}OpenLayers-2.12/OpenLayers.js"></script>
-    <script type="text/javascript" src="{{ STATIC_URL }}js/jquery.flot.js"></script>
-    <script type="text/javascript" src="{{ STATIC_URL }}api-1.0.js"></script>
+    {% compressed_js 'jquery' %}
+    {% compressed_js 'openlayers' %}
+    {% compressed_js 'dataox' %}
     <script type="text/javascript" src="{{ STATIC_URL }}js/base.js"></script>
     {% block extra_head %}{% endblock %}
     <link href="{% host_url search on data %}?opensearchdescription" type="application/opensearchdescription+xml" rel="search" title="data.ox.ac.uk">

@@ -17,8 +17,7 @@ search_args = {'opensearch_meta': {'ShortName': 'data.ox.ac.uk',
                'opensearch_images': [{'url': 'https://static.data.ox.ac.uk/favicon.ico'}]}
 
 urlpatterns = patterns('',
-    (r'^$', misc_views.FeedView.as_view(rss_url='http://blogs.oucs.ox.ac.uk/opendata/feed/',
-                                        template_name='index'), {}, 'index'),
+    (r'^$', misc_views.SimpleView.as_view(template_name='index'), {}, 'index'),
 
     (r'^id/.*$', desc_views.IdView.as_view(), {}, 'id'),
 
