@@ -7,3 +7,7 @@ MANIFEST
 .project
 .settings
 .pydevproject
+dataox/download-cache
+dataox/image-cache
+dataox/source-data
+dataox/static-collected
