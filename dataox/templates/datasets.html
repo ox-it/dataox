@@ -16,25 +16,25 @@
           </tr>
         </thead>
         <tbody>
-{% for dataset in datasets %}
+{% for subject in subjects %}
           <tr class="row-{% cycle "odd" "even" %}">
-            <td>{{ dataset|node }}</td>
+            <td>{{ subject|node }}</td>
             <td>
-              {% for publisher in dataset.all.dcterms_publisher %}
+              {% for publisher in subject.all.dcterms_publisher %}
                 {{ publisher|node }}{% if not forloop.last %}<br/>{% endif %}
               {% endfor %}
             </td>
-            <td>{{ dataset.dcterms_license|node|default:"<em>unknown</em>" }}</td>
-            <td>{{ dataset.dcterms_description|node|linebreaksbr }}</td>
+            <td>{{ subject.dcterms_license|node|default:"<em>unknown</em>" }}</td>
+            <td>{{ subject.dcterms_description|node|linebreaksbr }}</td>
             <td class="badges">
-              {% if dataset.dcterms_license.foaf_logo %}
-                <a href="{{ dataset.dcterms_license.doc_url }}">
-                  <img src="{{ dataset.dcterms_license.foaf_logo.uri }}" alt="{{ dataset.dcterms_license }}"/>
+              {% if subject.dcterms_license.foaf_logo %}
+                <a href="{{ subject.dcterms_license.doc_url }}">
+                  <img src="{{ subject.dcterms_license.foaf_logo.uri }}" alt="{{ subject.dcterms_license }}"/>
                 </a>
               {% endif %} 
-              {% if dataset.open_data_stars %}
+              {% if subject.open_data_stars %}
                 <a href="https://docs.data.ox.ac.uk/glossary.html#term-open-data-stars">
-                  <img src="{{ STATIC_URL }}desc/{{ dataset.open_data_stars.0 }}" alt="{{ dataset.open_data_stars.1 }}"/>
+                  <img src="{{ STATIC_URL }}desc/{{ subject.open_data_stars.0 }}" alt="{{ subject.open_data_stars.1 }}"/>
                 </a>
               {% endif %}
             </td>

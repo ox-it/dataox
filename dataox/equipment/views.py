@@ -127,7 +127,7 @@ class SearchView(EquipmentView, elasticsearch_views.SearchView):
                                                        store=self.store)
         return context
 
-class BrowseView(EquipmentView, RDFView, HTMLView, CannedQueryView, MappingView):
+class BrowseView(EquipmentView, CannedQueryView, RDFView, HTMLView, MappingView):
     concept_scheme = rdflib.URIRef('https://data.ox.ac.uk/id/equipment-category')
     datatype = rdflib.URIRef('https://data.ox.ac.uk/id/notation/equipment-category')
 
@@ -185,6 +185,7 @@ class BrowseView(EquipmentView, RDFView, HTMLView, CannedQueryView, MappingView)
                 }}""".format(concept_scheme=self.concept_scheme.n3())
 
     def finalize_context(self, request, context, notation):
+        self.undefer()
         graph = context['graph']
         context['equipment'] = map(self.resource, set(graph.subjects(NS.rdf.type, NS.oo.Equipment)) \
                                                 | set(graph.subjects(NS.rdf.type, NS.cerif.Equipment)))
@@ -203,7 +204,7 @@ class BrowseView(EquipmentView, RDFView, HTMLView, CannedQueryView, MappingView)
 
         return context
 
-class FacilityListView(EquipmentView, HTMLView, RDFView, CannedQueryView, MappingView):
+class FacilityListView(EquipmentView, CannedQueryView, HTMLView, RDFView, MappingView):
     query = """
         DESCRIBE * WHERE {
           VALUES ?facilityType { cerif:Facility oo:Facility } .
@@ -214,7 +215,7 @@ class FacilityListView(EquipmentView, HTMLView, RDFView, CannedQueryView, Mappin
     template_name = "equipment/facilities"
     with_labels = True
 
-    def get_subjects(self, request, graph):
+    def get_subjects(self, graph):
         facilities = set(graph.subjects(NS.rdf.type, NS.cerif.Facility)) \
                    | set(graph.subjects(NS.rdf.type, NS.oo.Facility))
 
@@ -222,3 +223,4 @@ class FacilityListView(EquipmentView, HTMLView, RDFView, CannedQueryView, Mappin
         facilities.sort(key=lambda facility: facility.label)
 
         return facilities
+

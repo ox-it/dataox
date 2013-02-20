@@ -47,7 +47,7 @@ class CatalogListView(CourseView, sparql_views.CannedQueryView, HTMLView, RDFVie
             dcterms:publisher ?publisher .
         }"""
 
-    def get_subjects(self, request, graph, renderers):
+    def get_subjects(self, graph):
         return sorted(map(self.resource, graph.subjects(NS.rdf.type, NS.xcri.catalog)), key=lambda x:x.label)
     def get_additional_context(self, request, renderers):
         return {'feed_renderers': [{'format': r.format,
@@ -154,12 +154,14 @@ class CatalogDetailView(CourseView, sparql_views.CannedQueryView, RDFView, Conte
 
     @renderer(format='xcricap', mimetypes=('application/xcri-cap+xml',), name="XCRI-CAP 1.2 (Simple)")
     def render_xcricap(self, request, context, template_name):
+        self.undefer()
         self.wrangle_two_three_codes(context['graph'])
         serializer = XCRICAPSerializer(context['graph'], self.catalog_uri)
         return HttpResponse(serializer.generator(), mimetype='application/xcri-cap+xml')
 
     @renderer(format='xcricap-full', mimetypes=(), name="XCRI-CAP 1.2 (Full)")
     def render_xcricap_full(self, request, context, template_name):
+        self.undefer()
         self.wrangle_two_three_codes(context['graph'])
         serializer = XCRICAPSerializer(context['graph'], self.catalog_uri, simple=False)
         return HttpResponse(serializer.generator(), mimetype='application/xcri-cap+xml')

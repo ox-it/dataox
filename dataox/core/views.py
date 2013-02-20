@@ -6,11 +6,12 @@ import rdflib
 from humfrey.utils.views import RedisView
 from humfrey.results.views.standard import RDFView, ResultSetView
 from humfrey.utils.namespaces import NS
-from humfrey.sparql.views import StoreView
+from humfrey.sparql.views import StoreView, CannedQueryView
 from humfrey.linkeddata.resource import Resource
 from humfrey.linkeddata.views import MappingView
 
-class DatasetView(StoreView, MappingView, RDFView, HTMLView):
+class DatasetView(CannedQueryView, MappingView, RDFView, HTMLView):
+    template_name = 'datasets'
     catalog = rdflib.URIRef("https://data.ox.ac.uk/id/dataset/catalogue")
 
     query = """
@@ -18,22 +19,11 @@ class DatasetView(StoreView, MappingView, RDFView, HTMLView):
             {catalog} dcat:dataset ?dataset .
             ?dataset a void:Dataset .
             OPTIONAL {{ ?dataset dcterms:license ?license }} .
-            OPTIONAL {{ ?dataset dcterms:publisher ?publisher }} .
             OPTIONAL {{ ?dataset oo:contact ?contact }} .
         }}""".format(catalog=catalog.n3())
 
-    def get(self, request):
-        graph = self.endpoint.query(self.query)
-        datasets = graph.subjects(NS['rdf'].type, NS['void'].Dataset)
-        datasets = [Resource(uri, graph, self.endpoint) for uri in datasets]
-        datasets.sort(key=lambda ds:unicode(ds.label))
-
-        context = {
-            'graph': graph,
-            'datasets': datasets,
-        }
-
-        return self.render(request, context, 'datasets')
+    def get_subjects(self, graph):
+        return map(self.resource, graph.objects(self.catalog, NS.dcat.dataset))
 
 EXAMPLES = (
     {'slug': 'science-area',

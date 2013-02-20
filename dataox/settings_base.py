@@ -29,6 +29,7 @@ INSTALLED_APPS = (
     'humfrey.archive',
     'humfrey.ckan',
     'humfrey.elasticsearch',
+    'humfrey.feeds',
     'humfrey.sparql',
     'humfrey.update',
     'humfrey.graphviz',
@@ -43,6 +44,7 @@ INSTALLED_APPS = (
     'dataox.equipment',
     'dataox.resource',
     'dataox.feeds',
+    'dataox.old_feeds',
     'dataox.vacancy',
     'djcelery',
     'pipeline',
@@ -182,6 +184,10 @@ MIDDLEWARE_CLASSES = (
 
 ENDPOINT_QUERY = 'http://localhost:3030/public/query'
 ENDPOINT_GRAPH = 'http://localhost:3030/public/data'
+
+HUMFREY_FEEDS = {
+    'organization': 'dataox.feeds.organization.OrganizationFeedView',
+}
 
 UPDATE_TRANSFORMS = (
     'dataox.vacancy.transform.RetrieveVacancies',
