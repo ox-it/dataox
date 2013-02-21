@@ -19,5 +19,3 @@ STATIC_ROOT = os.path.join(os.path.dirname(__file__),
                            'static-collected')
 
 PIPELINE_CLOSURE_BINARY = '/home/alex/src/closure/compiler'
-
-STATIC_URL = '//localhost:8001/'

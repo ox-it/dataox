@@ -7,9 +7,6 @@
 [submodule "dataox/static/lib/DataTables"]
 	path = dataox/static/lib/DataTables
 	url = git://github.com/DataTables/DataTables.git
-[submodule "dataox/static/lib/jquery"]
-	path = dataox/static/lib/jquery
-	url = git://github.com/jquery/jquery.git
 [submodule "dataox/static/lib/oauth2"]
 	path = dataox/static/lib/oauth2
 	url = git://github.com/ox-it/javascript-oauth2.git
