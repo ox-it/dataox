@@ -27,10 +27,12 @@ def AdvancedSearchForm(*args, **kwargs):
     attrs = {'q': forms.CharField(label='Query'),
              'filter.basedNear.uri': forms.ChoiceField(label='Location',
                                                        choices=based_near_choices,
-                                                       initial=''),
+                                                       initial='',
+                                                       required=False),
              'filter.formalOrganisation.uri': forms.ChoiceField(label='Institution',
                                                                 choices=formal_organisation_choices,
-                                                                initial='http://oxpoints.oucs.ox.ac.uk/id/00000000')}
+                                                                initial='http://oxpoints.oucs.ox.ac.uk/id/00000000',
+                                                                required=False)}
     form = type('AdvancedSearchForm', (forms.Form,), attrs)
     
     return form(*args, **kwargs)
