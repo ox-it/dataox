@@ -75,7 +75,7 @@ PIPELINE_JS = {
     'equipment': {'source_filenames': ('equipment/base.js',),
                   'output_filename': ('equipment.min.js')},
     'courses': {'source_filenames': ('app/courses-1.0.js',),
-                'output_filename': ('lib/courses-1.0.min.js')},
+                'output_filename': ('app/courses-1.0.min.js')},
     'html5shiv': {'source_filenames': ('lib/html5shiv.js',),
                   'output_filename': ('lib/html5shiv.min.js')},
     'oauth2': {'source_filenames': ('lib/oauth2/oauth2/oauth2.js',),
