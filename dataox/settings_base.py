@@ -302,6 +302,8 @@ HUMFREY_FEEDS = {
 
 import sys
 import rdflib
+import urllib2
+
 if map(int, rdflib.__version__.split('.')) < [3, 0, 0]:
     from datetime import date, time, datetime
     l = sys.modules['rdflib.Literal']
@@ -316,11 +318,10 @@ if map(int, rdflib.__version__.split('.')) < [3, 0, 0]:
         (date      , (lambda i:i.isoformat(),_XSD_NS[u'date'])),
         (time      , (lambda i:i.isoformat(),_XSD_NS[u'time'])),
     ]
-    del sys, date, datetime, time, l, _XSD_NS
+    del date, datetime, time, l, _XSD_NS
 
 # http://bugs.python.org/issue9639 (Python 2.6.6 regression)
 
-import urllib2
 
 if sys.version_info[:2] == (2, 6) and sys.version_info[2] >= 6:
     def fixed_http_error_401(self, req, fp, code, msg, headers):
