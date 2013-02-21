@@ -19,13 +19,20 @@ from humfrey.results.views.standard import RDFView
 from humfrey.sparql.views import CannedQueryView, StoreView
 from humfrey.utils.namespaces import NS
 
-from . import forms
+from . import forms, resource
 
 class EquipmentView(object):
     """
     Mixin to choose between public and internal indexes.
     """
     
+    id_mapping = (('https://data.ox.ac.uk/id/equipment/', 'https://www.research-facilities.ox.ac.uk/view:equipment/', True),
+                  ('https://data.ox.ac.uk/id/facility/', 'https://www.research-facilities.ox.ac.uk/view:facility/', True),
+                  ('http://id.southampton.ac.uk/', 'https://www.research-facilities.ox.ac.uk/view:soton/', False),
+                  ('http://oxpoints.oucs.ox.ac.uk/id/', 'https://www.research-facilities.ox.ac.uk/view:oxpoints/', False))
+
+    resource_registry = resource.resource_registry
+
     @property
     def desc_view(self):
         return reverse_full('equipment', 'desc')
