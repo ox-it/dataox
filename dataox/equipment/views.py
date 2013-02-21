@@ -193,7 +193,7 @@ class BrowseView(EquipmentView, CannedQueryView, RDFView, HTMLView, MappingView)
 
     def finalize_context(self, request, context, notation):
         self.undefer()
-        graph = context['graph']
+        graph = context['_graph']
         context['equipment'] = map(self.resource, set(graph.subjects(NS.rdf.type, NS.oo.Equipment)) \
                                                 | set(graph.subjects(NS.rdf.type, NS.cerif.Equipment)))
         context['equipment'].sort(key=lambda s:s.label)
