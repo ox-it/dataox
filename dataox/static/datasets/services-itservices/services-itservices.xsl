@@ -26,6 +26,7 @@
   <xsl:variable name="group-base-uri">https://data.ox.ac.uk/id/group/unit-member/</xsl:variable>
   <xsl:variable name="it-services">http://oxpoints.oucs.ox.ac.uk/id/31337175</xsl:variable>
   <xsl:variable name="university-of-oxford">http://oxpoints.oucs.ox.ac.uk/id/00000000</xsl:variable>
+  <xsl:variable name="team-base-uri">https://data.ox.ac.uk/id/itservices/team/</xsl:variable>
 
   <xsl:key name="user-bases" match="/site/lists/list[@name='User bases']/rows/row" use="@id"/>
   <xsl:key name="users" match="/site/lists/list[@name='User Information List']/rows/row" use="@id"/>
@@ -60,6 +61,19 @@
         </xsl:otherwise>
       </xsl:choose>
     </xsl:for-each>
+  </xsl:function>
+
+  <xsl:function name="ex:team-uri">
+    <xsl:param name="team"/>
+    <xsl:choose>
+      <xsl:when test="$team/fields/field[@name='URI']/text/text()">
+        <xsl:value-of select="$team/fields/field[@name='URI']/text/text()"/>
+      </xsl:when>
+      <xsl:otherwise>
+        <xsl:value-of select="$team-base-uri"/>
+        <xsl:value-of select="$team/@id"/>
+      </xsl:otherwise>
+    </xsl:choose>
   </xsl:function>
 
   <xsl:template match="/">
@@ -186,6 +200,12 @@
     <dcterms:subject rdf:resource="{$service-base-uri}activity-category/{@id}"/>
   </xsl:template>
   
+  <xsl:template match="field[@name='Service_x0020_Delivery_x0020_Man']/lookup" mode="in-service">
+    <xsl:if test="$internal">
+      <adhoc:serviceTeam rdf:resource="{ex:team-uri(.)}"/
+    </xsl:if>
+  </xsl:template>
+  
   <xsl:template match="field[@name='Generic_x0020_user_x0020_bases']/lookup" mode="in-offering">
     <gr:eligibleCustomerTypes rdf:resource="{key('user-bases', @id)/fields/field[@name='URI']/text/text()}"/>
   </xsl:template>
@@ -197,6 +217,18 @@
   <xsl:template match="field[@name='Escalate_x0020_to']/user" mode="in-service">
     <xsl:if test="$internal">
       <adhoc:serviceEscalationContact rdf:resource="{ex:agent-uri(.)}"/>
+    </xsl:if>
+  </xsl:template>
+
+  <xsl:template match="field[@name='Service_x0020_Owner']/user" mode="in-service">
+    <xsl:if test="$internal">
+      <adhoc:serviceOwner rdf:resource="{ex:agent-uri(.)}"/>
+    </xsl:if>
+  </xsl:template>
+
+  <xsl:template match="field[@name='Business_x0020_Owner']/user" mode="in-service">
+    <xsl:if test="$internal">
+      <adhoc:serviceBusinessOwner rdf:resource="{ex:agent-uri(.)}"/>
     </xsl:if>
   </xsl:template>
 
