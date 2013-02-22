@@ -47,17 +47,18 @@
     <xsl:param name="element"/>
     <xsl:for-each select="$element">
       <xsl:variable name="user" select="key('users', @id)"/>
+      <xsl:variable name="content-type" select="$user//field[@name='ContentType']/text"/>
       <xsl:choose>
-        <xsl:when test="$user//field[@name='ContentType']/text='DomainGroup'">
+        <xsl:when test="$content-type='DomainGroup'">
           <xsl:value-of select="$group-base-uri"/>
           <xsl:value-of select="substring-after($user//field[@name='Name']/text, 'AD-OAK\group_')"/>
         </xsl:when>
-        <xsl:when test="$user//field[@name='ContentType']/text='Person'">
+        <xsl:when test="$content-type='Person'">
           <xsl:value-of select="$person-base-uri"/>
           <xsl:value-of select="$user//field[@name='UserName']/text"/>
         </xsl:when>
         <xsl:otherwise>
-          <xsl:message terminate="yes">Unexpected ContentType: "<xsl:value-of select="$user//field[@name='ContentType']/text"/>" on user <xsl:value-of select="@id"/>; terminating.</xsl:message>
+          <xsl:message terminate="yes">Unexpected ContentType: "<xsl:value-of select="$content-type"/>"; terminating.</xsl:message>
         </xsl:otherwise>
       </xsl:choose>
     </xsl:for-each>
