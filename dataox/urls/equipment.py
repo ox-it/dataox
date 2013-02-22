@@ -7,7 +7,6 @@ from django_webauth.views import LogoutView
 from humfrey.misc import views as misc_views
 
 from dataox.equipment import views as equipment_views
-from dataox.equipment.resource import resource_registry
 
 from .main import handler404, handler500
 
