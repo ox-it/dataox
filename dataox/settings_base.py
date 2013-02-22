@@ -31,6 +31,7 @@ INSTALLED_APPS = (
     'humfrey.elasticsearch',
     'humfrey.feeds',
     'humfrey.sparql',
+    'humfrey.streaming',
     'humfrey.update',
     'humfrey.graphviz',
     'humfrey.manage',
