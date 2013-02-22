@@ -202,7 +202,7 @@
   
   <xsl:template match="field[@name='Service_x0020_Delivery_x0020_Man']/lookup" mode="in-service">
     <xsl:if test="$internal">
-      <adhoc:serviceTeam rdf:resource="{ex:team-uri(.)}"/
+      <adhoc:serviceTeam rdf:resource="{ex:team-uri(.)}"/>
     </xsl:if>
   </xsl:template>
   
