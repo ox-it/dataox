@@ -68,6 +68,9 @@ STATIC_URL = '//static.data.ox.ac.uk/'
 STATICFILES_DIRS = (
     os.path.join(imp.find_module('dataox')[1], 'static'),
     os.path.join(imp.find_module('humfrey')[1], 'static'),
+
+    ('lib/openlayers', '/usr/share/openlayers/www'), # Fedora
+    ('lib/openlayers', '/usr/share/javascript/openlayers'), # Debian
 )
 
 PIPELINE_JS = {
@@ -101,8 +104,8 @@ PIPELINE_JS = {
                       'output_filename': 'lib/jquery.cookie.min.js'},
     'jquery.dataTables': {'source_filenames': ('lib/DataTables/media/js/jquery.dataTables.js',),
                           'output_filename': 'lib/jquery.dataTables.min.js'},
-    'openlayers': {'source_filenames': ('lib/openlayers/build/OpenLayers.js',),
-                   'output_filename': 'lib/OpenLayers.min.js'},
+    'openlayers': {'source_filenames': ('lib/openlayers/OpenLayers.js',),
+                   'output_filename': 'lib/openlayers/OpenLayers.min.js'},
 }
 
 PIPELINE_JS_COMPRESSOR = 'pipeline.compressors.closure.ClosureCompressor'

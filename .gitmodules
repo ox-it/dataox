@@ -16,6 +16,3 @@
 [submodule "dataox/static/lib/jquery-ui"]
 	path = dataox/static/lib/jquery-ui
 	url = git://github.com/jquery/jquery-ui.git
-[submodule "dataox/static/lib/openlayers"]
-	path = dataox/static/lib/openlayers
-	url = git://github.com/openlayers/openlayers.git
