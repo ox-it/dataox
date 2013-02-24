@@ -1,5 +1,6 @@
 import imp
 import os
+import platform
 
 DEBUG = False
 STAGING = False
@@ -68,10 +69,19 @@ STATIC_URL = '//static.data.ox.ac.uk/'
 STATICFILES_DIRS = (
     os.path.join(imp.find_module('dataox')[1], 'static'),
     os.path.join(imp.find_module('humfrey')[1], 'static'),
-
-    ('lib/openlayers', '/usr/share/openlayers/www'), # Fedora
-    ('lib/openlayers', '/usr/share/javascript/openlayers'), # Debian
 )
+
+# OpenLayers should be installed as a system-wide package. To build the Debian
+# package, clone git://github.com/ox-it/debian-packaging.git and build the
+# package in the openlayers directory.
+distname, _, _ = platform.linux_distribution()
+if distname == 'Fedora':
+    STATICFILES_DIRS += (('lib/openlayers', '/usr/share/openlayers/www'),)
+elif distname == 'debian':
+    STATICFILES_DIRS += (('lib/openlayers', '/usr/share/javascript/openlayers'),)
+else:
+    raise AssertionError("Unsupported distribution")
+del distname
 
 PIPELINE_JS = {
     'dataox': {'source_filenames': ('app/dataox-1.0.js',),
