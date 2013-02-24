@@ -25,6 +25,7 @@ Depends: ${misc:Depends},
          python-oauth2app,
          python-sharepoint,
          xcri-rdf,
-         libclosure-compiler-java
+         libclosure-compiler-java,
+         libjs-openlayers
 Description: Additional code for Oxford's data.ox.ac.uk service.
 
