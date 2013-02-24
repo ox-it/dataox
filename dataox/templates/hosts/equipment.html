@@ -68,7 +68,7 @@
   {% compressed_js 'jquery' %}
   {% compressed_js 'jquery.collapsible' %}
   {% compressed_js 'jquery-ui' %}
-  {% compressed_js 'openlayers' %}
+  <script type="text/javascript" src="{{ STATIC_URL }}lib/openlayers/OpenLayers.js"></script>
   {% compressed_js 'dataox' %}
   {% compressed_js 'equipment' %}
   {% block extra_head %}{% endblock %}

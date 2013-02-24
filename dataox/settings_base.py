@@ -114,8 +114,6 @@ PIPELINE_JS = {
                       'output_filename': 'lib/jquery.cookie.min.js'},
     'jquery.dataTables': {'source_filenames': ('lib/DataTables/media/js/jquery.dataTables.js',),
                           'output_filename': 'lib/jquery.dataTables.min.js'},
-    'openlayers': {'source_filenames': ('lib/openlayers/OpenLayers.js',),
-                   'output_filename': 'lib/openlayers/OpenLayers.min.js'},
 }
 
 PIPELINE_JS_COMPRESSOR = 'pipeline.compressors.closure.ClosureCompressor'
