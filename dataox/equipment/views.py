@@ -55,6 +55,20 @@ class EquipmentView(object):
     def doc_url(self):
         return reverse('doc-generic')
 
+    id_mapping = (('https://data.ox.ac.uk/id/equipment/', 'https://www.research-facilities.ox.ac.uk/view:equipment/', True),
+                  ('https://data.ox.ac.uk/id/facility/', 'https://www.research-facilities.ox.ac.uk/view:facility/', True),
+                  ('http://id.southampton.ac.uk/', 'https://www.research-facilities.ox.ac.uk/view:soton/', False),
+                  ('http://oxpoints.oucs.ox.ac.uk/id/', 'https://www.research-facilities.ox.ac.uk/view:oxpoints/', False))
+    resource_registry = resource.resource_registry
+
+    @property
+    def desc_url(self):
+        return reverse('desc')
+
+    @property
+    def doc_url(self):
+        return reverse('doc-generic')
+
     @property
     def store_name(self):
         if self.request.user.groups.filter(name='member').count():

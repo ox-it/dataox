@@ -5,17 +5,14 @@ from oauth2app.consts import REALM
 
 class OAuth2Middleware(object):
     def process_request(self, request):
-        authorization = request.META.get('HTTP_AUTHORIZATION', '')
-        if not authorization.startswith('Bearer '):
-            return
-
         authenticator = Authenticator()
         try:
             authenticator.validate(request)
-        except AuthenticationException:
-            return authenticator.error_response(content="You didn't authenticate.")
-
-        request.user = authenticator.user
+        except AuthenticationException, e:
+            if authenticator.bearer_token or authenticator.auth_type in ['bearer', 'mac']:
+                return authenticator.error_response(content="You didn't authenticate.")
+        else:
+            request.user = authenticator.user
 
     def process_response(self, request, response):
 

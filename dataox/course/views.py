@@ -1,7 +1,9 @@
 from django.http import HttpResponse, Http404
 from django_conneg.decorators import renderer
 from django_conneg.views import HTMLView, ContentNegotiatedView
+from django_hosts import reverse_full
 
+from humfrey.desc import views as desc_views
 from humfrey.elasticsearch import views as elasticsearch_views
 from humfrey.linkeddata.views import MappingView
 from humfrey.sparql import views as sparql_views
@@ -19,6 +21,14 @@ class CourseView(object):
     """
 
     @property
+    def desc_view(self):
+        return reverse_full('data', 'desc')
+
+    @property
+    def doc_view(self):
+        return reverse_full('data', 'doc-generic')
+
+    @property
     def store_name(self):
         try:
             return self._store_name
@@ -29,6 +39,9 @@ class CourseView(object):
             else:
                 self._store_name = 'public'
             return self._store_name
+
+class IdView(CourseView, desc_views.IdView): pass
+class DocView(CourseView, desc_views.DocView): pass
 
 class SearchView(CourseView, elasticsearch_views.SearchView):
     default_types = ('course',)
@@ -41,14 +54,34 @@ class SearchView(CourseView, elasticsearch_views.SearchView):
 class CatalogListView(CourseView, sparql_views.CannedQueryView, HTMLView, RDFView, MappingView):
     template_name = 'course/catalog_list'
 
-    query = """
-        DESCRIBE ?catalog ?publisher WHERE {
-          ?catalog a xcri:catalog ;
-            dcterms:publisher ?publisher .
-        }"""
+    @property
+    def query(self):
+        return """\
+CONSTRUCT {{
+  {url} foaf:topic ?catalog .
+  ?catalog ?catalogPredicate ?catalogObject .
+  ?publisher ?publisherPredicate ?publisherObject
+}} WHERE {{
+  VALUES ?catalogPredicate {{
+    rdf:type
+    dcterms:title
+    dcterms:description
+    dcterms:publisher
+    dcterms:license
+    skos:notation
+  }}
+  VALUES ?publisherPredicate {{
+    rdf:type
+    rdfs:label
+    skos:prefLabel
+    skos:notation
+  }}
+  ?catalog a xcri:catalog ;
+    ?catalogPredicate ?catalogObject ;
+    dcterms:publisher ?publisher .
+  ?publisher ?publisherPredicate ?publisherObject
+}}""".format(url=rdflib.URIRef(self.request.build_absolute_uri()).n3())
 
-    def get_subjects(self, graph):
-        return sorted(map(self.resource, graph.subjects(NS.rdf.type, NS.xcri.catalog)), key=lambda x:x.label)
     def get_additional_context(self, request, renderers):
         return {'feed_renderers': [{'format': r.format,
                                     'name': r.name,
@@ -154,16 +187,16 @@ class CatalogDetailView(CourseView, sparql_views.CannedQueryView, RDFView, Conte
 
     @renderer(format='xcricap', mimetypes=('application/xcri-cap+xml',), name="XCRI-CAP 1.2 (Simple)")
     def render_xcricap(self, request, context, template_name):
-        self.undefer()
-        self.wrangle_two_three_codes(context['graph'])
-        serializer = XCRICAPSerializer(context['graph'], self.catalog_uri)
+        graph = context['graph']()
+        self.wrangle_two_three_codes(graph)
+        serializer = XCRICAPSerializer(graph, self.catalog_uri)
         return HttpResponse(serializer.generator(), mimetype='application/xcri-cap+xml')
 
     @renderer(format='xcricap-full', mimetypes=(), name="XCRI-CAP 1.2 (Full)")
     def render_xcricap_full(self, request, context, template_name):
-        self.undefer()
-        self.wrangle_two_three_codes(context['graph'])
-        serializer = XCRICAPSerializer(context['graph'], self.catalog_uri, simple=False)
+        graph = context['graph']()
+        self.wrangle_two_three_codes(graph)
+        serializer = XCRICAPSerializer(graph, self.catalog_uri, simple=False)
         return HttpResponse(serializer.generator(), mimetype='application/xcri-cap+xml')
 
     def wrangle_two_three_codes(self, graph):
