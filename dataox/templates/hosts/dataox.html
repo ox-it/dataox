@@ -14,7 +14,7 @@
     <script type="text/javascript">
       var staticURL = "{{ STATIC_URL|escapejs }}";
     </script>
-    {% compressed_js 'jquery' %}
+    <script type="text/javascript" src="{{ STATIC_URL }}lib/jquery/jquery.min.js"></script>
     <script type="text/javascript" src="{{ STATIC_URL }}lib/openlayers/OpenLayers.js"></script>
     {% compressed_js 'dataox' %}
     <script type="text/javascript" src="{{ STATIC_URL }}js/base.js"></script>

@@ -12,7 +12,7 @@
   <script src="{{ STATIC_URL }}js/html5shiv.js"></script>
   <![endif]-->
 
-  <link rel="stylesheet" type="text/css" href="{{ STATIC_URL }}lib/jquery-ui/themes/base/jquery.ui.all.css"></script>
+  <link rel="stylesheet" type="text/css" href="{{ STATIC_URL }}lib/jquery-ui/css/smoothness/jquery-ui-1.8.custom.css"></script>
 
   <!-- print stylesheet for print stlying -->
   <link media="print" href="{{ STATIC_URL }}equipment/css/print.css" rel="stylesheet" type="text/css" />
@@ -65,9 +65,9 @@
     var staticURL = "{{ STATIC_URL|escapejs }}";
     var searchURL = "{% url search %}";
   </script>
-  {% compressed_js 'jquery' %}
+  <script type="text/javascript" src="{{ STATIC_URL }}lib/jquery/jquery.min.js"></script>
   {% compressed_js 'jquery.collapsible' %}
-  {% compressed_js 'jquery-ui' %}
+  <script type="text/javascript" src="{{ STATIC_URL }}libjquery-ui/jquery-ui.min.js"></script>
   <script type="text/javascript" src="{{ STATIC_URL }}lib/openlayers/OpenLayers.js"></script>
   {% compressed_js 'dataox' %}
   {% compressed_js 'equipment' %}
