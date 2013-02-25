@@ -1,9 +1,6 @@
 [submodule "dataox/static/lib/jquery-collapsible-content"]
 	path = dataox/static/lib/jquery-collapsible-content
 	url = git://github.com/ox-it/jQuery-Collapsible-Content.git
-[submodule "dataox/static/lib/jquery-cookie"]
-	path = dataox/static/lib/jquery-cookie
-	url = git://github.com/carhartl/jquery-cookie.git
 [submodule "dataox/static/lib/DataTables"]
 	path = dataox/static/lib/DataTables
 	url = git://github.com/DataTables/DataTables.git
@@ -13,6 +10,3 @@
 [submodule "dataox/static/lib/flot"]
 	path = dataox/static/lib/flot
 	url = git://github.com/flot/flot.git
-[submodule "dataox/static/lib/jquery-ui"]
-	path = dataox/static/lib/jquery-ui
-	url = git://github.com/jquery/jquery-ui.git

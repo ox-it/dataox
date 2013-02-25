@@ -26,6 +26,10 @@ Depends: ${misc:Depends},
          python-sharepoint,
          xcri-rdf,
          libclosure-compiler-java,
-         libjs-openlayers
+         libjs-openlayers,
+         libjs-jquery,
+         libjs-jquery-cookie
+         libjs-jquery-ui,
+         libjs-datatables
 Description: Additional code for Oxford's data.ox.ac.uk service.
 

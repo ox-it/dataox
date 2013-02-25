@@ -78,7 +78,11 @@ distname, _, _ = platform.linux_distribution()
 if distname == 'Fedora':
     STATICFILES_DIRS += (('lib/openlayers', '/usr/share/openlayers/www'),)
 elif distname == 'debian':
-    STATICFILES_DIRS += (('lib/openlayers', '/usr/share/javascript/openlayers'),)
+    STATICFILES_DIRS += (('lib/openlayers', '/usr/share/javascript/openlayers'),
+                         ('lib/jquery', '/usr/share/javascript/jquery'),
+                         ('lib/jquery-cookie', '/usr/share/javascript/jquery-cookie'),
+                         ('lib/jquery-ui', '/usr/share/javascript/jquery-ui'),
+                         ('lib/datatables', '/usr/share/javascript/datatables'))
 else:
     raise AssertionError("Unsupported distribution")
 del distname
@@ -94,26 +98,8 @@ PIPELINE_JS = {
                   'output_filename': 'lib/html5shiv.min.js'},
     'oauth2': {'source_filenames': ('lib/oauth2/oauth2/oauth2.js',),
                'output_filename': 'lib/oauth2.min.js'},
-    'jquery': {'source_filenames': ('lib/jquery.js',),
-               'output_filename': 'lib/jquery.min.js'},
-    'jquery-ui': {'source_filenames': ('lib/jquery-ui/ui/jquery.ui.core.js',
-                                       'lib/jquery-ui/ui/jquery.ui.widget.js',
-                                       'lib/jquery-ui/ui/jquery.ui.mouse.js',
-                                       'lib/jquery-ui/ui/jquery.ui.draggable.js',
-                                       'lib/jquery-ui/ui/jquery.ui.droppable.js',
-                                       'lib/jquery-ui/ui/jquery.ui.resizable.js',
-                                       'lib/jquery-ui/ui/jquery.ui.selectable.js',
-                                       'lib/jquery-ui/ui/jquery.ui.sortable.js',
-                                       'lib/jquery-ui/ui/jquery.ui.effect.js',
-                                       'lib/jquery-ui/ui/jquery.ui.menu.js',
-                                       'lib/jquery-ui/ui/jquery.ui.autocomplete.js'),
-                  'output_filename': 'lib/jquery-ui.min.js'},
     'jquery.collapsible': {'source_filenames': ('lib/jquery-collapsible-content/js/jQuery.collapsible.js',),
                            'output_filename': 'lib/jquery.collapsible.min.js'},
-    'jquery.cookie': {'source_filenames': ('lib/jquery-cookie/jquery.cookie.js',),
-                      'output_filename': 'lib/jquery.cookie.min.js'},
-    'jquery.dataTables': {'source_filenames': ('lib/DataTables/media/js/jquery.dataTables.js',),
-                          'output_filename': 'lib/jquery.dataTables.min.js'},
 }
 
 PIPELINE_JS_COMPRESSOR = 'pipeline.compressors.closure.ClosureCompressor'
