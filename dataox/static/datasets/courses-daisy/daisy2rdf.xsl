@@ -65,8 +65,8 @@
       <xsl:when test="matches(text(), '^\d[A-Z]$')"><!--
         <skos:notation rdf:datatype="https://data.ox.ac.uk/id/notation/division">
           <xsl:value-of select="text()"/>
-        --></skos:notation>
-      </xsl:when>
+        </skos:notation>
+      --></xsl:when>
       <xsl:when test="matches(text(), '^\d[A-Z]..$')">
         <skos:notation rdf:datatype="https://data.ox.ac.uk/id/notation/department">
           <xsl:value-of select="text()"/>
