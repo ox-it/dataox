@@ -69,11 +69,13 @@ Here are some examples:
 * https://data.ox.ac.uk/search/?q=Wolfson+Building,+Parks+Road,+Oxford,+OX1+3QD&default_operator=or&type=organization (organizations relevant to (e.g. occupying) the Wolfson Building; i.e. the Department of Computer Science)
 
 
+.. _elasticsearch-endpoint:
+
 ElasticSearch endpoint
 ----------------------
 
 The Open Data Service exposes the raw ElasticSearch query endpoint for stores,
-linked from https://admin.data.ox.ac.uk/stores/. This endpoint allows you to
+linked from https://backstage.data.ox.ac.uk/stores/. This endpoint allows you to
 query using a very expressive JSON-based `DSL
 <http://en.wikipedia.org/wiki/Domain-specific_language>`_, and returns results
 as JSON.
