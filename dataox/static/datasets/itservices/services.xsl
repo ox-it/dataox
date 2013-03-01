@@ -16,78 +16,16 @@
     xmlns:m="http://schemas.microsoft.com/ado/2007/08/dataservices/metadata"
     xpath-default-namespace="https://github.com/ox-it/python-sharepoint/"
     version="2.0">
+  <xsl:import href="common.xsl"/>
   <xsl:output method="xml" indent="yes"/>
 
   <xsl:param name="store"/>
   <xsl:variable name="internal" select="$store='itservices'"/>
 
-  <xsl:variable name="service-base-uri">https://data.ox.ac.uk/id/itservices/</xsl:variable>
-  <xsl:variable name="person-base-uri">https://data.ox.ac.uk/id/person/</xsl:variable>
-  <xsl:variable name="group-base-uri">https://data.ox.ac.uk/id/group/unit-member/</xsl:variable>
-  <xsl:variable name="it-services">http://oxpoints.oucs.ox.ac.uk/id/31337175</xsl:variable>
-  <xsl:variable name="university-of-oxford">http://oxpoints.oucs.ox.ac.uk/id/00000000</xsl:variable>
-  <xsl:variable name="team-base-uri">https://data.ox.ac.uk/id/itservices/team/</xsl:variable>
+  <xsl:variable name="service-base-uri">https://data.ox.ac.uk/id/itservices/service/</xsl:variable>
 
   <xsl:key name="user-bases" match="/site/lists/list[@name='User bases']/rows/row" use="@id"/>
-  <xsl:key name="users" match="/site/lists/list[@name='User Information List']/rows/row" use="@id"/>
 
-  <xsl:function name="ex:slugify">
-    <xsl:param name="term"/>
-    <xsl:choose>
-      <xsl:when test="contains($term, '(')">
-        <xsl:value-of select="ex:slugify(substring-before($term, '('))"/>
-      </xsl:when>
-      <xsl:otherwise>
-        <xsl:value-of select="replace(lower-case(normalize-space($term)), '[^a-z0-9]+', '-')"/>
-      </xsl:otherwise>
-    </xsl:choose>
-  </xsl:function>
-
-  <xsl:function name="ex:agent-uri">
-    <xsl:param name="element"/>
-    <xsl:for-each select="$element">
-      <xsl:variable name="user" select="key('users', @id)"/>
-      <xsl:variable name="content-type" select="$user//field[@name='ContentType']/text"/>
-      <xsl:choose>
-        <xsl:when test="$content-type='DomainGroup'">
-          <xsl:value-of select="$group-base-uri"/>
-          <xsl:value-of select="substring-after($user//field[@name='Name']/text, 'AD-OAK\group_')"/>
-        </xsl:when>
-        <xsl:when test="$content-type='Person'">
-          <xsl:value-of select="$person-base-uri"/>
-          <xsl:value-of select="$user//field[@name='UserName']/text"/>
-        </xsl:when>
-        <xsl:otherwise>
-          <xsl:message terminate="yes">Unexpected ContentType: "<xsl:value-of select="$content-type"/>"; terminating.</xsl:message>
-        </xsl:otherwise>
-      </xsl:choose>
-    </xsl:for-each>
-  </xsl:function>
-
-  <xsl:function name="ex:team-uri">
-    <xsl:param name="team"/>
-    <xsl:choose>
-      <xsl:when test="$team/fields/field[@name='URI']/text/text()">
-        <xsl:value-of select="$team/fields/field[@name='URI']/text/text()"/>
-      </xsl:when>
-      <xsl:otherwise>
-        <xsl:value-of select="$team-base-uri"/>
-        <xsl:value-of select="$team/@id"/>
-      </xsl:otherwise>
-    </xsl:choose>
-  </xsl:function>
-
-  <xsl:template match="/">
-    <rdf:RDF>
-      <xsl:apply-templates/>
-    </rdf:RDF>
-  </xsl:template>
-
-  <xsl:template match="*" mode="#all">
-    <xsl:apply-templates mode="#current"/>
-  </xsl:template>
-  <xsl:template match="text()|@*" mode="#all"/>
-  
   <xsl:template match="list[@name='Service Catalogue']/rows">
     <gr:BusinessEntity rdf:about="{$it-services}">
       <xsl:for-each select="row">
@@ -167,24 +105,8 @@
       </oo:contact>
     </xsl:if>
   </xsl:template>
-  <xsl:template match="field[@name='Initial_x0020_contact_x0020_phon']" mode="service-contact">
-    <xsl:variable name="extension" select="text/text()"/>
-    <xsl:variable name="prefix">
-      <!-- From page 6 of the Internal Telephone Directory ("Extensions") -->
-      <xsl:choose>
-        <xsl:when test="starts-with($extension, '1')">+4418656</xsl:when>
-        <xsl:when test="starts-with($extension, '7')">+4418652</xsl:when>
-        <xsl:when test="starts-with($extension, '8')">+4418652</xsl:when>
-      </xsl:choose>
-    </xsl:variable>
-    <xsl:if test="$prefix">
-      <v:tel>
-        <v:Voice rdf:about="tel:{$prefix}{$extension}"/>
-      </v:tel>
-    </xsl:if>
-    <adhoc:oxfordExtensionNumber>
-      <xsl:value-of select="$extension"/>
-    </adhoc:oxfordExtensionNumber>
+  <xsl:template match="field[@name='Initial_x0020_contact_x0020_phon']/text" mode="service-contact">
+    <xsl:call-template name="telephone-extension"/>
   </xsl:template>
   <xsl:template match="field[@name='Initial_x0020_Contact_x0020_Emai']" mode="service-contact">
     <xsl:for-each select="tokenize(text/text(), '\s+')">
