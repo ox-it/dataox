@@ -192,8 +192,8 @@ Example resources
 -----------------
 
 * `Course catalogue for the University of Oxford <https://course.data.ox.ac.uk/id/catalogue>`_ (a catalog, which contains other catalogs)
-* `Archaeology in Practice <http://course.data.ox.ac.uk/id/continuing-education/course/V400-201>`_ (a Continuing Education course)
-* `Archaeology in Practice <http://course.data.ox.ac.uk/id/continuing-education/presentation/O12P495AHV>`_ (an online presentation)
+* `Archaeology in Practice <https://course.data.ox.ac.uk/id/continuing-education/course/V400-201>`_ (a Continuing Education course)
+* `Archaeology in Practice <https://course.data.ox.ac.uk/id/continuing-education/presentation/O12P495AHV>`_ (an online presentation)
 * `Department of Computer Science <https://data.ox.ac.uk/doc:oxpoints/23232561>`_ (a provider, with courses managed by Daisy)
 * `Categories, Proofs and Processes <https://course.data.ox.ac.uk/id/daisy/course/6200>`_ (a course with various categorisations)
 
