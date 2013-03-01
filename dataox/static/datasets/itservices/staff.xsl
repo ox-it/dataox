@@ -88,7 +88,7 @@
   </xsl:template>
 
   <xsl:template match="field[@name='Person']/user" mode="in-membership">
-    <org:person rdf:resource="{ex:agent-uri(.)}"/>
+    <org:member rdf:resource="{ex:agent-uri(.)}"/>
   </xsl:template>
 
   <xsl:template match="field[@name='Team']/lookup" mode="in-membership">
