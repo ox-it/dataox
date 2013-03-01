@@ -97,14 +97,16 @@
 
   <xsl:template match="field[@name='Manager']/boolean" mode="outside-membership">
     <xsl:variable name="team-uri" select="ex:team-uri(key('teams', ../../field[@name='Team']/lookup/@id))"/>
-    <xsl:choose>
-      <xsl:when test="text()='true'">
-        <org:headOf rdf:resource="{$team-uri}"/>
-      </xsl:when>
-      <xsl:when test="text()='false'">
-        <org:memberOf rdf:resource="{$team-uri}"/>
-      </xsl:when>
-    </xsl:choose>
+    <rdf:Description rdf:about="{ex:agent-uri(../../field[@name='Person']/user)}">
+      <xsl:choose>
+        <xsl:when test="text()='true'">
+          <org:headOf rdf:resource="{$team-uri}"/>
+        </xsl:when>
+        <xsl:when test="text()='false'">
+          <org:memberOf rdf:resource="{$team-uri}"/>
+        </xsl:when>
+      </xsl:choose>
+    </rdf:Description>
   </xsl:template>
 
   <xsl:template match="field[@name='Office']/text" mode="in-membership">
