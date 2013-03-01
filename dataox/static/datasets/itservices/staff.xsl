@@ -80,9 +80,9 @@
   <xsl:template match="field[@name='Title']/text" mode="in-membership">
     <org:role>
       <org:Role rdf:about="{ex:membership-uri(.)}/role">
-        <rdfs:label>
+        <skos:prefLabel>
           <xsl:value-of select="."/>
-        </rdfs:label>
+        </skos:prefLabel>
       </org:Role>
     </org:role>
   </xsl:template>
