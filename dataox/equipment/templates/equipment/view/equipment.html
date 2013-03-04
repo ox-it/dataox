@@ -3,6 +3,8 @@
 
 {% block breadcrumbs %}<li><a href=".">{{ item.source.label }}</a>{% endblock %}
 
+{% block title %}{% if subject.actual_label %}{{ subject.actual_label }}{% else %}Restricted{% endif %}{% endblock %}
+
 {% block extra_head %}{{ block.super }}
   <script type="text/javascript" src="{{ STATIC_URL }}OpenLayers-2.12/OpenLayers.js"></script>
   <script type="text/javascript" src="{{ STATIC_URL }}js/base.js"></script>
@@ -61,6 +63,13 @@
 
 {% block content %}
 {% include "equipment/login_prompt.html" %}
+  {% if not subject.actual_label %}
+  <h1>Restricted</h1>
+  
+  <p>Access to information about this item of equipment is restricted to
+     members of the University. To view information about it, please
+     <a href="{% url webauth:login %}">log in</a>.</p>
+  {% else %}
   <h1>{{ subject.label }}</h1>
   {% if item.source.page %}<p>{% for page in item.source.page %}
   <a href="{{ page.uri }}">{{ page.uri }}</a>{% if not forloop.last %}, {% endif %}
@@ -122,6 +131,7 @@
   </table>
 
 {% include "equipment/view/contact.html" %}
+  {% endif %}
 {% endblock %}
 
 {% block tertiary_content %}{{ block.super }}
