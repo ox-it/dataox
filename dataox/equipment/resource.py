@@ -22,6 +22,7 @@ class Equipment(object):
             '%(uri)s dcterms:subject %(category)s',
             
             '%(uri)s oo:organizationPart %(department)s',
+            '%(uri)s oo:formalOrganization %(department)s',
             '%(uri)s foaf:based_near %(basedNear)s',
             '%(uri)s spatialrelations:within %(within)s',
             '%(uri)s gr:hasMakeAndModel %(makeAndModel)s . %(makeAndModel)s gr:hasManufacturer %(manufacturer)s',
