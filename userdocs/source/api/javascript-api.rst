@@ -24,10 +24,11 @@ The API can be used by including the following in your webpage:
 
 .. code-block :: html
 
-   <script language="text/javascript" src="//static.data.ox.ac.uk/js/jquery-1.7.2.min.js"></script>
-   <script language="text/javascript" src="//static.data.ox.ac.uk/jquery-ui/js/jquery-ui-1.8.22.custom.min.js"></script>
-   <script language="text/javascript" src="//static.data.ox.ac.uk/OpenLayers-2.12/OpenLayers.js"></script>
-   <script language="text/javascript" src="//static.data.ox.ac.uk/api-1.0.js"></script>
+   <link rel="stylesheet" type="text/css" href="https://static.data.ox.ac.uk/lib/jquery-ui/themes/smoothness/jquery-ui-1.8.custom.css">
+   <script type="text/javascript" src="https://static.data.ox.ac.uk/lib/jquery.min.js"></script>
+   <script type="text/javascript" src="https://static.data.ox.ac.uk/lib/jquery-ui/jquery-ui.min.js"></script>
+   <script type="text/javascript" src="https://static.data.ox.ac.uk/lib/openlayers/OpenLayers.js"></script>
+   <script type="text/javascript" src="https://static.data.ox.ac.uk/app/dataox-1.0.min.js"></script>
 
 .. note::
 
