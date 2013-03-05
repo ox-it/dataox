@@ -114,7 +114,7 @@
             <p class="logInOut"><a href="{% url webauth:logout %}">log out</a></p>
             {% else %}
             <p>Log in to see more results</p>
-            <p class="logInOut"><a href="{% url webauth:login %}">log in</a></p>
+            <p class="logInOut"><a href="{% url webauth:login %}?next={{ request.get_full_path|urlencode }}">log in</a></p>
             
             {% endif %}
           </div>
