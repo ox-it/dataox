@@ -1,0 +1,41 @@
+@prefix cc:      <http://creativecommons.org/ns#> .
+@prefix dcat: <http://www.w3.org/ns/dcat#> .
+@prefix dcterms: <http://purl.org/dc/terms/> .
+@prefix foaf: <http://xmlns.com/foaf/0.1/> .
+@prefix oo: <http://purl.org/openorg/> .
+@prefix oxnotation: <https://data.ox.ac.uk/id/notation/> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix skos: <http://www.w3.org/2004/02/skos/core#> .
+@prefix void: <http://rdfs.org/ns/void#> .
+
+<http://data.ox.ac.uk/id/dataset/profile> a void:Dataset, dcat:Dataset ;
+    skos:notation "profile"^^oxnotation:dataset ;
+    rdfs:label "Organizational Profile" ;
+    dcterms:title "Organizational Profile" ;
+    dcterms:description "Contains core information about the University of Oxford, including links to key pages." ;
+
+    dcterms:license <http://creativecommons.org/publicdomain/zero/1.0/> ;
+    dcterms:rightsHolder <http://oxpoints.oucs.ox.ac.uk/id/00000000> ;
+    dcterms:publisher <http://oxpoints.oucs.ox.ac.uk/id/00000000> ;
+
+    cc:license <http://creativecommons.org/publicdomain/zero/1.0/> ;
+    cc:attributionName "University of Oxford"@en ;
+    cc:attributionURL <http://www.ox.ac.uk/> ;
+    
+    dcterms:conformsTo oo:opendata-5-star ;
+
+    void:exampleResource <http://oxpoints.oucs.ox.ac.uk/id/00000000> ;
+
+    oo:contact <https://data.ox.ac.uk/id/open-data-team> ;
+    oo:corrections <https://data.ox.ac.uk/id/open-data-team> .
+
+<https://data.ox.ac.uk/id/dataset/catalogue> dcat:dataset <https://data.ox.ac.uk/id/dataset/profile> .
+
+<https://data.ox.ac.uk/graph/oxpoints/profile> a foaf:Document ;
+    void:inDataset <https://data.ox.ac.uk/id/dataset/profile> ;
+    dcterms:license <http://creativecommons.org/publicdomain/zero/1.0/> .
+
+<https://data.ox.ac.uk/graph/oxpoints/profile> a foaf:Document ;
+    void:inDataset <https://data.ox.ac.uk/id/dataset/catalogue> , <https://data.ox.ac.uk/id/dataset/profile> ;
+    dcterms:license <http://creativecommons.org/publicdomain/zero/1.0/> .
+

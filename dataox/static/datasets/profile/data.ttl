@@ -1,0 +1,92 @@
+@prefix aiiso: <http://purl.org/vocab/aiiso/schema#> .
+@prefix dcterms: <http://purl.org/dc/terms/> .
+@prefix foaf: <http://xmlns.com/foaf/0.1/> .
+@prefix lyou: <http://purl.org/linkingyou/> .
+@prefix oo: <http://purl.org/openorg/> .
+@prefix org: <http://www.w3.org/ns/org#> .
+@prefix pim: <http://www.w3.org/2000/10/swap/pim/contact#> .
+@prefix postcode: <http://data.ordnancesurvey.co.uk/ontology/postcode/> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix skos: <http://www.w3.org/2004/02/skos/core#> .
+@prefix v: <http://www.w3.org/2006/vcard/ns#> .
+
+<> a oo:OrganizationProfileDocument ;
+    foaf:primaryTopic <http://oxpoints.oucs.ox.ac.uk/id/00000000> ;
+    dcterms:license <http://creativecommons.org/publicdomain/zero/1.0/> .
+
+<http://oxpoints.oucs.ox.ac.uk/id/00000000> a aiiso:Institution, org:FormalOrganization, foaf:Organization ;
+    rdfs:label "University of Oxford" ;
+    skos:prefLabel "University of Oxford" ;
+    skos:hiddenLabel "Oxford University" ;
+    v:sortLabel "Oxford, University of" ;
+
+    foaf:logo <http://www.ox.ac.uk/display_images/logo.gif> ;
+    foaf:homepage <http://www.ox.ac.uk/> ;
+
+    foaf:based_near <http://dbpedia.org/resource/Oxford> ;
+    pim:nearestAirport <http://transport.data.gov.uk/id/airport/OXF> ;
+    postcode:postcode <http://data.ordnancesurvey.co.uk/id/postcodeunit/OX12JD> ;
+
+    oo:sparql <https://data.ox.ac.uk/sparql/> ;
+
+    lyou:events <http://www.ox.ac.uk/visitors_friends/whats_on/> ;
+    lyou:business <http://www.ox.ac.uk/enterprise/> ;
+    lyou:depts <http://www.ox.ac.uk/divisions/department_az.html> ;
+    lyou:about <http://www.ox.ac.uk/about_the_university/introducing_oxford/> ;
+    lyou:search <http://googlesearch.oucs.ox.ac.uk/search?proxystylesheet=admin> ;
+    lyou:press <http://www.ox.ac.uk/media/> ;
+    lyou:news <http://www.ox.ac.uk/media/> ;
+    lyou:jobs <http://www.ox.ac.uk/about_the_university/jobs/> ;
+    lyou:legal <http://www.ox.ac.uk/copyright.html> ;
+    lyou:contact <http://www.ox.ac.uk/applications/dynamic/contact_us.rm?id=164> ;
+
+    lyou:about-leader <http://www.admin.ox.ac.uk/vc/person/> ;
+    lyou:about-executive <https://www1.admin.ox.ac.uk/council/> ;
+    lyou:about-strategy <http://www.admin.ox.ac.uk/pras/planning/strategicplan/> ;
+    lyou:about-sites <http://www.ox.ac.uk/visitors_friends/maps_and_directions/l>  ;
+    lyou:press-facts <http://www.ox.ac.uk/about_the_university/facts_and_figures/> ;
+#   lyou:legal-policies
+    lyou:legal-data-protection <http://www.admin.ox.ac.uk/dataprotection/privacypolicy/> ;
+#   lyou:legal-environment
+    lyou:legal-equality <http://www.admin.ox.ac.uk/eop/> ; # Kinda (i.e., the bit that deals with equality, not the policy itself)
+    lyou:legal-foi <http://www.admin.ox.ac.uk/foi/> ;
+    lyou:legal-ict <http://www.admin.ox.ac.uk/statutes/regulations/196-052.shtml> ;
+    lyou:legal-website <http://www.ox.ac.uk/copyright.html> ;
+    lyou:legal-regulations <http://www.admin.ox.ac.uk/statutes/> ;
+    lyou:contact-staff <http://www.ox.ac.uk/applications/contact_search/> ;
+    lyou:ict-support <http://www.it.ox.ac.uk/help/> ;
+    lyou:open-data <https://data.ox.ac.uk/> ;
+
+    lyou:research <http://www.ox.ac.uk/research/> ;
+#   lyou:legal-ethics
+#   lyou:conferences ;
+#   lyou:public-lectures
+    lyou:business-incubation <http://www.isis-innovation.com/> ;
+#   lyou:business-ktp
+    lyou:academic-depts <http://www.ox.ac.uk/divisions/department_az.html> ;
+    lyou:support-depts <http://www.ox.ac.uk/staff/about_the_university/services_az/> ;
+    lyou:conference-facilities <http://www.conference-oxford.com/> ;
+
+    lyou:courses <http://www.ox.ac.uk/admissions/> ;
+    lyou:undergraduate <http://www.ox.ac.uk/admissions/undergraduate_courses/> ;
+    lyou:undergraduate-courses <http://www.ox.ac.uk/admissions/undergraduate_courses/courses/> ;
+    lyou:undergraduate-courses-entry-requirements <http://www.ox.ac.uk/admissions/undergraduate_courses/courses/courses_and_entrance_requirements/index.html> ;
+#   lyou:undergraduate-prospectus
+    lyou:postgraduate <http://www.ox.ac.uk/admissions/postgraduate_courses/> ;
+    lyou:postgraduate-taught <http://www.ox.ac.uk/admissions/postgraduate_courses/course_guide/about_our_programmes.html#ataught_degrees> ;
+#   lyou:postgraduate-taught-courses
+#   lyou:postgraduate-taught-courses-entry-requirements
+#   lyou:postgraduate-taught-prospectus
+    lyou:postgraduate-research <http://www.ox.ac.uk/admissions/postgraduate_courses/course_guide/about_our_programmes.html#aresearch_degrees> ;
+#   lyou:postgraduate-research-courses
+#   lyou:postgraduate-research-courses-entry-requirements
+#   lyou:postgraduate-research-prospectus
+#   lyou:foundation
+#   lyou:foundation-courses
+#   lyou:foundation-courses-entry-requirements
+#   lyou:foundation-prospectus
+    lyou:opendays <http://www.ox.ac.uk/admissions/undergraduate_courses/open_days_events_and_visiting/> ;
+    lyou:events-graduation <http://www.ox.ac.uk/students/graduation/> ;
+    lyou:about-parents <http://www.ox.ac.uk/document.rm?id=2552> ;
+    lyou:international-students <http://www.ox.ac.uk/admissions/international_students/> .
+
