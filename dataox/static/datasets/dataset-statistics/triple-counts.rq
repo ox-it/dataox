@@ -1,0 +1,14 @@
+PREFIX void: <http://rdfs.org/ns/void#>
+
+CONSTRUCT {
+  ?dataset void:triples ?count
+} WHERE {
+  {
+    SELECT ?dataset (COUNT(?s) AS ?count) WHERE {
+      ?dataset a void:Dataset .
+      ?graph void:inDataset/^void:subset* ?dataset .
+      GRAPH ?graph { ?s ?p ?o }.
+    } GROUP BY ?dataset
+  }
+}
+
