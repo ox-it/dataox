@@ -15,6 +15,7 @@
 @prefix dc: <http://purl.org/dc/elements/1.1/> .
 @prefix v: <http://www.w3.org/2006/vcard/ns#> .
 @prefix dcat: <http://www.w3.org/ns/dcat#> .
+@prefix wdrs: <http://www.w3.org/2007/05/powder-s#> .
 
 
 <https://data.ox.ac.uk/id/dataset/oxpoints> a void:Dataset, dcat:Dataset ;
@@ -24,6 +25,7 @@
     dcterms:description "OxPoints is the University's geospatial, temporal and organisational RDF store.\n\nOxPoints aims to contain information about most political and built entities within the University, including college, department, building and rooms." ;
     
     foaf:homepage <http://www.oucs.ox.ac.uk/oxpoints/> ;
+    wdrs:describedby <https://docs.data.ox.ac.uk/datasets/oxpoints.html> ;
 
     dcterms:license <http://creativecommons.org/publicdomain/zero/1.0/> ;
     dcterms:rightsHolder <http://oxpoints.oucs.ox.ac.uk/id/00000000> ;
