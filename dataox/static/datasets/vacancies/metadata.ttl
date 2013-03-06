@@ -24,7 +24,7 @@
     dcterms:description "Vacancy advertisement information from the University of Oxford's central recruitment site, https://www.recruit.ox.ac.uk/. This dataset generally does not include collegiate advertisements." ;
 
     void:vocabulary oo:, vacancy:, dcterms:, gr:, rdfs: ;
-    wdrs:describedby <https://docs.data.ox.ac.uk/datasets/vacancies.html> ;
+    wdrs:describedby <https://docs.data.ox.ac.uk/datasets/vacancy.html> ;
 
     cc:attributionName "University of Oxford" ;
     cc:attributionURL <https://data.ox.ac.uk/doc/vacancies> ;
