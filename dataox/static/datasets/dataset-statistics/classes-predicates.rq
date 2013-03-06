@@ -2,9 +2,17 @@ PREFIX oo:   <http://purl.org/openorg/>
 PREFIX void: <http://rdfs.org/ns/void#>
 
 CONSTRUCT {
-  ?dataset oo:usedClass ?class ; oo:usedPredicate ?predicate
+  ?dataset
+    oo:usedClass ?class ;
+    oo:usedPredicate ?predicate ;
+    void:vocabulary ?vocabulary
 } WHERE {
   ?dataset a void:Dataset .
   ?graph void:inDataset/^void:subset* ?dataset .
-  GRAPH ?graph { { ?x a ?class } UNION { ?x ?predicate ?y } }
+  { GRAPH ?graph { ?x a ?class }
+    OPTIONAL { ?class rdfs:isDefinedBy ?vocabulary } }
+  UNION
+  { GRAPH ?graph { ?x ?predicate ?y }
+    OPTIONAL { ?predicate rdfs:isDefinedBy ?vocabulary } }
 }
+
