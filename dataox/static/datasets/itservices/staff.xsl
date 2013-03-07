@@ -77,7 +77,7 @@
     <xsl:call-template name="telephone-extension"/>
   </xsl:template>
 
-  <xsl:template match="field[@name='Title']/text" mode="in-membership">
+  <xsl:template match="field[@name='Title']/text[text()]" mode="in-membership">
     <org:role>
       <org:Role rdf:about="{ex:membership-uri(.)}/role">
         <skos:prefLabel>
