@@ -69,6 +69,12 @@
     </foaf:lastName>
   </xsl:template>
 
+  <xsl:template match="field[@name='Picture']/url[@href]" mode="in-person">
+    <foaf:depiction>
+      <foaf:Image rdf:about="{@href}"/>
+    </foaf:depiction>
+  </xsl:template>
+
   <xsl:template match="field[@name='EMail']/text" mode="in-person">
     <foaf:mbox rdf:resource="mailto:{.}"/>
   </xsl:template>
