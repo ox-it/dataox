@@ -135,19 +135,19 @@ AUTHENTICATION_BACKENDS = (
 )
 
 MIDDLEWARE_CLASSES = (
+    'django_statsd.middleware.GraphiteRequestTimingMiddleware',
+    'django_statsd.middleware.GraphiteMiddleware',
+    'dataox.auth.middleware.AuthenticatedAsMiddleware',
     'django_hosts.middleware.HostsMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
 #    'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
-    'django.contrib.messages.middleware.MessageMiddleware',
     'humfrey.base.middleware.AccessControlAllowOriginMiddleware',
-#    'django.contrib.auth.middleware.RemoteUserMiddleware',
     'dataox.oauth2.middleware.OAuth2Middleware',
     'django_conneg.support.middleware.BasicAuthMiddleware',
     'humfrey.pingback.middleware.PingbackMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
-    'dataox.auth.middleware.AuthenticatedAsMiddleware',
 )
 
 ENDPOINT_QUERY = 'http://localhost:3030/public/query'
