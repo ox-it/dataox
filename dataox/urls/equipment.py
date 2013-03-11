@@ -25,7 +25,7 @@ urlpatterns = patterns('',
     url(r'^login/', auth_views.login, name='login'),
     url(r'^logout/', LogoutView.as_view(), name='logout'),
     url(r'^webauth/', include('django_webauth.urls', 'webauth')),
-    url(r'^accounts/', include('registration.backends.default.urls')),
+    url(r'^accounts/', include('dataox.auth.registration_urls')),
 
     url(r'^$', misc_views.SimpleView.as_view(template_name="equipment/index"), name='index'),
     url(r'^about/$', misc_views.SimpleView.as_view(template_name="equipment/about"), name='about'),
