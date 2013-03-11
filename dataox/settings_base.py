@@ -51,6 +51,7 @@ INSTALLED_APPS = (
     'dataox.vacancy',
     'djcelery',
     'pipeline',
+    'registration',
     'raven.contrib.django',
 )
 
@@ -149,6 +150,9 @@ MIDDLEWARE_CLASSES = (
     'humfrey.pingback.middleware.PingbackMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
 )
+
+# For django-registration
+ACCOUNT_ACTIVATION_DAYS = 7
 
 ENDPOINT_QUERY = 'http://localhost:3030/public/query'
 ENDPOINT_GRAPH = 'http://localhost:3030/public/data'
