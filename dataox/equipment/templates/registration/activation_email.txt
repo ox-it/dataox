@@ -1,0 +1,9 @@
+Dear user,
+
+Please visit the following page within the next {{ activation_days }} to activate your account:
+
+https://www.research-facilities.ox.ac.uk/accounts/activate/?activation_key={{ activation_key }}
+
+With kind regards,
+
+The Research Services Office, University of Oxford
