@@ -288,6 +288,7 @@ a {
 }
 
 .panel /* .user, .simpleSearch */ {
+	display: block;
 	background: #FDFEFE;
 	filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#fdfefe', endColorstr='#f4f7fa');
 	background: -webkit-gradient(linear, left top, left bottom, from(#FDFEFE), to(#F4F7FA));
@@ -734,9 +735,15 @@ ul.errorlist {
 	list-style: none;
 	color: white;
 	background-color: #f44;
+	-moz-border-radius: 5px;
+	-webkit-border-radius: 5px;
+	border-radius: 5px;
+	margin: 0.2em 2px;
+	padding: 0.1em 0.3em;
 }
 
 ul.errorlist li {
+	list-style: none;
 }
 
 table.form > tbody > tr > th {
@@ -745,4 +752,39 @@ table.form > tbody > tr > th {
 
 table.form > tbody > tr.required > th {
 	font-weight: bold;
+}
+
+
+div.login-methods {
+	text-align: center;
+}
+
+
+div.login-method span.login-method-webauth-link-outer {
+	display: block;
+	font-size: 150%;
+}
+
+div.login-method-form table {
+	margin-left: auto;
+	margin-right: auto;
+}
+
+
+div.login-method-form tbody {
+	text-align: left;
+}
+
+div.login-method-form tfoot {
+	text-align: right;
+}
+
+div.login-method-form tfoot a {
+	margin-left: 1em;
+}
+
+div.login-method img {
+	border: 0;
+	margin-top: 0.5em;
+	margin-bottom: 1em;
 }
