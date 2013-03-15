@@ -51,7 +51,7 @@ INSTALLED_APPS = (
     'dataox.vacancy',
     'djcelery',
     'pipeline',
-    'registration',
+    'account',
     'raven.contrib.django',
 )
 
@@ -133,6 +133,7 @@ AUTHENTICATION_BACKENDS = (
     'django.contrib.auth.backends.ModelBackend',
     'object_permissions.backend.ObjectPermBackend',
     'django_webauth.backends.webauth_ldap.WebauthLDAPBackend',
+    'account.auth_backends.EmailAuthenticationBackend',
 )
 
 MIDDLEWARE_CLASSES = (
@@ -152,7 +153,9 @@ MIDDLEWARE_CLASSES = (
 )
 
 # For django-registration
-ACCOUNT_ACTIVATION_DAYS = 7
+ACCOUNT_EMAIL_UNIQUE = True
+ACCOUNT_EMAIL_CONFIRMATION_REQUIRED = True
+DEFAULT_HTTP_PROTOCOL = 'https'
 
 ENDPOINT_QUERY = 'http://localhost:3030/public/query'
 ENDPOINT_GRAPH = 'http://localhost:3030/public/data'
@@ -187,8 +190,8 @@ SHELL_TRANSFORMS = {
 EMAIL_HOST = 'smtp.ox.ac.uk'
 EMAIL_PORT = 587
 EMAIL_SUBJECT_PREFIX = '[dataox] '
-DEFAULT_FROM_EMAIL = 'Open Data Service [staging] <opendata@oucs.ox.ac.uk>'
-SERVER_EMAIL = 'Open Data Service Administrators [staging] <opendata-admin@maillist.ox.ac.uk>'
+DEFAULT_FROM_EMAIL = 'opendata@oucs.ox.ac.uk'
+SERVER_EMAIL = 'Open Data Service Administrators <opendata-admin@maillist.ox.ac.uk>'
 
 SERVER_EMAIL = 'opendata-admin@maillist.ox.ac.uk'
 

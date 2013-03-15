@@ -1,0 +1,24 @@
+{% extends "equipment/account/base.html" %}
+
+{% block title %}Register{% endblock %}
+
+{% block content %}
+<article>
+  <h1>Register</h1>
+  
+  <form method="post" action=".">
+  <table>
+  <tbody>
+  {{ form }}
+  </tbody>
+  <tfoot>
+    <tr>
+    <td colspan="2">
+    <input type="submit" value="Register">
+    </td>
+    </tr>
+    </tfoot>
+  </table>
+  </form>
+</article>
+{% endblock %}

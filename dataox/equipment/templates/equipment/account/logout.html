@@ -1,0 +1,13 @@
+{% extends "equipment/account/base.html" %}
+
+{% block title %}Log out{% endblock %}
+
+{% block content %}
+<article>
+  <h1>Log out</h1>
+  <form method="post" action=".">
+    <input type="hidden" name="{{ redirect_field_name }}" value="{{ redirect_field_value }}">
+    <input type="submit" value="Log out">
+  </form>
+</article>
+{% endblock %}

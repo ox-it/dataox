@@ -22,10 +22,7 @@ urlpatterns = patterns('',
 
     url(r'^browse/(?:(?P<notation>[a-z\-\d\/]+)/)?$', equipment_views.BrowseView.as_view(), name='browse'),
 
-    url(r'^login/', auth_views.login, name='login'),
-    url(r'^logout/', LogoutView.as_view(), name='logout'),
-    url(r'^webauth/', include('django_webauth.urls', 'webauth')),
-    url(r'^accounts/', include('dataox.equipment.rregistration.urls')),
+    url(r'^account/', include('dataox.equipment.account.urls')),
 
     url(r'^$', misc_views.SimpleView.as_view(template_name="equipment/index"), name='index'),
     url(r'^about/$', misc_views.SimpleView.as_view(template_name="equipment/about"), name='about'),
