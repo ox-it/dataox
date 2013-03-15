@@ -85,8 +85,16 @@
       <a href="http://www.ox.ac.uk/" id="oxCrest">University of Oxford</a>
     </header>
     <div class="main">
+
       <article class="content">
       <div class="wrapper{% block with_left_sidebar %} with-left-sidebar{% endblock %}{% block with_right_sidebar %}{% endblock %}">
+          {% if messages %}
+<ul class="messages panel">
+    {% for message in messages %}
+    <li{% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message }}</li>
+    {% endfor %}
+</ul>
+{% endif %}
       {% block content %}
         The main content of the page ends up in here.
       {% endblock %}
@@ -111,6 +119,7 @@
             <div class="panel user" >
             {% if user.is_authenticated %}
             <p class="iam">logged in as <span class="realName">{{ user.first_name }} {{ user.last_name }}</span> </p>
+            {% if user.has_usable_password %}<p class="logInOut"><a href="{% url account_password %}">change password</a></p>{% endif %}
             <p class="logInOut"><a href="{% url account_logout %}">log out</a></p>
             {% else %}
             <p>Log in to see more results</p>

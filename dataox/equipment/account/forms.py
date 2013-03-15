@@ -6,7 +6,7 @@ class SignupForm(account.forms.SignupForm):
     first_name = forms.CharField(max_length=30)
     last_name = forms.CharField(max_length=30)
     
-    good_domains = frozenset(['ouh.nhs.uk'])
+    good_domains = frozenset(['ouh.nhs.uk', 'ohis.nhs.uk', 'admin.ox.ac.uk', 'it.ox.ac.uk'])
 
     class Meta:
         fields = ('first_name', 'last_name', 'email', 'password1', 'password2')

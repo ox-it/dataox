@@ -788,3 +788,14 @@ div.login-method img {
 	margin-top: 0.5em;
 	margin-bottom: 1em;
 }
+
+ul.messages {
+	list-style: none;
+	padding: 1em;
+	font-size: 150%;
+	margin-top: 0;
+}
+
+ul.messages li {
+	list-style: none;
+}

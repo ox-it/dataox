@@ -14,7 +14,7 @@ urlpatterns = patterns('',
     url(r"^confirm_email/(?P<key>\w+)/$", views.ConfirmEmailView.as_view(), name="account_confirm_email"),
     url(r"^password/$", views.ChangePasswordView.as_view(), name="account_password"),
     url(r"^password/reset/$", views.PasswordResetView.as_view(), name="account_password_reset"),
-    url(r"^password/reset/(?P<uidb36>[0-9A-Za-z]+)-(?P<token>.+)/$", PasswordResetTokenView.as_view(), name="account_password_reset_token"),
+    url(r"^password/reset/(?P<uidb36>[0-9A-Za-z]+)-(?P<token>.+)/$", views.PasswordResetTokenView.as_view(), name="account_password_reset_token"),
 
     url(r'^webauth/$', django_webauth.views.LoginView.as_view(), name='webauth_login'),
     url(r"^logout/$", django_webauth.views.LogoutView.as_view(), name="account_logout"),
