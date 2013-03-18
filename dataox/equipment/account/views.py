@@ -6,7 +6,6 @@ from django.conf import settings
 from django.core.exceptions import PermissionDenied
 from django.views.generic import View
 from django.contrib.auth.models import User
-from django_webauth.backends.webauth_ldap import LDAP_PROVISIONED_GROUP
 
 from . import forms
 
