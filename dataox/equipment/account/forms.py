@@ -2,6 +2,8 @@ import account.forms
 from django import forms
 import account.models
 
+from django.contrib.auth.models import User, UNUSABLE_PASSWORD
+
 class SignupForm(account.forms.SignupForm):
     first_name = forms.CharField(max_length=30)
     last_name = forms.CharField(max_length=30)
@@ -22,3 +24,10 @@ class SignupForm(account.forms.SignupForm):
         if domain not in self.good_domains:
             raise forms.ValidationError('Registrations from your email domain are not permitted.')
         return self.cleaned_data['email']
+
+class PasswordResetForm(account.forms.PasswordResetForm):
+    def clean_email(self):
+        email = super(SignupForm, self).clean_email()
+        if User.objects.filter(email_iexact=email, password=UNUSABLE_PASSWORD).exists():
+            raise forms.ValidationError('Your password cannot be reset.')
+        

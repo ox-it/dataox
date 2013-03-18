@@ -65,6 +65,7 @@ class ConfirmEmailView(PatchSettings, account.views.ConfirmEmailView):
         }[self.request.method]
 
 class PasswordResetView(PatchSettings, account.views.PasswordResetView):
+    form_class = forms.PasswordResetForm
     template_name = 'equipment/account/password_reset.html'
     template_name_sent = 'equipment/account/password_reset_sent.html'
 
