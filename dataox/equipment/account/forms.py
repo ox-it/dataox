@@ -28,6 +28,6 @@ class SignupForm(account.forms.SignupForm):
 class PasswordResetForm(account.forms.PasswordResetForm):
     def clean_email(self):
         email = super(PasswordResetForm, self).clean_email()
-        if User.objects.filter(email_iexact=email, password=UNUSABLE_PASSWORD).exists():
+        if User.objects.filter(email__iexact=email, password=UNUSABLE_PASSWORD).exists():
             raise forms.ValidationError('Your password cannot be reset.')
 
