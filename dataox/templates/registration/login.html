@@ -5,7 +5,7 @@
 {% block content %}
   <h1>Log in</h1>
   
-  <p><a href="{% url webauth:login %}?next={{ next|urlencode }}">Log in using WebAuth</a></p>
+  <p><a href="{% url webauth_login %}?next={{ next|urlencode }}">Log in using WebAuth</a></p>
   
   <form method="post" action="">{% csrf_token %}
     <input name="next" type="hidden" value="{{ next }}"/>
