@@ -2,10 +2,6 @@ from django.conf.urls import patterns, include, url
 
 from . import views
 
-from account.views import LogoutView, DeleteView
-from account.views import ConfirmEmailView
-from account.views import ChangePasswordView, PasswordResetView, PasswordResetTokenView
-from account.views import SettingsView
 import django_webauth.views
 
 urlpatterns = patterns('',
