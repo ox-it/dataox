@@ -119,7 +119,8 @@ class SearchView(EquipmentView, elasticsearch_views.SearchView):
         facets = {
             'institution': {'terms': {'field': 'formalOrganisation.uri', 'size': 100}},
             'basedNear': {'terms': {'field': 'basedNear.uri', 'size': 100}},
-            'category': {'terms': {'field': 'category.uri'}}
+            'category': {'terms': {'field': 'category.uri'}},
+            'shareability': {'terms': {'field': 'shareability.uri'}},
         }
         if 'filter.formalOrganisation.uri' in self.request.GET:
             facets['department'] = {'terms': {'field': 'equipmentOf.uri', 'size': 100}}

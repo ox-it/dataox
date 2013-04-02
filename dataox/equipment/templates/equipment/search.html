@@ -104,6 +104,9 @@
   {% if facets and hits.total %}
     <div class="sidebar-item">
       <h2>refine by&hellip;</h2>
+      {% if facets.shareability %}
+        {% include "elasticsearch/facet.html" with facet=facets.shareability facet_name="shareability" terse=1 %}
+      {% endif %}
       {% if facets.institution %}
         {% include "elasticsearch/facet.html" with facet=facets.institution facet_name="institution" terse=1 %}
       {% endif %}
