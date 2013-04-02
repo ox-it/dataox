@@ -26,7 +26,7 @@ INSTALLED_APPS = (
     'django_longliving',
     'django_hosts',
     'django_webauth',
-    'object_permissions',
+    'guardian',
     'humfrey.desc',
     'humfrey.archive',
     'humfrey.ckan',
@@ -132,7 +132,7 @@ SOURCE_URL = 'https://source.data.ox.ac.uk/'
 
 AUTHENTICATION_BACKENDS = (
     'django.contrib.auth.backends.ModelBackend',
-    'object_permissions.backend.ObjectPermBackend',
+    'guardian.backends.ObjectPermissionBackend',
     'django_webauth.backends.webauth_ldap.WebauthLDAPBackend',
     'account.auth_backends.EmailAuthenticationBackend',
 )
@@ -295,6 +295,8 @@ DEPENDENT_TASKS = {'humfrey.update.update': ('humfrey.ckan.upload_dataset_metada
 DATASET_NOTATION = 'oxnotation:dataset'
 
 ANONYMOUS_USER_ID = 0
+GUARDIAN_RAISE_403 = True
+
 RESOURCE_REGISTRY = 'dataox.resource.resource_registry'
 
 HUMFREY_FEEDS = {
