@@ -23,6 +23,7 @@
   <xsl:variable name="internal" select="$store='itservices'"/>
 
   <xsl:variable name="service-base-uri">https://data.ox.ac.uk/id/itservices/service/</xsl:variable>
+  <xsl:variable name="service-activity-category-base-uri">https://data.ox.ac.uk/id/itservices/service-activity-category/</xsl:variable>
 
   <xsl:key name="user-bases" match="/site/lists/list[@name='User bases']/rows/row" use="@id"/>
 
@@ -120,7 +121,7 @@
   </xsl:template>
 
   <xsl:template match="field[@name='Activity_x0020_category']/lookup" mode="in-service">
-    <dcterms:subject rdf:resource="{$service-base-uri}activity-category/{@id}"/>
+    <dcterms:subject rdf:resource="{$service-activity-category-base-uri}{@id}"/>
   </xsl:template>
   
   <xsl:template match="field[@name='Service_x0020_Delivery_x0020_Man']/lookup" mode="in-service">
