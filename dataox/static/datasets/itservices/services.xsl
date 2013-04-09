@@ -23,7 +23,7 @@
   <xsl:variable name="internal" select="$store='itservices'"/>
 
   <xsl:variable name="service-base-uri">https://data.ox.ac.uk/id/itservices/service/</xsl:variable>
-  <xsl:variable name="service-activity-category-base-uri">https://data.ox.ac.uk/id/itservices/service-activity-category/</xsl:variable>
+  <xsl:variable name="service-activity-category-base-uri">https://data.ox.ac.uk/id/itservices/service-activity-category</xsl:variable>
 
   <xsl:key name="user-bases" match="/site/lists/list[@name='User bases']/rows/row" use="@id"/>
 
@@ -121,7 +121,7 @@
   </xsl:template>
 
   <xsl:template match="field[@name='Activity_x0020_category']/lookup" mode="in-service">
-    <dcterms:subject rdf:resource="{$service-activity-category-base-uri}{@id}"/>
+    <dcterms:subject rdf:resource="{$service-activity-category-base-uri}/{@id}"/>
   </xsl:template>
   
   <xsl:template match="field[@name='Service_x0020_Delivery_x0020_Man']/lookup" mode="in-service">
@@ -165,7 +165,7 @@
   </xsl:template>
 
   <xsl:template match="list[@name='Service activity categories']/rows">
-    <skos:ConceptScheme rdf:about="{$service-base-uri}activity-category">
+    <skos:ConceptScheme rdf:about="{$service-activity-category-base-uri}">
       <skos:prefLabel>Activity categories</skos:prefLabel>
       <dcterms:publisher rdf:resource="{$it-services}"/>
       <xsl:for-each select="row">
@@ -177,7 +177,7 @@
   </xsl:template>
 
   <xsl:template match="list[@name='Service activity categories']/rows/row">
-    <skos:Concept rdf:about="{$service-base-uri}activity-category/{@id}">
+    <skos:Concept rdf:about="{$service-activity-category-base-uri}/{@id}">
       <xsl:apply-templates mode="in-activity-category"/>
     </skos:Concept>
   </xsl:template>
