@@ -131,7 +131,10 @@
   </xsl:template>
   
   <xsl:template match="field[@name='Generic_x0020_user_x0020_bases']/lookup" mode="in-offering">
-    <gr:eligibleCustomerTypes rdf:resource="{key('user-bases', @id)/fields/field[@name='URI']/text/text()}"/>
+    <xsl:variable name="user-base-uri" select="key('user-bases', @id)/fields/field[@name='URI']/text/text()"/>
+    <xsl:if test="$user-base-uri">
+      <gr:eligibleCustomerTypes rdf:resource="{$user-base-uri}"/>
+    </xsl:if>
   </xsl:template>
 
   <xsl:template match="field[@name='Specific_x0020_user_x0020_bases']/user" mode="in-offering">
