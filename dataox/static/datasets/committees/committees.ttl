@@ -45,7 +45,7 @@
 
 # Skip 2-10, for want of individuals
 
-<http://oxpoints.oucs.ox.ac.uk/id/70000000/membership-rule/head-of-division-humanities a ctte:ExOfficioMembershipRule ;
+<http://oxpoints.oucs.ox.ac.uk/id/70000000/membership-rule/head-of-division-humanities> a ctte:ExOfficioMembershipRule ;
     ctte:requiresMembershipOf <http://oxpoints.oucs.ox.ac.uk/id/23233551> ;
     ctte:requiresRole org:head ;
     ctte:confersMembershipOf <http://oxpoints.oucs.ox.ac.uk/id/70000000> .
