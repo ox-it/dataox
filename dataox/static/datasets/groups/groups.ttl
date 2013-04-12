@@ -17,24 +17,6 @@
   # Everyone who is a foaf:Person is in the group of everyone
   foaf:membershipClass foaf:Person .
 
-
-# Lets define membership of the University formally.
-# If " ?x a foaf:Person ; org:memberOf 'the University' ", then " 'University members' foaf:member ?x ".
-# See http://xmlns.com/foaf/spec/#term_Group for more information
-
-:member a foaf:Group, gr:BusinessEntityType ;
-  foaf:name "members of the University of Oxford" ;
-  foaf:membershipClass <https://data.ox.ac.uk/id/group/member/membership-class> .
-
-<https://data.ox.ac.uk/id/group/member/membership-class> a owl:Class ;
-  rdfs:subClassOf foaf:Person ;
-  rdfs:subClassOf <https://data.ox.ac.uk/id/group/member/restriction> .
-
-<https://data.ox.ac.uk/id/group/member/restriction> a owl:Restriction ;
-  owl:onProperty org:memberOf ;
-  owl:hasValue <http://oxpoints.oucs.ox.ac.uk/id/00000000> .
-
-
 # These ones are too much effort to express formally for now.
 
 :convocation a foaf:Group, gr:BusinessEntityType ;
