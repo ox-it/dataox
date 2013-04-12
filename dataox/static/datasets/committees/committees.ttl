@@ -1,0 +1,52 @@
+@prefix ctte: <http://purl.org/NET/ctte/> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix foaf: <http://xmlns.com/foaf/0.1/> .
+@prefix org:  <http://www.w3.org/ns/org#> .
+@prefix skos: <http://www.w3.org/2004/02/skos/core#> .
+
+<http://oxpoints.oucs.ox.ac.uk/id/70000000> a ctte:Committee ;
+    rdfs:label "Council" ;
+    foaf:homepage <http://www.admin.ox.ac.uk/council/> .
+
+<http://oxpoints.oucs.ox.ac.uk/id/70000001> a ctte:Committee ;
+    rdfs:label "Education Committee" ;
+    foaf:homepage <http://www.admin.ox.ac.uk/epsc/edc_panels.shtml> ;
+    org:reportsTo <http://oxpoints.oucs.ox.ac.uk/id/70000000> .
+
+<http://oxpoints.oucs.ox.ac.uk/id/70000002> a ctte:Committee ;
+    rdfs:label "General Purposes Committee" ;
+    foaf:homepage <http://www.admin.ox.ac.uk/councilsec/oxonly/gpcmeetings/> ;
+    org:reportsTo <http://oxpoints.oucs.ox.ac.uk/id/70000000> .
+
+<http://oxpoints.oucs.ox.ac.uk/id/70000003> a ctte:Committee ;
+    rdfs:label "Personnel Committee" ;
+    foaf:homepage <http://www.admin.ox.ac.uk/personnel/oxonly/agendas/> ;
+    org:reportsTo <http://oxpoints.oucs.ox.ac.uk/id/70000000> .
+
+<http://oxpoints.oucs.ox.ac.uk/id/70000004> a ctte:Committee ;
+    rdfs:label "Planning and Resource Allocation Committee" ;
+    skos:altLabel "PRAC" ;
+    foaf:homepage <http://www.admin.ox.ac.uk/pras/committees/prac/> ;
+    org:reportsTo <http://oxpoints.oucs.ox.ac.uk/id/70000000> .
+
+<http://oxpoints.oucs.ox.ac.uk/id/70000005> a ctte:Committee ;
+    rdfs:label "Research Committee" ;
+    foaf:homepage <http://www.admin.ox.ac.uk/pras/committees/research/membership/> ;
+    org:reportsTo <http://oxpoints.oucs.ox.ac.uk/id/70000000> .
+
+
+# Council members
+
+<http://oxpoints.oucs.ox.ac.uk/id/70000000/membership-rule/vice-chancellor> a ctte:ExOfficioMembershipRule ;
+    ctte:requiresMembershipOf <http://oxpoints.oucs.ox.ac.uk/id/00000000> ;
+    ctte:requiresRole org:head ;
+    ctte:confersMembershipOf <http://oxpoints.oucs.ox.ac.uk/id/70000000> ;
+    ctte:confersRole org:head .
+
+# Skip 2-10, for want of individuals
+
+<http://oxpoints.oucs.ox.ac.uk/id/70000000/membership-rule/head-of-division-humanities a ctte:ExOfficioMembershipRule ;
+    ctte:requiresMembershipOf <http://oxpoints.oucs.ox.ac.uk/id/23233551> ;
+    ctte:requiresRole org:head ;
+    ctte:confersMembershipOf <http://oxpoints.oucs.ox.ac.uk/id/70000000> .
+
