@@ -52,7 +52,7 @@
         <http://oxpoints.oucs.ox.ac.uk/id/70000000/post/head-of-humanities> ,
         <http://oxpoints.oucs.ox.ac.uk/id/70000000/post/head-of-mpls> ,
         <http://oxpoints.oucs.ox.ac.uk/id/70000000/post/head-of-medsci> ,
-        <http://oxpoints.oucs.ox.ac.uk/id/70000000/post/head-of-socsci> ;
+        <http://oxpoints.oucs.ox.ac.uk/id/70000000/post/head-of-socsci> ,
         <http://oxpoints.oucs.ox.ac.uk/id/70000000/post/elected-from-mpls-and-medsci> ,
         <http://oxpoints.oucs.ox.ac.uk/id/70000000/post/elected-from-humanities-and-socsci> ,
         <http://oxpoints.oucs.ox.ac.uk/id/70000000/post/elected-from-congregation> ,
