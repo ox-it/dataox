@@ -30,6 +30,7 @@
     xmlns:humfrey="http://purl.org/NET/humfrey/ns/"
     xmlns:oxcap="http://purl.ox.ac.uk/oxcap/ns/"
     xmlns:tio="http://purl.org/tio/ns#"
+    xmlns:cdp="http://xcri.co.uk/"
     xmlns:tei="http://www.tei-c.org/ns/1.0">
   <xsl:output method="xml" indent="yes"/>
 
@@ -361,7 +362,9 @@
   </xsl:template>
 
   <xsl:template match="course-audience" mode="in-course">
-    <!-- TODO: Where does this go? -->
+    <cdp:targetAudience>
+      <xsl:apply-templates select="text()" mode="rich-text-element"/>
+    </cdp:targetAudience>
   </xsl:template>
 
   <xsl:template match="course-subject" mode="in-course">
