@@ -12,3 +12,5 @@
         <https://course.data.ox.ac.uk/id/medsci/catalogue> ,
         <https://course.data.ox.ac.uk/id/sharepoint/catalogue> .
 
+<https://data.ox.ac.uk/graph/courses/cobomo/metadata> a sd:Graph ;
+    dcterms:license <http://creativecommons.org/publicdomain/zero/1.0/> .
