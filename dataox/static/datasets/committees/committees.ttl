@@ -4,7 +4,7 @@
 @prefix org:  <http://www.w3.org/ns/org#> .
 @prefix skos: <http://www.w3.org/2004/02/skos/core#> .
 @prefix owl: <http://www.w3.org/2002/07/owl#> .
-@prefix oxnotation: <https://data.ox.ac.uk/id/notation> .
+@prefix oxnotation: <https://data.ox.ac.uk/id/notation/> .
 
 <http://oxpoints.oucs.ox.ac.uk/id/70000000> a ctte:Committee ;
     rdfs:label "Council" ;
