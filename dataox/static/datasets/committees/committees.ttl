@@ -4,34 +4,41 @@
 @prefix org:  <http://www.w3.org/ns/org#> .
 @prefix skos: <http://www.w3.org/2004/02/skos/core#> .
 @prefix owl: <http://www.w3.org/2002/07/owl#> .
+@prefix oxnotation: <https://data.ox.ac.uk/id/notation> .
 
 <http://oxpoints.oucs.ox.ac.uk/id/70000000> a ctte:Committee ;
     rdfs:label "Council" ;
+    skos:notation "70000000"^^oxnotation:oxpoints ;
     foaf:homepage <http://www.admin.ox.ac.uk/council/> .
 
 <http://oxpoints.oucs.ox.ac.uk/id/70000001> a ctte:Committee ;
     rdfs:label "Education Committee" ;
+    skos:notation "70000001"^^oxnotation:oxpoints ;
     foaf:homepage <http://www.admin.ox.ac.uk/epsc/edc_panels.shtml> ;
     org:reportsTo <http://oxpoints.oucs.ox.ac.uk/id/70000000> .
 
 <http://oxpoints.oucs.ox.ac.uk/id/70000002> a ctte:Committee ;
     rdfs:label "General Purposes Committee" ;
+    skos:notation "70000002"^^oxnotation:oxpoints ;
     foaf:homepage <http://www.admin.ox.ac.uk/councilsec/oxonly/gpcmeetings/> ;
     org:reportsTo <http://oxpoints.oucs.ox.ac.uk/id/70000000> .
 
 <http://oxpoints.oucs.ox.ac.uk/id/70000003> a ctte:Committee ;
     rdfs:label "Personnel Committee" ;
+    skos:notation "70000003"^^oxnotation:oxpoints ;
     foaf:homepage <http://www.admin.ox.ac.uk/personnel/oxonly/agendas/> ;
     org:reportsTo <http://oxpoints.oucs.ox.ac.uk/id/70000000> .
 
 <http://oxpoints.oucs.ox.ac.uk/id/70000004> a ctte:Committee ;
     rdfs:label "Planning and Resource Allocation Committee" ;
     skos:altLabel "PRAC" ;
+    skos:notation "70000004"^^oxnotation:oxpoints ;
     foaf:homepage <http://www.admin.ox.ac.uk/pras/committees/prac/> ;
     org:reportsTo <http://oxpoints.oucs.ox.ac.uk/id/70000000> .
 
 <http://oxpoints.oucs.ox.ac.uk/id/70000005> a ctte:Committee ;
     rdfs:label "Research Committee" ;
+    skos:notation "70000005"^^oxnotation:oxpoints ;
     foaf:homepage <http://www.admin.ox.ac.uk/pras/committees/research/membership/> ;
     org:reportsTo <http://oxpoints.oucs.ox.ac.uk/id/70000000> .
 
