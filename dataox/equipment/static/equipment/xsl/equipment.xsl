@@ -223,6 +223,9 @@
     <!-- We don't have a URI for this yet
     <ex:general-location name="Osney Mead Industrial Estate"/>
     -->
+    <ex:general-location name="London" uri="http://dbpedia.org/resource/London" label="London"/>
+    <ex:general-location name="Vientiane" uri="http://dbpedia.org/resource/Vientiane" label="Vientiane"/>
+    <ex:general-location name="Harwell" uri="http://dbpedia.org/resource/Harwell,_Oxfordshire" label="Harwell"/>
     <ex:general-location name="Wytham" uri="http://dbpedia.org/resource/Wytham" label="Wytham"/>
     <ex:general-location name="HCMC" uri="http://dbpedia.org/resource/Ho_Chi_Minh_City" label="Ho Chi Minh City"/>
     <ex:general-location name="New York" uri="http://dbpedia.org/resource/New_York" label="New York"/>
