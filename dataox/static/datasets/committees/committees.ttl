@@ -1,0 +1,193 @@
+@prefix ctte: <http://purl.org/NET/ctte/> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix foaf: <http://xmlns.com/foaf/0.1/> .
+@prefix org:  <http://www.w3.org/ns/org#> .
+@prefix skos: <http://www.w3.org/2004/02/skos/core#> .
+@prefix owl: <http://www.w3.org/2002/07/owl#> .
+@prefix oxnotation: <https://data.ox.ac.uk/id/notation/> .
+
+<http://oxpoints.oucs.ox.ac.uk/id/70000000> a ctte:Committee ;
+    rdfs:label "Council" ;
+    skos:notation "70000000"^^oxnotation:oxpoints ;
+    foaf:homepage <http://www.admin.ox.ac.uk/council/> .
+
+<http://oxpoints.oucs.ox.ac.uk/id/70000001> a ctte:Committee ;
+    rdfs:label "Education Committee" ;
+    skos:notation "70000001"^^oxnotation:oxpoints ;
+    foaf:homepage <http://www.admin.ox.ac.uk/epsc/edc_panels.shtml> ;
+    org:reportsTo <http://oxpoints.oucs.ox.ac.uk/id/70000000> .
+
+<http://oxpoints.oucs.ox.ac.uk/id/70000002> a ctte:Committee ;
+    rdfs:label "General Purposes Committee" ;
+    skos:notation "70000002"^^oxnotation:oxpoints ;
+    foaf:homepage <http://www.admin.ox.ac.uk/councilsec/oxonly/gpcmeetings/> ;
+    org:reportsTo <http://oxpoints.oucs.ox.ac.uk/id/70000000> .
+
+<http://oxpoints.oucs.ox.ac.uk/id/70000003> a ctte:Committee ;
+    rdfs:label "Personnel Committee" ;
+    skos:notation "70000003"^^oxnotation:oxpoints ;
+    foaf:homepage <http://www.admin.ox.ac.uk/personnel/oxonly/agendas/> ;
+    org:reportsTo <http://oxpoints.oucs.ox.ac.uk/id/70000000> .
+
+<http://oxpoints.oucs.ox.ac.uk/id/70000004> a ctte:Committee ;
+    rdfs:label "Planning and Resource Allocation Committee" ;
+    skos:altLabel "PRAC" ;
+    skos:notation "70000004"^^oxnotation:oxpoints ;
+    foaf:homepage <http://www.admin.ox.ac.uk/pras/committees/prac/> ;
+    org:reportsTo <http://oxpoints.oucs.ox.ac.uk/id/70000000> .
+
+<http://oxpoints.oucs.ox.ac.uk/id/70000005> a ctte:Committee ;
+    rdfs:label "Research Committee" ;
+    skos:notation "70000005"^^oxnotation:oxpoints ;
+    foaf:homepage <http://www.admin.ox.ac.uk/pras/committees/research/membership/> ;
+    org:reportsTo <http://oxpoints.oucs.ox.ac.uk/id/70000000> .
+
+
+# Council members, as per http://www.admin.ox.ac.uk/statutes/783-121.shtml
+
+<http://oxpoints.oucs.ox.ac.uk/id/70000000/post/member> a org:Post ;
+    skos:prefLabel "Member of Council" ;
+    org:postIn <http://oxpoints.oucs.ox.ac.uk/id/70000000> ;
+    skos:narrower
+        <http://oxpoints.oucs.ox.ac.uk/id/70000000/post/vice-chancellor> ,
+        <http://oxpoints.oucs.ox.ac.uk/id/70000000/post/chairman-of-the-conference-of-colleges> ,
+        <http://oxpoints.oucs.ox.ac.uk/id/70000000/post/senior-proctor> ,
+        <http://oxpoints.oucs.ox.ac.uk/id/70000000/post/junior-proctor> ,
+        <http://oxpoints.oucs.ox.ac.uk/id/70000000/post/assessor> ,
+        <http://oxpoints.oucs.ox.ac.uk/id/70000000/post/member-of-congregation-elected-by-the-conference-of-colleges> ,
+        <http://oxpoints.oucs.ox.ac.uk/id/70000000/post/four-external-persons-nominated-by-council-and-approved-by-congregation> ,
+        <http://oxpoints.oucs.ox.ac.uk/id/70000000/post/head-of-humanities> ,
+        <http://oxpoints.oucs.ox.ac.uk/id/70000000/post/head-of-mpls> ,
+        <http://oxpoints.oucs.ox.ac.uk/id/70000000/post/head-of-medsci> ,
+        <http://oxpoints.oucs.ox.ac.uk/id/70000000/post/head-of-socsci> ,
+        <http://oxpoints.oucs.ox.ac.uk/id/70000000/post/elected-from-mpls-and-medsci> ,
+        <http://oxpoints.oucs.ox.ac.uk/id/70000000/post/elected-from-humanities-and-socsci> ,
+        <http://oxpoints.oucs.ox.ac.uk/id/70000000/post/elected-from-congregation> ,
+        <http://oxpoints.oucs.ox.ac.uk/id/70000000/post/co-opted> ;
+    ctte:maximumNumberOfPostHolders 28 .
+
+# (1) The Vice-Chancellor
+<http://oxpoints.oucs.ox.ac.uk/id/70000000/post/vice-chancellor> a ctte:ExOfficioPost ;
+    skos:prefLabel "Member of Council (Vice-Chancellor)" ;
+    ctte:heldByVirtueOf <http://oxpoints.oucs.ox.ac.uk/id/00000000/post/vice-chancellor> ;
+    org:postIn <http://oxpoints.oucs.ox.ac.uk/id/70000000> ;
+    org:role ctte:chair ;
+    ctte:maximumNumberOfPostHolders 1 .
+
+# (2) The Chairman of the Conference of Colleges
+<http://oxpoints.oucs.ox.ac.uk/id/70000000/post/chairman-of-the-conference-of-colleges> a ctte:ExOfficioPost ;
+    skos:prefLabel "Member of Council (Chairman of the Conference of Colleges" ;
+    ctte:heldByVirtueOf <http://oxpoints.oucs.ox.ac.uk/id/52241241/post/chairman> ;
+    org:postIn <http://oxpoints.oucs.ox.ac.uk/id/70000000> ;
+    ctte:maximumNumberOfPostHolders 1 .
+
+# (3), (4) The Proctors
+<http://oxpoints.oucs.ox.ac.uk/id/70000000/post/senior-proctor> a ctte:ExOfficioPost ;
+    skos:prefLabel "Member of Council (Senior Proctor)" ;
+    ctte:heldByVirtueOf <http://oxpoints.oucs.ox.ac.uk/id/00000000/post/senior-proctor> ;
+    org:postIn <http://oxpoints.oucs.ox.ac.uk/id/70000000> ;
+    ctte:maximumNumberOfPostHolders 1 .
+<http://oxpoints.oucs.ox.ac.uk/id/70000000/post/junior-proctor> a ctte:ExOfficioPost ;
+    skos:prefLabel "Member of Council (Junior Proctor)" ;
+    ctte:heldByVirtueOf <http://oxpoints.oucs.ox.ac.uk/id/00000000/post/junior-proctor> ;
+    org:postIn <http://oxpoints.oucs.ox.ac.uk/id/70000000> ;
+    ctte:maximumNumberOfPostHolders 1 .
+
+# (5) The Assessor
+<http://oxpoints.oucs.ox.ac.uk/id/70000000/post/assessor> a ctte:ExOfficioPost ;
+    skos:prefLabel "Member of Council (Assessor)" ;
+    ctte:heldByVirtueOf <http://oxpoints.oucs.ox.ac.uk/id/00000000/post/assessor> ;
+    org:postIn <http://oxpoints.oucs.ox.ac.uk/id/70000000> ;
+    ctte:maximumNumberOfPostHolders 1 .
+
+# (6) A member of Congregation elected by the Conference of Colleges
+<http://oxpoints.oucs.ox.ac.uk/id/70000000/post/member-of-congregation-elected-by-the-conference-of-colleges> a ctte:ElectedPost ;
+    skos:prefLabel "Member of Council (Member of Congregation elected by the Conference of Colleges)" ;
+    ctte:candidateClass <https://data.ox.ac.uk/id/group/congregation/Member> ;
+    ctte:electorateClass <http://oxpoints.oucs.ox.ac.uk/id/52241241/Member> ;
+    org:postIn <http://oxpoints.oucs.ox.ac.uk/id/70000000> ;
+    ctte:maximumNumberOfPostHolders 1 .
+
+# (7)-(10) Four external persons nominated by Council and approved by
+# Congregation
+<http://oxpoints.oucs.ox.ac.uk/id/70000000/post/four-external-persons-nominated-by-council-and-approved-by-congregation> a ctte:ElectedPost ;
+    skos:prefLabel "Member of Council (Four external persons nominated by Council and approved by Congregation)" ;
+    ctte:candidateClass foaf:Person ;
+    ctte:electorateClass <http://oxpoints.oucs.ox.ac.uk/id/70000000/Member> ;
+    ctte:approvedBy <https://data.ox.ac.uk/id/group/congregation> ;
+    org:postIn <http://oxpoints.oucs.ox.ac.uk/id/70000000> ;
+    ctte:maximumNumberOfPostHolders 4 .
+
+# (11)-(14) The Heads of the Divisions of Humanities; Mathematical, Physical
+# and Life Sciences; Medical Sciences; and Social Sciences
+<http://oxpoints.oucs.ox.ac.uk/id/70000000/post/head-of-humanities> a ctte:ExOfficioPost ;
+    skos:prefLabel "Member of Council (Head of the Division of Humanities)" ;
+    ctte:heldByVirtueOf <http://oxpoints.oucs.ox.ac.uk/id/23233551/post/head-of-division> ;
+    org:postIn <http://oxpoints.oucs.ox.ac.uk/id/70000000> ;
+    ctte:maximumNumberOfPostHolders 1 .
+<http://oxpoints.oucs.ox.ac.uk/id/70000000/post/head-of-mpls> a ctte:ExOfficioPost ;
+    skos:prefLabel "Member of Council (Head of the Division of Mathematical, Physical and Life Sciences)" ;
+    ctte:heldByVirtueOf <http://oxpoints.oucs.ox.ac.uk/id/23232639/post/head-of-division> ;
+    org:postIn <http://oxpoints.oucs.ox.ac.uk/id/70000000> ;
+    ctte:maximumNumberOfPostHolders 1 .
+<http://oxpoints.oucs.ox.ac.uk/id/70000000/post/head-of-medsci> a ctte:ExOfficioPost ;
+    skos:prefLabel "Member of Council (Head of the Division of Medical Sciences)" ;
+    ctte:heldByVirtueOf <http://oxpoints.oucs.ox.ac.uk/id/23233560/post/head-of-division> ;
+    org:postIn <http://oxpoints.oucs.ox.ac.uk/id/70000000> ;
+    ctte:maximumNumberOfPostHolders 1 .
+<http://oxpoints.oucs.ox.ac.uk/id/70000000/post/head-of-socsci> a ctte:ExOfficioPost ;
+    skos:prefLabel "Member of Council (Head of the Division of Social Sciences)" ;
+    ctte:heldByVirtueOf <http://oxpoints.oucs.ox.ac.uk/id/23232714/post/head-of-division> ;
+    org:postIn <http://oxpoints.oucs.ox.ac.uk/id/70000000> ;
+    ctte:maximumNumberOfPostHolders 1 .
+
+# (15)-(18)  Four members of Congregation elected by Congregation from members
+# of the faculties in the Divisions of Mathematical, Physical and Life Sciences
+# and of Medical Sciences;
+<http://oxpoints.oucs.ox.ac.uk/id/70000000/post/elected-from-mpls-and-medsci> a ctte:ElectedPost ;
+    skos:prefLabel "Member of Council (Four members of Congregation elected by Congregation from members of the faculties in the Divisions of Mathematical, Physical and Life Sciences and of Medical Sciences)" ;
+    ctte:electorateClass <https://data.ox.ac.uk/id/group/congregation/Member> ;
+    ctte:candidateClass <https://data.ox.ac.uk/id/group/congregation/Member> , [
+        a owl:Class ;
+        owl:unionOf (
+            <http://oxpoints.oucs.ox.ac.uk/id/23232639/Member>
+            <http://oxpoints.oucs.ox.ac.uk/id/23233560/Member>
+        ) ] ;
+    org:postIn <http://oxpoints.oucs.ox.ac.uk/id/70000000> ;
+    ctte:maximumNumberOfPostHolders 4 .
+
+# (19)–(22) Four members of Congregation elected by Congregation from members
+# of the faculties in the Divisions of Humanities and of Social Sciences
+
+<http://oxpoints.oucs.ox.ac.uk/id/70000000/post/elected-from-humanities-and-socsci> a ctte:ElectedPost ;
+    skos:prefLabel "Member of Council (Four members of Congregation elected by Congregation from members of the faculties in the Divisions of Humanities and of Social Sciences)" ;
+    ctte:electorateClass <https://data.ox.ac.uk/id/group/congregation/Member> ;
+    ctte:candidateClass <https://data.ox.ac.uk/id/group/congregation/Member> , [
+        a owl:Class ;
+        owl:unionOf (
+            <http://oxpoints.oucs.ox.ac.uk/id/23233551/Member>
+            <http://oxpoints.oucs.ox.ac.uk/id/23232714/Member>
+        ) ] ;
+    org:postIn <http://oxpoints.oucs.ox.ac.uk/id/70000000> ;
+    ctte:maximumNumberOfPostHolders 4 .
+
+# (23)–(25) Three members of Congregation, not necessarily being members of any
+# division and not in any case being nominated in a divisional capacity, who
+# shall be elected by Congregation
+
+<http://oxpoints.oucs.ox.ac.uk/id/70000000/post/elected-from-congregation> a ctte:ElectedPost ;
+    skos:prefLabel "Member of Council (Three members of Congregation, not necessarily being members of any division and not in any case being nominated in a divisional capacity, who shall be elected by Congregation)" ;
+    ctte:electorateClass <https://data.ox.ac.uk/id/group/congregation/Member> ;
+    ctte:candidateClass <https://data.ox.ac.uk/id/group/congregation/Member> ;
+    org:postIn <http://oxpoints.oucs.ox.ac.uk/id/70000000> ;
+    ctte:maximumNumberOfPostHolders 3 .
+
+# 6. Council may, but is not obliged to, co-opt up to three members of Congregation as additional members of Council.
+
+<http://oxpoints.oucs.ox.ac.uk/id/70000000/post/co-opted> a ctte:ElectedPost ;
+    skos:prefLabel "Member of Council (Up to three members of Congregation co-opted by Council as additional members)" ;
+    ctte:electorateClass <http://oxpoints.oucs.ox.ac.uk/id/70000000/Member> ;
+    ctte:candidateClass <https://data.ox.ac.uk/id/group/congregation/Member> ;
+    org:postIn <http://oxpoints.oucs.ox.ac.uk/id/70000000> ;
+    ctte:maximumNumberOfPostHolders 3 .
+

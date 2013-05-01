@@ -1,0 +1,21 @@
+CONSTRUCT {
+  ?membershipClass a owl:Class ;
+    rdfs:label ?membershipClassLabel ;
+    rdfs:subClassOf ?parentMembershipClass .
+  ?org foaf:membershipClass ?membershipClass .
+} WHERE {
+  VALUES ?orgSuperType { foaf:Group org:Organization } .
+  ?orgType rdfs:subClassOf* ?orgSuperType .
+  ?org a ?orgType .
+  OPTIONAL { ?org rdfs:label ?orgLabel }
+  OPTIONAL { ?org skos:prefLabel ?orgLabel }
+  OPTIONAL { ?org foaf:name ?orgLabel }
+  FILTER (BOUND(?orgLabel))
+  BIND (CONCAT('Member of ', ?orgLabel) AS ?membershipClassLabel)
+  BIND (URI(CONCAT(str(?org), '/Member')) AS ?membershipClass)
+  OPTIONAL {
+    ?org org:subOrganizationOf ?parentOrg
+    BIND (URI(CONCAT(str(?parentOrg), '/Member')) AS ?parentMembershipClass)
+  }
+  OPTIONAL { BIND(foaf:Person AS ?parentMembershipClass) }
+}
