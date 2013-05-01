@@ -25,7 +25,7 @@ INSTALLED_APPS = (
     'django_longliving',
     'django_hosts',
     'django_webauth',
-    'object_permissions',
+    'guardian',
     'humfrey.desc',
     'humfrey.archive',
     'humfrey.ckan',
