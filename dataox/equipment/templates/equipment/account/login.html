@@ -1,0 +1,48 @@
+{% extends "equipment/account/base.html" %}
+
+{% block title %}Login{% endblock %}
+
+{% block content %}
+<article>
+	<h1>Login</h1>
+
+    <p>Please select your login method.</p>
+
+	<div class="login-methods">
+		<div class="login-method login-method-webauth">
+			<a class="login-method-inner panel" href="{% url webauth_login %}"><img
+				src="{{ STATIC_URL }}equipment/logos/ou.gif"
+				alt="University of Oxford">
+ 
+				<span class="login-method-webauth-link-outer">
+				  <span class="login-method-webauth-link-inner">
+				    Log in using Webauth
+				  </span>
+				</span>
+			</a>
+		</div>
+		<div class="login-method login-method-form">
+		<div class="login-method-inner panel">
+
+			<img src="{{ STATIC_URL }}equipment/logos/ouh.png"
+				alt="Oxford University Hospitals NHS Trust">
+			<form method="post" action=".">
+				<table>
+					<tbody>{{ form }}
+					</tbody>
+					<tfoot>
+						<tr>
+							<td colspan="2"><input type="submit" value="Log in"></td>
+						</tr>
+						<tr>
+							<td colspan="2"><a href="{% url account_signup %}">Register as an
+									OUH user</a> <a href="{% url account_password_reset %}">Forgotten
+									password?</a></td>
+						</tr>
+					</tfoot>
+				</table>
+			</form>
+		</div></div>
+	</div>
+</article>
+{% endblock %}

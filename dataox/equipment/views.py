@@ -17,6 +17,7 @@ from humfrey.elasticsearch import views as elasticsearch_views
 from humfrey.linkeddata.resource import Resource
 from humfrey.linkeddata.views import MappingView
 from humfrey.results.views.standard import RDFView
+from humfrey.sparql.models import Store
 from humfrey.sparql.views import CannedQueryView, StoreView
 from humfrey.utils.namespaces import NS
 
@@ -44,10 +45,15 @@ class EquipmentView(object):
 
     @property
     def store_name(self):
-        if self.request.user.groups.filter(name='member').count():
-            return 'equipment'
-        else:
-            return 'public'
+        try:
+            return self._store_name
+        except AttributeError:
+            store = Store.objects.get(slug='equipment')
+            if self.request.user.has_perm('sparql.query_store', store):
+                self._store_name = 'equipment'
+            else:
+                self._store_name = 'public'
+            return self._store_name
 
 class DescView(EquipmentView, desc_views.DescView):
     pass
@@ -113,7 +119,8 @@ class SearchView(EquipmentView, elasticsearch_views.SearchView):
         facets = {
             'institution': {'terms': {'field': 'formalOrganisation.uri', 'size': 100}},
             'basedNear': {'terms': {'field': 'basedNear.uri', 'size': 100}},
-            'category': {'terms': {'field': 'category.uri'}}
+            'category': {'terms': {'field': 'category.uri'}},
+            'shareability': {'terms': {'field': 'shareability.uri'}},
         }
         if 'filter.formalOrganisation.uri' in self.request.GET:
             facets['department'] = {'terms': {'field': 'equipmentOf.uri', 'size': 100}}

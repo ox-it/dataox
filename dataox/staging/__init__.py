@@ -66,7 +66,7 @@ if settings.STAGING:
     def new_doc_forwards(*args, **kwargs):
         urls = original_doc_forwards(*args, **kwargs)
         return uri.DocURLs('/'+urls._base.split('//', 1)[-1], '/'+urls._format_pattern.split('//', 1)[-1])
-    #uri.doc_forwards = new_doc_forwards
+    uri.doc_forwards = new_doc_forwards
 
     def _new_get_host_path(url):
         parsed_url = urlparse.urlparse(url)

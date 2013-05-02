@@ -18,5 +18,4 @@ MIDDLEWARE_CLASSES = (
     'dataox.staging.middleware.StagingMiddleware',
 ) + MIDDLEWARE_CLASSES
 
-DEFAULT_FROM_EMAIL = 'Open Data Service [staging] <opendata@oucs.ox.ac.uk>'
 SERVER_EMAIL = 'Open Data Service Administrators [staging] <opendata-admin@maillist.ox.ac.uk>'

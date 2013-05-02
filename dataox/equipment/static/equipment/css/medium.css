@@ -40,6 +40,44 @@ body.equipment-browse ul.equipment-categories ul li a{
 }
 
 
+div.login-method {
+	float:left;
+	text-align: center;
+	width: 50%
+}
+
+.login-method-inner {
+/*	border: 1px solid #888;
+	background-color: #eee; */
+	padding: 0.05em;
+	margin-left: 1em;
+	min-height: 25em;
+}
+
+
+div.login-method-webauth a {
+	display: block;
+	position: relative;
+}
+
+div.login-method span.login-method-webauth-link-outer {
+	position: absolute;
+	display:block;
+	font-size: 200%;
+	bottom:50%;
+	width: 100%;
+}
+
+div.login-method span.login-method-webauth-link-inner {
+	position: absolute;
+
+	bottom:-0.5em;
+	width: 100%;
+	left: 0;
+	white-space: nowrap;
+	text-align:center;
+}
+
 
 .advanced-search-form,
 .searchTips {

@@ -92,7 +92,7 @@ div.main article.content {
 
 div.main article.content .wrapper {
 
-  padding: 0px 10px;
+  padding: 0px 0px 0px 10px;
 }
 
 div.main article.content .with-left-sidebar {
@@ -276,3 +276,24 @@ header.pageHeader {
 }
 
 
+
+.login-method:first-child .login-method-inner{
+	margin-left: 0;
+}
+
+div.login-method-webauth {
+	
+}
+
+div.login-method span.login-method-webauth-link-outer {
+	font-size: 200%;
+}
+
+div.login-method:first-child {
+	border-left: 0;
+}
+
+
+div.login-method img {
+	margin-top: 1em;
+}

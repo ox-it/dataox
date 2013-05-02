@@ -18,6 +18,7 @@ INTERNAL_IPS = (
 INSTALLED_APPS = (
     'django.contrib.auth',
     'django.contrib.admin',
+    'django.contrib.messages',
     'django.contrib.sessions',
     'django.contrib.staticfiles',
     'django.contrib.contenttypes',
@@ -51,6 +52,7 @@ INSTALLED_APPS = (
     'dataox.vacancy',
     'djcelery',
     'pipeline',
+    'account',
     'raven.contrib.django',
 )
 
@@ -130,8 +132,9 @@ SOURCE_URL = 'https://source.data.ox.ac.uk/'
 
 AUTHENTICATION_BACKENDS = (
     'django.contrib.auth.backends.ModelBackend',
-    'object_permissions.backend.ObjectPermBackend',
+    'guardian.backends.ObjectPermissionBackend',
     'django_webauth.backends.webauth_ldap.WebauthLDAPBackend',
+    'account.auth_backends.EmailAuthenticationBackend',
 )
 
 MIDDLEWARE_CLASSES = (
@@ -149,6 +152,11 @@ MIDDLEWARE_CLASSES = (
     'humfrey.pingback.middleware.PingbackMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
 )
+
+# For django-registration
+ACCOUNT_EMAIL_UNIQUE = True
+ACCOUNT_EMAIL_CONFIRMATION_REQUIRED = True
+DEFAULT_HTTP_PROTOCOL = 'https'
 
 ENDPOINT_QUERY = 'http://localhost:3030/public/query'
 ENDPOINT_GRAPH = 'http://localhost:3030/public/data'
@@ -183,8 +191,8 @@ SHELL_TRANSFORMS = {
 EMAIL_HOST = 'smtp.ox.ac.uk'
 EMAIL_PORT = 587
 EMAIL_SUBJECT_PREFIX = '[dataox] '
-DEFAULT_FROM_EMAIL = 'Open Data Service [staging] <opendata@oucs.ox.ac.uk>'
-SERVER_EMAIL = 'Open Data Service Administrators [staging] <opendata-admin@maillist.ox.ac.uk>'
+DEFAULT_FROM_EMAIL = 'opendata@oucs.ox.ac.uk'
+SERVER_EMAIL = 'Open Data Service Administrators <opendata-admin@maillist.ox.ac.uk>'
 
 SERVER_EMAIL = 'opendata-admin@maillist.ox.ac.uk'
 
@@ -258,6 +266,7 @@ THUMBNAIL_WIDTHS = (200, 220, 400)
 THUMBNAIL_HEIGHTS = (120, 80,)
 
 SESSION_COOKIE_SECURE = True
+SESSION_EXPIRE_AT_BROWSER_CLOSE = True
 
 # Celery
 
@@ -286,6 +295,8 @@ DEPENDENT_TASKS = {'humfrey.update.update': ('humfrey.ckan.upload_dataset_metada
 DATASET_NOTATION = 'oxnotation:dataset'
 
 ANONYMOUS_USER_ID = 0
+GUARDIAN_RAISE_403 = True
+
 RESOURCE_REGISTRY = 'dataox.resource.resource_registry'
 
 HUMFREY_FEEDS = {

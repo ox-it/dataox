@@ -19,6 +19,7 @@ class DatasetView(CannedQueryView, MappingView, RDFView, HTMLView):
             {catalog} dcat:dataset ?dataset .
             ?dataset a void:Dataset .
             OPTIONAL {{ ?dataset dcterms:license ?license }} .
+            OPTIONAL {{ ?dataset dcterms:publisher ?publisher }} .
             OPTIONAL {{ ?dataset oo:contact ?contact }} .
         }}""".format(catalog=catalog.n3())
 
