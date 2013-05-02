@@ -8,4 +8,5 @@
   <xsl:variable name="publisher-name">the Careers Service</xsl:variable>
   <xsl:variable name="course-notation">https://data.ox.ac.uk/id/notation/careers-course</xsl:variable>
   <xsl:variable name="presentation-notation">https://data.ox.ac.uk/id/notation/careers-presentation</xsl:variable>
+  <xsl:variable name="slugify-fields" select="('course-identifier')"/>
 </xsl:stylesheet>
