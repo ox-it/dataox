@@ -40,6 +40,7 @@
   <xsl:variable name="publisher"/>
   <xsl:variable name="course-notation">https://data.ox.ac.uk/id/notation/daisy-course</xsl:variable>
   <xsl:variable name="presentation-notation">https://data.ox.ac.uk/id/notation/daisy-presentation</xsl:variable>
+  <xsl:variable name="slugify-fields" select="()"/>
 
   <xsl:function name="ex:slugify">
     <xsl:param name="term"/>
@@ -58,10 +59,10 @@
       <courses>
         <xsl:choose>
           <xsl:when test="$skip-first">
-            <xsl:apply-templates select="/tei:TEI/tei:text/tei:body/tei:table/tei:row[position() &gt; 1]" mode="preprocess"/>
+            <xsl:apply-templates select=".//tei:row[position() &gt; 1]" mode="preprocess"/>
           </xsl:when>
           <xsl:otherwise>
-            <xsl:apply-templates select="/tei:TEI/tei:text/tei:body/tei:table/tei:row" mode="preprocess"/>
+            <xsl:apply-templates select=".//tei:row" mode="preprocess"/>
           </xsl:otherwise>
         </xsl:choose>
       </courses>
@@ -70,11 +71,11 @@
       <xcri:catalog rdf:about="{$base}catalogue">
         <dcterms:title>Courses from <xsl:value-of select="$publisher-name"/> at the University of Oxford</dcterms:title>
         <dcterms:publisher rdf:resource="{$publisher}"/>
-        <xsl:for-each select="$data/courses/course">
+        <xsl:for-each-group select="$data/courses/course" group-by="course-identifier">
           <skos:member rdf:resource="{$base}course/{course-identifier/text()}"/>
-        </xsl:for-each>
+        </xsl:for-each-group>
       </xcri:catalog>
-      <xsl:for-each-group select="$data/courses/course" group-by="provider-identifier">
+      <xsl:for-each-group select="$data/courses/course" group-by="course-identifier">
         <xsl:apply-templates select="." mode="provider"/>
       </xsl:for-each-group>
     </rdf:RDF>
@@ -82,14 +83,21 @@
 
   <xsl:template match="tei:row" mode="preprocess">
     <xsl:variable name="row" select="."/>
-    <xsl:if test="tei:cell[7]/text()='PB' or ($store='courses' and tei:cell[7]/text()='RS')">
+    <xsl:if test="tei:cell[8]/text()='PB' or ($store='courses' and tei:cell[8]/text()='RS')">
       <course>
         <xsl:for-each select="$columns/*">
           <xsl:variable name="position" select="position()"/>
           <xsl:variable name="cell" select="$row/tei:cell[position()=$position]"/>
           <xsl:if test="$cell/text()">
             <xsl:element name="{name()}">
-              <xsl:value-of select="$cell/text()"/>
+              <xsl:choose>
+                <xsl:when test="name() = $slugify-fields">
+                  <xsl:value-of select="ex:slugify($cell/text())"/>
+                </xsl:when>
+                <xsl:otherwise>
+                  <xsl:value-of select="$cell/text()"/>
+                </xsl:otherwise>
+              </xsl:choose>
             </xsl:element>
           </xsl:if>
         </xsl:for-each>
@@ -100,7 +108,7 @@
   <xsl:template match="course" mode="provider">
     <org:Organization rdf:about="https://course.data.ox.ac.uk/id/provider/{provider-identifier/text()}">
       <xsl:apply-templates mode="provider-metadata"/>
-      <xsl:for-each-group select="current-group()" group-adjacent="course-title">
+      <xsl:for-each-group select="current-group()" group-by="provider-identifier">
         <xsl:apply-templates select="." mode="in-provider">
           <xsl:with-param name="current-group" select="current-group()"/>
         </xsl:apply-templates>
@@ -139,7 +147,7 @@
     <xsl:param name="current-group"/>
     <xcri:course rdf:about="{$base}course/{course-identifier/text()}">
       <xsl:apply-templates select="*[text()]" mode="in-course"/>
-      <xsl:for-each-group select="$current-group" group-by="presentation-start">
+      <xsl:for-each-group select="$current-group" group-by="presentation-identifier">
         <xsl:apply-templates select="." mode="in-course">
           <xsl:with-param name="current-group" select="current-group()"/>
         </xsl:apply-templates>
@@ -149,7 +157,7 @@
 
   <xsl:template match="course" mode="in-course">
     <xsl:param name="current-group"/>
-    <xsl:if test="presentation-start/text()">
+    <xsl:if test="presentation-identifier/text()">
       <mlo:specifies>
         <xsl:apply-templates select="." mode="presentation">
           <xsl:with-param name="current-group" select="$current-group"/>
@@ -160,7 +168,7 @@
 
   <xsl:template match="course" mode="presentation">
     <xsl:param name="current-group"/>
-    <xsl:variable name="presentation-uri" select="concat($base, 'presentation/', course-identifier/text(), '/', position())"/>
+    <xsl:variable name="presentation-uri" select="concat($base, 'presentation/', presentation-identifier/text())"/>
     <xcri:presentation rdf:about="{$presentation-uri}">
       <skos:notation rdf:datatype="{$presentation-notation}">
         <xsl:value-of select="concat(course-identifier/text(), '-', position())"/>
@@ -171,22 +179,18 @@
       <xsl:for-each select="$current-group[session-date or session-start]">
         <xsl:sort select="session-date"/>
         <xsl:sort select="session-start"/>
-        <xsl:apply-templates select="." mode="in-presentation">
-          <xsl:with-param name="session-uri" select="concat($presentation-uri, '/session/', position())"/>
-        </xsl:apply-templates>
+        <xsl:apply-templates select="." mode="in-presentation"/>
       </xsl:for-each>
     </xcri:presentation>
   </xsl:template>
 
   <xsl:template match="course" mode="in-presentation">
-    <xsl:param name="session-uri"/>
-    <xsl:if test="session-identifiier/text()">
+    <xsl:variable name="session-uri" select="concat($base, 'session/', session-identifier/text())"/>
       <oxcap:consistsOf>
         <xsl:apply-templates select="." mode="session">
           <xsl:with-param name="session-uri" select="$session-uri"/>
         </xsl:apply-templates>
       </oxcap:consistsOf>
-    </xsl:if>
   </xsl:template>
 
   <xsl:template match="course" mode="session">
@@ -372,6 +376,7 @@
       <dcterms:subject rdf:resource="http://jacs.dataincubator.org/{lower-case(.)}"/>
     </xsl:for-each>
   </xsl:template>
+
   <xsl:template match="course-skill" mode="in-course">
     <xsl:for-each select="tokenize(text(), ' ')">
       <dcterms:subject rdf:resource="https://data.ox.ac.uk/id/ox-rdf/descriptor/{.}"/>
@@ -460,7 +465,7 @@
           <xsl:value-of select="concat($session-uri, if (self::session-start) then '/start' else '/end')"/>
         </xsl:attribute>
         <time:inXSDDateTime rdf:datatype="&xsd;dateTime">
-          <xsl:value-of select="../session-start"/>
+          <xsl:value-of select="text()"/>
         </time:inXSDDateTime>
       </time:Instant>
     </xsl:element>
@@ -529,41 +534,42 @@
     <course-title/>
     <!-- F-J -->
     <course-identifier/>
+    <presentation-identifier/>
     <course-visibility/>
     <member-apply-to/>
     <public-apply-to/>
-    <presentation-start/>
     <!-- K-0 -->
+    <presentation-start/>
     <presentation-start-text/>
     <presentation-venue/>
     <presentation-venue-text/>
     <presentation-status/>
-    <course-learning-outcome/>
     <!-- P-T -->
+    <course-learning-outcome/>
     <course-prerequisite/>
     <course-audience/>
     <course-subject/>
     <course-skill/>
-    <course-research-methods/>
     <!-- U-Y -->
+    <course-research-methods/>
     <course-description/>
     <course-url/>
     <presentation-apply-from/>
     <presentation-apply-from-text/>
-    <presentation-apply-until/>
     <!-- Z-AD -->
+    <presentation-apply-until/>
     <presentation-apply-until-text/>
     <presentation-attendance-mode/>
     <presentation-attendance-pattern/>
     <presentation-end/>
-    <presentation-places/>
     <!-- AE-AI -->
-    <session-identififer/>
+    <presentation-places/>
+    <session-identifier/>
     <session-date/>
     <session-start/>
     <session-end/>
+    <!-- AJ-AL -->
     <session-venue/>
-    <!-- AJ-AN -->
     <session-venue-text/>
     <qualifications/>
   </xsl:variable>
