@@ -1,6 +1,7 @@
 @prefix xcri: <http://xcri.org/profiles/1.2/> .
 @prefix skos: <http://www.w3.org/2004/02/skos/core#> .
 @prefix dcterms: <http://purl.org/dc/terms/> .
+@prefix sd: <http://www.w3.org/ns/sparql-service-description#> .
 
 <https://data.ox.ac.uk/id/courses/cobomo-catalogue> a xcri:catalog ;
     dcterms:title "Course catalogue for bookings through Mobile Oxford" ;
