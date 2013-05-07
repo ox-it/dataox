@@ -118,7 +118,7 @@
 
   <!-- Course identifier -->
   <xsl:template match="txt_cidentifier" mode="course">
-    <xsl:variable name="identifier" select="normalize-space(upper-case(txt_cidentifier))"/>
+    <xsl:variable name="identifier" select="normalize-space(upper-case(.))"/>
     <dc:identifier>
       <xsl:text>https://course.data.ox.ac.uk/id/sharepoint/course/</xsl:text>
       <xsl:value-of select="$identifier"/>
