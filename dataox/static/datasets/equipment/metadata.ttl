@@ -40,7 +40,7 @@
     org:postIn <http://oxpoints.oucs.ox.ac.uk/id/23233536> ;
     foaf:mbox <mailto:research.facilities@admin.ox.ac.uk> .
 
-<https://data.ox.ac.uk/id/dataset/catalogue> dcat:dataset <https://data.ox.ac.uk/id/dataset/equipment> .
+<https://data.ox.ac.uk/id/dataset/catalogue> dcat:dataset <https://data.ox.ac.uk/id/dataset/research-facilities> .
 
 <https://data.ox.ac.uk/graph/equipment/equipment> a sd:Graph ;
     dcterms:license <http://reference.data.gov.uk/id/open-government-licence> ;
