@@ -1,0 +1,60 @@
+@prefix void:    <http://rdfs.org/ns/void#> .
+@prefix rdfs:    <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix dcterms: <http://purl.org/dc/terms/> .
+@prefix cc:      <http://creativecommons.org/ns#> .
+@prefix cerif:   <http://spi-fm.uca.es/neologism/cerif#> .
+@prefix oo:      <http://purl.org/openorg/> .
+@prefix oxnotation: <https://data.ox.ac.uk/id/notation/> .
+@prefix foaf: <http://xmlns.com/foaf/0.1/> .
+@prefix xcri: <http://xcri.org/profiles/1.2/> .
+@prefix mlo: <http://purl.org/net/mlo/> .
+@prefix org: <http://www.w3.org/ns/org#> .
+@prefix time: <http://www.w3.org/2006/time#> .
+@prefix skos: <http://www.w3.org/2004/02/skos/core#> .
+@prefix v: <http://www.w3.org/2006/vcard/ns#> .
+@prefix sd: <http://www.w3.org/ns/sparql-service-description#> .
+@prefix dcat: <http://www.w3.org/ns/dcat#> .
+@prefix wdrs: <http://www.w3.org/2007/05/powder-s#> .
+
+<https://data.ox.ac.uk/id/dataset/research-facilities> a void:Dataset ;
+    rdfs:label "Research equipment and facilities at the University of Oxford" ;
+    skos:notation "research-facilities"^^oxnotation:dataset ;
+
+#    wdrs:describedby <https://docs.data.ox.ac.uk/datasets/research-facilities.html> ;
+
+    dcterms:references <https://data.ox.ac.uk/id/dataset/oxpoints> ;
+    dcterms:publisher <http://oxpoints.oucs.ox.ac.uk/id/23233536> ;
+    dcterms:description "Metadata about research equipment and facilities" ;
+    dcterms:license <http://reference.data.gov.uk/id/open-government-licence> ;
+
+    void:vocabulary oo:, cerif: ;
+
+    cc:attributionName "University of Oxford" ;
+    cc:attributionURL <https://www.research-facilities.ox.ac.uk/> ;
+
+    oo:contact <https://data.ox.ac.uk/id/open-data-team> ;
+    oo:corrections <https://data.ox.ac.uk/id/dataset/research-facilities/corrections> .
+
+<https://data.ox.ac.uk/id/dataset/research-facilities/corrections> a foaf:Agent ;
+    foaf:name "Research Facilities Team, Research Services Office" ;
+    org:postIn <http://oxpoints.oucs.ox.ac.uk/id/23233536> ;
+    foaf:mbox <mailto:research.facilities@admin.ox.ac.uk> .
+
+<https://data.ox.ac.uk/graph/equipment/equipment> a sd:Graph ;
+    dcterms:license <http://reference.data.gov.uk/id/open-government-licence> ;
+    void:inDataset <https://data.ox.ac.uk/id/dataset/research-facilities> .
+
+<https://data.ox.ac.uk/graph/equipment/facilities> a sd:Graph ;
+    dcterms:license <http://reference.data.gov.uk/id/open-government-licence> ;
+    void:inDataset <https://data.ox.ac.uk/id/dataset/research-facilities> .
+
+<https://data.ox.ac.uk/graph/equipment/taxonomy> a sd:Graph ;
+    dcterms:license <http://reference.data.gov.uk/id/open-government-licence> ;
+    void:inDataset <https://data.ox.ac.uk/id/dataset/research-facilities> .
+
+
+
+<https://data.ox.ac.uk/graph/equipment/metadata> a sd:Graph ;
+    void:inDataset <https://data.ox.ac.uk/id/dataset/catalogue> , <https://data.ox.ac.uk/id/dataset/research-facilities> ;
+    dcterms:license <http://creativecommons.org/publicdomain/zero/1.0/> .
+
