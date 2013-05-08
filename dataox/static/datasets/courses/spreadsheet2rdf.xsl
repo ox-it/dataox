@@ -171,7 +171,7 @@
     <xsl:variable name="presentation-uri" select="concat($base, 'presentation/', presentation-identifier/text())"/>
     <xcri:presentation rdf:about="{$presentation-uri}">
       <skos:notation rdf:datatype="{$presentation-notation}">
-        <xsl:value-of select="concat(course-identifier/text(), '-', position())"/>
+        <xsl:value-of select="presentation-identifier/text()"/>
       </skos:notation>
       <xsl:apply-templates select="*[text()]" mode="in-presentation">
         <xsl:with-param name="presentation-uri" select="$presentation-uri"/>
@@ -185,7 +185,7 @@
   </xsl:template>
 
   <xsl:template match="course" mode="in-presentation">
-    <xsl:variable name="session-uri" select="concat($base, 'session/', session-identifier/text())"/>
+    <xsl:variable name="session-uri" select="concat($base, 'session/', presentation-identifier/text(), '/', session-identifier/text())"/>
       <oxcap:consistsOf>
         <xsl:apply-templates select="." mode="session">
           <xsl:with-param name="session-uri" select="$session-uri"/>
