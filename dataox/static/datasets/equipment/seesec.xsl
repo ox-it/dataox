@@ -133,10 +133,12 @@
     <xsl:variable name="dbpedia">
       <xsl:choose>
         <xsl:when test="text()='South Kensington'">South_Kensington</xsl:when>
+        <xsl:when test="text()='Cambridge'">Cambridge</xsl:when>
+        <xsl:when test="text()='UCL'">University_College_London</xsl:when>
       </xsl:choose>
     </xsl:variable>
     <xsl:choose>
-      <xsl:when test="$dbpedia">
+      <xsl:when test="string-length($dbpedia) gt 0">
         <foaf:based_near>
           <geo:SpatialThing rdf:about="http://dbpedia.org/resource/{$dbpedia}">
             <rdfs:label>
