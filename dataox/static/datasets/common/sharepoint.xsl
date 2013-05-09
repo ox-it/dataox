@@ -29,6 +29,9 @@
     <xsl:for-each select="$element">
       <xsl:variable name="user" select="key('users', @id)"/>
       <xsl:choose>
+        <xsl:when test="not($user)">
+          <xsl:value-of select="concat($group-base-uri, @id)"/>
+        </xsl:when>
         <xsl:when test="$user//field[@name='ContentType']/text='DomainGroup'">
           <xsl:value-of select="$group-base-uri"/>
           <xsl:value-of select="substring-after($user//field[@name='Name']/text, 'AD-OAK\group_')"/>
