@@ -7,7 +7,8 @@
 
   <xsl:template name="telephone-extension">
     <!-- Last five characters. Remember strings are 1-indexed, not 0-indexed. -->
-    <xsl:variable name="extension" select="substring(., string-length(.)-4)"/>
+    <xsl:variable name="digits" select="replace(., '[^0-9]', '')"/>
+    <xsl:variable name="extension" select="substring($digits, string-length($digits)-4)"/>
     <xsl:variable name="prefix">
       <!-- From page 6 of the Internal Telephone Directory ("Extensions") -->
       <xsl:choose>
