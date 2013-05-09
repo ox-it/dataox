@@ -84,13 +84,14 @@
       <xsl:choose>
         <xsl:when test="ex:slugify(type)='equipment'">oo:Equipment</xsl:when>
         <xsl:when test="ex:slugify(type)='facility'">oo:Facility</xsl:when>
+        <xsl:when test="not(type)">oo:Equipment</xsl:when>
         <xsl:otherwise>
           <xsl:message terminate="yes">Unexpected type: <xsl:value-of select="ex:slugify(type)"/>.</xsl:message>
         </xsl:otherwise>
       </xsl:choose>
     </xsl:variable>
     <xsl:variable name="uri">
-      <xsl:value-of select="concat($base-uri, ex:slugify(type), '/', if (id) then ex:slugify(id/text()) else @id)"/>
+      <xsl:value-of select="concat($base-uri, if (type) then ex:slugify(type) else 'equipment', '/', if (id) then ex:slugify(id/text()) else @id)"/>
     </xsl:variable>
     <xsl:element name="{$type}">
       <xsl:attribute name="rdf:about" select="$uri"/>
