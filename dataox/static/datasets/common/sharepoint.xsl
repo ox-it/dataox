@@ -30,6 +30,7 @@
       <xsl:variable name="user" select="key('users', @id)"/>
       <xsl:choose>
         <xsl:when test="not($user)">
+          <xsl:message>Invalid user <xsl:value-of select="@id"/> on row <xsl:value-of select="../../../@id"/> of list "<xsl:value-of select="../../../../../@name"/>"</xsl:message>
           <xsl:value-of select="concat($group-base-uri, @id)"/>
         </xsl:when>
         <xsl:when test="$user//field[@name='ContentType']/text='DomainGroup'">
