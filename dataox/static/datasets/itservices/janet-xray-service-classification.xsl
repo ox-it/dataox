@@ -27,7 +27,7 @@
       <dcterms:publisher>
         <org:FormalOrganization rdf:about="http://id.ja.net/">
           <rdfs:label>Janet</rdfs:label>
-          <foaf:homepage rdfs:resource="http://www.ja.net/"/>
+          <foaf:homepage rdf:resource="http://www.ja.net/"/>
         </org:FormalOrganization>
       </dcterms:publisher>
       <xsl:apply-templates/>
