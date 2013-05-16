@@ -25,7 +25,9 @@
   <xsl:variable name="it-services">http://oxpoints.oucs.ox.ac.uk/id/31337175</xsl:variable>
   <xsl:variable name="university-of-oxford">http://oxpoints.oucs.ox.ac.uk/id/00000000</xsl:variable>
   <xsl:variable name="group-base-uri">https://data.ox.ac.uk/id/group/unit-member/</xsl:variable>
+  <xsl:variable name="service-classification-base-uri">http://id.ja.net/xray-service-classification</xsl:variable>
   <xsl:key name="teams" match="/site/lists/list[@name='Teams']/rows/row" use="@id"/>
+  <xsl:key name="service-classifications" match="/site/lists/list[@name='Service classifications']/rows/row" use="@id"/>
 
   <xsl:function name="ex:team-uri">
     <xsl:param name="team"/>
@@ -38,5 +40,12 @@
         <xsl:value-of select="$team/@id"/>
       </xsl:otherwise>
     </xsl:choose>
+  </xsl:function>
+
+  <xsl:function name="ex:service-classification-uri">
+    <xsl:param name="service-classification"/>
+    <xsl:for-each select="$service-classification">
+      <xsl:value-of select="concat($service-classification-base-uri, '/', key('service-classifications', @id)/fields/field[@name='Slug']/text/text())"/>
+    </xsl:for-each>
   </xsl:function>
 </xsl:stylesheet>

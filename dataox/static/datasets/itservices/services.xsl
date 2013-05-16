@@ -122,6 +122,11 @@
   <xsl:template match="field[@name='Activity_x0020_category']/lookup" mode="in-service">
     <dcterms:subject rdf:resource="{$service-base-uri}service-activity-category/{@id}"/>
   </xsl:template>
+
+  <xsl:template match="field[@name='Service_x0020_classification']/lookup" mode="in-service">
+    <foobar/>
+    <dcterms:subject rdf:resource="{ex:service-classification-uri(.)}"/>
+  </xsl:template>
   
   <xsl:template match="field[@name='Service_x0020_Delivery_x0020_Man']/lookup" mode="in-service">
     <xsl:if test="$internal">
