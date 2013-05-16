@@ -124,7 +124,6 @@
   </xsl:template>
 
   <xsl:template match="field[@name='Service_x0020_classification']/lookup" mode="in-service">
-    <foobar/>
     <dcterms:subject rdf:resource="{ex:service-classification-uri(.)}"/>
   </xsl:template>
   
