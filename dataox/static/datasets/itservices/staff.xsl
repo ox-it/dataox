@@ -29,9 +29,9 @@
     </xsl:if>
   </xsl:template>
 
-  <xsl:function name="ex:membership-uri">
+  <xsl:function name="ex:post-uri">
     <xsl:param name="node"/>
-    <xsl:text>https://data.ox.ac.uk/id/itservices/membership/</xsl:text>
+    <xsl:text>https://data.ox.ac.uk/id/itservices/post/</xsl:text>
     <xsl:value-of select="$node/ancestor-or-self::row[1]/@id"/>
   </xsl:function>
 
@@ -45,10 +45,10 @@
   </xsl:template>
 
   <xsl:template match="list[@name='Staff']/rows/row">
-    <org:Membership rdf:about="{ex:membership-uri(.)}">
-      <xsl:apply-templates mode="in-membership"/>
-    </org:Membership>
-    <xsl:apply-templates mode="outside-membership"/>
+    <org:Post rdf:about="{ex:post-uri(.)}">
+      <xsl:apply-templates mode="in-post"/>
+    </org:Post>
+    <xsl:apply-templates mode="outside-post"/>
   </xsl:template>
 
   <xsl:template match="field[@name='Title']/text" mode="in-person">
@@ -83,9 +83,9 @@
     <xsl:call-template name="telephone-extension"/>
   </xsl:template>
 
-  <xsl:template match="field[@name='Title']/text[text()]" mode="in-membership">
+  <xsl:template match="field[@name='Role']/text[text()]" mode="in-post">
     <org:role>
-      <org:Role rdf:about="{ex:membership-uri(.)}/role">
+      <org:Role rdf:about="{ex:post-uri(.)}/role">
         <skos:prefLabel>
           <xsl:value-of select="."/>
         </skos:prefLabel>
@@ -93,15 +93,15 @@
     </org:role>
   </xsl:template>
 
-  <xsl:template match="field[@name='Person']/user" mode="in-membership">
+  <xsl:template match="field[@name='Person']/user" mode="in-post">
     <org:member rdf:resource="{ex:agent-uri(.)}"/>
   </xsl:template>
 
-  <xsl:template match="field[@name='Team']/lookup" mode="in-membership">
+  <xsl:template match="field[@name='Team']/lookup" mode="in-post">
     <org:organization rdf:resource="{ex:team-uri(key('teams', @id))}"/>
   </xsl:template>
 
-  <xsl:template match="field[@name='Manager']/boolean" mode="outside-membership">
+  <xsl:template match="field[@name='Manager']/boolean" mode="outside-post">
     <xsl:variable name="team-uri" select="ex:team-uri(key('teams', ../../field[@name='Team']/lookup/@id))"/>
     <rdf:Description rdf:about="{ex:agent-uri(../../field[@name='Person']/user)}">
       <xsl:choose>
@@ -115,7 +115,7 @@
     </rdf:Description>
   </xsl:template>
 
-  <xsl:template match="field[@name='Office']/text" mode="in-membership">
+  <xsl:template match="field[@name='Office']/text" mode="in-post">
     <org:basedAt>
       <xsl:attribute name="rdf:resource">
         <xsl:text>http://oxpoints.oucs.ox.ac.uk/id/</xsl:text>
