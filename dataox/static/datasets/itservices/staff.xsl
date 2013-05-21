@@ -22,6 +22,7 @@
 
   <xsl:param name="store"/>
   <xsl:variable name="internal" select="$store='itservices'"/>
+  <xsl:key name="post-holders" match="list[@name='Staff']/rows/row" use="fields/field[@name='Person']/user/@id"/>
 
   <xsl:template match="site">
     <xsl:if test="$internal">
@@ -40,6 +41,19 @@
     <xsl:if test="$content-type = 'Person'">
       <foaf:Person rdf:about="{ex:agent-uri(.)}">
         <xsl:apply-templates mode="in-person"/>
+        <xsl:variable name="post" select="key('post-holders', @id)"/>
+        <xsl:for-each select="$post">
+          <org:hasPost rdf:resource="{ex:post-uri(.)}"/>
+          <xsl:variable name="team-uri" select="ex:team-uri(key('teams', fields/field[@name='Team']/lookup/@id))"/>
+          <xsl:choose>
+            <xsl:when test="fields/field[@name='Manager']/text/text()='true'">
+              <org:headOf rdf:resource="{$team-uri}"/>
+            </xsl:when>
+            <xsl:otherwise>
+              <org:memberOf rdf:resource="{$team-uri}"/>
+            </xsl:otherwise>
+          </xsl:choose>
+        </xsl:for-each>
       </foaf:Person>
     </xsl:if>
   </xsl:template>
@@ -48,7 +62,6 @@
     <org:Post rdf:about="{ex:post-uri(.)}">
       <xsl:apply-templates mode="in-post"/>
     </org:Post>
-    <xsl:apply-templates mode="outside-post"/>
   </xsl:template>
 
   <xsl:template match="field[@name='Title']/text" mode="in-person">
@@ -89,30 +102,25 @@
         <skos:prefLabel>
           <xsl:value-of select="."/>
         </skos:prefLabel>
+        <org:roleProperty>
+          <xsl:attribute name="rdf:resource">
+            <xsl:text>http://www.w3.org/ns/org#</xsl:text>
+            <xsl:choose>
+              <xsl:when test="../../field[@name='Manager']/boolean/text()='true'">headOf</xsl:when>
+              <xsl:otherwise>memberOf</xsl:otherwise>
+            </xsl:choose>
+          </xsl:attribute>
+        </org:roleProperty>
       </org:Role>
     </org:role>
   </xsl:template>
 
   <xsl:template match="field[@name='Person']/user" mode="in-post">
-    <org:member rdf:resource="{ex:agent-uri(.)}"/>
+    <org:heldBy rdf:resource="{ex:agent-uri(.)}"/>
   </xsl:template>
 
   <xsl:template match="field[@name='Team']/lookup" mode="in-post">
-    <org:organization rdf:resource="{ex:team-uri(key('teams', @id))}"/>
-  </xsl:template>
-
-  <xsl:template match="field[@name='Manager']/boolean" mode="outside-post">
-    <xsl:variable name="team-uri" select="ex:team-uri(key('teams', ../../field[@name='Team']/lookup/@id))"/>
-    <rdf:Description rdf:about="{ex:agent-uri(../../field[@name='Person']/user)}">
-      <xsl:choose>
-        <xsl:when test="text()='true'">
-          <org:headOf rdf:resource="{$team-uri}"/>
-        </xsl:when>
-        <xsl:when test="text()='false'">
-          <org:memberOf rdf:resource="{$team-uri}"/>
-        </xsl:when>
-      </xsl:choose>
-    </rdf:Description>
+    <org:postIn rdf:resource="{ex:team-uri(key('teams', @id))}"/>
   </xsl:template>
 
   <xsl:template match="field[@name='Office']/text" mode="in-post">
@@ -124,6 +132,7 @@
           <xsl:when test="text()='Blue Boar Court'">23233619</xsl:when>
           <xsl:when test="text()='Hythe Bridge Street'">23233672</xsl:when>
           <xsl:when test="text()='Malthouse'">23233636</xsl:when>
+          <xsl:when test="text()='Parks Road'">23233753</xsl:when>
           <xsl:when test="text()='Wellington Square'">23233665</xsl:when>
           <xsl:when test="text()='Worcester Street'">23233614</xsl:when>
         </xsl:choose>
