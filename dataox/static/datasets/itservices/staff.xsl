@@ -13,6 +13,8 @@
     xmlns:tio="http://purl.org/tio/ns#"
     xmlns:v="http://www.w3.org/2006/vcard/ns#"
     xmlns:ex="http://www.example.org/"
+    xmlns:humfrey="http://purl.org/NET/humfrey/ns/"
+    xmlns:geo="http://www.w3.org/2003/01/geo/wgs84_pos#"
     xmlns:d="http://schemas.microsoft.com/ado/2007/08/dataservices"
     xmlns:m="http://schemas.microsoft.com/ado/2007/08/dataservices/metadata"
     xpath-default-namespace="https://github.com/ox-it/python-sharepoint/"
@@ -96,12 +98,14 @@
     <xsl:call-template name="telephone-extension"/>
   </xsl:template>
 
-  <xsl:template match="field[@name='Role']/text[text()]" mode="in-post">
+  <xsl:template match="field[@name='Role']/text" mode="in-post">
     <org:role>
       <org:Role rdf:about="{ex:post-uri(.)}/role">
-        <skos:prefLabel>
-          <xsl:value-of select="."/>
-        </skos:prefLabel>
+        <xsl:if test="text()">
+          <skos:prefLabel>
+            <xsl:value-of select="."/>
+          </skos:prefLabel>
+        </xsl:if>
         <org:roleProperty>
           <xsl:attribute name="rdf:resource">
             <xsl:text>http://www.w3.org/ns/org#</xsl:text>
@@ -123,20 +127,35 @@
     <org:postIn rdf:resource="{ex:team-uri(key('teams', @id))}"/>
   </xsl:template>
 
-  <xsl:template match="field[@name='Office']/text" mode="in-post">
-    <org:basedAt>
-      <xsl:attribute name="rdf:resource">
-        <xsl:text>http://oxpoints.oucs.ox.ac.uk/id/</xsl:text>
-        <xsl:choose>
-          <xsl:when test="text()='Banbury Road'">40002001</xsl:when>
-          <xsl:when test="text()='Blue Boar Court'">23233619</xsl:when>
-          <xsl:when test="text()='Hythe Bridge Street'">23233672</xsl:when>
-          <xsl:when test="text()='Malthouse'">23233636</xsl:when>
-          <xsl:when test="text()='Parks Road'">23233753</xsl:when>
-          <xsl:when test="text()='Wellington Square'">23233665</xsl:when>
-          <xsl:when test="text()='Worcester Street'">23233614</xsl:when>
-        </xsl:choose>
-      </xsl:attribute>
-    </org:basedAt>
+  <xsl:template match="field[@name='Office']/text[text()]" mode="in-post">
+    <xsl:variable name="building-uri">
+      <xsl:text>http://oxpoints.oucs.ox.ac.uk/id/</xsl:text>
+      <xsl:choose>
+        <xsl:when test="text()='Banbury Road'">40002001</xsl:when>
+        <xsl:when test="text()='Blue Boar Court'">23233619</xsl:when>
+        <xsl:when test="text()='Hythe Bridge Street'">23233672</xsl:when>
+        <xsl:when test="text()='Malthouse'">23233636</xsl:when>
+        <xsl:when test="text()='Parks Road'">23233753</xsl:when>
+        <xsl:when test="text()='Wellington Square'">23233665</xsl:when>
+        <xsl:when test="text()='Worcester Street'">23233614</xsl:when>
+      </xsl:choose>
+    </xsl:variable>
+    <org:basedAt rdf:resource="{$building-uri}"/>
+    <adhoc:building rdf:resource="{$building-uri}"/>
   </xsl:template>
+
+  <xsl:template match="field[@name='Space']/text[text()]" mode="in-post">
+    <adhoc:space>
+      <geo:SpatialThing rdf:about="https://data.ox.ac.uk/id/estates/{text()}">
+        <humfrey:noIndex rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean">true</humfrey:noIndex>
+        <rdfs:label>
+          <xsl:value-of select="text()"/>
+        </rdfs:label>
+        <skos:notation rdf:datatype="https://data.ox.ac.uk/id/notation/estates">
+          <xsl:value-of select="text()"/>
+        </skos:notation>
+      </geo:SpatialThing>
+    </adhoc:space>
+  </xsl:template>
+
 </xsl:stylesheet>
