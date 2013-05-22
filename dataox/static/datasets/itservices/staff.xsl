@@ -15,6 +15,7 @@
     xmlns:ex="http://www.example.org/"
     xmlns:humfrey="http://purl.org/NET/humfrey/ns/"
     xmlns:geo="http://www.w3.org/2003/01/geo/wgs84_pos#"
+    xmlns:spatialrelations="http://data.ordnancesurvey.co.uk/ontology/spatialrelations/"
     xmlns:d="http://schemas.microsoft.com/ado/2007/08/dataservices"
     xmlns:m="http://schemas.microsoft.com/ado/2007/08/dataservices/metadata"
     xpath-default-namespace="https://github.com/ox-it/python-sharepoint/"
@@ -140,22 +141,24 @@
         <xsl:when test="text()='Worcester Street'">23233614</xsl:when>
       </xsl:choose>
     </xsl:variable>
+    <xsl:variable name="space" select="normalize-space(../../field[@name='Space']/text/text())"/>
     <org:basedAt rdf:resource="{$building-uri}"/>
     <adhoc:building rdf:resource="{$building-uri}"/>
+    <xsl:if test="$space">
+      <adhoc:space>
+        <geo:SpatialThing rdf:about="https://data.ox.ac.uk/id/estates/{$space}">
+          <humfrey:noIndex rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean">true</humfrey:noIndex>
+          <rdfs:label>
+            <xsl:value-of select="$space"/>
+          </rdfs:label>
+          <skos:notation rdf:datatype="https://data.ox.ac.uk/id/notation/estates">
+            <xsl:value-of select="$space"/>
+          </skos:notation>
+          <spatialrelations:within rdf:resource="{$building-uri}"/>
+        </geo:SpatialThing>
+      </adhoc:space>
+    </xsl:if>
   </xsl:template>
 
-  <xsl:template match="field[@name='Space']/text[text()]" mode="in-post">
-    <adhoc:space>
-      <geo:SpatialThing rdf:about="https://data.ox.ac.uk/id/estates/{text()}">
-        <humfrey:noIndex rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean">true</humfrey:noIndex>
-        <rdfs:label>
-          <xsl:value-of select="text()"/>
-        </rdfs:label>
-        <skos:notation rdf:datatype="https://data.ox.ac.uk/id/notation/estates">
-          <xsl:value-of select="text()"/>
-        </skos:notation>
-      </geo:SpatialThing>
-    </adhoc:space>
-  </xsl:template>
 
 </xsl:stylesheet>
