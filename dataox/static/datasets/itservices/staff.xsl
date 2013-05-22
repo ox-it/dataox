@@ -43,7 +43,7 @@
         <xsl:apply-templates mode="in-person"/>
         <xsl:variable name="post" select="key('post-holders', @id)"/>
         <xsl:for-each select="$post">
-          <org:hasPost rdf:resource="{ex:post-uri(.)}"/>
+          <org:holds rdf:resource="{ex:post-uri(.)}"/>
           <xsl:variable name="team-uri" select="ex:team-uri(key('teams', fields/field[@name='Team']/lookup/@id))"/>
           <xsl:choose>
             <xsl:when test="fields/field[@name='Manager']/text/text()='true'">
