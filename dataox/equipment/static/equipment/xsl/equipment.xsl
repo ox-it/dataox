@@ -168,18 +168,16 @@
         <xsl:when test="self::tertiary-contact-email">tertiary-contact</xsl:when>
       </xsl:choose>
     </xsl:variable>
-    <xsl:if test="$store != 'public'">
-      <oo:contact>
-        <foaf:Agent rdf:about="{../@uri}/{$uri-part}">
-          <xsl:if test="$contact-name">
-            <foaf:name><xsl:value-of select="$contact-name"/></foaf:name>
-          </xsl:if>
-          <vcard:email rdf:resource="mailto:{text()}"/>
-        </foaf:Agent>
-      </oo:contact>
-      <xsl:if test="$uri-part = 'primary-contact'">
-        <oo:primaryContact rdf:resource="{../@uri}/{$uri-part}"/>
-      </xsl:if>
+    <oo:contact>
+      <foaf:Agent rdf:about="{../@uri}/{$uri-part}">
+        <xsl:if test="$contact-name">
+          <foaf:name><xsl:value-of select="$contact-name"/></foaf:name>
+        </xsl:if>
+        <vcard:email rdf:resource="mailto:{text()}"/>
+      </foaf:Agent>
+    </oo:contact>
+    <xsl:if test="$uri-part = 'primary-contact'">
+      <oo:primaryContact rdf:resource="{../@uri}/{$uri-part}"/>
     </xsl:if>
   </xsl:template>
 
