@@ -20,6 +20,7 @@
     rdfs:label "Vacancy data from the University of Oxford" ;
     skos:notation "vacancies"^^oxnotation:dataset ;
 
+    dcterms:references <https://data.ox.ac.uk/id/dataset/oxpoints> ;
     dcterms:publisher <http://oxpoints.oucs.ox.ac.uk/id/00000000> ;
     dcterms:description "Vacancy advertisement information from the University of Oxford's central recruitment site, https://www.recruit.ox.ac.uk/. This dataset generally does not include collegiate advertisements." ;
 

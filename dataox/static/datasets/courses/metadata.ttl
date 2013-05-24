@@ -20,6 +20,7 @@
 
     wdrs:describedby <https://docs.data.ox.ac.uk/datasets/courses.html> ;
 
+    dcterms:references <https://data.ox.ac.uk/id/dataset/oxpoints> ;
     dcterms:publisher <http://oxpoints.oucs.ox.ac.uk/id/00000000> ;
     dcterms:description "Upcoming courses from the University of Oxford" ;
     dcterms:license <http://reference.data.gov.uk/id/open-government-licence> ;

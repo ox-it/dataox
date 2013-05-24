@@ -14,6 +14,7 @@
     dcterms:title "Organizational Profile" ;
     dcterms:description "Contains core information about the University of Oxford, including links to key pages." ;
 
+    dcterms:references <https://data.ox.ac.uk/id/dataset/oxpoints> ;
     dcterms:license <http://creativecommons.org/publicdomain/zero/1.0/> ;
     dcterms:rightsHolder <http://oxpoints.oucs.ox.ac.uk/id/00000000> ;
     dcterms:publisher <http://oxpoints.oucs.ox.ac.uk/id/00000000> ;
