@@ -1,5 +1,4 @@
 from django.conf.urls.defaults import patterns, include, url
-from django.views.generic.simple import redirect_to
 from django.contrib import admin
 from django.contrib.auth import views as auth_views
 from django.contrib.staticfiles.urls import staticfiles_urlpatterns

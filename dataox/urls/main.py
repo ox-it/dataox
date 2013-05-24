@@ -1,5 +1,5 @@
 from django.conf.urls.defaults import patterns, include, url
-from django.views.generic.simple import redirect_to
+from django.views.generic import RedirectView
 from django.contrib.staticfiles.urls import staticfiles_urlpatterns
 
 from humfrey.desc import views as desc_views
@@ -38,7 +38,7 @@ urlpatterns = patterns('',
     (r'^explore/queries/$', core_views.ExampleQueryView.as_view(), {}, 'explore-query'),
 
     (r'^explore/(?P<slug>[a-z\d-]+)/$', core_views.ExampleDetailView.as_view(), {}, 'example-detail'),
-    (r'^explore/example:(?P<slug>[a-z\d-]+)/$', redirect_to, {'url': '/explore/%(slug)s/'}),
+    (r'^explore/example:(?P<slug>[a-z\d-]+)/$', RedirectView.as_view(url='/explore/%(slug)s/')),
 
     (r'^pingback/', include('humfrey.pingback.urls', 'pingback')),
     (r'^sparql/', include('humfrey.sparql.urls.simple', 'sparql')),
@@ -47,7 +47,7 @@ urlpatterns = patterns('',
     (r'^graphviz/$', graphviz_views.GraphVizView.as_view(), {}, 'graphviz'),
 
     # as per http://www.w3.org/TR/void/#well-known
-    (r'^.well-known/void$', redirect_to, {'url': '/datasets/', 'permanent': False}),
+    (r'^.well-known/void$', RedirectView.as_view(url='/datasets/', permanent=False)),
 ) + staticfiles_urlpatterns()
 
 handler404 = misc_views.SimpleView.as_view(template_name='404', context={'status_code':404})
