@@ -1,9 +1,0 @@
-{% if subject.get_time_series %}
-<section class="widget">
-<h2>Recent electricity consumption (kW)</h2>
-<div id="meterWidget" style="width:200px; height:150px; font-size:9pt; margin-bottom:1em;"></div>
-<script type="text/javascript">
-  widgetOpenMeters("meterWidget", "{{ subject.get_time_series.uri|escapejs }}");
-</script>
-</section>
-{% endif %}

@@ -23,7 +23,6 @@ INSTALLED_APPS = (
     'django.contrib.staticfiles',
     'django.contrib.contenttypes',
     'django_conneg',
-    'django_longliving',
     'django_hosts',
     'django_webauth',
     'guardian',
@@ -40,7 +39,6 @@ INSTALLED_APPS = (
     'humfrey.pingback',
     'humfrey.thumbnail',
     'humfrey.utils',
-    'openorg_timeseries',
     'dataox.analytics',
     'dataox.core',
     'dataox.course',
@@ -202,11 +200,6 @@ SERVER_EMAIL = 'opendata-admin@maillist.ox.ac.uk'
 REDIS_PARAMS = {'host': 'localhost',
                 'port': 6379}
 
-TIME_SERIES_URI_BASE = "http://data.ox.ac.uk/id/time-series/"
-TIME_SERIES_SERVER_ARGS = {'address': ('localhost', 4545),
-                           'authkey': 'vee4pohCpai7aeRegaizo1EeaL9aengo'}
-TIME_SERIES_PATH = '/srv/humfrey/dataox/time-series/'
-
 LOGIN_URL = '/account/login/'
 LOGOUT_URL = '/account/logout/'
 LOGIN_REDIRECT_URL = '/'
@@ -244,7 +237,6 @@ ADDITIONAL_NAMESPACES = {
     'xcri': 'http://xcri.org/profiles/1.2/',
     'vacancy': 'http://purl.org/openorg/vacancy/',
     'meter': 'http://purl.org/meter/',
-    'timeseries': 'http://purl.org/NET/time-series/',
     'oxnotation': 'https://data.ox.ac.uk/id/notation/',
     'prog': 'http://purl.org/prog/',
     'oxcap': 'http://purl.ox.ac.uk/oxcap/ns/',

@@ -30,7 +30,6 @@ INSTALLED_APPS = (
     'humfrey.results',
     'humfrey.update',
     'object_permissions',
-    'openorg_timeseries',
     'dataox.core',
     'dataox.course',
     'dataox.equipment',
@@ -41,7 +40,6 @@ ROOT_URLCONF = 'dataox.urls.empty'
 DEFAULT_HOST = 'empty'
 
 IGNORE_TEST_MODULES = [
-    'openorg_timeseries.tests.admin',
     'humfrey.desc.tests',
     'humfrey.linkeddata.tests',
     'django_hosts.tests',
@@ -84,12 +82,10 @@ def remove_temp_directory():
 
 MEDIA_ROOT = os.path.join(TEMP_DIRECTORY, 'media')
 UPDATE_FILES_DIRECTORY = os.path.join(MEDIA_ROOT, 'update-files')
-TIME_SERIES_PATH = os.path.join(TEMP_DIRECTORY, 'time-series')
 
 _directories_to_create = [
     MEDIA_ROOT,
     UPDATE_FILES_DIRECTORY,
-    TIME_SERIES_PATH,
 ]
 
 for x in _directories_to_create:

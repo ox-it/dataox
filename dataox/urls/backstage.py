@@ -13,10 +13,8 @@ admin.autodiscover()
 
 urlpatterns = patterns('',
     url(r'^$', misc_views.SimpleView.as_view(template_name='backstage/index'), name='index'),
-    url(r'^time-series/', include('openorg_timeseries.urls.admin', 'timeseries')),
     url(r'^feeds/', include('humfrey.feeds.urls', 'feeds')),
     url(r'^update/', include('humfrey.update.urls', 'update')),
-    url(r'^time-series/', include('openorg_timeseries.urls.admin', 'timeseries-admin')),
     url(r'^stores/', include('humfrey.sparql.urls.admin', 'sparql-admin')),
 
     url(r'^account/login/$', auth_views.login, name='account_login'),

@@ -17,7 +17,7 @@ analytics_meta = [{'analytics_id': 'UA-32168758-1',
                    'login_possible': True,
                    'privacy_policy_url': reverse_full('equipment', 'legal') + '#analytics'},
                   {'analytics_id': 'UA-35258720-1',
-                   'hosts': ('data', 'course', 'timeseries', 'empty'),
+                   'hosts': ('data', 'course', 'empty'),
                    'hostname': '.data.ox.ac.uk',
                    'login_possible': False,
                    'privacy_policy_url': reverse_full('data', 'legal') + '#analytics'}]

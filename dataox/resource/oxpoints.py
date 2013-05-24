@@ -34,24 +34,3 @@ class Organization(object):
 
 class Place(object):
     types = ('oxp:Building', 'oxp:Site', 'oxp:Space', 'oxp:Room', 'org:Site')
-
-    @classmethod
-    def _construct_patterns(cls):
-        return [
-#            '%(meterPoint)s meter:pertainsTo %(uri)s ; timeseries:timeSeries ?timeSeries',
-        ]
-
-    @classmethod
-    def _describe_patterns(cls):
-        return [
-#            "%(timeSeries)s meter:pertainsTo %(uri)s",
-        ]
-
-    def widget_templates(self):
-        return [('widgets/openmeters.html', self)] + super(Place, self).widget_templates()
-
-    def get_all_time_series(self):
-        return [Resource(uri, self._graph, self._endpoint) for uri in self._graph.subjects(NS.rdf.type, NS.timeseries.TimeSeries)]
-    def get_time_series(self):
-        if self.meter_pertainsTo_inv:
-            return self.meter_pertainsTo_inv.timeseries_timeSeries

@@ -6,5 +6,4 @@ urlpatterns = patterns(
     url('^main/', include('dataox.urls.main', 'host-data')),
     url('^backstage/', include('dataox.urls.backstage', 'host-backstage')),
     url('^equipment/', include('dataox.urls.equipment', 'host-equipment')),
-    url('^time-series/', include('dataox.urls.timeseries', 'host-timeseries')),
 )
