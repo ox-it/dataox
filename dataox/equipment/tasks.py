@@ -18,7 +18,7 @@ watch_graphs = frozenset(map(rdflib.URIRef, (
     'https://data.ox.ac.uk/graph/equipment/taxonomy',
 )))
 
-TARGET_URL = getattr(settings, 'SEESEC_TARGET_URL')
+TARGET_URL = getattr(settings, 'SEESEC_TARGET_URL', None)
 CREDENTIALS = getattr(settings, 'SEESEC_CREDENTIALS', (None, None))
 
 query = """\
