@@ -180,6 +180,7 @@ UPDATE_TRANSFORMS = (
     'humfrey.update.transform.shell.Shell',
     'humfrey.update.transform.spreadsheet.GnumericToTEI',
     'humfrey.update.transform.spreadsheet.ODSToTEI',
+    'humfrey.update.transform.spreadsheet.CSVToTEI',
     'humfrey.update.transform.union.Union',
     'humfrey.update.transform.upload.Upload',
     'humfrey.update.transform.vocabularies.VocabularyLoader',
