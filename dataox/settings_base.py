@@ -207,8 +207,8 @@ TIME_SERIES_SERVER_ARGS = {'address': ('localhost', 4545),
                            'authkey': 'vee4pohCpai7aeRegaizo1EeaL9aengo'}
 TIME_SERIES_PATH = '/srv/humfrey/dataox/time-series/'
 
-LOGIN_URL = '/login/'
-LOGOUT_URL = '/logout/'
+LOGIN_URL = '/account/login/'
+LOGOUT_URL = '/account/logout/'
 LOGIN_REDIRECT_URL = '/'
 
 ID_MAPPING = (
