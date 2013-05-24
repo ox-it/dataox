@@ -10,7 +10,7 @@
 {% block browse_item %}
 <td>
   {% if result.logo %}
-    <img src="{% url resized-image %}?url={{ result.logo|urlencode }}&amp;height=80" alt="{{ result.label }} Crest"/>
+    <img src="{% url "resized-image" %}?url={{ result.logo|urlencode }}&amp;height=80" alt="{{ result.label }} Crest"/>
   {% endif %}
 </td>
 <td><a href="{{ result.uri|doc_url }}">{{ result.label }}</a></td>
@@ -22,7 +22,7 @@
 <td style="text-align:center">
   {% if result.depiction %}
     <a href="{{ result.depiction|doc_url }}">
-      <img src="{% url resized-image %}?url={{ result.depiction|urlencode }}&amp;height=80" alt=""/>
+      <img src="{% url "resized-image" %}?url={{ result.depiction|urlencode }}&amp;height=80" alt=""/>
     </a>
   {% endif %}
 </td>

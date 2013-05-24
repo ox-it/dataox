@@ -8,12 +8,12 @@
 {% block entire_title %}{% block title %}{% endblock %} | backstage.data.ox.ac.uk{% endblock %}
 
 {% block nav %}
-  <li><a href="{% url index %}">home</a></li>{% if user.is_authenticated %}
-  <li><a href="{% url update:index %}">dataset updates</a></li>{% endif %}
-  <li><a href="{% url sparql-admin:index %}">stores</a></li>{% if user.is_staff %}
-  <li><a href="{% url admin:index %}">admin</a></li>{% endif %}{% if user.is_authenticated %}
-  <li><a href="{% url account_logout %}">log out <small>({{ user.username }})</small></a></li>{% else %}
-  <li><a href="{% url account_login %}?next={% block login_next_url %}{{ request.get_full_path|urlencode }}{% endblock %}">log in</a></li>{% endif %}
+  <li><a href="{% url "index" %}">home</a></li>{% if user.is_authenticated %}
+  <li><a href="{% url "update:index" %}">dataset updates</a></li>{% endif %}
+  <li><a href="{% url "sparql-admin:index" %}">stores</a></li>{% if user.is_staff %}
+  <li><a href="{% url "admin:index" %}">admin</a></li>{% endif %}{% if user.is_authenticated %}
+  <li><a href="{% url "account_logout" %}">log out <small>({{ user.username }})</small></a></li>{% else %}
+  <li><a href="{% url "account_login" %}?next={% block login_next_url %}{{ request.get_full_path|urlencode }}{% endblock %}">log in</a></li>{% endif %}
 {% endblock %}
 
 {% block search_box %}{% endblock %}

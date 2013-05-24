@@ -3,7 +3,7 @@
 {% block content %}
 <h1>Authorize external OAuth application?</h1>
 
-<form method="post" action="{% url oauth2:authorize %}">{% csrf_token %}
+<form method="post" action="{% url "oauth2:authorize" %}">{% csrf_token %}
   <p>The application <strong id="client-name">{{ client.name }}</strong>,
      provided by <strong id="client-owner">{% if client.user.first_name or client.user.last_name %}{{ client.user.first_name }}
      {{ client.user.last_name }}{% else %}{{ client.user.username }}{% endif %}</strong>,

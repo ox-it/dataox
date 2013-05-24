@@ -27,7 +27,7 @@
 <td style="text-align:center">
   {% if result.depiction %}
     <a href="{{ result.depiction.0.uri|doc_url }}">
-      <img src="{% url resized-image %}?url={{ result.depiction.0.uri|urlencode }}&amp;height=80" alt=""/>
+      <img src="{% url "resized-image" %}?url={{ result.depiction.0.uri|urlencode }}&amp;height=80" alt=""/>
     </a>
   {% endif %}
 </td>

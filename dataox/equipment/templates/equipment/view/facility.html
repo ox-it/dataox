@@ -11,7 +11,7 @@
         <th rowspan="{{ subject.all.dcterms_subject|length }}">Category:</th>
         <td>{% for category in subject.all.dcterms_subject %}
         {% if not forloop.first %}</td></tr><tr><td>{% endif %}{% if category.skos_notation %}
-        <a href="{% url browse category.skos_notation %}">{{ category.label }}</a>{% else %}
+        <a href="{% url "browse" category.skos_notation %}">{{ category.label }}</a>{% else %}
         {{ category.label }}{% endif %}{% endfor %}
       </td></tr>{% endif %}{% if subject.oo_organizationPart or subject.oo_formalOrganization %}
       <tr>

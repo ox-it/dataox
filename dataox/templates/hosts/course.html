@@ -9,10 +9,10 @@
   <link rel="stylesheet" type="text/css" href="{{ STATIC_URL }}course/base.css"/>
 {% endblock %}
 
-{% block search_target %}{% url search %}{% endblock %}
+{% block search_target %}{% url "search" %}{% endblock %}
 
 {% block nav %}
-  <li><a href="{% url index %}">home</a></li>
-  <li><a href="{% url catalogues %}">catalogues</a></li>
+  <li><a href="{% url "index" %}">home</a></li>
+  <li><a href="{% url "catalogues" %}">catalogues</a></li>
   <li><a href="{% host_url contact on data %}">contact</a></li>
 {% endblock %}

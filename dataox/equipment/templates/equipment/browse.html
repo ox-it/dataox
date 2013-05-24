@@ -8,7 +8,7 @@
 {% include "equipment/login_prompt.html" %}
 
 {% with concept.skos_narrower_inv as broader %}
-<h1>{% if not concept %}Categories{% else %}{% if broader %}<a href="{% url browse broader.skos_notation %}">{{ broader.label }}</a> » {% endif %}{{ concept.label }}{% endif %}</h1>
+<h1>{% if not concept %}Categories{% else %}{% if broader %}<a href="{% url "browse" broader.skos_notation %}">{{ broader.label }}</a> » {% endif %}{{ concept.label }}{% endif %}</h1>
 {% endwith %}
 
 {% if not concept %}
@@ -16,7 +16,7 @@
    technique that they are mainly associated with. Similar techniques or those
    associated with a particular field of study have been grouped together,
    enabling a two-tier searchable system. Any suggestions for
-   re-categorisation should be made via the <a href="{% url contact %}">contact page</a>.</p>
+   re-categorisation should be made via the <a href="{% url "contact" %}">contact page</a>.</p>
 {% endif %}
 
 {% if concepts %}
@@ -24,10 +24,10 @@
 <ul class="equipment-categories">
 {% for concept in concepts %}
   <li class="equipment-category">
-    <h3><a href="{% url browse concept.skos_notation %}">{{ concept.label }}</a></h3>
+    <h3><a href="{% url "browse" concept.skos_notation %}">{{ concept.label }}</a></h3>
     {% if concept.skos_narrower %}
     <ul>{% for narrower in concept.all.skos_narrower %}
-      <li><a href="{% url browse narrower.skos_notation %}">{{ narrower.label }}</a></li>{% endfor %}
+      <li><a href="{% url "browse" narrower.skos_notation %}">{{ narrower.label }}</a></li>{% endfor %}
     </ul>
     {% endif %}
     {% if concept.dcterms_subject_inv %}

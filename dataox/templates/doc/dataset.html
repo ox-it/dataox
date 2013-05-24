@@ -124,7 +124,7 @@
         <th>Example queries:</th>
         <td>
           {% for query in subject.all.oo_exampleQuery %}
-            <a href="{% url sparql:endpoint %}?query={{ query.rdf_value|urlencode }}">{{ query.label }}</a>
+            <a href="{% url "sparql:endpoint" %}?query={{ query.rdf_value|urlencode }}">{{ query.label }}</a>
             {% if not forloop.last %}<br/>{% endif %}
           {% empty %}
             <em>None specified</em>
@@ -147,7 +147,7 @@
         <th>Classes in use:</th>
         <td>
           {% for class in subject.all.oo_usedClass %}
-            <a href="{% url sparql:endpoint %}?query={{ "SELECT ?subject WHERE { ?g void:inDataset "|urlencode }}{{ subject.n3|urlencode }}{{ " . GRAPH ?g { ?subject a "|urlencode }}{{ class.n3|urlencode }}{{ " } } LIMIT 200"|urlencode }}&amp;common_prefixes=on">{{ class.label }}</a>
+            <a href="{% url "sparql:endpoint" %}?query={{ "SELECT ?subject WHERE { ?g void:inDataset "|urlencode }}{{ subject.n3|urlencode }}{{ " . GRAPH ?g { ?subject a "|urlencode }}{{ class.n3|urlencode }}{{ " } } LIMIT 200"|urlencode }}&amp;common_prefixes=on">{{ class.label }}</a>
             {{ cls|node }}
             {% if not forloop.last %}&#8226;{% endif %}
           {% empty %}
@@ -160,7 +160,7 @@
         <th>Predicates in use:</th>
         <td>
           {% for predicate in subject.all.oo_usedPredicate %}
-            <a href="{% url sparql:endpoint %}?query={{ "SELECT ?subject ?object WHERE { ?g void:inDataset "|urlencode }}{{ subject.n3|urlencode }}{{ " . GRAPH ?g { ?subject "|urlencode }}{{ predicate.n3|urlencode }}{{ " ?object } } LIMIT 200"|urlencode }}&amp;common_prefixes=on">{{ predicate.label }}</a>
+            <a href="{% url "sparql:endpoint" %}?query={{ "SELECT ?subject ?object WHERE { ?g void:inDataset "|urlencode }}{{ subject.n3|urlencode }}{{ " . GRAPH ?g { ?subject "|urlencode }}{{ predicate.n3|urlencode }}{{ " ?object } } LIMIT 200"|urlencode }}&amp;common_prefixes=on">{{ predicate.label }}</a>
             {% if not forloop.last %}&#8226;{% endif %}
           {% empty %}
             <em>None</em>

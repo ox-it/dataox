@@ -10,7 +10,7 @@
 
 	<div class="login-methods">
 		<div class="login-method login-method-webauth">
-			<a class="login-method-inner panel" href="{% url webauth_login %}"><img
+			<a class="login-method-inner panel" href="{% url "webauth_login" %}"><img
 				src="{{ STATIC_URL }}equipment/logos/ou.gif"
 				alt="University of Oxford">
  
@@ -35,8 +35,8 @@
 							<td colspan="2"><input type="submit" value="Log in"></td>
 						</tr>
 						<tr>
-							<td colspan="2"><a href="{% url account_signup %}">Register as an
-									OUH user</a> <a href="{% url account_password_reset %}">Forgotten
+							<td colspan="2"><a href="{% url "account_signup" %}">Register as an
+									OUH user</a> <a href="{% url "account_password_reset" %}">Forgotten
 									password?</a></td>
 						</tr>
 					</tfoot>
