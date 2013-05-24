@@ -23,36 +23,47 @@ CREDENTIALS = getattr(settings, 'SEESEC_CREDENTIALS', (None, None))
 
 query = """\
 SELECT * WHERE {
-  {
-    VALUES ?rdf_type { cerif:Equipment oo:Equipment }
-    ?id a ?rdf_type .
-    BIND ("equipment" AS ?type)
-    OPTIONAL { ?id rdfs:label ?name }
-    OPTIONAL { ?id rdfs:comment ?description }
-    OPTIONAL { ?id oo:facility ?related_facility_id }
-    OPTIONAL {
-      ?id foaf:based_near/owl:sameAs? ?based_near
-      FILTER regex(str(?based_near), "^http://dbpedia\\\\.org/resource/")
-      BIND (uri(concat('http://en.wikipedia.org/wiki', substr(str(?based_near), 28))) AS ?location)
-    }
-    OPTIONAL {
-      ?id oo:primaryContact ?contact
-      OPTIONAL { ?contact foaf:name ?contact_name }
-      OPTIONAL { ?contact v:tel ?contact_telephone }
-      OPTIONAL {
-        ?contact v:email ?contact_mailto
-        BIND(SUBSTR(STR(?contact_mailto), 8) AS ?contact_email)
-      }
-    }
-    OPTIONAL { ?id foaf:img ?photo }
-    OPTIONAL { ?id foaf:depiction ?photo }
-    OPTIONAL { ?id oo:organizationPart/skos:prefLabel ?organisational_unit }
-    OPTIONAL { ?id foaf:based_near/(skos:prefLabel|rdfs:label) ?site_location }
-    OPTIONAL { ?id spatialrelations:within/v:adr/v:locality ?site_location }
-    OPTIONAL { BIND ("Oxford" AS ?site_location) }
-    OPTIONAL { ?id spatialrelations:within/skos:prefLabel ?building }
-    OPTIONAL { ?id foaf:page ?web_address }
+  VALUES (?type ?rdf_type) {
+    ("equipment" cerif:Equipment)
+    ("equipment" oo:Equipment)
+    ("facility" cerif:Facility)
+    ("facility" oo:Facility)
   }
+  ?id a ?rdf_type .
+  OPTIONAL { ?id rdfs:label ?name }
+  OPTIONAL { ?id rdfs:comment ?description }
+  OPTIONAL { ?id oo:facility ?related_facility_id }
+  OPTIONAL {
+    ?id foaf:based_near/owl:sameAs? ?based_near
+    FILTER regex(str(?based_near), "^http://dbpedia\\\\.org/resource/")
+    BIND (uri(concat('http://en.wikipedia.org/wiki', substr(str(?based_near), 28))) AS ?location)
+  }
+  OPTIONAL { BIND (<http://en.wikipedia.org/wiki/Oxford> AS ?location) }
+  OPTIONAL {
+    {
+      SELECT ?id (SAMPLE(?c) AS ?contact) {
+        ?id a ?type
+        OPTIONAL { ?id oo:primaryContact ?c }
+        OPTIONAL { ?id oo:contact ?c }
+        FILTER (BOUND(?c))
+      } GROUP BY ?id
+    }
+    EXISTS { ?id oo:primaryContact|oo:contact ?contact }
+    OPTIONAL { ?contact foaf:name ?contact_name }
+    OPTIONAL { ?contact v:tel ?contact_telephone }
+    OPTIONAL {
+      ?contact v:email ?contact_mailto
+      BIND(SUBSTR(STR(?contact_mailto), 8) AS ?contact_email)
+    }
+  }
+  OPTIONAL { ?id foaf:img ?photo }
+  OPTIONAL { ?id foaf:depiction ?photo }
+  OPTIONAL { ?id oo:organizationPart/(skos:prefLabel|rdfs:label) ?organisational_unit }
+  OPTIONAL { ?id foaf:based_near/(skos:prefLabel|rdfs:label) ?site_location }
+  OPTIONAL { ?id spatialrelations:within/v:adr/v:locality ?site_location }
+  OPTIONAL { BIND ("Oxford" AS ?site_location) }
+  OPTIONAL { ?id spatialrelations:within/skos:prefLabel ?building }
+  OPTIONAL { ?id foaf:page ?web_address }
   BIND ("ogl" AS ?open_license)
 }
 """
