@@ -119,8 +119,23 @@
     </xsl:for-each>
   </xsl:template>
 
-  <xsl:template match="field[@name='Activity_x0020_category']/lookup" mode="in-service">
-    <dcterms:subject rdf:resource="{$service-base-uri}service-activity-category/{@id}"/>
+  <xsl:template match="field[@name='Activities']/text" mode="in-service">
+    <xsl:variable name="id">
+      <xsl:choose>
+        <xsl:when test="text() = 'Administration'">1</xsl:when>
+        <xsl:when test="text() = 'Core infrastructure'">2</xsl:when>
+        <xsl:when test="text() = 'Research'">3</xsl:when>
+        <xsl:when test="text() = 'Teaching'">4</xsl:when>
+      </xsl:choose>
+    </xsl:variable>
+    <xsl:choose>
+      <xsl:when test="$id">
+        <dcterms:subject rdf:resource="{$service-base-uri}service-activity-category/{$id}"/>
+      </xsl:when>
+      <xsl:otherwise>
+        <xsl:message>Unexpected activity category: <xsl:value-of select="text()"/></xsl:message>
+      </xsl:otherwise>
+    </xsl:choose>
   </xsl:template>
 
   <xsl:template match="field[@name='Service_x0020_classification']/lookup" mode="in-service">
@@ -168,24 +183,6 @@
         <xsl:value-of select="text()"/>
       </skos:notation>
     </xsl:if>
-  </xsl:template>
-
-  <xsl:template match="list[@name='Service activity categories']/rows">
-    <skos:ConceptScheme rdf:about="{$service-base-uri}service-activity-category">
-      <skos:prefLabel>Activity categories</skos:prefLabel>
-      <dcterms:publisher rdf:resource="{$it-services}"/>
-      <xsl:for-each select="row">
-        <skos:topConcept>
-          <xsl:apply-templates select="."/>
-        </skos:topConcept>
-      </xsl:for-each>
-    </skos:ConceptScheme>
-  </xsl:template>
-
-  <xsl:template match="list[@name='Service activity categories']/rows/row">
-    <skos:Concept rdf:about="{$service-base-uri}service-activity-category/{@id}">
-      <xsl:apply-templates mode="in-activity-category"/>
-    </skos:Concept>
   </xsl:template>
 
   <xsl:template match="field[@name='Title']/text[text()]" mode="in-activity-category">
