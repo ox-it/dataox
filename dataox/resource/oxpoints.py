@@ -33,4 +33,5 @@ class Organization(object):
         return widgets
 
 class Place(object):
-    types = ('oxp:Building', 'oxp:Site', 'oxp:Space', 'oxp:Room', 'org:Site')
+    types = ('oxp:Building', 'oxp:Site', 'oxp:Space', 'oxp:Room', 'org:Site',
+             'rooms:Room', 'rooms:Building')
