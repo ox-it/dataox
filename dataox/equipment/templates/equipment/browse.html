@@ -8,7 +8,7 @@
 {% include "equipment/login_prompt.html" %}
 
 {% with concept.skos_narrower_inv as broader %}
-<h1>{% if not concept %}Categories{% else %}{% if broader %}<a href="{% url "browse" broader.skos_notation %}">{{ broader.label }}</a> » {% endif %}{{ concept.label }}{% endif %}</h1>
+<h1>{% if not concept %}Categories (Oxford equipment only){% else %}{% if broader %}<a href="{% url "browse" broader.skos_notation %}">{{ broader.label }}</a> » {% endif %}{{ concept.label }}{% endif %}</h1>
 {% endwith %}
 
 {% if not concept %}
