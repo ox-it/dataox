@@ -18,6 +18,3 @@ def base_template_chooser(request):
     return {'base_template_name': base_template_name,
             'host': host,
             'service_name': _service_names.get(host, _default_service_name)}
-
-def maintenance_mode(request):
-    return {'maintenance_mode': settings.MAINTENANCE_MODE}

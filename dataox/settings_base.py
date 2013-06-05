@@ -122,7 +122,6 @@ TEMPLATE_CONTEXT_PROCESSORS = (
     "django.core.context_processors.request",
     "django.contrib.messages.context_processors.messages",
     "dataox.core.context_processors.base_template_chooser",
-    "dataox.core.context_processors.maintenance_mode",
     "dataox.analytics.context_processors.do_not_track",
 )
 

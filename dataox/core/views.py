@@ -1,6 +1,7 @@
 from __future__ import division
 
-from django_conneg.views import HTMLView
+from django.conf import settings
+from django_conneg.views import HTMLView, TextView
 import rdflib
 
 from humfrey.utils.views import RedisView
@@ -113,3 +114,16 @@ class ServerErrorView(HTMLView):
         self.context = {'status_code': 500}
         setattr(self, request.method.lower(), self.render)
         return super(ServerErrorView, self).dispatch(request)
+
+class MaintenanceModeView(HTMLView, TextView):
+    template_name = '503'
+    _force_fallback_format = 'txt'
+    
+    def dispatch(self, request):
+        self.context = {'status_code': 503,
+                        'additional_headers': {'Retry-After': 600},
+                        'maintenance_mode': settings.MAINTENANCE_MODE}
+        setattr(self, request.method.lower(), self.render)
+        return super(MaintenanceModeView, self).dispatch(request)
+    
+    
