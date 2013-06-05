@@ -1,9 +1,11 @@
 Down for Maintenance
 ====================
 
-{{ service_name|capfirst }} is currently disabled while we tweak a few things behind the scenes.
+{{ service_name|capfirst }} is currently offline while we tweak a few things behind the scenes.
 
 We've been in maintenance mode since {{ maintenance_mode.started }} ({{ maintenance_mode.started|timesince }} ago),
 and these things never normally take more than a couple of minutes — please try again soon.
 
 If you have any questions, please e-mail us at opendata@it.ox.ac.uk.
+
+If this is causing trouble for one of your robots, get it to heed the Retry-After header.
