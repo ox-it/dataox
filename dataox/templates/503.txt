@@ -4,7 +4,7 @@ Down for Maintenance
 {{ service_name|capfirst }} is currently offline while we tweak a few things behind the scenes.
 
 We've been in maintenance mode since {{ maintenance_mode.started }} ({{ maintenance_mode.started|timesince }} ago),
-and these things never normally take more than a couple of minutes — please try again soon.
+and these things normally never take more than a couple of minutes — please try again soon.
 
 If you have any questions, please e-mail us at opendata@it.ox.ac.uk.
 
