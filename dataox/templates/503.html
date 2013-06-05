@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>{{ service_name|capfirst }} — Down for Maintenance</title>
+    <style type="text/css">
+      @font-face {
+        font-family: 'GNUTypewriter';
+        src: url('{{ STATIC_URL }}fonts/gtw.otf') format('opentype');
+        font-weight: normal;
+        font-style: normal;
+      }
+      body {
+        font-family: sans-serif;
+        background-color: #002147;
+        color: #fff;
+      }
+      
+      div#container {
+        max-width: 600px;
+        margin: 1em auto;
+        /*border: 1px solid #222;*/
+        padding: 1em;
+        text-align: justify;
+        
+      }
+      
+      h1 {
+        background-image: url('{{ STATIC_URL }}brandmark.gif');
+        background-repeat: no-repeat;
+        background-position: right top;
+        font-family: GNUTypewriter, monospace;
+        font-weight: normal;
+        margin-top: 0; padding-top: 15px;
+      }
+      
+      a {
+      	color: #fff;
+      }
+    </style>
+  </head>
+  <body>
+    <div id="container">
+      <h1>Down for Maintenance</h1>
+      <p>{{ service_name|capfirst }} is currently disabled while we tweak a few things behind the scenes.</p>
+      <p>We've been in maintenance mode since <em>{{ maintenance_mode.started }}</em>
+         ({{ maintenance_mode.started|timesince }} ago), and these things never normally take more than a couple
+         of minutes — please try again soon.</p>
+      <p>If you have any questions, please e-mail us at
+         <a href="mailto:opendata@it.ox.ac.uk">opendata@it.ox.ac.uk</a>.</p>
+    </div>
+  </body>
+</html>

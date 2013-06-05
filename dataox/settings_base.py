@@ -51,6 +51,7 @@ INSTALLED_APPS = (
     'djcelery',
     'pipeline',
     'account',
+    'maintenancemode',
     'raven.contrib.django',
 )
 
@@ -121,6 +122,7 @@ TEMPLATE_CONTEXT_PROCESSORS = (
     "django.core.context_processors.request",
     "django.contrib.messages.context_processors.messages",
     "dataox.core.context_processors.base_template_chooser",
+    "dataox.core.context_processors.maintenance_mode",
     "dataox.analytics.context_processors.do_not_track",
 )
 
@@ -138,17 +140,18 @@ AUTHENTICATION_BACKENDS = (
 MIDDLEWARE_CLASSES = (
     'django_statsd.middleware.GraphiteRequestTimingMiddleware',
     'django_statsd.middleware.GraphiteMiddleware',
-    'dataox.auth.middleware.AuthenticatedAsMiddleware',
     'django_hosts.middleware.HostsMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
 #    'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'humfrey.base.middleware.AccessControlAllowOriginMiddleware',
+    'maintenancemode.middleware.MaintenanceModeMiddleware',
     'dataox.oauth2.middleware.OAuth2Middleware',
     'django_conneg.support.middleware.BasicAuthMiddleware',
     'humfrey.pingback.middleware.PingbackMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
+    'dataox.auth.middleware.AuthenticatedAsMiddleware',
 )
 
 DEFAULT_STORE = 'public'
@@ -297,6 +300,8 @@ RESOURCE_REGISTRY = 'dataox.resource.resource_registry'
 HUMFREY_FEEDS = {
     'organization': 'dataox.feeds.organization.OrganizationFeedView',
 }
+
+from .maintenancemode import MAINTENANCE_MODE
 
 # Monkey patches
 
