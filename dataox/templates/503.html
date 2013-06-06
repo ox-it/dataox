@@ -5,15 +5,16 @@
     <meta charset="utf-8">
     <style type="text/css">
       @font-face {
-        font-family: 'GNUTypewriter';
-        src: url('{{ STATIC_URL }}fonts/gtw.otf') format('opentype');
-        font-weight: normal;
+        font-family: 'Deja Vu Sans ExtraLight';
+        src: url('{{ STATIC_URL }}fonts/DejaVuSans-ExtraLight.ttf') format('truetype');
+        font-weight: light;
         font-style: normal;
       }
       body {
-        font-family: sans-serif;
+        font-family: "Deja Vu Sans ExtraLight";
+        font-weight: 300;
         background-color: #002147;
-        color: #fff;
+        color: #eee;
       }
       
       div#container {
@@ -26,12 +27,13 @@
       }
       
       h1 {
+        fnt-family: "DejaVu Sans", sans-serif;
+        letter-spacing: 1px;
         background-image: url('{{ STATIC_URL }}brandmark.gif');
         background-repeat: no-repeat;
         background-position: right top;
-        font-family: GNUTypewriter, monospace;
-        font-weight: normal;
         margin-top: 0; padding-top: 15px;
+        font-weight: normal;
       }
       
       a {
@@ -39,7 +41,7 @@
       }
       
       small, small a {
-        color: #4C6179;
+        color: #8BA2BD;
       }
     </style>
   </head>
