@@ -1,4 +1,4 @@
-from django.conf.urls.defaults import patterns, include, url
+from django.conf.urls import patterns, include, url
 from django.contrib import admin
 from django.contrib.auth import views as auth_views
 from django.contrib.staticfiles.urls import staticfiles_urlpatterns
@@ -18,7 +18,9 @@ urlpatterns = patterns('',
 
     url(r'^account/login/$', auth_views.login, name='account_login'),
     url(r'^account/webauth/$', django_webauth.views.LoginView.as_view(), name='account_webauth'),
-    url(r"^account/logout/$", django_webauth.views.LogoutView.as_view(), name="account_logout"),
+    url(r'^account/logout/$', django_webauth.views.LogoutView.as_view(), name="account_logout"),
+
+    url(r'^sharepoint/', include('dataox.sharepoint.urls', 'sharepoint')),
 
     url(r'^oauth2/', include('dataox.oauth2.urls', 'oauth2')),
     url(r'^admin/', admin.site.urls),
