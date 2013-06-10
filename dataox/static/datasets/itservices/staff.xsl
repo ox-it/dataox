@@ -86,9 +86,14 @@
   </xsl:template>
 
   <xsl:template match="field[@name='Picture']/url[@href]" mode="in-person">
-    <foaf:depiction>
-      <foaf:Image rdf:about="{@href}"/>
-    </foaf:depiction>
+    <xsl:variable name="username" select="../../field[@name='UserName']/text"/>
+    <foaf:img>
+      <foaf:Image rdf:about="https://backstage.data.ox.ac.uk/sharepoint/user-profile-image/{$username}/large/">
+        <foaf:thumbnail>
+          <foaf:Image rdf:about="https://backstage.data.ox.ac.uk/sharepoint/user-profile-image/{$username}/medium/"/>
+        </foaf:thumbnail>
+      </foaf:Image>
+    </foaf:img>
   </xsl:template>
 
   <xsl:template match="field[@name='EMail']/text" mode="in-person">
