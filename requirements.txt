@@ -4,3 +4,4 @@ redis>=2.4.9
 python-sharepoint>=0.2.1
 django-user-accounts
 django-maintenancemode
+django-dirtyfields

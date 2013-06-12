@@ -36,21 +36,26 @@ class RetrieveVacancies(Transform):
     def execute(self, transform_manager):
         scrapers = [scraper(transform_manager) for scraper in self.scrapers]
         
-        logger.debug("Importing vacancies")
+        logger.info("Importing vacancies")
+        changed = False
 
         for scraper in scrapers:
-            scraper.import_vacancies()
+            changed = scraper.import_vacancies() or changed
             
         documents = Document.objects.filter(local_url='').select_related('vacancy')
-        logger.debug("Finished importing vacancies; retrieving %d new documents", documents.count())
-        file_handler = VacancyFileHandler()
-        for document in documents:
-            try:
-                file_handler.retrieve(document)
-            except Exception:
-                logger.exception("Could not retrieve file: %s", document.url)
+        if documents:
+            logger.info("Finished importing vacancies; retrieving %d new documents", documents.count())
+            file_handler = VacancyFileHandler()
+            for document in documents:
+                try:
+                    changed = file_handler.retrieve(document) or changed
+                except Exception:
+                    logger.exception("Could not retrieve file: %s", document.url)
+            logger.info("Finished retrieving documents; starting to serialize")
 
-        logger.debug("Finished retrieving documents; starting to serialize")
+        if not changed:
+            logger.info("Nothing changed; we're done here.")
+            return
 
         transforms = {'current': {'file': open(transform_manager('rdf'), 'w'),
                                   'transform': self.current_transform,

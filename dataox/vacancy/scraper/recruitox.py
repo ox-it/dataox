@@ -56,6 +56,7 @@ class RecruitOxScraper(Scraper):
     detail_salary_re = re.compile(ur'^(Grade|Salary)[^\dA-Z]+(?P<grade>[^:]+)[-:][^£]*£? ?(?P<lower>[\d,]+)(?:[^£]*£ ?(?P<upper>[\d,]+)(?:[^£]+£(?P<discretionary>[\d,]+))?)?')
 
     def __init__(self, transform_manager):
+        self.quick = transform_manager.update_log.trigger == 'crontab'
         super(RecruitOxScraper, self).__init__(transform_manager)
 
     @classmethod
@@ -68,11 +69,16 @@ class RecruitOxScraper(Scraper):
         return etree.parse(urllib2.urlopen(request), parser=etree.HTMLParser(encoding="WINDOWS-1252"))
 
     def import_vacancies(self):
+        changed = False
+
+        if self.quick and not self.number_of_vacancies_changed():
+            return changed
+        
         vacancy_identifiers = self.get_vacancy_identifiers()
 
         for vacancy_id in vacancy_identifiers:
             try:
-                self.import_vacancy(vacancy_id)
+                changed = self.import_vacancy(vacancy_id) or changed
             except Exception:
                 logger.exception("Unable to parse vacancy %r", vacancy_id)
 
@@ -83,6 +89,26 @@ class RecruitOxScraper(Scraper):
             if closes > now and vacancy.vacancy_id not in vacancy_identifiers:
                 vacancy.closing_date = now.isoformat()
                 vacancy.save()
+                changed = True
+        
+        return changed
+
+    def number_of_vacancies_changed(self):
+        params = self.search_params.copy()
+        params['p_start_from'] = '0'
+        html = self.get_html(RecruitOxScraper.search_url, params)
+
+        pagination = html.xpath(".//span[@class='erq_searchv4_count']")[0].text.strip()
+        pagination = self.search_pagination_re.match(pagination).groupdict()
+        
+        new_count = int(pagination['count'])
+
+        now = self.site_timezone.localize(datetime.datetime.now()).replace(microsecond=0)
+        now = now.isoformat()
+        old_count = Vacancy.objects.filter(opening_date__lt=now, closing_date__gt=now).count()
+        
+        logger.debug("Expected vacancies: %d; Listed vacancies: %d", old_count, new_count)
+        return new_count != old_count
 
     def get_vacancy_identifiers(self):
         vacancy_identifiers = set()
@@ -90,6 +116,7 @@ class RecruitOxScraper(Scraper):
             params = self.search_params.copy()
             params['p_start_from'] = page_number * 10
             html = self.get_html(self.search_url, params)
+            logger.info("Got page number %d", page_number)
 
             vacancy_identifiers.update(map(unicode, html.xpath(self.search_vacancy_identifier_xpath)))
 
@@ -97,16 +124,28 @@ class RecruitOxScraper(Scraper):
             pagination = self.search_pagination_re.match(pagination).groupdict()
             if pagination['end'] == pagination['count']:
                 break
+            
+        now = self.site_timezone.localize(datetime.datetime.now()).replace(microsecond=0)
+        now = now.isoformat()
+        old = set(v.vacancy_id for v in Vacancy.objects.filter(opening_date__lt=now, closing_date__gt=now))
+        logger.info("Added: %r; Removed: %r", vacancy_identifiers - old, old - vacancy_identifiers)
+        
         return vacancy_identifiers
 
     def import_vacancy(self, vacancy_id):
-        logger.debug("Retrieving vacancy %r", vacancy_id)
+        changed = False
+
         try:
             vacancy = Vacancy.objects.get(vacancy_id=vacancy_id)
         except Vacancy.DoesNotExist:
             vacancy = Vacancy(vacancy_id=vacancy_id,
                               opening_date=self.site_timezone.localize(datetime.datetime.now()).replace(microsecond=0).isoformat())
-
+        else:
+            if self.quick and vacancy.last_checked + datetime.timedelta(1) > datetime.datetime.now():
+                logger.debug("Ignoring vacancy %s", vacancy_id)
+                return changed
+        logger.info("Retrieving vacancy %s", vacancy_id)
+        
         params = self.detail_params.copy()
         params['p_recruitment_id'] = vacancy_id
         html = self.get_html(self.detail_url, params)
@@ -176,7 +215,9 @@ class RecruitOxScraper(Scraper):
         if meta:
             logger.warning("Extra metadata not parsed: %s", ', '.join(meta))
 
-        vacancy.save()
+        if vacancy.is_dirty():
+            vacancy.save()
+            changed = True
 
         for row in html.xpath(".//table[@class='erqlayouttable']//tr")[1:]:
             anchor = row.xpath('.//a')[0]
@@ -187,4 +228,9 @@ class RecruitOxScraper(Scraper):
             except:
                 document = Document(url=url, vacancy=vacancy)
             document.title = anchor.text
-            document.save()
+            
+            if document.is_dirty():
+                document.save()
+                changed = True
+        
+        return changed

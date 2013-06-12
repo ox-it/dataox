@@ -10,6 +10,7 @@ from lxml import etree
 import pytz
 import rdflib
 
+from dirtyfields import DirtyFieldsMixin
 from django.conf import settings
 from django.db import models
 from humfrey.elasticsearch.query import ElasticSearchEndpoint
@@ -18,7 +19,7 @@ from humfrey.utils.namespaces import NS
 logger = logging.getLogger(__name__)
 email_re = re.compile(r'(?P<localpart>[a-zA-Z\d\-._]+)@(?P<host>[a-zA-Z\d\-.]+)')
 
-class Vacancy(models.Model):
+class Vacancy(DirtyFieldsMixin, models.Model):
     vacancy_id = models.CharField(max_length=10)
     title = models.CharField(max_length=512)
 
@@ -29,7 +30,7 @@ class Vacancy(models.Model):
     
     description = models.TextField()
     
-    salary = models.CharField(max_length=128, blank=True)
+    salary = models.CharField(max_length=512, blank=True)
     salary_grade = models.CharField(max_length=32, blank=True)
     salary_lower = models.PositiveIntegerField(null=True, blank=True)
     salary_upper = models.PositiveIntegerField(null=True, blank=True)
@@ -46,6 +47,8 @@ class Vacancy(models.Model):
     closing_date = models.CharField(max_length=25)
     
     internal = models.BooleanField()
+    
+    last_checked = models.DateTimeField(auto_now=True)
     
     def __unicode__(self):
         return u'{0}: {1}'.format(self.vacancy_id, self.title)
@@ -127,6 +130,9 @@ class Vacancy(models.Model):
             triples.append((uri, NS.foaf.based_near, rdflib.URIRef(basedNear)))
 
         for document in self.document_set.all():
+            if not document.local_url:
+                continue
+
             document_uri = rdflib.URIRef(document.local_url)
             triples += [
                 (uri, NS.foaf.page, document_uri),
@@ -201,7 +207,7 @@ class Vacancy(models.Model):
     class Meta:
         verbose_name_plural = 'vacancies'
 
-class Document(models.Model):
+class Document(DirtyFieldsMixin, models.Model):
     vacancy = models.ForeignKey(Vacancy)
     url = models.URLField()
     title = models.CharField(max_length=256)
