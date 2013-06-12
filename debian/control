@@ -25,12 +25,14 @@ Depends: ${misc:Depends},
          python-oauth2app,
          python-sharepoint,
          python-django-maintenancemode,
+         python-django-dirtyfields,
          xcri-rdf,
          libclosure-compiler-java,
          libjs-openlayers,
          libjs-jquery,
          libjs-jquery-cookie
          libjs-jquery-ui,
-         libjs-datatables
+         libjs-datatables,
+         unoconv
 Description: Additional code for Oxford's data.ox.ac.uk service.
 
