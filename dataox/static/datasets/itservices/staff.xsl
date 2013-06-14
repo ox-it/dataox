@@ -71,15 +71,25 @@
     <foaf:name>
       <xsl:value-of select="."/>
     </foaf:name>
+    <xsl:if test="not(../../field[@name='FirstName']/text/text())">
+      <foaf:firstName>
+        <xsl:value-of select="substring-before(., ' ')"/>
+      </foaf:firstName>
+    </xsl:if>
+    <xsl:if test="not(../../field[@name='LastName']/text/text())">
+      <foaf:lastName>
+        <xsl:value-of select="substring-after(., ' ')"/>
+      </foaf:lastName>
+    </xsl:if>
   </xsl:template>
 
-  <xsl:template match="field[@name='FirstName']/text" mode="in-person">
+  <xsl:template match="field[@name='FirstName']/text[text()]" mode="in-person">
     <foaf:firstName>
       <xsl:value-of select="."/>
     </foaf:firstName>
   </xsl:template>
 
-  <xsl:template match="field[@name='LastName']/text" mode="in-person">
+  <xsl:template match="field[@name='LastName']/text[text()]" mode="in-person">
     <foaf:lastName>
       <xsl:value-of select="."/>
     </foaf:lastName>
