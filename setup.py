@@ -64,7 +64,7 @@ setup(
     description="The frontend to the University of Oxford's institutional data site.",
     author='IT Services, University of Oxford',
     author_email='opendata@oucs.ox.ac.uk',
-    version='0.2',
+    version='0.3',
     packages=packages,
     license='BSD',
     url='http://data.ox.ac.uk/',

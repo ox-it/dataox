@@ -5,8 +5,9 @@ Maintainer: Alexander Dutton <alexander.dutton@it.ox.ac.uk>
 Build-Depends: debhelper (>= 7.0.50~),
                python-sphinx,
                python-all,
-               python-support
-#               python-django-humfrey
+               python-support,
+               git,
+               python-django-humfrey
 Standards-Version: 3.8.4
 X-Python-Version: >= 2.6
 Homepage: https://github.com/oucs/dataox
@@ -26,11 +27,12 @@ Depends: ${misc:Depends},
          python-sharepoint,
          python-django-maintenancemode,
          python-django-dirtyfields,
+         liboxford-dataox-describe-handler-java,
          xcri-rdf,
          libclosure-compiler-java,
          libjs-openlayers,
          libjs-jquery,
-         libjs-jquery-cookie
+         libjs-jquery-cookie,
          libjs-jquery-ui,
          libjs-datatables,
          unoconv

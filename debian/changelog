@@ -1,3 +1,10 @@
+oxford-dataox (0.3.1) unstable; urgency=low
+
+  * Added describe-handler dependency
+  * Various bugfixes and features
+
+ -- Alexander Dutton <alexander.dutton@oucs.ox.ac.uk>  Mon, 24 Jun 2013 11:26:50 +0100
+
 oxford-dataox (0.2) unstable; urgency=low
 
   * ElasticSearch integration
