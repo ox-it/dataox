@@ -280,43 +280,22 @@
   </xsl:template>
 
   <!-- Presentation start -->
-  <xsl:template match="txt_applyfromtext" mode="presentation">
+  <xsl:template match="dt_start" mode="presentation">
     <mlo:start>
-      <xsl:if test="../dt_start/text()">
-        <xsl:attribute name="dtf">
-          <xsl:value-of select="normalize-space(../dt_start/text())"/>
-        </xsl:attribute>
-      </xsl:if>
-      <xsl:choose>
-        <xsl:when test="string-length(normalize-space(.)) gt 0">
-          <xsl:value-of select="."/>
-        </xsl:when>
-        <xsl:when test="string-length(normalize-space(../dt_start)) gt 0">
-          <xsl:value-of select="format-date(xs:date(dt_start), '[F] [D] [MNn] [Y]')"/>
-        </xsl:when>
-        <xsl:otherwise>
-          <xsl:message>Error: Missing start date!</xsl:message>
-        </xsl:otherwise>
-      </xsl:choose>
+      <xsl:call-template name="xcri-date">
+        <xsl:with-param name="date" select="normalize-space(text())"/>
+        <xsl:with-param name="text" select="normalize-space(../txt_starttext/text())"/>
+      </xsl:call-template>
     </mlo:start>
   </xsl:template>
 
   <!-- Presentation end -->
   <xsl:template match="dt_end" mode="presentation">
     <end>
-      <xsl:if test="text()">
-        <xsl:attribute name="dtf">
-          <xsl:value-of select="normalize-space(.)"/>
-        </xsl:attribute>
-      </xsl:if>
-      <xsl:choose>
-        <xsl:when test="string-length(normalize-space(.)) gt 0">
-          <xsl:value-of select="format-date(xs:date(.), '[F] [D] [MNn] [Y]')"/>
-        </xsl:when>
-        <xsl:otherwise>
-          <xsl:message>Error: Missing end date!</xsl:message>
-        </xsl:otherwise>
-      </xsl:choose>
+      <xsl:call-template name="xcri-date">
+        <xsl:with-param name="date" select="normalize-space(text())"/>
+        <xsl:with-param name="text" select="normalize-space(../txt_endtext/text())"/>
+      </xsl:call-template>
     </end>
   </xsl:template>
 
@@ -367,47 +346,22 @@
 
   <!-- Apply from -->
   <xsl:template match="dt_applyfrom" mode="presentation">
-    <!-- apply from/until with formatted date if text not provided -->
     <applyFrom>
-      <xsl:if test="text()">
-        <xsl:attribute name="dtf">
-          <xsl:value-of select="normalize-space(.)"/>
-        </xsl:attribute>
-      </xsl:if>
-      <xsl:choose>
-        <xsl:when test="string-length(normalize-space(../txt_applyfromtext)) gt 0">
-          <xsl:value-of select="../txt_applyfromtext"/>
-        </xsl:when>
-        <xsl:when test="not(@xsi:nil)">
-          <xsl:value-of select="format-date(xs:date(.), '[F] [D] [MNn] [Y]')"/>
-        </xsl:when>
-        <xsl:otherwise>
-          <xsl:message>Error: Missing applyFrom date for <xsl:value-of select="../course_id"/>!</xsl:message>
-        </xsl:otherwise>
-      </xsl:choose>
+      <xsl:call-template name="xcri-date">
+        <xsl:with-param name="date" select="normalize-space(text())"/>
+        <xsl:with-param name="text" select="normalize-space(../txt_applyfromtext/text())"/>
+      </xsl:call-template>
     </applyFrom>
   </xsl:template>
-
+  
   <!-- Apply from -->
   <xsl:template match="dt_applyuntil" mode="presentation">
-    <applyUntil>
-      <xsl:if test="text()">
-        <xsl:attribute name="dtf">
-          <xsl:value-of select="normalize-space(.)"/>
-        </xsl:attribute>
-      </xsl:if>
-      <xsl:choose>
-        <xsl:when test="string-length(normalize-space(../txt_capplyuntiltext)) gt 0">
-          <xsl:value-of select="../txt_capplyuntiltext"/>
-        </xsl:when>
-        <xsl:when test="not(@xsi:nil)">
-          <xsl:value-of select="format-date(xs:date(.), '[F] [D] [MNn] [Y]')"/>
-        </xsl:when>
-        <xsl:otherwise>
-          <xsl:message>Error: Missing applyUnit date for <xsl:value-of select="../course_id"/>!</xsl:message>
-        </xsl:otherwise>
-      </xsl:choose>
-    </applyUntil>
+    <applyFrom>
+      <xsl:call-template name="xcri-date">
+        <xsl:with-param name="date" select="normalize-space(text())"/>
+        <xsl:with-param name="text" select="normalize-space(../txt_capplyuntiltext/text())"/>
+      </xsl:call-template>
+    </applyFrom>
   </xsl:template>
 
   <!-- Attendance mode-->
@@ -491,4 +445,26 @@
 
   <!-- Catch-all -->
   <xsl:template match="*|@*" mode="#all"/>
+
+
+  <xsl:template name="xcri-date">
+    <xsl:param name="date"/>
+    <xsl:param name="text"/>
+    <xsl:if test="$text">
+      <xsl:attribute name="dtf">
+        <xsl:value-of select="$date"/>
+      </xsl:attribute>
+    </xsl:if>
+    <xsl:choose>
+      <xsl:when test="$text">
+        <xsl:value-of select="$text"/>
+      </xsl:when>
+      <xsl:when test="$date">
+        <xsl:value-of select="format-date(xs:date($date), '[F] [D] [MNn] [Y]')"/>
+      </xsl:when>
+      <xsl:otherwise>
+        <xsl:message>Error: Missing date!</xsl:message>
+      </xsl:otherwise>
+    </xsl:choose>
+  </xsl:template>
 </xsl:stylesheet>
