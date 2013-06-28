@@ -26,6 +26,7 @@
 
   <xsl:key name="user-bases" match="/site/lists/list[@name='User bases']/rows/row" use="@id"/>
   <xsl:key name="user-base-names" match="/site/lists/list[@name='User bases']/rows/row" use="fields/field[@name='Title']/text/text()"/>
+  <xsl:key name="grouped-services" match="/site/lists/list[@name='Service Catalogue']/rows/row" use="fields/field[@name='Service_x0020_group']/lookup/@id"/>
 
   <xsl:template match="list[@name='Service Catalogue']/rows">
     <gr:BusinessEntity rdf:about="{$it-services}">
@@ -199,4 +200,13 @@
     </skos:prefLabel>
   </xsl:template>
 
+  <xsl:template match="field[@name='Service_x0020_group']/lookup" mode="in-service">
+    <dcterms:isPartOf rdf:resource="{$service-base-uri}service/{@id}"/>
+  </xsl:template>
+
+  <xsl:template match="field[@name='Service_x0020_group_x0020_or_x00']/text" mode="in-service">
+    <xsl:for-each select="key('grouped-services', ../../../@id)">
+      <dcterms:hasPart rdf:resource="{$service-base-uri}service/{@id}"/>
+    </xsl:for-each>
+  </xsl:template>
 </xsl:stylesheet>
