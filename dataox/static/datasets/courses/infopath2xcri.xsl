@@ -450,7 +450,7 @@
   <xsl:template name="xcri-date">
     <xsl:param name="date"/>
     <xsl:param name="text"/>
-    <xsl:if test="$text">
+    <xsl:if test="$date">
       <xsl:attribute name="dtf">
         <xsl:value-of select="$date"/>
       </xsl:attribute>
