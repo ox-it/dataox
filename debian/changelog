@@ -1,3 +1,9 @@
+oxford-dataox (0.3.2~rc1) unstable; urgency=low
+
+  * Snapshot
+
+ -- Alexander Dutton <alexander.dutton@it.ox.ac.uk>  Mon, 29 Jul 2013 11:04:07 +0100
+
 oxford-dataox (0.3.1) unstable; urgency=low
 
   * Added describe-handler dependency
