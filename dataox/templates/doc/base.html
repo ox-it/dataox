@@ -111,7 +111,7 @@
     <aside class="sidebar">
       {% if subject.foaf_img %}
         <a href="{{ subject.foaf_img.doc_url }}">
-          <img class="depiction" src="{% thumbnail url=subect.foaf_img.uri width=200 %}" alt=""/>
+          <img class="depiction" src="{% thumbnail url=subject.foaf_img.uri width=200 %}" alt=""/>
         </a>
       {% endif %}
       {% for depiction in subject.depictions %}
