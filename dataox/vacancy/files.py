@@ -19,22 +19,27 @@ logger = logging.getLogger(__name__)
 
 
 class UNOConverter(object):
-    def convert_to_text(self, file_path):
+    def convert_to_text(self, file_path, mimetype):
         unoconv = subprocess.Popen(['unoconv', '--stdout', '-f', 'txt', file_path], stdout=subprocess.PIPE)
-        unoconv.wait()
-        data = unoconv.stdout.read().decode('utf-8', 'ignore')
+        text = []
+        for line in unoconv.stdout:
+            text.append(line)
+        text = ''.join(text).decode('utf-8', 'ignore')
         # The replacement is to work around an OpenOffice/LibreOffice bug:
         # https://bugs.freedesktop.org/show_bug.cgi?id=51905
-        data = data.replace(u'\x1e', u'\N{NON-BREAKING HYPHEN}')
-        return data
+        text = text.replace(u'\x1e', u'\N{NON-BREAKING HYPHEN}')
+        return text
 
 class PDFConverter(object):
     def convert_to_text(self, file_path, mimetype):
         if mimetype != 'application/pdf':
             return NotImplemented
         pdftotext = subprocess.Popen(['pdftotext', file_path, '-'], stdout=subprocess.PIPE)
-        pdftotext.wait()
-        return pdftotext.stdout.read().decode('utf-8', 'ignore')
+        text = []
+        for line in pdftotext.stdout:
+            text.append(line)
+        text = ''.join(text).decode('utf-8', 'ignore')
+        return text
 
 converters = {
     'application/pdf': PDFConverter,
@@ -80,6 +85,7 @@ class VacancyFileHandler(object):
         else:
             try:
                 text = converter.convert_to_text(file_path, document.mimetype)
+                logger.debug("Converted")
             except Exception:
                 logger.exception("Failed to convert %r (%r) to text using %s",
                                  document.url, document.mimetype, converter.__class__.__name__)
