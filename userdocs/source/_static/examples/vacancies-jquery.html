@@ -18,6 +18,16 @@
       $(function() {
         var months = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
         var status = $('div#vacancy-status').html("Loading vacancies&hellip;");
+        var highlightElement = function(e) {
+          var c = 255 - 20 * 3;
+          var f = function() {
+            e.css('background-color', 'rgb('+c+', '+c+', 255)');
+            c += 3;
+            if (c <= 255)
+              setTimeout(f, 50);
+          };
+          f();
+        };
         $.ajax("https://data.ox.ac.uk/feeds/all-vacancies/31337175.js", {
           success: function(data) {
             var ul = $('ul#vacancy-list');
@@ -31,6 +41,7 @@
               var closes = new Date(vacancy.closes);
               var closesFormatted = closes.getDate() + " " + months[closes.getMonth()] + " " + closes.getFullYear() + ", " + closes.getHours() + ":" + (closes.getMinutes() < 10 ? "0" : "") + closes.getMinutes();
               summary.append($('<tr/>').append($('<td/>').append($('<a/>').attr('href', '#vacancy-'+vacancy.id)
+                                  .click(function() { highlightElement($(this.getAttribute('href'))); })
                                                                           .text(vacancy.label)))
                                        .append($('<td/>').text(closesFormatted))
                                        .append($('<td/>').text(vacancy.salary.label)));
@@ -45,6 +56,10 @@
             status.hide();
             summary.show();
             ul.show();
+            if (document.location.hash) {
+                document.location = document.location;
+                highlightElement($(document.location.hash));
+            }
           },
           dataType: 'jsonp'
         });
