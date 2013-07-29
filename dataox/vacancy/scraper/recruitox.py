@@ -23,6 +23,7 @@ def _normalize_space(text):
 class RecruitOxScraper(Scraper):
     base_url = 'https://www.recruit.ox.ac.uk/pls/hrisliverecruit/'
     site_timezone = pytz.timezone('Europe/London')
+    COUNT_KEY = 'dataox:transform:vacancies:count'
 
     search_url = base_url + 'erq_search_version_4.start_search_with_params'
     search_params = {'p_company': '10',
