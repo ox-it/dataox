@@ -32,7 +32,7 @@
     <gr:BusinessEntity rdf:about="{$it-services}">
       <xsl:for-each select="row">
         <xsl:if test="$store='itservices' or .//field[@name='Viewable_x0020_by']/text[not(text()='IT Services')]">
-          <xsl:if test="$store='itservices' or not(.//field[@name='Archived']/text = 'Archived')">
+          <xsl:if test="$store='itservices' or .//field[@name='Archived']/text = 'Live'">
             <gr:offers>
               <xsl:apply-templates select="."/>
             </gr:offers>
@@ -93,6 +93,10 @@
 
   <xsl:template match="field[@name='Published_x0020_SLA_x0020_or_x00']/url" mode="in-service">
     <adhoc:serviceLevelDefinition rdf:resource="{@href}"/>
+  </xsl:template>
+  
+  <xsl:template match="field[@name='Archived']/text" mode="in-service">
+    <adhoc:serviceLifecycle rdf:resource="https://data.ox.ac.uk/id/itservices/service-lifecycle/{lower-case(.)}"/>
   </xsl:template>
 
   <!-- Use this field to go up and re-interpret the row in the contact of its contact information -->
