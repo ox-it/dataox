@@ -31,12 +31,13 @@
   <xsl:template match="list[@name='Service Catalogue']/rows">
     <gr:BusinessEntity rdf:about="{$it-services}">
       <xsl:for-each select="row">
-        <xsl:if test="$store='itservices' or .//field[@name='Viewable_x0020_by']/text[not(text()='IT Services')]">
-          <xsl:if test="$store='itservices' or .//field[@name='Archived']/text = 'Live'">
-            <gr:offers>
-              <xsl:apply-templates select="."/>
-            </gr:offers>
-          </xsl:if>
+        <xsl:if test="$store='itservices' or (
+                       .//field[@name='Viewable_x0020_by']/text[not(text()='IT Services')]
+                   and .//field[@name='Archived']/text = 'Live'
+                   and .//field[@name='Service_x0020_type']/text = 'Customer facing service')">
+          <gr:offers>
+            <xsl:apply-templates select="."/>
+          </gr:offers>
         </xsl:if>
       </xsl:for-each>
     </gr:BusinessEntity>
