@@ -204,9 +204,10 @@
     <xsl:variable name="team" select="key('teams', fields/field[@name='Team']/lookup/@id)"/>
     <xsl:variable name="team-of-manager">
       <xsl:choose>
-        <xsl:when test="not($team/fields/field[@name='Part_x0020_of']/lookup/@id)"/>
         <xsl:when test="fields/field[@name='Manager']/boolean/text()='true'">
-          <xsl:value-of select="key('teams', $team/fields/field[@name='Part_x0020_of']/lookup/@id)/@id"/>
+          <xsl:if test="$team/fields/field[@name='Part_x0020_of']/lookup/@id">
+            <xsl:value-of select="key('teams', $team/fields/field[@name='Part_x0020_of']/lookup/@id)/@id"/>
+          </xsl:if>
         </xsl:when>
         <xsl:otherwise>
           <xsl:value-of select="$team/@id"/>
