@@ -26,6 +26,10 @@
   <xsl:param name="store"/>
   <xsl:variable name="internal" select="$store='itservices'"/>
   <xsl:key name="post-holders" match="list[@name='Staff']/rows/row" use="fields/field[@name='Person']/user/@id"/>
+  <xsl:key name="team-managers" match="list[@name='Staff']/rows/row[.//field[@name='Manager']/boolean/text()='true']" use="fields/field[@name='Team']/lookup/@id"/>
+  
+  <xsl:key name="staff" match="list[@name='Staff']/rows/row" use="@id"/>
+  <xsl:key name="teams" match="list[@name='Teams']/rows/row" use="@id"/>
 
   <xsl:template match="site">
     <xsl:if test="$internal">
@@ -64,6 +68,9 @@
   <xsl:template match="list[@name='Staff']/rows/row">
     <org:Post rdf:about="{ex:post-uri(.)}">
       <xsl:apply-templates mode="in-post"/>
+      <xsl:if test="not(.//field[@name='Manager0'])">
+        <xsl:apply-templates select="." mode="infer-manager"/>
+      </xsl:if>
     </org:Post>
   </xsl:template>
 
@@ -112,6 +119,20 @@
 
   <xsl:template match="field[@name='WorkPhone']/text/text()" mode="in-person">
     <xsl:call-template name="telephone-extension"/>
+  </xsl:template>
+  
+  <xsl:template match="field[@name='Title']/text" mode="in-post">
+    <rdfs:label>
+      <xsl:choose>
+        <xsl:when test="../../field[@name='Person']">
+          <xsl:value-of select="key('users', ../../field[@name='Person']/user/@id)//field[@name='Title']/text"/>
+        </xsl:when>
+        <xsl:otherwise>vacancy</xsl:otherwise>
+      </xsl:choose>
+      <xsl:text> (</xsl:text>
+      <xsl:value-of select="../../field[@name='Role']/text"/>
+      <xsl:text>)</xsl:text>
+    </rdfs:label>
   </xsl:template>
 
   <xsl:template match="field[@name='Role']/text" mode="in-post">
@@ -174,6 +195,30 @@
       </adhoc:space>
     </xsl:if>
   </xsl:template>
+  
+  <xsl:template match="field[@name='Manager0']/user[@id]" mode="in-post">
+    <org:reportsTo rdf:resource="{ex:post-uri(key('staff', @id))}"/>
+  </xsl:template>
 
+  <xsl:template match="row" mode="infer-manager">
+    <xsl:variable name="team" select="key('teams', fields/field[@name='Team']/lookup/@id)"/>
+    <xsl:variable name="team-of-manager">
+      <xsl:choose>
+        <xsl:when test="not($team/fields/field[@name='Part_x0020_of']/lookup/@id)"/>
+        <xsl:when test="fields/field[@name='Manager']/boolean/text()='true'">
+          <xsl:value-of select="key('teams', $team/fields/field[@name='Part_x0020_of']/lookup/@id)/@id"/>
+        </xsl:when>
+        <xsl:otherwise>
+          <xsl:value-of select="$team/@id"/>
+        </xsl:otherwise>
+      </xsl:choose>
+    </xsl:variable>
+    <xsl:if test="$team-of-manager">
+    <xsl:variable name="managers" select="key('team-managers', $team-of-manager)"/>
+    <xsl:for-each select="$managers">
+      <org:reportsTo rdf:resource="{ex:post-uri(.)}"/>
+    </xsl:for-each>
+    </xsl:if>
+  </xsl:template>
 
 </xsl:stylesheet>
