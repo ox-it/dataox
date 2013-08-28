@@ -188,6 +188,24 @@ Although not used to directly annotate courses, we have aligned it with the
 Oxford simplified version, so it can still be used in queries.
 
 
+Data sources
+------------
+
+The Open Data Service pulls data from the following upstream sources:
+
+===================== =========== =======================================================================================
+Provider              Type        URL
+===================== =========== =======================================================================================
+IT Learning Programme XCRI-CAP    http://courses.it.ox.ac.uk/xcri/oxcap.php?span=12+month
+Continuing Education  XCRI-CAP    http://xcri.conted.ox.ac.uk/?s=1&format=xcri12
+Careers Service       Spreadsheet https://sharepoint.nexus.ox.ac.uk/sites/OUCS/coursedata/Shared%20Documents/careers.xlsx
+===================== =========== =======================================================================================
+
+One or more of these may be restricted access.
+
+Metadata and XSL transforms may be found `in GitHub
+<https://github.com/ox-it/dataox/tree/master/dataox/static/datasets>`_.
+
 Example resources
 -----------------
 
