@@ -97,12 +97,12 @@ dcterms:subject     Relates a course to a concept in some classification
                     scheme, such as the Oxford version of the Researcher
                     Development Framework, JACS, or whether the course
                     develops quantitative or qualitative research skills. For
-                    more information, see :ref:`course-catagorizations` below.
+                    more information, see :ref:`course-categorizations` below.
 =================== ==========================================================
 
-.. _course-catagorizations:
+.. _course-categorizations:
 
-Catagorizations
+Categorizations
 ---------------
 
 Courses are categorized — using dcterms:subject properties — in zero or more of
