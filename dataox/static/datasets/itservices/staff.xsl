@@ -165,7 +165,7 @@
   </xsl:template>
 
   <xsl:template match="field[@name='Assists']/lookup" mode="in-post">
-    <adhoc:assistantTo rdf:resource="{ex:post-uri(.)}"/>
+    <adhoc:assistantTo rdf:resource="{ex:post-uri(key('staff', @id))}"/>
   </xsl:template>
 
   <xsl:template match="field[@name='Office']/text[text()]" mode="in-post">
