@@ -164,6 +164,10 @@
     <org:postIn rdf:resource="{ex:team-uri(key('teams', @id))}"/>
   </xsl:template>
 
+  <xsl:template match="field[@name='Assists']/lookup" mode="in-post">
+    <adhoc:assistantTo rdf:resource="{ex:post-uri(.)}"/>
+  </xsl:template>
+
   <xsl:template match="field[@name='Office']/text[text()]" mode="in-post">
     <xsl:variable name="building-uri">
       <xsl:text>http://oxpoints.oucs.ox.ac.uk/id/</xsl:text>
