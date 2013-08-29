@@ -30,11 +30,9 @@
   </xsl:template>
 
   <xsl:template match="list[@name='Teams']/rows/row">
-    <xsl:if test="not(fields/field[@name='URI']/text/text())">
-      <org:OrganizationalUnit rdf:about="{ex:team-uri(.)}">
-        <xsl:apply-templates/>
-      </org:OrganizationalUnit>
-    </xsl:if>
+    <org:OrganizationalUnit rdf:about="{ex:team-uri(.)}">
+      <xsl:apply-templates/>
+    </org:OrganizationalUnit>
   </xsl:template>
 
   <xsl:template match="field[@name='Title']/text[text()]">
