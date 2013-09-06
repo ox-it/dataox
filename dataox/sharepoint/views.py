@@ -1,6 +1,8 @@
 import base64
+import hashlib
 import httplib
 import logging
+import random
 import urllib2
 
 from django.contrib.auth.decorators import login_required
@@ -11,10 +13,11 @@ from django_conneg.http import HttpError
 from django_conneg.views import ContentNegotiatedView
 
 from humfrey.update.models import Credential
+from humfrey.utils.views import RedisView
 
 logger = logging.getLogger(__name__)
 
-class UserProfileImageView(ContentNegotiatedView):
+class UserProfileImageView(RedisView, ContentNegotiatedView):
     url = 'https://mysite.nexus.ox.ac.uk/User%20Photos/Profile%20Pictures/ad-oak_{username}_{size}Thumb.jpg'
     sizes = {'small': 'S', 'medium': 'M', 'large': 'L'}
     
@@ -30,7 +33,29 @@ class UserProfileImageView(ContentNegotiatedView):
             raise Http404
         
         url = self.url.format(username=username, size=self.sizes[size])
+        key = 'dataox:sharepoint:user-profile-image:{username}:{size}'.format(username=username,
+                                                                              size=size)
         
+        redis = self.get_redis_client()
+        value = redis.get(key)
+        if value:
+            content_type, content = value.split('\0', 1)
+        else:
+            content_type, content = self.get_image(url)
+            redis.set(key, '\0'.join((content_type, content)))
+            redis.expire(key, random.randrange(4*3600, 8*3600))
+        
+        response = HttpResponse(content)
+        response['Content-type'] = content_type
+        return response
+
+    def get_image(self, url):
+        """
+        Retrieves the image from SharePoint.
+        
+        Returns a tuple of (content-type, content). content-type will likely
+        always be 'image/jpeg', but we need to pass it through as-is.
+        """
         try:
             credential = Credential.objects.get(user__username='opendata',
                                                 url='https://sharepoint.nexus.ox.ac.uk/')
@@ -45,15 +70,11 @@ class UserProfileImageView(ContentNegotiatedView):
                                                          credential.password])))
         
         try:
-            sp_response = urllib2.urlopen(sp_request)
+            response = urllib2.urlopen(sp_request)
+            return response.headers['Content-type'], response.read()
         except urllib2.HTTPError as e:
             if e.code in (401, 403):
-                raise
                 logger.warning("Failed authentication accessing profile image: %d",
                                e.code, exc_info=1)
                 raise HttpError(status_code=httplib.SERVICE_UNAVAILABLE)
             raise
-        else:
-            response = HttpResponse(sp_response)
-            response['Content-type'] = sp_response.headers['Content-type']
-            return response
