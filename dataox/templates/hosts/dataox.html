@@ -9,7 +9,7 @@
     <meta name="robots" content="noindex"/>{% endif %}{% for renderer in renderers %}{% for mimetype in renderer.mimetypes %}
     <link rel="alternate" type="{{ mimetype }}" href="{{ renderer.url }}">{% endfor %}{% endfor %}
   <!--[if lt IE 9]>
-  <script src="{{ STATIC_URL }}js/html5shiv.js"></script>
+  <script src="{{ STATIC_URL }}lib/html5shiv.min.js"></script>
   <![endif]-->
     <script type="text/javascript">
       var staticURL = "{{ STATIC_URL|escapejs }}";

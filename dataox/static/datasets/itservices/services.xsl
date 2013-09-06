@@ -31,12 +31,14 @@
   <xsl:template match="list[@name='Service Catalogue']/rows">
     <gr:BusinessEntity rdf:about="{$it-services}">
       <xsl:for-each select="row">
-        <xsl:if test="$store='itservices' or .//field[@name='Viewable_x0020_by']/text[not(text()='IT Services')]">
-          <xsl:if test="$store='itservices' or not(.//field[@name='Archived']/text = 'Archived')">
-            <gr:offers>
-              <xsl:apply-templates select="."/>
-            </gr:offers>
-          </xsl:if>
+        <xsl:if test="not(.//field[@name='Redact']/boolean='true') and (
+                   $store='itservices' or (
+                           .//field[@name='Viewable_x0020_by']/text[not(text()='IT Services')]
+                       and .//field[@name='Archived']/text = 'Live'
+                       and .//field[@name='Service_x0020_type']/text = 'Customer facing service'))">
+          <gr:offers>
+            <xsl:apply-templates select="."/>
+          </gr:offers>
         </xsl:if>
       </xsl:for-each>
     </gr:BusinessEntity>
@@ -93,6 +95,10 @@
 
   <xsl:template match="field[@name='Published_x0020_SLA_x0020_or_x00']/url" mode="in-service">
     <adhoc:serviceLevelDefinition rdf:resource="{@href}"/>
+  </xsl:template>
+  
+  <xsl:template match="field[@name='Archived']/text" mode="in-service">
+    <adhoc:serviceLifecycle rdf:resource="https://data.ox.ac.uk/id/itservices/service-lifecycle/{lower-case(.)}"/>
   </xsl:template>
 
   <!-- Use this field to go up and re-interpret the row in the contact of its contact information -->
