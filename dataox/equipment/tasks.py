@@ -6,6 +6,7 @@ from celery.task import task
 from django.conf import settings
 from humfrey.signals import graphs_updated
 from humfrey.streaming.csv import CSVSerializer
+from humfrey.utils.user_agents import USER_AGENTS
 import rdflib
 
 logger = logging.getLogger(__name__)
@@ -19,10 +20,13 @@ watch_graphs = frozenset(map(rdflib.URIRef, (
 )))
 
 TARGET_URL = getattr(settings, 'SEESEC_TARGET_URL', None)
+TARGET_URL = 'http://localhost/uniquip/'
 CREDENTIALS = getattr(settings, 'SEESEC_CREDENTIALS', (None, None))
 
 query = """\
-SELECT * WHERE {
+SELECT *
+""" + '\n'.join("FROM " + wg.n3() for wg in watch_graphs) + """
+WHERE {
   VALUES (?type ?rdf_type) {
     ("equipment" cerif:Equipment)
     ("equipment" oo:Equipment)
@@ -65,6 +69,7 @@ SELECT * WHERE {
   OPTIONAL { ?id spatialrelations:within/skos:prefLabel ?building }
   OPTIONAL { ?id foaf:page ?web_address }
   BIND ("ogl" AS ?open_license)
+  FILTER(BOUND(?contact_name) && (BOUND(?contact_telephone) || BOUND(?contact_url) || BOUND(?contact_email)))
 }
 """
 
@@ -80,25 +85,28 @@ def update_seesec(sender, store, graphs, when, **kwargs):
         logger.debug("No SEESEC target URL set; not updating")
         return
 
-    logger.debug("Updating SEESEC")
-
     password_manager = urllib2.HTTPPasswordMgrWithDefaultRealm()
     password_manager.add_password(None, TARGET_URL, *CREDENTIALS)
     auth_handler = urllib2.HTTPBasicAuthHandler(password_manager)
-    
+
     opener = urllib2.build_opener(auth_handler)
-    
+
     with tempfile.TemporaryFile() as f:
         for line in CSVSerializer(store.query(query)):
             f.write(line)
-        
+
         content_length = f.tell()
         f.seek(0)
-    
+        logger.debug("Updating SEESEC (%d bytes)", content_length)
+
         request = urllib2.Request(TARGET_URL, f)
-        request.add_header('Content-length', content_length)
+        request.add_header('Content-length', str(content_length))
+        request.add_header('User-agent', USER_AGENTS['agent'])
         request.get_method = lambda : 'PUT'
-        opener.open(request)
+        try:
+            opener.open(request).read()
+        except urllib2.HTTPError as e:
+            logger.exception("Upload failure (%s):\n\n%s", e.code, e.read())
 
 graphs_updated.connect(update_seesec.delay)
 
@@ -106,11 +114,8 @@ if __name__ == '__main__':
     from datetime import datetime
     from humfrey.sparql.models import Store
     logging.basicConfig(level=logging.DEBUG)
-    try:
-        update_seesec(None,
-                        store=Store.objects.get(slug='seesec'),
-                        graphs=set([rdflib.URIRef('https://data.ox.ac.uk/graph/equipment/facilities')]),
-                        when=datetime.now())
-    except urllib2.HTTPError, e:
-        print e.read()
-        print e.getcode()
+
+    update_seesec(None,
+                    store=Store.objects.get(slug='seesec'),
+                    graphs=set([rdflib.URIRef('https://data.ox.ac.uk/graph/equipment/facilities')]),
+                    when=datetime.now())
