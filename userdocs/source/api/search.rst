@@ -15,6 +15,7 @@ The search service only indexes certain classes of thing. These are:
 * Equipment (``equipment``)
 * Vacancies (``vacancy``)
 * Courses (``course``)
+* Course presentations (``presentation``)
 
 The identifier in brackets can be used to :ref:`filter results
 <search-filtering>`.
@@ -59,6 +60,24 @@ Filtering
 You can restrict results to a particular type of thing using the ``type``
 parameter. For example, https://data.ox.ac.uk/search/?q=computing&type=vacancy
 will search for computing vacancies.
+
+Additional filtering can be achieved using prefixed query parameters. These
+take the form ``<filter name>.<field name>=<value>``. Here are the current
+options:
+
+=========== ================================== ==============================================================================================================
+Filter name Meaning                            Example
+=========== ================================== ==============================================================================================================
+``filter``  Term match (i.e., not exact match) ``filter.offeredBy.uri=http://oxpoints.oucs.ox.ac.uk/id/53505808`` (courses and presentations offered by ITLP)
+``not``     Inverse term match                 ``not.type.uri=oxp:Room`` (things that don't have an ``rdf:type`` of room)
+``lt``      Less than (dates, numeric values)  ``lt.start.time=2013-08-09`` (things that started before the 9th of August 2013)
+``gt``      Greater than                       ``gt.salary.lower=40000`` (vacancies with salaries of at least £40k)
+``lte``     Less than or equal to
+``gte``     Greater than or equal to
+=========== ================================== ==============================================================================================================
+
+Filters with the same key are ``OR``'d, so you can use e.g. ``filter.label=keble&filter.label=merton`` to
+find things that mention either term in their label. Otherwise, the all filters are cumulative.
 
 Examples
 ~~~~~~~~
