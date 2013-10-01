@@ -64,6 +64,8 @@ CONSTRUCT {{
 }} WHERE {{
   VALUES ?catalogPredicate {{
     rdf:type
+    rdfs:label
+    rdfs:comment
     dcterms:title
     dcterms:description
     dcterms:publisher
@@ -116,7 +118,7 @@ class CatalogDetailView(CourseView, sparql_views.CannedQueryView, RDFView, Conte
         } WHERE {
           %(uri)s a xcri:catalog ;
             skos:member ?course .
-          OPTIONAL { ?catalog dcterms:description|dc:description ?catalogDescription } .
+          OPTIONAL { ?catalog dcterms:description|dc:description|rdfs:comment ?catalogDescription } .
           OPTIONAL {
             ?catalog dcterms:publisher ?provider .
             ?provider a ?providerType .

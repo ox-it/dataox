@@ -142,7 +142,7 @@ class RecruitOxScraper(Scraper):
             vacancy = Vacancy(vacancy_id=vacancy_id,
                               opening_date=self.site_timezone.localize(datetime.datetime.now()).replace(microsecond=0).isoformat())
         else:
-            if self.quick and vacancy.last_checked + datetime.timedelta(1) > datetime.datetime.now():
+            if self.quick and vacancy.last_checked and vacancy.last_checked + datetime.timedelta(1) > datetime.datetime.now():
                 logger.debug("Ignoring vacancy %s", vacancy_id)
                 return changed
         logger.info("Retrieving vacancy %s", vacancy_id)

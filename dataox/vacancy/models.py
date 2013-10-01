@@ -116,10 +116,13 @@ class Vacancy(DirtyFieldsMixin, models.Model):
                         (phone_uri, NS.rdf.value, rdflib.Literal(self.contact_phone))]
 
         if self.description:
-            triples += [
-                (uri, NS.rdfs.comment, rdflib.Literal(self.description, datatype=NS.xtypes['Fragment-XHTML'])),
-                (uri, NS.rdfs.comment, rdflib.Literal(self.plain_description)),
-            ]
+            try:
+                triples += [
+                    (uri, NS.rdfs.comment, rdflib.Literal(self.description, datatype=NS.xtypes['Fragment-XHTML'])),
+                    (uri, NS.rdfs.comment, rdflib.Literal(self.plain_description)),
+                ]
+            except Exception:
+                logger.exception("Couldn't parse description for vacancy %s", self.vacancy_id)
         if self.location:
             triples.append((uri, NS.dc.spatial, rdflib.Literal(self.location)))
         for formalOrganization in self.formalOrganization.split():
