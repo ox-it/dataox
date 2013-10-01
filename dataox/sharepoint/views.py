@@ -72,6 +72,8 @@ class UserProfileImageView(RedisView, ContentNegotiatedView):
             response = urllib2.urlopen(sp_request)
             return response.headers['Content-type'], response.read()
         except urllib2.HTTPError as e:
+            if e.code == 404:
+                raise Http404
             if e.code in (401, 403):
                 logger.warning("Failed authentication accessing profile image: %d",
                                e.code, exc_info=1)
