@@ -1,4 +1,5 @@
 import logging
+import requests
 import tempfile
 import urllib2
 
@@ -20,7 +21,6 @@ watch_graphs = frozenset(map(rdflib.URIRef, (
 )))
 
 TARGET_URL = getattr(settings, 'SEESEC_TARGET_URL', None)
-TARGET_URL = 'http://localhost/uniquip/'
 CREDENTIALS = getattr(settings, 'SEESEC_CREDENTIALS', (None, None))
 
 query = """\
@@ -79,17 +79,12 @@ def update_seesec(sender, store, graphs, when, **kwargs):
         return
     
     if not (watch_graphs & graphs):
+        logger.debug("No SEESEC graphs updated; not updating")
         return 
 
     if not TARGET_URL:
         logger.debug("No SEESEC target URL set; not updating")
         return
-
-    password_manager = urllib2.HTTPPasswordMgrWithDefaultRealm()
-    password_manager.add_password(None, TARGET_URL, *CREDENTIALS)
-    auth_handler = urllib2.HTTPBasicAuthHandler(password_manager)
-
-    opener = urllib2.build_opener(auth_handler)
 
     with tempfile.TemporaryFile() as f:
         for line in CSVSerializer(store.query(query)):
@@ -99,14 +94,15 @@ def update_seesec(sender, store, graphs, when, **kwargs):
         f.seek(0)
         logger.debug("Updating SEESEC (%d bytes)", content_length)
 
-        request = urllib2.Request(TARGET_URL, f)
-        request.add_header('Content-length', str(content_length))
-        request.add_header('User-agent', USER_AGENTS['agent'])
-        request.get_method = lambda : 'PUT'
-        try:
-            opener.open(request).read()
-        except urllib2.HTTPError as e:
-            logger.exception("Upload failure (%s):\n\n%s", e.code, e.read())
+        response = requests.post(TARGET_URL,
+                                 files={'file': f},
+                                 data={'institution': 'oxford'},
+                                 auth=CREDENTIALS,
+                                 headers={'User-Agent': USER_AGENTS['agent']})
+    if response.status_code != requests.codes.ok:
+        logger.error("Failed to upload equipment to SEESEC (%d):\n\n%s",
+                     response.status_code,
+                     response.text)
 
 graphs_updated.connect(update_seesec.delay)
 
