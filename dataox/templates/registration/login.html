@@ -5,19 +5,38 @@
 {% block content %}
   <h1>Log in</h1>
   
-  <p><a href="{% url "account_webauth" %}?next={{ next|urlencode }}">Log in using WebAuth</a></p>
-  
-  <form method="post" action="">{% csrf_token %}
-    <input name="next" type="hidden" value="{{ next }}"/>
-    <table>
-      <tbody>{{ form }}</tbody>
-      <tfoot>
-        <tr>
-          <td colspan="2">
-            <input type="submit" value="Log in"/>
-          </td>
-        </tr>
-      </tfoot>
-    </table>
-  </form>
+
+    <p>Please select your login method.</p>
+
+	<div class="login-methods">
+		<div class="login-method login-method-webauth">
+			<a class="login-method-inner panel" href="{% url "account_webauth" %}"><img
+				src="{{ STATIC_URL }}equipment/logos/ou.gif"
+				alt="University of Oxford">
+ 
+				<span class="login-method-webauth-link-outer">
+				  <span class="login-method-webauth-link-inner">
+				    Log in using Webauth
+				  </span>
+				</span>
+			</a>
+		</div>
+		<div class="login-method login-method-form">
+		<div class="login-method-inner panel">
+
+		    <h2>Log in using local credentials</h2>
+			<form method="post" action=".">
+				<table>
+					<tbody>{{ form }}
+					</tbody>
+					<tfoot>
+						<tr>
+							<td colspan="2"><input type="submit" value="Log in"></td>
+						</tr>
+					</tfoot>
+				</table>
+			</form>
+		</div></div>
+		<div style="clear:both"></div>
+	</div>
 {% endblock %}
