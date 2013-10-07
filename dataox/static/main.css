@@ -241,17 +241,12 @@ form table {
     width: 100%;
 }
 
-form th, form td {
-    border-top: 1px solid #ddd;
-}
-
 form tr:first-child th, form tr:first-child td {
     border:0
 }
 
 form table th {
     width: 200px;
-    vertical-align:top;
     text-align:left;
 }
 
@@ -401,4 +396,4 @@ div.warning {
 	border-radius: 1em;
 }
 
-}
+

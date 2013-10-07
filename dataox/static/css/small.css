@@ -1,0 +1,22 @@
+/* all devices with non-tiny screens (i.e. >= 640px wide) */
+
+.login-method:first-child .login-method-inner{
+	margin-left: 0;
+}
+
+div.login-method-webauth {
+	
+}
+
+div.login-method span.login-method-webauth-link-outer {
+	font-size: 200%;
+}
+
+div.login-method:first-child {
+	border-left: 0;
+}
+
+
+div.login-method img {
+	margin-top: 1em;
+}
