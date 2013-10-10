@@ -45,7 +45,7 @@ Glossary
              </tr>
              <tr>
                <td><img src="https://static.data.ox.ac.uk/desc/stars/data-badge-1.png" alt="1 star"/></td>
-               <td>Put your data on the web with an open license (in any format)</td>
+               <td>Put your data on the web with an open licence (in any format)</td>
              </tr>
              <tr>
                <td><img src="https://static.data.ox.ac.uk/desc/stars/data-badge-2.png" alt="2 stars"/></td>
