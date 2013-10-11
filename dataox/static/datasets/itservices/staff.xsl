@@ -200,7 +200,7 @@
     </xsl:if>
   </xsl:template>
   
-  <xsl:template match="field[@name='Manager0']/user[@id]" mode="in-post">
+  <xsl:template match="field[@name='Manager0']/lookup[@id]" mode="in-post">
     <org:reportsTo rdf:resource="{ex:post-uri(key('staff', @id))}"/>
   </xsl:template>
 
