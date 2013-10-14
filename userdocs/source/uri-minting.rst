@@ -54,7 +54,8 @@ Data Service.
     the source name, and then another component to signify a partition or
     whether it's a dataset, or dataset metadata. Examples of ``[path]``
     include ``oxpoints/data``, ``oxpoints/metadata``, ``vacancies/archive`` and
-    ``vacancies/current``.
+    ``vacancies/current``. A list of all current graph URIs in use can be seen
+    at https://backstage.data.ox.ac.uk/stores/public/data/.
 
 ``https://data.ox.ac.uk/id/dataset/[path]``
     Datasets, VoID or otherwise. Each should be a ``dcat:Dataset`` instance.
