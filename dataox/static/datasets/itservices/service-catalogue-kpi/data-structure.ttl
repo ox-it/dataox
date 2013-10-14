@@ -1,0 +1,48 @@
+@base <https://data.ox.ac.uk/id/qb-data-structure/service-catalogue-kpi/> .
+
+@prefix qb: <http://purl.org/linked-data/cube#> .
+@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix sdmx-measure: <http://purl.org/linked-data/sdmx/2009/measure#> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+
+<https://data.ox.ac.uk/id/qb-data-structure/service-catalogue-kpi> a qb:DataStructureDefinition ;
+  qb:component
+    [ qb:dimension <dimension/serviceType> ; qb:order 1 ] ,
+    [ qb:dimension <dimension/withSLA> ; qb:order 2 ] ,
+    [ qb:dimension <dimension/withServiceOwner> ; qb:order 3 ] ,
+    [ qb:dimension <dimension/withBusinessOwner> ; qb:order 4 ] ,
+    [ qb:dimension <dimension/lifecycleStatus> ; qb:order 5 ] ;
+  qb:component
+    [ qb:measure <measure/numberOfServices> ] 
+  .
+
+<dimension/serviceType> a rdf:Property, qb:DimensionProperty ;
+  rdfs:label "service type"@en ;
+  qb:codeList <https://data.ox.ac.uk/id/itservices/service-type> ;
+  rdfs:range <https://data.ox.ac.uk/id/itservices/ServiceType> .
+
+<dimension/withSLA> a rdf:Property, qb:DimensionProperty ;
+  rdfs:label "has SLA or SLD"@en ;
+  rdfs:comment "True if a service has a published Service-level agreement or definition." ;
+  rdfs:range xsd:boolean .
+
+<dimension/withServiceOwner> a rdf:Property, qb:DimensionProperty ;
+  rdfs:label "service owner?"@en ;
+  rdfs:comment "True if a service has a nominated service owner." ;
+  rdfs:range xsd:boolean .
+
+<dimension/withBusinessOwner> a rdf:Property, qb:DimensionProperty ;
+  rdfs:label "business owner?"@en ;
+  rdfs:comment "True if a service has a nominated business owner." ;
+  rdfs:range xsd:boolean .
+
+<dimension/lifecycleStatus> a rdf:Property, qb:DimensionProperty ;
+  rdfs:label "lifecycle status"@en ;
+  qb:codeList <https://data.ox.ac.uk/id/itservices/service-lifecycle-status> ;
+  rdfs:range <https://data.ox.ac.uk/id/itservices/ServiceLifecycleStatus> .
+
+<measure/numberOfServices> a rdf:Property, qb:MeasureProperty ;
+  rdfs:label "number of services"@en ;
+  rdfs:subPropertyOf sdmx-measure:obsValue ;
+  rdfs:range xsd:int .

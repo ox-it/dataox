@@ -1,0 +1,11 @@
+@base <https://data.ox.ac.uk/id/dataset/service-catalogue-kpi/> .
+
+@prefix dcat:    <http://www.w3.org/ns/dcat#> .
+@prefix dcterms: <http://purl.org/dc/terms/> .
+@prefix qb: <http://purl.org/linked-data/cube#> .
+@prefix rdfs:    <http://www.w3.org/2000/01/rdf-schema#> .
+
+<https://data.ox.ac.uk/id/dataset/service-catalogue-kpi> a qb:DataSet, dcat:Dataset ;
+  rdfs:label "KPIs for the IT Services Service Catalogue"@en ;
+  qb:structure <https://data.ox.ac.uk/id/qb-data-structure/service-catalogue-kpi> ;
+  dcterms:publisher <https://oxpoints.oucs.ox.ac.uk/id/31337175> .
