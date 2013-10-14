@@ -17,6 +17,7 @@
   rdfs:subClassOf skos:Concept ;
   rdfs:seeAlso <https://data.ox.ac.uk/id/itservices/service-type> .
 
+
 <https://data.ox.ac.uk/id/itservices/service-type/user-facing>
   a <https://data.ox.ac.uk/id/itservices/ServiceType>, skos:Concept ;
   skos:prefLabel "user-facing"@en ;
@@ -34,3 +35,5 @@
   skos:prefLabel "internal"@en ;
   skos:definition "A service primarily used only by members of IT Services." ;
   skos:inScheme <https://data.ox.ac.uk/id/itservices/service-type> .
+
+
