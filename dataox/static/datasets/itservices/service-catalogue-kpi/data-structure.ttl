@@ -8,14 +8,19 @@
 
 <https://data.ox.ac.uk/id/qb-data-structure/service-catalogue-kpi> a qb:DataStructureDefinition ;
   qb:component
-    [ qb:dimension <dimension/serviceType> ; qb:order 1 ] ,
-    [ qb:dimension <dimension/withSLA> ; qb:order 2 ] ,
-    [ qb:dimension <dimension/withServiceOwner> ; qb:order 3 ] ,
-    [ qb:dimension <dimension/withBusinessOwner> ; qb:order 4 ] ,
-    [ qb:dimension <dimension/lifecycleStatus> ; qb:order 5 ] ;
+    [ qb:dimension <dimension/month> ; qb:order 1 ] ,
+    [ qb:dimension <dimension/serviceType> ; qb:order 2 ] ,
+    [ qb:dimension <dimension/withSLA> ; qb:order 3 ] ,
+    [ qb:dimension <dimension/withServiceOwner> ; qb:order 4 ] ,
+    [ qb:dimension <dimension/withBusinessOwner> ; qb:order 5 ] ,
+    [ qb:dimension <dimension/lifecycleStatus> ; qb:order 6 ] ;
   qb:component
     [ qb:measure <measure/numberOfServices> ] 
   .
+
+<dimension/month> a rdf:Property, qb:DimensionProperty ;
+  rdfs:label "month"@en ;
+  rdfs:range xsd:gYearMonth .
 
 <dimension/serviceType> a rdf:Property, qb:DimensionProperty ;
   rdfs:label "service type"@en ;
