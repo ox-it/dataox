@@ -10,7 +10,7 @@
   skos:topConcept
     <https://data.ox.ac.uk/id/itservices/service-lifecycle-status/in-development> ,
     <https://data.ox.ac.uk/id/itservices/service-lifecycle-status/production> ,
-    <https://data.ox.ac.uk/id/itservices/service-lifecycle-status/deprecated> ;
+    <https://data.ox.ac.uk/id/itservices/service-lifecycle-status/deprecated> ,
     <https://data.ox.ac.uk/id/itservices/service-lifecycle-status/withdrawn> ;
   rdfs:seeAlso <https://data.ox.ac.uk/id/itservices/ServiceLifecycleStatus> .
 
@@ -42,9 +42,3 @@
   skos:prefLabel "withdrawn"@en ;
   skos:definition "A service that has been withdrawn and is no longer available." ;
   skos:inScheme <https://data.ox.ac.uk/id/itservices/service-lifecycle-status> .
-
-
-In development
-Live
-Archived
-
