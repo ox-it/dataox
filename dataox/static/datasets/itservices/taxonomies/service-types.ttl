@@ -10,6 +10,7 @@
   skos:topConcept
     <https://data.ox.ac.uk/id/itservices/service-type/user-facing> ,
     <https://data.ox.ac.uk/id/itservices/service-type/supporting> ,
+    <https://data.ox.ac.uk/id/itservices/service-type/itss> ,
     <https://data.ox.ac.uk/id/itservices/service-type/internal> ;
   rdfs:seeAlso <https://data.ox.ac.uk/id/itservices/ServiceType> .
 
@@ -28,6 +29,12 @@
   a <https://data.ox.ac.uk/id/itservices/ServiceType>, skos:Concept ;
   skos:prefLabel "supporting"@en ;
   skos:definition "A service with no direct users, but which supports other services." ;
+  skos:inScheme <https://data.ox.ac.uk/id/itservices/service-type> .
+
+<https://data.ox.ac.uk/id/itservices/service-type/itss>
+  a <https://data.ox.ac.uk/id/itservices/ServiceType>, skos:Concept ;
+  skos:prefLabel "ITSS only"@en ;
+  skos:definition "A service primarily used only by members of IT Support Staff." ;
   skos:inScheme <https://data.ox.ac.uk/id/itservices/service-type> .
 
 <https://data.ox.ac.uk/id/itservices/service-type/internal>
