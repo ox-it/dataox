@@ -284,8 +284,11 @@
     </skos:prefLabel>
   </xsl:template>
 
-  <xsl:template match="field[@name='Service_x0020_group']/lookup" mode="in-service">
-    <dcterms:isPartOf rdf:resource="{$service-base-uri}service/{@id}"/>
+  <xsl:template match="field[@name='Service_x0020_group']/lookup[@id != '0']" mode="in-service">
+    <xsl:variable name="part-of" select="key('services', @id)"/>
+    <xsl:if test="$part-of and ex:include-service($part-of)">
+      <dcterms:isPartOf rdf:resource="{$service-base-uri}service/{@id}"/>
+    </xsl:if>
   </xsl:template>
 
   <xsl:template match="field[@name='Service_x0020_group_x0020_or_x00']/text" mode="in-service">
