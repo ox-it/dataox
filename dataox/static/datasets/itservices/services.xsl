@@ -183,6 +183,47 @@
     </xsl:choose>
   </xsl:template>
 
+  <xsl:template match="field[@name='Service_x0020_type']/text" mode="in-service">
+    <xsl:variable name="id">
+      <xsl:choose>
+        <xsl:when test="text() = 'Customer facing service'">user-facing</xsl:when>
+        <xsl:when test="text() = 'Supporting service'">supporting</xsl:when>
+        <xsl:when test="text() = 'ITSS only'">itss</xsl:when>
+        <xsl:when test="text() = 'Internal only'">internal</xsl:when>
+      </xsl:choose>
+    </xsl:variable>
+    <xsl:choose>
+      <xsl:when test="$id">
+        <dcterms:subject rdf:resource="{$service-base-uri}service-type/{$id}"/>
+      </xsl:when>
+      <xsl:otherwise>
+        <xsl:message>Unexpected service type: <xsl:value-of select="text()"/></xsl:message>
+      </xsl:otherwise>
+    </xsl:choose>
+  </xsl:template>
+
+  <xsl:template match="field[@name='Archived']/text" mode="in-service">
+    <xsl:variable name="id">
+      <xsl:choose>
+        <xsl:when test="text() = 'In development'">in-development</xsl:when>
+        <xsl:when test="text() = 'Live'">production</xsl:when>
+        <xsl:when test="text() = 'Production'">production</xsl:when>
+        <xsl:when test="text() = 'Deprecated'">itss</xsl:when>
+        <xsl:when test="text() = 'Archived'">withdrawn</xsl:when>
+        <xsl:when test="text() = 'Withdrawn'">withdrawn</xsl:when>
+        <xsl:when test="text() = 'Costing roll-up only'"/>
+      </xsl:choose>
+    </xsl:variable>
+    <xsl:choose>
+      <xsl:when test="$id">
+        <dcterms:subject rdf:resource="{$service-base-uri}service-lifecycle-status/{$id}"/>
+      </xsl:when>
+      <xsl:otherwise>
+        <xsl:message>Unexpected service lifecycle status: <xsl:value-of select="text()"/></xsl:message>
+      </xsl:otherwise>
+    </xsl:choose>
+  </xsl:template>
+
   <xsl:template match="field[@name='Service_x0020_classification']/lookup" mode="in-service">
     <dcterms:subject rdf:resource="{ex:service-classification-uri(.)}"/>
   </xsl:template>
