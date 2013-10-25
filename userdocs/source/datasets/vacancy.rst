@@ -98,7 +98,30 @@ Here's an example entry in an XML feed:
 Data
 ----
 
-The data is updated hourly by scraping the recruitment site.
+The data is updated up to every ten minutes by scraping the recruitment site.
+
+.. note::
+
+   Only if the number of vacancies has changed are the vacancies imported.
+   As almost all vacancies close — and so disappear — at midday, the only way
+   this will lead to new vacancies being missed is if the same number of
+   vacancies are created as are closed within that ten minute window. Were
+   this to happen, the new vacancies will be picked up the next time another
+   vacancy is added.
+
+
+Data quality
+~~~~~~~~~~~~
+
+There doesn't seem to be much input validation being the scenes in the source
+system, so be wary of making assumptions about the data. In particular:
+
+ * The HTML in the descriptions is not always well-formed. In these cases
+   there will be a (malformed) HTML description, but no plain-text description.
+ * Some vacancies don't have closing dates listed. You should assume these are
+   still open.
+ * Some files (linked using ``foaf:page``) don't have titles
+   (``dcterms:title``).
 
 
 Limitations
@@ -138,6 +161,7 @@ Vacancies are also syndicated to the following job sites:
 
 .. _adding-vacancies:
 
+
 Adding your vacancies to the dataset
 ------------------------------------
 
@@ -170,3 +194,22 @@ Anything else you feel is relevant could also be included.
 
 To find out more, or to express your interest, please contact the Open Data
 Team at opendata@oucs.ox.ac.uk.
+
+
+Source code
+-----------
+
+The source for ingesting vacancy information from https://www.recruit.ox.ac.uk/
+is available in GitHub.
+
+`dataox.vacancy.transform.vacancy <https://github.com/ox-it/dataox/blob/master/dataox/vacancy/transform/vacancy.py>`_
+    ``RetrieveVacancies.execute`` is executed periodically by the update
+    framework.
+`dataox.vacancy.scraper.recruitox <https://github.com/ox-it/dataox/blob/master/dataox/vacancy/scraper/recruitox.py>`_
+    Scrapes the vacancy information out of https://www.recruit.ox.ac.uk/ by
+    crawling the list of vacancies for vacancy IDs, and then retrieving
+    individual pages. Data are then stored in a Django model.
+`dataox.vacancy.models <https://github.com/ox-it/dataox/blob/master/dataox/vacancy/models.py>`_
+    ``Vacancy`` is the main model, and has a ``triples()`` method for
+    generating the RDF. ``Document`` records details of documents attached to
+    vacancies.
