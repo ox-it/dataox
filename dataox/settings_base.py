@@ -194,7 +194,7 @@ SHELL_TRANSFORMS = {
 EMAIL_HOST = 'smtp.ox.ac.uk'
 EMAIL_PORT = 587
 EMAIL_SUBJECT_PREFIX = '[dataox] '
-DEFAULT_FROM_EMAIL = 'opendata@oucs.ox.ac.uk'
+DEFAULT_FROM_EMAIL = 'opendata@it.ox.ac.uk'
 SERVER_EMAIL = 'Open Data Service Administrators <opendata-admin@maillist.ox.ac.uk>'
 
 SERVER_EMAIL = 'opendata-admin@maillist.ox.ac.uk'

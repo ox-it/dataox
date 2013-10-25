@@ -38,7 +38,7 @@
     dcterms:conformsTo oo:opendata-4-star ;
 
     oo:contact [ a foaf:Agent ;
-        foaf:mbox <mailto:opendata@oucs.ox.ac.uk> ;
+        foaf:mbox <mailto:opendata@it.ox.ac.uk> ;
         foaf:name "Open Data Team, IT Services"
     ] .
 

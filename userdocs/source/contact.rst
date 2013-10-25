@@ -1,7 +1,7 @@
 Feedback and contact details
 ============================
 
-You can contact the open data team directly by e-mailing opendata@oucs.ox.ac.uk.
+You can contact the open data team directly by e-mailing opendata@it.ox.ac.uk.
 
 The University has an open data mailling list at opendata@maillist.ox.ac.uk,
 which you can join by sending a blank e-mail to

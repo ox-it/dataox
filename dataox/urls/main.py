@@ -12,7 +12,7 @@ from dataox.core import views as core_views
 search_args = {'opensearch_meta': {'ShortName': 'data.ox.ac.uk',
                                    'LongName': 'Open Data Service',
                                    'Description': 'Linked Open Data about the University of Oxford',
-                                   'Contact': 'opendata@oucs.ox.ac.uk',
+                                   'Contact': 'opendata@it.ox.ac.uk',
                                    'SyndicationRight': 'open'},
                'opensearch_images': [{'url': 'https://static.data.ox.ac.uk/favicon.ico'}]}
 
