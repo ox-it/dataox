@@ -139,7 +139,7 @@ the building name has been given).
 
 If you notice that a job hasn't appeared, search for the vacancy ID at
 https://data.ox.ac.uk/search/ to make sure it's been ingested. If it
-has — and has been matched wrongly — contact opendata@oucs.ox.ac.uk to
+has — and has been matched wrongly — contact opendata@it.ox.ac.uk to
 get it fixed.
 
 
@@ -193,7 +193,7 @@ At a minimum, we'd like the following fields:
 Anything else you feel is relevant could also be included.
 
 To find out more, or to express your interest, please contact the Open Data
-Team at opendata@oucs.ox.ac.uk.
+Team at opendata@it.ox.ac.uk.
 
 
 Source code
