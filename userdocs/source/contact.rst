@@ -14,4 +14,4 @@ open data communities to ensure communal best practice. These include:
   (Community discussion, planning and management for data.ac.uk)
 * `buildingdata <http://mailman.ecs.soton.ac.uk/mailman/listinfo/buildingdata>`_
   (RDF modelling for Higher Education)
- 
+
