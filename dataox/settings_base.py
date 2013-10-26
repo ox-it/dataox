@@ -312,7 +312,7 @@ import sys
 import rdflib
 import urllib2
 
-if map(int, rdflib.__version__.split('.')) < [3, 0, 0]:
+if map(int, rdflib.__version__.split('.')[0]) < 3:
     from datetime import date, time, datetime
     l = sys.modules['rdflib.Literal']
     _XSD_NS = l._XSD_NS
