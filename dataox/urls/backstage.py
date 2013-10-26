@@ -22,6 +22,6 @@ urlpatterns = patterns('',
 
     url(r'^sharepoint/', include('dataox.sharepoint.urls', 'sharepoint')),
 
-    url(r'^oauth2/', include('dataox.oauth2.urls', 'oauth2')),
+    url(r'^oauth2/', include('oauth2app.urls', 'oauth2app')),
     url(r'^admin/', admin.site.urls),
 ) + staticfiles_urlpatterns()
