@@ -44,7 +44,7 @@ class Vacancy(DirtyFieldsMixin, models.Model):
     apply_url = models.URLField(max_length=2048, blank=True)
 
     opening_date = models.CharField(max_length=25)
-    closing_date = models.CharField(max_length=25)
+    closing_date = models.CharField(max_length=25, null=True, blank=True)
     
     internal = models.BooleanField()
     
@@ -90,14 +90,17 @@ class Vacancy(DirtyFieldsMixin, models.Model):
             (uri, NS.rdf.type, NS.vacancy.Vacancy),
             (uri, NS.oo.contact, contact_uri),
             (uri, NS.vacancy.applicationOpeningDate, rdflib.Literal(self.opening_date, datatype=NS.xsd.dateTime)),
-            (uri, NS.vacancy.applicationClosingDate, rdflib.Literal(self.closing_date, datatype=NS.xsd.dateTime)),
             (uri, NS.vacancy.internalApplicationsOnly, rdflib.Literal(self.internal)),
             (uri, NS.rdfs.label, rdflib.Literal(self.title)),
             (uri, NS.skos.notation, rdflib.Literal(self.vacancy_id, datatype=NS.oxnotation.vacancy)),
         ]
+        
+        if self.closing_date:
+            triples.append((uri, NS.vacancy.applicationClosingDate, rdflib.Literal(self.closing_date, datatype=NS.xsd.dateTime)))
 
         # Only include a URL if the vacancy is still being advertised.
-        if dateutil.parser.parse(self.closing_date) > pytz.utc.localize(datetime.datetime.utcnow()):
+        if not self.closing_date or \
+              dateutil.parser.parse(self.closing_date) > pytz.utc.localize(datetime.datetime.utcnow()):
             triples.append((uri, NS.foaf.homepage, rdflib.URIRef(self.url)))
 
 

@@ -206,9 +206,14 @@ class RecruitOxScraper(Scraper):
             closing_hour, closing_minute = 12, 0
 
         closing_date = meta.pop('Closing Date :')
-        closing_date = datetime.datetime.strptime(closing_date, '%d-%b-%Y')
-        closing_date = closing_date.replace(hour=closing_hour, minute=closing_minute)
-        vacancy.closing_date = self.site_timezone.localize(closing_date).replace(microsecond=0).isoformat()
+        try:
+            closing_date = datetime.datetime.strptime(closing_date, '%d-%b-%Y')
+        except (TypeError, ValueError):
+            logger.warning("Vacancy %s has no closing date", vacancy_id)
+            vacancy.closing_date = None
+        else:
+            closing_date = closing_date.replace(hour=closing_hour, minute=closing_minute)
+            vacancy.closing_date = self.site_timezone.localize(closing_date).replace(microsecond=0).isoformat()
 
         vacancy.internal = 'INTERNAL APPLICANTS ONLY' in vacancy.description
 
