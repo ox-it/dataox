@@ -233,7 +233,9 @@ class RecruitOxScraper(Scraper):
                 document = Document.objects.get(url=url, vacancy=vacancy)
             except:
                 document = Document(url=url, vacancy=vacancy)
-            document.title = anchor.text
+            document.title = anchor.text or ''
+            if document.title == '':
+                logger.warning("File %s for vacancy %s has no title", url, vacancy_id)
             
             if document.is_dirty():
                 document.save()
