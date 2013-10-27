@@ -30,7 +30,7 @@
     cc:attributionURL <http://www.careers.ox.ac.uk/> ;
     oo:contact [ a foaf:Agent;
                  foaf:name "Open Data Team" ;
-                 foaf:mbox <mailto:opendata@oucs.ox.ac.uk> ] .
+                 foaf:mbox <mailto:opendata@it.ox.ac.uk> ] .
 
 <https://data.ox.ac.uk/graph/courses/careers/data> a sd:Graph ;
     void:inDataset <https://data.ox.ac.uk/id/dataset/courses/careers> ;

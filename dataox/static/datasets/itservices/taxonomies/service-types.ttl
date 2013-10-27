@@ -1,0 +1,46 @@
+@prefix dcterms: <http://purl.org/dc/terms/>.
+@prefix owl: <http://www.w3.org/2002/07/owl#>.
+@prefix rdfs:    <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix skos:    <http://www.w3.org/2004/02/skos/core#>.
+
+<https://data.ox.ac.uk/id/itservices/service-type> a skos:ConceptScheme ;
+  skos:prefLabel "service types"@en ;
+  skos:note "A code list for IT Service service types." ;
+  dcterms:publisher <http://oxpoints.oucs.ox.ac.uk/id/31337175> ;
+  skos:topConcept
+    <https://data.ox.ac.uk/id/itservices/service-type/user-facing> ,
+    <https://data.ox.ac.uk/id/itservices/service-type/supporting> ,
+    <https://data.ox.ac.uk/id/itservices/service-type/itss> ,
+    <https://data.ox.ac.uk/id/itservices/service-type/internal> ;
+  rdfs:seeAlso <https://data.ox.ac.uk/id/itservices/ServiceType> .
+
+<https://data.ox.ac.uk/id/itservices/ServiceType> a rdfs:Class, owl:Class ;
+  rdfs:subClassOf skos:Concept ;
+  rdfs:seeAlso <https://data.ox.ac.uk/id/itservices/service-type> .
+
+
+<https://data.ox.ac.uk/id/itservices/service-type/user-facing>
+  a <https://data.ox.ac.uk/id/itservices/ServiceType>, skos:Concept ;
+  skos:prefLabel "user-facing"@en ;
+  skos:definition "A service for users outside of IT Services." ;
+  skos:inScheme <https://data.ox.ac.uk/id/itservices/service-type> .
+
+<https://data.ox.ac.uk/id/itservices/service-type/supporting>
+  a <https://data.ox.ac.uk/id/itservices/ServiceType>, skos:Concept ;
+  skos:prefLabel "supporting"@en ;
+  skos:definition "A service with no direct users, but which supports other services." ;
+  skos:inScheme <https://data.ox.ac.uk/id/itservices/service-type> .
+
+<https://data.ox.ac.uk/id/itservices/service-type/itss>
+  a <https://data.ox.ac.uk/id/itservices/ServiceType>, skos:Concept ;
+  skos:prefLabel "ITSS only"@en ;
+  skos:definition "A service primarily used only by members of IT Support Staff." ;
+  skos:inScheme <https://data.ox.ac.uk/id/itservices/service-type> .
+
+<https://data.ox.ac.uk/id/itservices/service-type/internal>
+  a <https://data.ox.ac.uk/id/itservices/ServiceType>, skos:Concept ;
+  skos:prefLabel "internal"@en ;
+  skos:definition "A service primarily used only by members of IT Services." ;
+  skos:inScheme <https://data.ox.ac.uk/id/itservices/service-type> .
+
+

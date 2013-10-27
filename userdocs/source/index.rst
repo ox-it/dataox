@@ -22,6 +22,7 @@ Contents:
    overview
    api/index
    datasets/index
+   uri-minting
    glossary
    contact
 

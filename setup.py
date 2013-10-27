@@ -63,7 +63,7 @@ setup(
     name='dataox',
     description="The frontend to the University of Oxford's institutional data site.",
     author='IT Services, University of Oxford',
-    author_email='opendata@oucs.ox.ac.uk',
+    author_email='opendata@it.ox.ac.uk',
     version='0.3',
     packages=packages,
     license='BSD',

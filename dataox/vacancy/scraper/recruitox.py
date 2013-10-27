@@ -206,9 +206,14 @@ class RecruitOxScraper(Scraper):
             closing_hour, closing_minute = 12, 0
 
         closing_date = meta.pop('Closing Date :')
-        closing_date = datetime.datetime.strptime(closing_date, '%d-%b-%Y')
-        closing_date = closing_date.replace(hour=closing_hour, minute=closing_minute)
-        vacancy.closing_date = self.site_timezone.localize(closing_date).replace(microsecond=0).isoformat()
+        try:
+            closing_date = datetime.datetime.strptime(closing_date, '%d-%b-%Y')
+        except (TypeError, ValueError):
+            logger.warning("Vacancy %s has no closing date", vacancy_id)
+            vacancy.closing_date = None
+        else:
+            closing_date = closing_date.replace(hour=closing_hour, minute=closing_minute)
+            vacancy.closing_date = self.site_timezone.localize(closing_date).replace(microsecond=0).isoformat()
 
         vacancy.internal = 'INTERNAL APPLICANTS ONLY' in vacancy.description
 
@@ -228,7 +233,9 @@ class RecruitOxScraper(Scraper):
                 document = Document.objects.get(url=url, vacancy=vacancy)
             except:
                 document = Document(url=url, vacancy=vacancy)
-            document.title = anchor.text
+            document.title = anchor.text or ''
+            if document.title == '':
+                logger.warning("File %s for vacancy %s has no title", url, vacancy_id)
             
             if document.is_dirty():
                 document.save()

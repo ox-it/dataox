@@ -27,21 +27,60 @@
   <xsl:key name="user-bases" match="/site/lists/list[@name='User bases']/rows/row" use="@id"/>
   <xsl:key name="user-base-names" match="/site/lists/list[@name='User bases']/rows/row" use="fields/field[@name='Title']/text/text()"/>
   <xsl:key name="grouped-services" match="/site/lists/list[@name='Service Catalogue']/rows/row" use="fields/field[@name='Service_x0020_group']/lookup/@id"/>
+  <xsl:key name="services" match="/site/lists/list[@name='Service Catalogue']/rows/row" use="@id"/>
+
+  <xsl:function name="ex:include-service">
+    <xsl:param name="row"/>
+      <xsl:if test="not($row//field[@name='Redact']/boolean='true') and (
+                 $store='itservices' or (
+                         $row//field[@name='Viewable_x0020_by']/text[not(text()='IT Services')]
+                     and $row//field[@name='Archived']/text = 'Live'
+                     and $row//field[@name='Service_x0020_type']/text = 'Customer facing service'))">true</xsl:if>
+    <!--<xsl:choose>
+      <xsl:when test="$row//field[@name='Redact']/boolean='true'"/>
+      <xsl:when test="$store='itservices'">true</xsl:when>
+      <xsl:when test="$row//field[@name='Service_x0020_group_x0020_or_x00']/text/text() = 'Service grouping'"/>
+      <xsl:when test="$row//field[@name='Viewable_x0020_by']/text[not(text()='IT Services')]">true</xsl:when>
+    </xsl:choose>-->
+  </xsl:function>
+
+  <xsl:function name="ex:user-facing-service">
+    <xsl:param name="row"/>
+    <xsl:choose>
+      <xsl:when test="$row//field[@name='Redact']/boolean='true'"/>
+      <xsl:when test="$row//field[@name='Viewable_x0020_by']/text[not(text()='IT Services')]
+                  and $row//field[@name='Archived']/text = ('Live', 'Production')
+                  and $row//field[@name='Service_x0020_type']/text = 'Customer facing service'">true</xsl:when>
+    </xsl:choose>
+  </xsl:function>
 
   <xsl:template match="list[@name='Service Catalogue']/rows">
     <gr:BusinessEntity rdf:about="{$it-services}">
       <xsl:for-each select="row">
-        <xsl:if test="not(.//field[@name='Redact']/boolean='true') and (
-                   $store='itservices' or (
-                           .//field[@name='Viewable_x0020_by']/text[not(text()='IT Services')]
-                       and .//field[@name='Archived']/text = 'Live'
-                       and .//field[@name='Service_x0020_type']/text = 'Customer facing service'))">
+        <xsl:if test="ex:include-service(.)">
           <gr:offers>
             <xsl:apply-templates select="."/>
           </gr:offers>
         </xsl:if>
       </xsl:for-each>
     </gr:BusinessEntity>
+    <rdf:Description rdf:about="https://data.ox.ac.uk/id/itservices/service-catalogue/user-facing">
+      <xsl:for-each select="row">
+        <xsl:if test="ex:include-service(.) and ex:user-facing-service(.)">
+          <xsl:comment select=".//field[@name='Title']/text"/>
+          <skos:member rdf:resource="{$service-base-uri}service/{@id}"/>
+        </xsl:if>
+      </xsl:for-each>
+    </rdf:Description>
+    <rdf:Description rdf:about="https://data.ox.ac.uk/id/itservices/service-catalogue">
+      <xsl:for-each select="row">
+        <xsl:if test="ex:include-service(.) and not(ex:user-facing-service(.))">
+          <xsl:comment select=".//field[@name='Title']/text"/>
+          <skos:member rdf:resource="{$service-base-uri}service/{@id}"/>
+        </xsl:if>
+      </xsl:for-each>
+    </rdf:Description>
+    
   </xsl:template>
 
   <xsl:template match="list[@name='Service Catalogue']/rows/row">
@@ -96,10 +135,6 @@
   <xsl:template match="field[@name='Published_x0020_SLA_x0020_or_x00']/url" mode="in-service">
     <adhoc:serviceLevelDefinition rdf:resource="{@href}"/>
   </xsl:template>
-  
-  <xsl:template match="field[@name='Archived']/text" mode="in-service">
-    <adhoc:serviceLifecycle rdf:resource="https://data.ox.ac.uk/id/itservices/service-lifecycle/{lower-case(.)}"/>
-  </xsl:template>
 
   <!-- Use this field to go up and re-interpret the row in the contact of its contact information -->
   <xsl:template match="field[@name='Initial_x0020_contact_x0020_phon']" mode="in-service">
@@ -144,6 +179,47 @@
       </xsl:when>
       <xsl:otherwise>
         <xsl:message>Unexpected activity category: <xsl:value-of select="text()"/></xsl:message>
+      </xsl:otherwise>
+    </xsl:choose>
+  </xsl:template>
+
+  <xsl:template match="field[@name='Service_x0020_type']/text" mode="in-service">
+    <xsl:variable name="id">
+      <xsl:choose>
+        <xsl:when test="text() = 'Customer facing service'">user-facing</xsl:when>
+        <xsl:when test="text() = 'Supporting service'">supporting</xsl:when>
+        <xsl:when test="text() = 'ITSS only'">itss</xsl:when>
+        <xsl:when test="text() = 'Internal only'">internal</xsl:when>
+      </xsl:choose>
+    </xsl:variable>
+    <xsl:choose>
+      <xsl:when test="$id">
+        <dcterms:subject rdf:resource="{$service-base-uri}service-type/{$id}"/>
+      </xsl:when>
+      <xsl:otherwise>
+        <xsl:message>Unexpected service type: <xsl:value-of select="text()"/></xsl:message>
+      </xsl:otherwise>
+    </xsl:choose>
+  </xsl:template>
+
+  <xsl:template match="field[@name='Archived']/text" mode="in-service">
+    <xsl:variable name="id">
+      <xsl:choose>
+        <xsl:when test="text() = 'In development'">in-development</xsl:when>
+        <xsl:when test="text() = 'Live'">production</xsl:when>
+        <xsl:when test="text() = 'Production'">production</xsl:when>
+        <xsl:when test="text() = 'Deprecated'">itss</xsl:when>
+        <xsl:when test="text() = 'Archived'">withdrawn</xsl:when>
+        <xsl:when test="text() = 'Withdrawn'">withdrawn</xsl:when>
+        <xsl:when test="text() = 'Costing roll-up only'"/>
+      </xsl:choose>
+    </xsl:variable>
+    <xsl:choose>
+      <xsl:when test="$id">
+        <dcterms:subject rdf:resource="{$service-base-uri}service-lifecycle-status/{$id}"/>
+      </xsl:when>
+      <xsl:otherwise>
+        <xsl:message>Unexpected service lifecycle status: <xsl:value-of select="text()"/></xsl:message>
       </xsl:otherwise>
     </xsl:choose>
   </xsl:template>
@@ -208,8 +284,11 @@
     </skos:prefLabel>
   </xsl:template>
 
-  <xsl:template match="field[@name='Service_x0020_group']/lookup" mode="in-service">
-    <dcterms:isPartOf rdf:resource="{$service-base-uri}service/{@id}"/>
+  <xsl:template match="field[@name='Service_x0020_group']/lookup[@id != '0']" mode="in-service">
+    <xsl:variable name="part-of" select="key('services', @id)"/>
+    <xsl:if test="$part-of and ex:include-service($part-of)">
+      <dcterms:isPartOf rdf:resource="{$service-base-uri}service/{@id}"/>
+    </xsl:if>
   </xsl:template>
 
   <xsl:template match="field[@name='Service_x0020_group_x0020_or_x00']/text" mode="in-service">

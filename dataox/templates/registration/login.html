@@ -25,7 +25,7 @@
 		<div class="login-method-inner panel">
 
 		    <h2>Log in using local credentials</h2>
-			<form method="post" action=".">
+			<form method="post" action=".">{% csrf_token %}
 				<table>
 					<tbody>{{ form }}
 					</tbody>

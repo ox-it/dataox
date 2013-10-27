@@ -45,7 +45,7 @@ Glossary
              </tr>
              <tr>
                <td><img src="https://static.data.ox.ac.uk/desc/stars/data-badge-1.png" alt="1 star"/></td>
-               <td>Put your data on the web with an open license (in any format)</td>
+               <td>Put your data on the web with an open licence (in any format)</td>
              </tr>
              <tr>
                <td><img src="https://static.data.ox.ac.uk/desc/stars/data-badge-2.png" alt="2 stars"/></td>
@@ -101,6 +101,22 @@ Glossary
       RDF is generally queried using :term:`SPARQL`. You can read more about
       RDF at the `W3C <http://www.w3.org/RDF/>`_ and
       `Wikipedia <http://en.wikipedia.org/wiki/Resource_Description_Framework>`_.
+
+   slug
+      A relatively short, human-readable sequence of characters used to
+      uniquely identify a thing, normally in a URI or URL. These should
+      normally be lowercase with punctuation removed, and hyphens used to
+      delimit words if applicable.
+      Examples include ``course``, ``undergraduate-course``, and
+      ``university-of-oxford``. Often one excludes terms such as "the" and
+      "and" as they add unnecessary length to the slug. See `the Clean URL
+      page on Wikipedia <http://en.wikipedia.org/wiki/Clean_URL#Slug>`_ for
+      more information.
+
+   slugification
+      Turning a phrase into a :term:`slug`. For example, one would slugify
+      "University of Oxford" to ``university-of-oxford``. Slugification can
+      either be done automatically, or with human input.
 
    SPARQL
       A query language for RDF databases. SPARQL queries can return table-like

@@ -45,7 +45,7 @@ INSTALLED_APPS = (
     'dataox.equipment',
     'dataox.resource',
     'dataox.feeds',
-    'dataox.oauth2',
+    'oauth2app',
     'dataox.old_feeds',
     'dataox.vacancy',
     'djcelery',
@@ -109,6 +109,10 @@ PIPELINE_CLOSURE_ARGUMENTS = '--jscomp_off uselessCode'
 STATICFILES_STORAGE = 'pipeline.storage.PipelineStorage'
 
 
+OAUTH2_ACCESS_TOKEN_LENGTH = 20
+OAUTH2_REFRESH_TOKEN_LENGTH = 20
+
+
 TEMPLATE_DIRS = (
     os.path.join(imp.find_module('dataox')[1], 'templates'),
 )
@@ -146,7 +150,7 @@ MIDDLEWARE_CLASSES = (
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'humfrey.base.middleware.AccessControlAllowOriginMiddleware',
     'maintenancemode.middleware.MaintenanceModeMiddleware',
-    'dataox.oauth2.middleware.OAuth2Middleware',
+    'oauth2app.middleware.OAuth2Middleware',
     'django_conneg.support.middleware.BasicAuthMiddleware',
     'humfrey.pingback.middleware.PingbackMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
@@ -194,7 +198,7 @@ SHELL_TRANSFORMS = {
 EMAIL_HOST = 'smtp.ox.ac.uk'
 EMAIL_PORT = 587
 EMAIL_SUBJECT_PREFIX = '[dataox] '
-DEFAULT_FROM_EMAIL = 'opendata@oucs.ox.ac.uk'
+DEFAULT_FROM_EMAIL = 'opendata@it.ox.ac.uk'
 SERVER_EMAIL = 'Open Data Service Administrators <opendata-admin@maillist.ox.ac.uk>'
 
 SERVER_EMAIL = 'opendata-admin@maillist.ox.ac.uk'
@@ -308,7 +312,7 @@ import sys
 import rdflib
 import urllib2
 
-if map(int, rdflib.__version__.split('.')) < [3, 0, 0]:
+if map(int, rdflib.__version__.split('.')[0]) < 3:
     from datetime import date, time, datetime
     l = sys.modules['rdflib.Literal']
     _XSD_NS = l._XSD_NS

@@ -20,7 +20,7 @@
 
 <https://data.ox.ac.uk/id/open-data-team> a org:OrganizationalUnit ;
   rdfs:label "Open Data Team" ;
-  foaf:mbox <mailto:opendata@oucs.ox.ac.uk> ;
+  foaf:mbox <mailto:opendata@it.ox.ac.uk> ;
   org:hasPrimarySite <http://oxpoints.oucs.ox.ac.uk/id/40002001> .
 
 <https://data.ox.ac.uk/id/dataset/catalogue> dcat:dataset <https://data.ox.ac.uk/id/dataset/catalogue> .
