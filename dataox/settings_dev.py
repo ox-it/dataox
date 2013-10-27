@@ -21,3 +21,9 @@ STATIC_ROOT = os.path.join(os.path.dirname(__file__),
 PIPELINE_CLOSURE_BINARY = '/home/alex/src/closure/compiler'
 
 SESSION_COOKIE_SECURE = False
+
+import django
+if django.VERSION < (1, 5):
+    # Forward compatibility with Django 1.5
+    import django.template
+    django.template.add_to_builtins('django.templatetags.future')

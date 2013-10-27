@@ -11,11 +11,10 @@ class Account(object):
     }
 
     _SERVICES = {
-        'https://www.twitter.com/' : {'label': 'Twitter', 'icon': 'fa-twitter'},
+        'https://www.twitter.com/' : {'label': 'Twitter', 'icon': 'fa-twitter', 'prefix': '@'},
         'https://github.com/' : {'label': 'GitHub', 'icon': 'fa-github'},
         'https://www.facebook.com/' : {'label': 'Facebook', 'icon': 'fa-facebook'},
-        'https://plus.google.com/' : {'label': 'Google+', 'icon': 'fa-google-plus'},
-        'https://plus.google.com/' : {'label': 'Google+', 'icon': 'fa-google-plus'},
+        'https://plus.google.com/' : {'label': 'Google+', 'icon': 'fa-google-plus', 'prefix': '+'},
         'http://www.skype.com/' : {'label': 'Skype', 'icon': 'fa-skype'},
         'http://www.youtube.com/' : {'label': 'YouTube', 'icon': 'fa-youtube'},
         'http://www.flickr.com/' : {'label': 'Flickr', 'icon': 'fa-flickr'},
@@ -26,6 +25,7 @@ class Account(object):
 
     def render(self):
         icon, service_homepage, service_label, account_name = None, None, None, None
+        prefix = ''
 
         if self.foaf_accountName:
             account_name = self.foaf_accountName
@@ -34,6 +34,7 @@ class Account(object):
             service_homepage = self.foaf_accountServiceHomepage.uri
             service = self._SERVICES.get(service_homepage, {})
             icon, service_label = service.get('icon'), service.get('label', service_homepage)
+            prefix = service.get('prefix', '')
             if icon:
                 icon = '<i class="fa {0}"></i> '.format(icon)
 
@@ -43,6 +44,7 @@ class Account(object):
             rendered.append(quoteattr(' {0} on {1}'.format(account_name, service_label)))
         rendered.append('>')
         rendered.append(icon or '')
+        rendered.append(prefix)
         rendered.append(escape(account_name or self.uri))
         rendered.append('</a>')
 
