@@ -32,6 +32,18 @@ class Organization(object):
             widgets.extend(account.widget_templates())
         return widgets
 
+    @classmethod
+    def _describe_patterns(cls):
+        return [
+            '%(uri)s foaf:account %(account)s',
+        ]
+
 class Place(object):
     types = ('oxp:Building', 'oxp:Site', 'oxp:Space', 'oxp:Room', 'org:Site',
              'rooms:Room', 'rooms:Building')
+
+    @classmethod
+    def _describe_patterns(cls):
+        return [
+            '%(uri)s foaf:account %(account)s',
+        ]
