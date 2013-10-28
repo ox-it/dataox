@@ -1,3 +1,12 @@
+PREFIX adhoc: <http://vocab.ox.ac.uk/ad-hoc-data-ox/>
+PREFIX cerif: <http://spi-fm.uca.es/neologism/cerif#>
+PREFIX dcterms: <http://purl.org/dc/terms/>
+PREFIX oo: <http://purl.org/openorg/>
+PREFIX qb: <http://purl.org/linked-data/cube#>
+PREFIX sd: <http://www.w3.org/ns/sparql-service-description#>
+PREFIX skos: <http://www.w3.org/2004/02/skos/core#>
+PREFIX xsd: <http://www.w3.org/2001/XMLSchema#>
+
 PREFIX dimension: <https://data.ox.ac.uk/id/qb-data-structure/service-catalogue-kpi/dimension/>
 PREFIX measure: <https://data.ox.ac.uk/id/qb-data-structure/service-catalogue-kpi/measure/>
 
