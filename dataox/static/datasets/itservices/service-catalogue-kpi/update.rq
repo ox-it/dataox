@@ -46,7 +46,7 @@ CONSTRUCT {
     
     OPTIONAL {
       ?service a cerif:Service ; oo:organizationPart <http://oxpoints.oucs.ox.ac.uk/id/31337175> ;
-        dcterms:subject ?serviceType
+        dcterms:subject ?serviceType , ?lifecycleStatus 
 
       OPTIONAL { ?service adhoc:serviceLevelDefinition ?sla }
       FILTER (BOUND(?sla) = ?withSLA)
