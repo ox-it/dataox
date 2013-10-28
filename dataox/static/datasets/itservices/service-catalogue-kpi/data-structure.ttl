@@ -13,7 +13,7 @@
     [ qb:dimension <dimension/withSLA> ; qb:order 3 ] ,
     [ qb:dimension <dimension/withServiceOwner> ; qb:order 4 ] ,
     [ qb:dimension <dimension/withBusinessOwner> ; qb:order 5 ] ,
-    [ qb:dimension <dimension/lifecycleStatus> ; qb:order 6 ] ;
+    [ qb:dimension <dimension/serviceLifecycleStatus> ; qb:order 6 ] ;
   qb:component
     [ qb:measure <measure/numberOfServices> ] 
   .
@@ -42,7 +42,7 @@
   rdfs:comment "True if a service has a nominated business owner." ;
   rdfs:range xsd:boolean .
 
-<dimension/lifecycleStatus> a rdf:Property, qb:DimensionProperty ;
+<dimension/serviceLifecycleStatus> a rdf:Property, qb:DimensionProperty ;
   rdfs:label "lifecycle status"@en ;
   qb:codeList <https://data.ox.ac.uk/id/itservices/service-lifecycle-status> ;
   rdfs:range <https://data.ox.ac.uk/id/itservices/ServiceLifecycleStatus> .
