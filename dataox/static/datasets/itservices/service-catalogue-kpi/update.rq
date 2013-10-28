@@ -16,7 +16,7 @@ CONSTRUCT {
     dimension:month ?month ;
     dimension:serviceType ?serviceType ;
     dimension:withSLA ?withSLA ;
-    dimension:withServiceOwner ?withServiceOwner ;
+    dimension:withBusinessOwner ?withServiceOwner ;
     dimension:serviceLifecycleStatus ?lifecycleStatus ;
     measure:numberOfServices ?numberOfServices
 } WHERE { {
