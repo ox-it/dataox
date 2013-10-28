@@ -1,0 +1,50 @@
+PREFIX dimension: <https://data.ox.ac.uk/id/qb-data-structure/service-catalogue-kpi/dimension/>
+PREFIX measure: <https://data.ox.ac.uk/id/qb-data-structure/service-catalogue-kpi/measure/>
+
+CONSTRUCT {
+  ?obs a qb:Observation ;
+    qb:dataSet <https://data.ox.ac.uk/id/dataset/service-catalogue-kpi> ;
+    dimension:month ?month ;
+    dimension:serviceType ?serviceType ;
+    dimension:withSLA ?withSLA ;
+    dimension:withServiceOwner ?withServiceOwner ;
+    dimension:serviceLifecycleStatus ?lifecycleStatus ;
+    measure:numberOfServices ?numberOfServices
+} WHERE { {
+  SELECT ?obs ?month ?serviceType ?withSLA ?withServiceOwner ?lifecycleStatus (COUNT(?service) AS ?numberOfServices) WHERE {
+    BIND (STR(MONTH(NOW())) AS ?m1)
+    BIND (IF(STRLEN(?m1)=1, '0'+?m1, ?m1) AS ?m2)
+    BIND (STRDT(STR(YEAR(NOW())) + '-' + ?m2, xsd:gYear) AS ?month)
+
+    ?serviceType skos:inScheme <https://data.ox.ac.uk/id/itservices/service-type> ;
+      skos:notation ?serviceTypeNotation .
+    FILTER(DATATYPE(?serviceTypeNotation) = <https://data.ox.ac.uk/id/itservices/service-type/notation>)
+
+    VALUES ?withSLA { true false }
+    VALUES ?withServiceOwner { true false }
+
+    ?lifecycleStatus skos:inScheme <https://data.ox.ac.uk/id/itservices/service-lifecycle-status> ;
+      skos:notation ?lifecycleStatusNotation .
+    FILTER(DATATYPE(?lifecycleStatusNotation) = <https://data.ox.ac.uk/id/itservices/service-lifecycle-status/notation>)
+
+    BIND (IRI('https://data.ox.ac.uk/id/observation/service-catalogue-kpi/'
+              +STR(?month)+'/'
+              +STR(?serviceTypeNotation)+'/'
+              +IF(?withSLA, 'with', 'without')+'-sla/'
+              +IF(?withServiceOwner, 'with', 'without')+'-service-owner/'
+              +STR(?lifecycleStatusNotation)
+             ) AS ?obs)
+    
+    OPTIONAL {
+      ?service a cerif:Service ; oo:organizationPart <http://oxpoints.oucs.ox.ac.uk/id/31337175> ;
+        dcterms:subject ?serviceType
+
+      OPTIONAL { ?service adhoc:serviceLevelDefinition ?sla }
+      FILTER (BOUND(?sla) = ?withSLA)
+
+      OPTIONAL { ?service adhoc:serviceBusinessOwner ?serviceOwner }
+      FILTER (BOUND(?serviceOwner) = ?withServiceOwner)
+
+    }
+  } GROUP BY ?obs ?month ?serviceType ?withSLA ?withServiceOwner ?lifecycleStatus
+} }
