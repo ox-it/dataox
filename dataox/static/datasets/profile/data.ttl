@@ -90,3 +90,36 @@
     lyou:about-parents <http://www.ox.ac.uk/document.rm?id=2552> ;
     lyou:international-students <http://www.ox.ac.uk/admissions/international_students/> .
 
+
+# Online accounts for various bits of the University
+
+<http://oxpoints.oucs.ox.ac.uk/id/00000000>
+  foaf:account
+    <http://www.youtube.com/user/oxford> ,
+    <http://www.facebook.com/the.university.of.oxford> .
+
+<http://www.youtube.com/user/oxford> a foaf:OnlineAccount ;
+  foaf:accountName "oxford" ;
+  foaf:accountServiceHomepage <http://www.youtube.com/> .
+
+<http://www.facebook.com/the.university.of.oxford> a foaf:OnlineAccount ;
+  foaf:accountName "the.university.of.oxford" ;
+  foaf:accountServiceHomepage <http://www.facebook.com/> .
+
+
+<http://oxpoints.oucs.ox.ac.uk/id/31337175>
+  foaf:account 
+    <https://github.com/ox-it> .
+
+<https://github.com/ox-it> a foaf:OnlineAccount ;
+  foaf:accountName "ox-it" ;
+  foaf:accountServiceHomepage <https://github.com/> .
+
+
+<http://oxpoints.oucs.ox.ac.uk/id/23233583>
+  foaf:account 
+    <https://github.com/BDLSS> .
+
+<https://github.com/BDLSS> a foaf:OnlineAccount ;
+  foaf:accountName "BDLSS" ;
+  foaf:accountServiceHomepage <https://github.com/> .
