@@ -25,16 +25,22 @@ CONSTRUCT {
     BIND (IF(STRLEN(?m1)=1, '0'+?m1, ?m1) AS ?m2)
     BIND (STRDT(STR(YEAR(NOW())) + '-' + ?m2, xsd:gYear) AS ?month)
 
+    {
     ?serviceType skos:inScheme <https://data.ox.ac.uk/id/itservices/service-type> ;
       skos:notation ?serviceTypeNotation .
     FILTER(DATATYPE(?serviceTypeNotation) = <https://data.ox.ac.uk/id/itservices/service-type/notation>)
+    } UNION { VALUES (?serviceType ?serviceTypeNotation) { (rdf:nil "-") } }
+
+    {
+    ?lifecycleStatus skos:inScheme <https://data.ox.ac.uk/id/itservices/service-lifecycle-status> ;
+      skos:notation ?lifecycleStatusNotation .
+    FILTER(DATATYPE(?lifecycleStatusNotation) = <https://data.ox.ac.uk/id/itservices/service-lifecycle-status/notation>)
+    } UNION { VALUES (?lifecycleStatus ?lifecycleStatusNotation) { (rdf:nil "-") } }
+
 
     VALUES ?withSLA { true false }
     VALUES ?withServiceOwner { true false }
 
-    ?lifecycleStatus skos:inScheme <https://data.ox.ac.uk/id/itservices/service-lifecycle-status> ;
-      skos:notation ?lifecycleStatusNotation .
-    FILTER(DATATYPE(?lifecycleStatusNotation) = <https://data.ox.ac.uk/id/itservices/service-lifecycle-status/notation>)
 
     BIND (IRI('https://data.ox.ac.uk/id/observation/service-catalogue-kpi/'
               +STR(?month)+'/'
@@ -44,16 +50,26 @@ CONSTRUCT {
               +STR(?lifecycleStatusNotation)
              ) AS ?obs)
     
-    OPTIONAL {
-      ?service a cerif:Service ; oo:organizationPart <http://oxpoints.oucs.ox.ac.uk/id/31337175> ;
-        dcterms:subject ?serviceType , ?lifecycleStatus 
+    ?service a cerif:Service ; oo:organizationPart <http://oxpoints.oucs.ox.ac.uk/id/31337175> ;
 
-      OPTIONAL { ?service adhoc:serviceLevelDefinition ?sla }
-      FILTER (BOUND(?sla) = ?withSLA)
+    OPTIONAL { ?service dcterms:subject ?serviceType }
 
-      OPTIONAL { ?service adhoc:serviceBusinessOwner ?serviceOwner }
-      FILTER (BOUND(?serviceOwner) = ?withServiceOwner)
+    FILTER(IF(
+      ?serviceType != rdf:nil,
+      EXISTS { ?service dcterms:subject ?serviceType },
+      NOT EXISTS { ?service dcterms:subject/skos:inScheme <https://data.ox.ac.uk/id/itservices/service-type> }))
 
-    }
+    FILTER(IF(
+      ?lifecycleStatus != rdf:nil,
+      EXISTS { ?service dcterms:subject ?lifecycleStatus },
+      NOT EXISTS { ?service dcterms:subject/skos:inScheme <https://data.ox.ac.uk/id/itservices/service-lifecycle-status> }))
+
+
+    OPTIONAL { ?service adhoc:serviceLevelDefinition ?sla }
+    FILTER (BOUND(?sla) = ?withSLA)
+
+    OPTIONAL { ?service adhoc:serviceBusinessOwner ?serviceOwner }
+    FILTER (BOUND(?serviceOwner) = ?withServiceOwner)
+
   } GROUP BY ?obs ?month ?serviceType ?withSLA ?withServiceOwner ?lifecycleStatus
 } }
