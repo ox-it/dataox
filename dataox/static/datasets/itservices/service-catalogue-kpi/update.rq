@@ -16,11 +16,12 @@ CONSTRUCT {
     dimension:month ?month ;
     dimension:serviceType ?serviceType ;
     dimension:withSLA ?withSLA ;
-    dimension:withBusinessOwner ?withServiceOwner ;
+    dimension:withServiceOwner ?withServiceOwner ;
+    dimension:withBusinessOwner ?withBusinessOwner ;
     dimension:serviceLifecycleStatus ?lifecycleStatus ;
     measure:numberOfServices ?numberOfServices
 } WHERE { {
-  SELECT ?obs ?month ?serviceType ?withSLA ?withServiceOwner ?lifecycleStatus (COUNT(?service) AS ?numberOfServices) WHERE {
+  SELECT ?obs ?month ?serviceType ?withSLA ?withBusinessOwner ?withServiceOwner ?lifecycleStatus (COUNT(?service) AS ?numberOfServices) WHERE {
     BIND (STR(MONTH(NOW())) AS ?m1)
     BIND (IF(STRLEN(?m1)=1, '0'+?m1, ?m1) AS ?m2)
     BIND (STRDT(STR(YEAR(NOW())) + '-' + ?m2, xsd:gYear) AS ?month)
@@ -39,15 +40,17 @@ CONSTRUCT {
 
 
     VALUES ?withSLA { true false }
+    VALUES ?withBusinessOwner { true false }
     VALUES ?withServiceOwner { true false }
 
 
     BIND (IRI('https://data.ox.ac.uk/id/observation/service-catalogue-kpi/'
               +STR(?month)+'/'
               +STR(?serviceTypeNotation)+'/'
-              +IF(?withSLA, 'with', 'without')+'-sla/'
-              +IF(?withServiceOwner, 'with', 'without')+'-service-owner/'
               +STR(?lifecycleStatusNotation)
+              +IF(?withSLA, 'with', 'without')+'-sla/'
+              +IF(?withBusinessOwner, 'with', 'without')+'-business-owner/'
+              +IF(?withServiceOwner, 'with', 'without')+'-service-owner/'
              ) AS ?obs)
     
     ?service a cerif:Service ; oo:organizationPart <http://oxpoints.oucs.ox.ac.uk/id/31337175> ;
@@ -68,8 +71,11 @@ CONSTRUCT {
     OPTIONAL { ?service adhoc:serviceLevelDefinition ?sla }
     FILTER (BOUND(?sla) = ?withSLA)
 
-    OPTIONAL { ?service adhoc:serviceBusinessOwner ?serviceOwner }
+    OPTIONAL { ?service adhoc:serviceBusinessOwner ?businessOwner }
+    FILTER (BOUND(?businessOwner) = ?withBusinessOwner)
+
+    OPTIONAL { ?service adhoc:serviceOwner ?serviceOwner }
     FILTER (BOUND(?serviceOwner) = ?withServiceOwner)
 
-  } GROUP BY ?obs ?month ?serviceType ?withSLA ?withServiceOwner ?lifecycleStatus
+  } GROUP BY ?obs ?month ?serviceType ?withSLA ?withBusinessOwner ?withServiceOwner ?lifecycleStatus
 } }
