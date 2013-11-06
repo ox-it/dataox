@@ -270,12 +270,29 @@
     </xsl:if>
   </xsl:template>
 
-  <xsl:template match="field[@name='Status_x0020_ID']/text" mode="in-service">
-    <xsl:if test="string-length(text()) &gt; 0">
-      <skos:notation rdf:datatype="https://data.ox.ac.uk/id/notation/status-ox-ac-uk-service">
-        <xsl:value-of select="text()"/>
-      </skos:notation>
-    </xsl:if>
+  <xsl:template match="field[@name='Status_x0020_ID']/text[text()]" mode="in-service">
+    <foaf:account>
+      <foaf:OnlineAccount>
+        <foaf:accountServiceHomepage rdf:resource="http://status.ox.ac.uk/"/>
+        <foaf:accountName>
+          <xsl:value-of select="text()"/>
+        </foaf:accountName>
+      </foaf:OnlineAccount>
+    </foaf:account>
+    <skos:notation rdf:datatype="https://data.ox.ac.uk/id/notation/status-ox-ac-uk-service">
+      <xsl:value-of select="text()"/>
+    </skos:notation>
+  </xsl:template>
+
+  <xsl:template match="field[@name='Twitter']/text[text()]" mode="in-service">
+    <foaf:account>
+      <foaf:OnlineAccount rdf:about="https://www.twitter.com/{text()}">
+        <foaf:accountServiceHomepage rdf:resource="https://www.twitter.com/"/>
+        <foaf:accountName>
+          <xsl:value-of select="text()"/>
+        </foaf:accountName>
+      </foaf:OnlineAccount>
+    </foaf:account>
   </xsl:template>
 
   <xsl:template match="field[@name='Title']/text[text()]" mode="in-activity-category">
