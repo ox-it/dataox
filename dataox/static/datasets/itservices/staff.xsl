@@ -39,7 +39,7 @@
 
   <xsl:function name="ex:post-uri">
     <xsl:param name="node"/>
-    <xsl:text>https://data.ox.ac.uk/id/itservices/post/</xsl:text>
+    <xsl:text>https://id.it.ox.ac.uk/post/</xsl:text>
     <xsl:value-of select="$node/ancestor-or-self::row[1]/@id"/>
   </xsl:function>
 

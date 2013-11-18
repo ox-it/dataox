@@ -62,7 +62,7 @@
         </xsl:if>
       </xsl:for-each>
     </gr:BusinessEntity>
-    <rdf:Description rdf:about="https://data.ox.ac.uk/id/itservices/service-catalogue/user-facing">
+    <rdf:Description rdf:about="https://id.it.ox.ac.uk/service-catalogue/user-facing">
       <xsl:for-each select="row">
         <xsl:if test="ex:include-service(.) and ex:user-facing-service(.)">
           <xsl:comment select=".//field[@name='Title']/text"/>
@@ -70,7 +70,7 @@
         </xsl:if>
       </xsl:for-each>
     </rdf:Description>
-    <rdf:Description rdf:about="https://data.ox.ac.uk/id/itservices/service-catalogue">
+    <rdf:Description rdf:about="https://id.it.ox.ac.uk/service-catalogue">
       <xsl:for-each select="row">
         <xsl:if test="ex:include-service(.) and not(ex:user-facing-service(.))">
           <xsl:comment select=".//field[@name='Title']/text"/>

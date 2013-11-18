@@ -44,12 +44,12 @@
 
 <https://data.ox.ac.uk/id/dataset/catalogue> dcat:dataset <https://data.ox.ac.uk/id/dataset/itservices/services> .
 
-<https://data.ox.ac.uk/id/itservices/service-catalogue> a skos:Collection ;
+<https://id.it.ox.ac.uk/service-catalogue> a skos:Collection ;
     skos:prefLabel "Service catalogue for IT Services" ;
     dcterms:publisher <http://oxpoints.oucs.ox.ac.uk/id/31337175> ;
-    skos:member <https://data.ox.ac.uk/id/itservices/service-catalogue/user-facing> .
+    skos:member <https://id.it.ox.ac.uk/service-catalogue/user-facing> .
 
-<https://data.ox.ac.uk/id/itservices/service-catalogue/user-facing> a skos:Collection ;
+<https://id.it.ox.ac.uk/service-catalogue/user-facing> a skos:Collection ;
     skos:prefLabel "User-facing service catalogue for IT Services" ;
     dcterms:publisher <http://oxpoints.oucs.ox.ac.uk/id/31337175> .
 

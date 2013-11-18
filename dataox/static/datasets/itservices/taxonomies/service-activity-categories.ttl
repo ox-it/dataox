@@ -3,38 +3,38 @@
 @prefix rdfs:    <http://www.w3.org/2000/01/rdf-schema#> .
 @prefix skos:    <http://www.w3.org/2004/02/skos/core#>.
 
-<https://data.ox.ac.uk/id/itservices/service-activity-category> a skos:ConceptScheme ;
+<https://id.it.ox.ac.uk/service-activity-category> a skos:ConceptScheme ;
   skos:prefLabel "Activity categories" ;
   dcterms:publisher <http://oxpoints.oucs.ox.ac.uk/id/31337175> ;
   skos:topConcept
-    <https://data.ox.ac.uk/id/itservices/service-activity-category/1> ,
-    <https://data.ox.ac.uk/id/itservices/service-activity-category/2> ,
-    <https://data.ox.ac.uk/id/itservices/service-activity-category/3> ,
-    <https://data.ox.ac.uk/id/itservices/service-activity-category/4> ;
-  rdfs:seeAlso <https://data.ox.ac.uk/id/itservices/ServiceActivityCategory> .
+    <https://id.it.ox.ac.uk/service-activity-category/1> ,
+    <https://id.it.ox.ac.uk/service-activity-category/2> ,
+    <https://id.it.ox.ac.uk/service-activity-category/3> ,
+    <https://id.it.ox.ac.uk/service-activity-category/4> ;
+  rdfs:seeAlso <https://id.it.ox.ac.uk/ServiceActivityCategory> .
 
-<https://data.ox.ac.uk/id/itservices/ServiceActivityCategory> a rdfs:Class, owl:Class ;
+<https://id.it.ox.ac.uk/ServiceActivityCategory> a rdfs:Class, owl:Class ;
   rdfs:subClassOf skos:Concept ;
-  rdfs:seeAlso <https://data.ox.ac.uk/id/itservices/service-activity-category> .
+  rdfs:seeAlso <https://id.it.ox.ac.uk/service-activity-category> .
 
 
-<https://data.ox.ac.uk/id/itservices/service-activity-category/1>
-  a <https://data.ox.ac.uk/id/itservices/ServiceActivityCategory>, skos:Concept ;
+<https://id.it.ox.ac.uk/service-activity-category/1>
+  a <https://id.it.ox.ac.uk/ServiceActivityCategory>, skos:Concept ;
   skos:prefLabel "Administration" ;
-  skos:inScheme <https://data.ox.ac.uk/id/itservices/service-activity-category> .
+  skos:inScheme <https://id.it.ox.ac.uk/service-activity-category> .
 
-<https://data.ox.ac.uk/id/itservices/service-activity-category/2>
-  a <https://data.ox.ac.uk/id/itservices/ServiceActivityCategory>, skos:Concept ;
+<https://id.it.ox.ac.uk/service-activity-category/2>
+  a <https://id.it.ox.ac.uk/ServiceActivityCategory>, skos:Concept ;
   skos:prefLabel "Core infrastructure" ;
-  skos:inScheme <https://data.ox.ac.uk/id/itservices/service-activity-category> .
+  skos:inScheme <https://id.it.ox.ac.uk/service-activity-category> .
 
-<https://data.ox.ac.uk/id/itservices/service-activity-category/3>
-  a <https://data.ox.ac.uk/id/itservices/ServiceActivityCategory>, skos:Concept ;
+<https://id.it.ox.ac.uk/service-activity-category/3>
+  a <https://id.it.ox.ac.uk/ServiceActivityCategory>, skos:Concept ;
   skos:prefLabel "Research" ;
-  skos:inScheme <https://data.ox.ac.uk/id/itservices/service-activity-category> .
+  skos:inScheme <https://id.it.ox.ac.uk/service-activity-category> .
 
-<https://data.ox.ac.uk/id/itservices/service-activity-category/4>
-  a <https://data.ox.ac.uk/id/itservices/ServiceActivityCategory>, skos:Concept ;
+<https://id.it.ox.ac.uk/service-activity-category/4>
+  a <https://id.it.ox.ac.uk/ServiceActivityCategory>, skos:Concept ;
   skos:prefLabel "Teaching" ;
-  skos:inScheme <https://data.ox.ac.uk/id/itservices/service-activity-category> .
+  skos:inScheme <https://id.it.ox.ac.uk/service-activity-category> .
   
