@@ -67,9 +67,10 @@ class RetrieveVacancies(Transform):
         for transform in transforms.values():
             transform['serializer'] = RDFXMLSerializer(transform['file'])
 
+        now_dt = self.site_timezone.localize(datetime.datetime.now())
         for vacancy in Vacancy.objects.all():
-            opening_date, closing_date = map(dateutil.parser.parse, (vacancy.opening_date, vacancy.closing_date))
-            if opening_date < self.site_timezone.localize(datetime.datetime.now()) < closing_date:
+            if (not vacancy.opening_date_dt or vacancy.opening_date_dt < now_dt) and \
+               (not vacancy.closing_date_dt or now_dt < vacancy.closing_date_dt):
                 transforms['current']['vacancies'].append(vacancy)
             else:
                 transforms['archive']['vacancies'].append(vacancy)

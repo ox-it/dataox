@@ -86,8 +86,11 @@ class RecruitOxScraper(Scraper):
         # If vacancies have disappeared, say that they've just closed.
         now = self.site_timezone.localize(datetime.datetime.now()).replace(microsecond=0)
         for vacancy in Vacancy.objects.all():
-            closes = dateutil.parser.parse(vacancy.closing_date)
-            if closes > now and vacancy.vacancy_id not in vacancy_identifiers:
+            if vacancy.closing_date:
+                closes = dateutil.parser.parse(vacancy.closing_date)
+            else:
+                closes = None
+            if (not closes or closes > now) and vacancy.vacancy_id not in vacancy_identifiers:
                 vacancy.closing_date = now.isoformat()
                 vacancy.save()
                 changed = True
@@ -101,13 +104,13 @@ class RecruitOxScraper(Scraper):
 
         pagination = html.xpath(".//span[@class='erq_searchv4_count']")[0].text.strip()
         pagination = self.search_pagination_re.match(pagination).groupdict()
-        
+
         new_count = int(pagination['count'])
 
         now = self.site_timezone.localize(datetime.datetime.now()).replace(microsecond=0)
         now = now.isoformat()
         old_count = Vacancy.objects.filter(opening_date__lt=now, closing_date__gt=now).count()
-        
+
         logger.debug("Expected vacancies: %d; Listed vacancies: %d", old_count, new_count)
         return new_count != old_count
 
@@ -125,12 +128,12 @@ class RecruitOxScraper(Scraper):
             pagination = self.search_pagination_re.match(pagination).groupdict()
             if pagination['end'] == pagination['count']:
                 break
-            
+
         now = self.site_timezone.localize(datetime.datetime.now()).replace(microsecond=0)
         now = now.isoformat()
         old = set(v.vacancy_id for v in Vacancy.objects.filter(opening_date__lt=now, closing_date__gt=now))
         logger.info("Added: %r; Removed: %r", vacancy_identifiers - old, old - vacancy_identifiers)
-        
+
         return vacancy_identifiers
 
     def import_vacancy(self, vacancy_id):
@@ -146,15 +149,15 @@ class RecruitOxScraper(Scraper):
                 logger.debug("Ignoring vacancy %s", vacancy_id)
                 return changed
         logger.info("Retrieving vacancy %s", vacancy_id)
-        
+
         params = self.detail_params.copy()
         params['p_recruitment_id'] = vacancy_id
         html = self.get_html(self.detail_url, params)
         vacancy.url = '%s?%s' % (self.detail_url, urllib.urlencode(params))
-        
+
         title_td = html.xpath(".//td[@class='erq_searchv4_heading1']")
         vacancy.title = ' '.join(title_td[0].text.split()) if title_td else ''
-        
+
         salary_td = html.xpath(".//td[@class='erq_searchv4_heading3']")
         vacancy.salary =  ' '.join((salary_td[0].text or '').split()) if len(salary_td) == 2 else ''
 
@@ -169,12 +172,12 @@ class RecruitOxScraper(Scraper):
         else:
             vacancy.salary_lower, vacancy.salary_upper = None, None
             vacancy.salary_discretionary, vacancy.salary_grade = None, ''
-        
+
         description = html.xpath(".//td[@class='erq_searchv4_heading3']")[-1]
         description.attrib.clear()
         description.tag = 'div'
         vacancy.description = etree.tostring(description)
-        
+
         meta = dict(zip([_normalize_space(x.text) for x in html.xpath(".//*[@class='erq_searchv4_heading5_label']")],
                         html.xpath(".//*[@class='erq_searchv4_heading5_text']")))
         for key in meta:
@@ -228,7 +231,7 @@ class RecruitOxScraper(Scraper):
         for row in html.xpath(".//table[@class='erqlayouttable']//tr")[1:]:
             anchor = row.xpath('.//a')[0]
             url = urlparse.urljoin(self.detail_url, anchor.attrib['href'])
-            
+
             try:
                 document = Document.objects.get(url=url, vacancy=vacancy)
             except:
@@ -236,9 +239,9 @@ class RecruitOxScraper(Scraper):
             document.title = anchor.text or ''
             if document.title == '':
                 logger.warning("File %s for vacancy %s has no title", url, vacancy_id)
-            
+
             if document.is_dirty():
                 document.save()
                 changed = True
-        
+
         return changed

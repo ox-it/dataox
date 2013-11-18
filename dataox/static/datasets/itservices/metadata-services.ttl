@@ -49,7 +49,7 @@
     dcterms:publisher <http://oxpoints.oucs.ox.ac.uk/id/31337175> ;
     skos:member <https://data.ox.ac.uk/id/itservices/service-catalogue/user-facing> .
 
-<https://data.ox.ac.uk/id/itservices/service-catalogue/user-facing> a skos:Collection .
+<https://data.ox.ac.uk/id/itservices/service-catalogue/user-facing> a skos:Collection ;
     skos:prefLabel "User-facing service catalogue for IT Services" ;
     dcterms:publisher <http://oxpoints.oucs.ox.ac.uk/id/31337175> .
 

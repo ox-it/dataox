@@ -45,10 +45,17 @@ class Vacancy(DirtyFieldsMixin, models.Model):
 
     opening_date = models.CharField(max_length=25)
     closing_date = models.CharField(max_length=25, null=True, blank=True)
-    
+
     internal = models.BooleanField()
     
     last_checked = models.DateTimeField(auto_now=True)
+
+    @property
+    def opening_date_dt(self):
+        return dateutil.parser.parse(self.opening_date) if self.opening_date else None
+    @property
+    def closing_date_dt(self):
+        return dateutil.parser.parse(self.closing_date) if self.closing_date else None
     
     def __unicode__(self):
         return u'{0}: {1}'.format(self.vacancy_id, self.title)
@@ -100,7 +107,7 @@ class Vacancy(DirtyFieldsMixin, models.Model):
 
         # Only include a URL if the vacancy is still being advertised.
         if not self.closing_date or \
-              dateutil.parser.parse(self.closing_date) > pytz.utc.localize(datetime.datetime.utcnow()):
+              self.closing_date_dt > pytz.utc.localize(datetime.datetime.utcnow()):
             triples.append((uri, NS.foaf.homepage, rdflib.URIRef(self.url)))
 
 
@@ -172,15 +179,17 @@ class Vacancy(DirtyFieldsMixin, models.Model):
                 (uri, NS.vacancy.salary, salary_uri),
                 (salary_uri, NS.rdf.type, NS.gr.UnitPriceSpecification),
                 (salary_uri, NS.rdfs.label, rdflib.Literal(label)),
-                (salary_uri, NS.gr.validThrough, rdflib.Literal(self.closing_date)),
                 (salary_uri, NS.gr.hasCurrency, rdflib.Literal('GBP')),
             ]
+            if self.closing_date:
+                triples.append((salary_uri, NS.gr.validThrough, rdflib.Literal(self.closing_date, datatype=NS.xsd.dateTime)))
         elif self.salary:
             triples += [
                 (uri, NS.vacancy.salary, salary_uri),
                 (salary_uri, NS.rdf.type, NS.gr.UnitPriceSpecification),
-                (salary_uri, NS.rdfs.label, rdflib.Literal(self.salary)),
-                (salary_uri, NS.gr.validThrough, rdflib.Literal(self.closing_date))]
+                (salary_uri, NS.rdfs.label, rdflib.Literal(self.salary))]
+            if self.closing_date:
+                triples.append((salary_uri, NS.gr.validThrough, rdflib.Literal(self.closing_date, datatype=NS.xsd.dateTime)))
 
         return triples
 

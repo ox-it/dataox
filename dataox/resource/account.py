@@ -19,6 +19,8 @@ class Account(object):
         'http://www.youtube.com/' : {'label': 'YouTube', 'icon': 'fa-youtube'},
         'http://www.flickr.com/' : {'label': 'Flickr', 'icon': 'fa-flickr'},
         'http://www.linkedin.com/' : {'label': 'LinkedIn', 'icon': 'fa-linkedin'},
+        'https://nexus.ox.ac.uk/' : {'label': 'Nexus', 'icon': 'fa-calendar'},
+        'http://status.ox.ac.uk/' : {'label': 'System Status', 'icon': 'fa-tachometer'},
     }
 
     rdf_types = ('foaf:OnlineAccount',)

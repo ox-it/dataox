@@ -215,6 +215,7 @@ ID_MAPPING = (
     ('https://data.ox.ac.uk/id/facility/', 'https://www.research-facilities.ox.ac.uk/view:facility/', True),
     ('https://data.ox.ac.uk/id/', 'https://data.ox.ac.uk/doc/', True),
     ('http://oxpoints.oucs.ox.ac.uk/id/', 'https://data.ox.ac.uk/doc:oxpoints/', False),
+    ('http://id.it.ox.ac.uk/', 'https://data.ox.ac.uk/doc:it/', True),
     ('http://id.conted.ox.ac.uk/', 'https://course.data.ox.ac.uk/doc:conted/', False),
 )
 

@@ -23,22 +23,26 @@
   a <https://data.ox.ac.uk/id/itservices/ServiceLifecycleStatus>, skos:Concept ;
   skos:prefLabel "in development"@en ;
   skos:definition "A service not yet ready for production use." ;
+  skos:notation "in-development"^^<https://data.ox.ac.uk/id/itservices/service-lifecycle-status/notation> ;
   skos:inScheme <https://data.ox.ac.uk/id/itservices/service-lifecycle-status> .
 
 <https://data.ox.ac.uk/id/itservices/service-lifecycle-status/production>
   a <https://data.ox.ac.uk/id/itservices/ServiceLifecycleStatus>, skos:Concept ;
   skos:prefLabel "in production"@en ;
   skos:definition "A service available for use." ;
+  skos:notation "production"^^<https://data.ox.ac.uk/id/itservices/service-lifecycle-status/notation> ;
   skos:inScheme <https://data.ox.ac.uk/id/itservices/service-lifecycle-status> .
 
 <https://data.ox.ac.uk/id/itservices/service-lifecycle-status/deprecated>
   a <https://data.ox.ac.uk/id/itservices/ServiceLifecycleStatus>, skos:Concept ;
   skos:prefLabel "deprecated"@en ;
   skos:definition "Use of this service is discouraged as it is intended to be withdrawn." ;
+  skos:notation "deprecated"^^<https://data.ox.ac.uk/id/itservices/service-lifecycle-status/notation> ;
   skos:inScheme <https://data.ox.ac.uk/id/itservices/service-lifecycle-status> .
 
 <https://data.ox.ac.uk/id/itservices/service-lifecycle-status/withdrawn>
   a <https://data.ox.ac.uk/id/itservices/ServiceLifecycleStatus>, skos:Concept ;
   skos:prefLabel "withdrawn"@en ;
   skos:definition "A service that has been withdrawn and is no longer available." ;
+  skos:notation "withdrawn"^^<https://data.ox.ac.uk/id/itservices/service-lifecycle-status/notation> ;
   skos:inScheme <https://data.ox.ac.uk/id/itservices/service-lifecycle-status> .
