@@ -10,9 +10,8 @@
     <link rel="stylesheet" type="text/css" href="{{ STATIC_URL }}css/small.css" media="(min-width: 640px)" />
     <link rel="stylesheet" type="text/css" href="{{ STATIC_URL }}css/medium.css" media="(min-width: 999px) and (max-width: 1599px)" />
     <link rel="stylesheet" type="text/css" href="{{ STATIC_URL }}css/large.css" media="screen and (min-width: 1600px)" />
-    <link rel="stylesheet" href="{{ STATIC_URL }}font-awesome/css/font-awesome.min.css">
-    
-    
+    <link rel="stylesheet" type="text/css" href="{{ STATIC_URL }}font-awesome/css/font-awesome.min.css">
+
     {% include "analytics/include_head.html" %}
     <link rel="icon" href="{{ STATIC_URL }}favicon.ico" type="image/x-icon"/>{% if no_index %}
     <meta name="robots" content="noindex"/>{% endif %}{% for renderer in renderers %}{% for mimetype in renderer.mimetypes %}
