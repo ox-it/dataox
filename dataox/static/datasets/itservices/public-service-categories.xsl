@@ -77,5 +77,9 @@
     </adhoc:fontAwesome>
   </xsl:template>
 
-
+  <xsl:template match="field[@name='Slug']/text[text()]" mode="in-service">
+    <skos:notation rdf:datatype="https://id.it.ox.ac.uk/notation/service-category">
+      <xsl:value-of select="text()"/>
+    </skos:notation>
+  </xsl:template>
 </xsl:stylesheet>

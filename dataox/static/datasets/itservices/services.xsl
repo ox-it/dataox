@@ -268,6 +268,12 @@
     </xsl:if>
   </xsl:template>
 
+  <xsl:template match="field[@name='Slug']/text[text()]" mode="in-service">
+    <skos:notation rdf:datatype="https://id.it.ox.ac.uk/notation/service">
+      <xsl:value-of select="text()"/>
+    </skos:notation>
+  </xsl:template>
+  
   <xsl:template match="field[@name='Status_x0020_ID']/text[text()]" mode="in-service">
     <foaf:account>
       <foaf:OnlineAccount>
