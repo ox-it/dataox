@@ -22,8 +22,6 @@
   <xsl:param name="store"/>
   <xsl:variable name="internal" select="$store='itservices'"/>
 
-  <xsl:variable name="service-base-uri">https://data.ox.ac.uk/id/itservices/</xsl:variable>
-
   <xsl:key name="user-bases" match="/site/lists/list[@name='User bases']/rows/row" use="@id"/>
   <xsl:key name="user-base-names" match="/site/lists/list[@name='User bases']/rows/row" use="fields/field[@name='Title']/text/text()"/>
   <xsl:key name="grouped-services" match="/site/lists/list[@name='Service Catalogue']/rows/row" use="fields/field[@name='Service_x0020_group']/lookup/@id"/>
@@ -68,7 +66,7 @@
       <xsl:for-each select="row">
         <xsl:if test="ex:include-service(.) and ex:user-facing-service(.)">
           <xsl:comment select=".//field[@name='Title']/text"/>
-          <skos:member rdf:resource="{$service-base-uri}service/{@id}"/>
+          <skos:member rdf:resource="{ex:service-uri('service', .)}"/>
         </xsl:if>
       </xsl:for-each>
     </rdf:Description>
@@ -76,7 +74,7 @@
       <xsl:for-each select="row">
         <xsl:if test="ex:include-service(.) and not(ex:user-facing-service(.))">
           <xsl:comment select=".//field[@name='Title']/text"/>
-          <skos:member rdf:resource="{$service-base-uri}service/{@id}"/>
+          <skos:member rdf:resource="{ex:service-uri('service', .)}"/>
         </xsl:if>
       </xsl:for-each>
     </rdf:Description>
@@ -84,11 +82,11 @@
   </xsl:template>
 
   <xsl:template match="list[@name='Service Catalogue']/rows/row">
-    <gr:Offering rdf:about="{$service-base-uri}service-offering/{@id}">
+    <gr:Offering rdf:about="{ex:service-uri('service-offering', .)}">
       <gr:includes>
-        <tio:TicketPlaceholder rdf:about="{$service-base-uri}use-of-service/{@id}">
+        <tio:TicketPlaceholder rdf:about="{ex:service-uri('use-of-service', .)}">
           <tio:accessTo>
-            <gr:ProductOrService rdf:about="{$service-base-uri}service/{@id}">
+            <gr:ProductOrService rdf:about="{ex:service-uri('service', .)}">
               <rdf:type rdf:resource="http://spi-fm.uca.es/neologism/cerif#Service"/>
               <oo:organizationPart rdf:resource="{$it-services}"/>
               <oo:formalOrganization rdf:resource="{$university-of-oxford}"/>
@@ -144,7 +142,7 @@
   <xsl:template match="list[@name='Service Catalogue']/rows/row" mode="service-contact">
     <xsl:if test="fields/field[@name='Initial_x0020_contact_x0020_phon' or @name='Initial_x0020_Contact_x0020_Emai' or @name='Initial_x0020_Contact_x0020_Form']/*/text()">
       <oo:contact>
-        <foaf:Agent rdf:about="{$service-base-uri}service/{@id}/contact">
+        <foaf:Agent rdf:about="{ex:service-uri('service', .)}/contact">
           <xsl:apply-templates select="fields/field[*/text()]" mode="service-contact"/>
         </foaf:Agent>
       </oo:contact>
@@ -175,7 +173,7 @@
     </xsl:variable>
     <xsl:choose>
       <xsl:when test="$id">
-        <dcterms:subject rdf:resource="{$service-base-uri}service-activity-category/{$id}"/>
+        <dcterms:subject rdf:resource="{$base-uri}service-activity-category/{$id}"/>
       </xsl:when>
       <xsl:otherwise>
         <xsl:message>Unexpected activity category: <xsl:value-of select="text()"/></xsl:message>
@@ -194,7 +192,7 @@
     </xsl:variable>
     <xsl:choose>
       <xsl:when test="$id">
-        <dcterms:subject rdf:resource="{$service-base-uri}service-type/{$id}"/>
+        <dcterms:subject rdf:resource="{$base-uri}service-type/{$id}"/>
       </xsl:when>
       <xsl:otherwise>
         <xsl:message>Unexpected service type: <xsl:value-of select="text()"/></xsl:message>
@@ -216,7 +214,7 @@
     </xsl:variable>
     <xsl:choose>
       <xsl:when test="$id">
-        <dcterms:subject rdf:resource="{$service-base-uri}service-lifecycle-status/{$id}"/>
+        <dcterms:subject rdf:resource="{$base-uri}service-lifecycle-status/{@id}"/>
       </xsl:when>
       <xsl:otherwise>
         <xsl:message>Unexpected service lifecycle status: <xsl:value-of select="text()"/></xsl:message>
@@ -304,13 +302,13 @@
   <xsl:template match="field[@name='Service_x0020_group']/lookup[@id != '0']" mode="in-service">
     <xsl:variable name="part-of" select="key('services', @id)"/>
     <xsl:if test="$part-of and ex:include-service($part-of)">
-      <dcterms:isPartOf rdf:resource="{$service-base-uri}service/{@id}"/>
+      <dcterms:isPartOf rdf:resource="{ex:service-uri('service', $part-of)}"/>
     </xsl:if>
   </xsl:template>
 
   <xsl:template match="field[@name='Service_x0020_group_x0020_or_x00']/text" mode="in-service">
     <xsl:for-each select="key('grouped-services', ../../../@id)">
-      <dcterms:hasPart rdf:resource="{$service-base-uri}service/{@id}"/>
+      <dcterms:hasPart rdf:resource="{ex:service-uri('service', .)}"/>
     </xsl:for-each>
   </xsl:template>
 </xsl:stylesheet>
