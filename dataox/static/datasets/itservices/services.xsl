@@ -214,7 +214,7 @@
     </xsl:variable>
     <xsl:choose>
       <xsl:when test="$id">
-        <dcterms:subject rdf:resource="{$base-uri}service-lifecycle-status/{@id}"/>
+        <dcterms:subject rdf:resource="{$base-uri}service-lifecycle-status/{$id}"/>
       </xsl:when>
       <xsl:otherwise>
         <xsl:message>Unexpected service lifecycle status: <xsl:value-of select="text()"/></xsl:message>
