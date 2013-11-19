@@ -55,6 +55,7 @@
     <skos:hasTopConcept>
       <skos:Concept rdf:about="{$service-category-base-uri}/{.//field[@name='Slug']/text/text()}">
         <xsl:apply-templates/>
+        <skos:inScheme rdf:resource="{$service-category-base-uri}"/>
       </skos:Concept>
     </skos:hasTopConcept>
   </xsl:template>
