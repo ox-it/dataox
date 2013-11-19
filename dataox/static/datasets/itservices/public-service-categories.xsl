@@ -36,7 +36,7 @@
   
   <xsl:template match="field[@name='Featured_x0020_Services']/text[text()]">
     <xsl:variable name="tree" select="/"/>
-    <adhoc:featuredServiceList rdf:parseType="Collection">
+    <adhoc:featuredList rdf:parseType="Collection">
       <xsl:for-each select="tokenize(text(), '\s+')">
         <xsl:variable name="service" select="key('services-by-slug', ., $tree)"/>
         <xsl:choose>
@@ -48,7 +48,7 @@
           </xsl:otherwise> 
         </xsl:choose>
       </xsl:for-each>
-    </adhoc:featuredServiceList>
+    </adhoc:featuredList>
   </xsl:template>
 
   <xsl:template match="list[@name='Public Service Categories']/rows/row">
