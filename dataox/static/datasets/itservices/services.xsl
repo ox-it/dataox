@@ -268,9 +268,16 @@
     </xsl:if>
   </xsl:template>
 
-  <xsl:template match="field[@name='Slug']/text[text()]" mode="in-service">
+  <xsl:template match="field[@name='Slug']/text" mode="in-service">
     <skos:notation rdf:datatype="https://id.it.ox.ac.uk/notation/service">
-      <xsl:value-of select="text()"/>
+      <xsl:choose>
+        <xsl:when test="text()">
+          <xsl:value-of select="text()"/>
+        </xsl:when>
+        <xsl:otherwise>
+          <xsl:value-of select="../../../@id"/>
+        </xsl:otherwise>
+      </xsl:choose>
     </skos:notation>
   </xsl:template>
   
