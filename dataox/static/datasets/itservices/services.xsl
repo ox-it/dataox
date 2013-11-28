@@ -9,7 +9,6 @@
     xmlns:oo="http://purl.org/openorg/"
     xmlns:rdfs="http://www.w3.org/2000/01/rdf-schema#"
     xmlns:skos="http://www.w3.org/2004/02/skos/core#"
-    xmlns:tio="http://purl.org/tio/ns#"
     xmlns:v="http://www.w3.org/2006/vcard/ns#"
     xmlns:ex="http://www.example.org/"
     xmlns:d="http://schemas.microsoft.com/ado/2007/08/dataservices"
@@ -83,18 +82,14 @@
 
   <xsl:template match="list[@name='Service Catalogue']/rows/row">
     <gr:Offering rdf:about="{ex:service-uri('service-offering', .)}">
+      <gr:hasBusinessFunction rdf:resource="http://purl.org/goodrelations/v1#ProvideService"/>
       <gr:includes>
-        <tio:TicketPlaceholder rdf:about="{ex:service-uri('use-of-service', .)}">
-          <tio:accessTo>
-            <gr:ProductOrService rdf:about="{ex:service-uri('service', .)}">
-              <rdf:type rdf:resource="http://spi-fm.uca.es/neologism/cerif#Service"/>
-              <oo:organizationPart rdf:resource="{$it-services}"/>
-              <oo:formalOrganization rdf:resource="{$university-of-oxford}"/>
-              <xsl:apply-templates mode="in-service"/>
-            </gr:ProductOrService>
-          </tio:accessTo>
-          <xsl:apply-templates mode="in-ticket-placeholder"/>
-        </tio:TicketPlaceholder>
+        <gr:ProductOrService rdf:about="{ex:service-uri('service', .)}">
+          <rdf:type rdf:resource="http://spi-fm.uca.es/neologism/cerif#Service"/>
+          <oo:organizationPart rdf:resource="{$it-services}"/>
+          <oo:formalOrganization rdf:resource="{$university-of-oxford}"/>
+          <xsl:apply-templates mode="in-service"/>
+        </gr:ProductOrService>
       </gr:includes>
       <xsl:apply-templates mode="in-offering"/>
     </gr:Offering>
@@ -103,6 +98,13 @@
   <xsl:template match="field[@name='Title']/text[text()]" mode="in-service">
     <rdfs:label>
       <xsl:value-of select="text()"/>
+    </rdfs:label>
+  </xsl:template>
+
+  <xsl:template match="field[@name='Title']/text[text()]" mode="in-offering">
+    <rdfs:label>
+      <xsl:value-of select="text()"/>
+      <xsl:text> (service offering)</xsl:text>
     </rdfs:label>
   </xsl:template>
 
