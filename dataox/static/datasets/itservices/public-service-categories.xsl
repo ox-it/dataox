@@ -14,6 +14,7 @@
     xmlns:ex="http://www.example.org/"
     xmlns:d="http://schemas.microsoft.com/ado/2007/08/dataservices"
     xmlns:m="http://schemas.microsoft.com/ado/2007/08/dataservices/metadata"
+    xmlns:ui-hints="http://purl.org/NET/ui-hints/"
     xpath-default-namespace="https://github.com/ox-it/python-sharepoint/"
     version="2.0">
   <xsl:import href="common.xsl"/>
@@ -86,9 +87,15 @@
   </xsl:template>
 
   <xsl:template match="field[@name='FontAwesome']/text[text()]">
-    <adhoc:fontAwesome>
+    <ui-hints:fontAwesome>
       <xsl:value-of select="text()"/>
-    </adhoc:fontAwesome>
+    </ui-hints:fontAwesome>
+  </xsl:template>
+  
+  <xsl:template match="field[@name='Teaser']/text[text()]">
+    <ui-hints:teaser>
+      <xsl:value-of select="text()"/>
+    </ui-hints:teaser>
   </xsl:template>
 
   <xsl:template match="field[@name='Slug']/text[text()]">
