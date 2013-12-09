@@ -24,7 +24,18 @@
   <xsl:template match="list[@name='Public Service Categories']/rows">
     <skos:ConceptScheme rdf:about="{$service-category-base-uri}">
       <skos:prefLabel xml:lang="en">Categories for the IT Services public Service Catalogue</skos:prefLabel>
-      <xsl:apply-templates/>
+      <skos:hasTopConcept>
+        <skos:Concept rdf:about="{$service-category-base-uri}/service-group">
+          <skos:prefLabel>Service groups</skos:prefLabel>
+          <skos:notation rdf:datatype="https://id.it.ox.ac.uk/notation/service-category">service-group</skos:notation>
+          <xsl:apply-templates select="row[.//field[@name='CategoryType']/text='Category']"/>
+        </skos:Concept>
+        <skos:Concept rdf:about="{$service-category-base-uri}/user-group">
+          <skos:prefLabel>User groups</skos:prefLabel>
+          <skos:notation rdf:datatype="https://id.it.ox.ac.uk/notation/service-category">user-group</skos:notation>
+          <xsl:apply-templates select="row[.//field[@name='CategoryType']/text='User Group']"/>
+        </skos:Concept>
+      </skos:hasTopConcept>
     </skos:ConceptScheme>
 
     <xsl:for-each select=".//field[@name='Services']/lookup">
@@ -52,12 +63,12 @@
   </xsl:template>
 
   <xsl:template match="list[@name='Public Service Categories']/rows/row">
-    <skos:hasTopConcept>
+    <skos:narrower>
       <skos:Concept rdf:about="{$service-category-base-uri}/{.//field[@name='Slug']/text/text()}">
         <xsl:apply-templates/>
         <skos:inScheme rdf:resource="{$service-category-base-uri}"/>
       </skos:Concept>
-    </skos:hasTopConcept>
+    </skos:narrower>
   </xsl:template>
 
   <xsl:template match="field[@name='Title']/text[text()]">
