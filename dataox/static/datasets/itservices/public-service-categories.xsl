@@ -30,6 +30,8 @@
           <skos:notation rdf:datatype="https://id.it.ox.ac.uk/notation/service-category">service-group</skos:notation>
           <xsl:apply-templates select="row[.//field[@name='CategoryType']/text='Category']"/>
         </skos:Concept>
+      </skos:hasTopConcept>
+      <skos:hasTopConcept>
         <skos:Concept rdf:about="{$service-category-base-uri}/user-group">
           <skos:prefLabel>User groups</skos:prefLabel>
           <skos:notation rdf:datatype="https://id.it.ox.ac.uk/notation/service-category">user-group</skos:notation>
