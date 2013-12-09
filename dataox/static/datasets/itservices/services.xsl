@@ -10,6 +10,7 @@
     xmlns:rdfs="http://www.w3.org/2000/01/rdf-schema#"
     xmlns:skos="http://www.w3.org/2004/02/skos/core#"
     xmlns:v="http://www.w3.org/2006/vcard/ns#"
+    xmlns:cat="http://purl.org/NET/catalogue/"
     xmlns:ex="http://www.example.org/"
     xmlns:d="http://schemas.microsoft.com/ado/2007/08/dataservices"
     xmlns:m="http://schemas.microsoft.com/ado/2007/08/dataservices/metadata"
@@ -61,23 +62,15 @@
         </xsl:if>
       </xsl:for-each>
     </gr:BusinessEntity>
-    <rdf:Description rdf:about="https://id.it.ox.ac.uk/service-catalogue/user-facing">
-      <xsl:for-each select="row">
-        <xsl:if test="ex:include-service(.) and ex:user-facing-service(.)">
-          <xsl:comment select=".//field[@name='Title']/text"/>
-          <skos:member rdf:resource="{ex:service-uri('service', .)}"/>
-        </xsl:if>
-      </xsl:for-each>
-    </rdf:Description>
-    <rdf:Description rdf:about="https://id.it.ox.ac.uk/service-catalogue">
-      <xsl:for-each select="row">
-        <xsl:if test="ex:include-service(.) and not(ex:user-facing-service(.))">
-          <xsl:comment select=".//field[@name='Title']/text"/>
-          <skos:member rdf:resource="{ex:service-uri('service', .)}"/>
-        </xsl:if>
-      </xsl:for-each>
-    </rdf:Description>
-    
+    <xsl:for-each select="row">
+      <xsl:if test="ex:include-service(.)">
+        <cat:Record rdf:about="{ex:service-uri('service-catalogue-record', .)}">
+          <xsl:apply-templates select="." mode="in-catalogue-record"/>
+          <cat:catalogue rdf:resource="https://id.it.ox.ac.uk/service-catalogue"/>
+          <cat:item rdf:resource="{ex:service-uri('service', .)}"/>
+        </cat:Record>
+      </xsl:if>
+    </xsl:for-each>
   </xsl:template>
 
   <xsl:template match="list[@name='Service Catalogue']/rows/row">
@@ -325,5 +318,23 @@
     <xsl:for-each select="key('grouped-services', ../../../@id)">
       <dcterms:hasPart rdf:resource="{ex:service-uri('service', .)}"/>
     </xsl:for-each>
+  </xsl:template>
+  
+  <xsl:template match="field[@name='Modified']/dateTime/text()" mode="in-catalogue-record">
+    <dcterms:modified rdf:datatype="http://www.w3.org/2001/XMLSchema#dateTime">
+      <xsl:copy/>
+    </dcterms:modified>
+  </xsl:template>
+  
+  <xsl:template match="field[@name='Created']/dateTime/text()" mode="in-catalogue-record">
+    <dcterms:created rdf:datatype="http://www.w3.org/2001/XMLSchema#dateTime">
+      <xsl:copy/>
+    </dcterms:created>
+  </xsl:template>
+  
+  <xsl:template match="field[@name='CatalogueReady']/boolean/text()" mode="in-catalogue-record">
+    <adhoc:catalogueReady rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean">
+      <xsl:copy/>
+    </adhoc:catalogueReady>
   </xsl:template>
 </xsl:stylesheet>
