@@ -15,6 +15,7 @@
 @prefix dc: <http://purl.org/dc/elements/1.1/> .
 @prefix v: <http://www.w3.org/2006/vcard/ns#> .
 @prefix dcat: <http://www.w3.org/ns/dcat#> .
+@prefix cat: <http://purl.org/NET/catalogue/> .
 
 
 <https://data.ox.ac.uk/id/dataset/itservices/services> a void:Dataset, dcat:Dataset ;
@@ -44,14 +45,16 @@
 
 <https://data.ox.ac.uk/id/dataset/catalogue> dcat:dataset <https://data.ox.ac.uk/id/dataset/itservices/services> .
 
-<https://id.it.ox.ac.uk/service-catalogue> a skos:Collection ;
+<https://id.it.ox.ac.uk/service-catalogue> a cat:Catalogue ;
     skos:prefLabel "Service catalogue for IT Services" ;
     dcterms:publisher <http://oxpoints.oucs.ox.ac.uk/id/31337175> ;
+    cat:classificationScheme
+      <http://id.ja.net/xray-service-classification> ,
+      <http://id.it.ox.ac.uk/service-category> ,
+      <http://id.it.ox.ac.uk/service-activity-category> ,
+      <http://id.it.ox.ac.uk/service-type> ,
+      <http://id.it.ox.ac.uk/service-lifecycle-status> ;
     skos:member <https://id.it.ox.ac.uk/service-catalogue/user-facing> .
-
-<https://id.it.ox.ac.uk/service-catalogue/user-facing> a skos:Collection ;
-    skos:prefLabel "User-facing service catalogue for IT Services" ;
-    dcterms:publisher <http://oxpoints.oucs.ox.ac.uk/id/31337175> .
 
 <https://data.ox.ac.uk/graph/itservices/services/data> a foaf:Document ;
     void:inDataset <https://data.ox.ac.uk/id/dataset/itservices/services> ;
