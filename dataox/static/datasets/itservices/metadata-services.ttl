@@ -48,13 +48,14 @@
 <https://id.it.ox.ac.uk/service-catalogue> a cat:Catalogue ;
     skos:prefLabel "Service catalogue for IT Services" ;
     dcterms:publisher <http://oxpoints.oucs.ox.ac.uk/id/31337175> ;
+    oo:contact <https://id.it.ox.ac.uk/team/information-management> ;
+    oo:corrections <https://id.it.ox.ac.uk/team/information-management> ;
     cat:classificationScheme
       <http://id.ja.net/xray-service-classification> ,
       <http://id.it.ox.ac.uk/service-category> ,
       <http://id.it.ox.ac.uk/service-activity-category> ,
       <http://id.it.ox.ac.uk/service-type> ,
-      <http://id.it.ox.ac.uk/service-lifecycle-status> ;
-    skos:member <https://id.it.ox.ac.uk/service-catalogue/user-facing> .
+      <http://id.it.ox.ac.uk/service-lifecycle-status> .
 
 <https://data.ox.ac.uk/graph/itservices/services/data> a foaf:Document ;
     void:inDataset <https://data.ox.ac.uk/id/dataset/itservices/services> ;
