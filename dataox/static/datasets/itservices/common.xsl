@@ -40,6 +40,10 @@
       <xsl:when test="$team/fields/field[@name='URI']/text/text()">
         <xsl:value-of select="$team/fields/field[@name='URI']/text/text()"/>
       </xsl:when>
+      <xsl:when test="$team/fields/field[@name='Slug']/text/text()">
+        <xsl:value-of select="$team-base-uri"/>
+        <xsl:value-of select="$team/fields/field[@name='Slug']/text/text()"/>
+      </xsl:when>
       <xsl:otherwise>
         <xsl:value-of select="$team-base-uri"/>
         <xsl:value-of select="$team/@id"/>
