@@ -42,16 +42,6 @@
     </xsl:choose>-->
   </xsl:function>
 
-  <xsl:function name="ex:user-facing-service">
-    <xsl:param name="row"/>
-    <xsl:choose>
-      <xsl:when test="$row//field[@name='Redact']/boolean='true'"/>
-      <xsl:when test="$row//field[@name='Viewable_x0020_by']/text[not(text()='IT Services')]
-                  and $row//field[@name='Archived']/text = ('Live', 'Production')
-                  and $row//field[@name='Service_x0020_type']/text = 'Customer facing service'">true</xsl:when>
-    </xsl:choose>
-  </xsl:function>
-
   <xsl:template match="list[@name='Service Catalogue']/rows">
     <gr:BusinessEntity rdf:about="{$it-services}">
       <xsl:for-each select="row">

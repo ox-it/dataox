@@ -32,20 +32,13 @@
   <xsl:key name="teams" match="list[@name='Teams']/rows/row" use="@id"/>
 
   <xsl:template match="site">
-    <xsl:if test="$internal">
       <xsl:apply-imports/>
-    </xsl:if>
   </xsl:template>
 
-  <xsl:function name="ex:post-uri">
-    <xsl:param name="node"/>
-    <xsl:text>https://id.it.ox.ac.uk/post/</xsl:text>
-    <xsl:value-of select="$node/ancestor-or-self::row[1]/@id"/>
-  </xsl:function>
 
   <xsl:template match="list[@name='User Information List']/rows/row">
     <xsl:variable name="content-type" select=".//field[@name='ContentType']/text/text()"/>
-    <xsl:if test="$content-type = 'Person'">
+    <xsl:if test="$content-type = 'Person' and ex:include-person(.)">
       <foaf:Person rdf:about="{ex:agent-uri(.)}">
         <xsl:apply-templates mode="in-person"/>
         <xsl:variable name="post" select="key('post-holders', @id)"/>
@@ -66,12 +59,14 @@
   </xsl:template>
 
   <xsl:template match="list[@name='Staff']/rows/row">
+    <xsl:if test="ex:include-person(fields/field[@name='Person']/user)">
     <org:Post rdf:about="{ex:post-uri(.)}">
       <xsl:apply-templates mode="in-post"/>
       <xsl:if test="not(.//field[@name='Manager0'])">
         <xsl:apply-templates select="." mode="infer-manager"/>
       </xsl:if>
     </org:Post>
+    </xsl:if>
   </xsl:template>
 
   <xsl:template match="field[@name='Title']/text" mode="in-person">
@@ -103,14 +98,16 @@
   </xsl:template>
 
   <xsl:template match="field[@name='Picture']/url[@href]" mode="in-person">
-    <xsl:variable name="username" select="../../field[@name='UserName']/text"/>
-    <foaf:img>
-      <foaf:Image rdf:about="https://backstage.data.ox.ac.uk/sharepoint/user-profile-image/{$username}/large/">
-        <foaf:thumbnail>
-          <foaf:Image rdf:about="https://backstage.data.ox.ac.uk/sharepoint/user-profile-image/{$username}/medium/"/>
-        </foaf:thumbnail>
-      </foaf:Image>
-    </foaf:img>
+    <xsl:if test="$internal">
+      <xsl:variable name="username" select="../../field[@name='UserName']/text"/>
+      <foaf:img>
+        <foaf:Image rdf:about="https://backstage.data.ox.ac.uk/sharepoint/user-profile-image/{$username}/large/">
+          <foaf:thumbnail>
+            <foaf:Image rdf:about="https://backstage.data.ox.ac.uk/sharepoint/user-profile-image/{$username}/medium/"/>
+          </foaf:thumbnail>
+        </foaf:Image>
+      </foaf:img>
+    </xsl:if>
   </xsl:template>
 
   <xsl:template match="field[@name='EMail']/text" mode="in-person">
@@ -165,64 +162,72 @@
   </xsl:template>
 
   <xsl:template match="field[@name='Assists']/lookup" mode="in-post">
-    <adhoc:assistantTo rdf:resource="{ex:post-uri(key('staff', @id))}"/>
+    <xsl:if test="$internal">
+      <adhoc:assistantTo rdf:resource="{ex:post-uri(key('staff', @id))}"/>
+    </xsl:if>
   </xsl:template>
 
   <xsl:template match="field[@name='Office']/text[text()]" mode="in-post">
-    <xsl:variable name="building-uri">
-      <xsl:text>http://oxpoints.oucs.ox.ac.uk/id/</xsl:text>
-      <xsl:choose>
-        <xsl:when test="text()='Banbury Road'">40002001</xsl:when>
-        <xsl:when test="text()='Blue Boar Court'">23233619</xsl:when>
-        <xsl:when test="text()='Hythe Bridge Street'">23233672</xsl:when>
-        <xsl:when test="text()='Malthouse'">23233636</xsl:when>
-        <xsl:when test="text()='Parks Road'">23233753</xsl:when>
-        <xsl:when test="text()='Wellington Square'">23233665</xsl:when>
-        <xsl:when test="text()='Worcester Street'">23233614</xsl:when>
-      </xsl:choose>
-    </xsl:variable>
-    <xsl:variable name="space" select="normalize-space(../../field[@name='Space']/text/text())"/>
-    <org:basedAt rdf:resource="{$building-uri}"/>
-    <adhoc:building rdf:resource="{$building-uri}"/>
-    <xsl:if test="$space">
-      <adhoc:space>
-        <geo:SpatialThing rdf:about="https://data.ox.ac.uk/id/estates/{$space}">
-          <humfrey:noIndex rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean">true</humfrey:noIndex>
-          <rdfs:label>
-            <xsl:value-of select="$space"/>
-          </rdfs:label>
-          <skos:notation rdf:datatype="https://data.ox.ac.uk/id/notation/estates">
-            <xsl:value-of select="$space"/>
-          </skos:notation>
-          <spatialrelations:within rdf:resource="{$building-uri}"/>
-        </geo:SpatialThing>
-      </adhoc:space>
+    <xsl:if test="$internal">
+      <xsl:variable name="building-uri">
+        <xsl:text>http://oxpoints.oucs.ox.ac.uk/id/</xsl:text>
+        <xsl:choose>
+          <xsl:when test="text()='Banbury Road'">40002001</xsl:when>
+          <xsl:when test="text()='Blue Boar Court'">23233619</xsl:when>
+          <xsl:when test="text()='Hythe Bridge Street'">23233672</xsl:when>
+          <xsl:when test="text()='Malthouse'">23233636</xsl:when>
+          <xsl:when test="text()='Parks Road'">23233753</xsl:when>
+          <xsl:when test="text()='Wellington Square'">23233665</xsl:when>
+          <xsl:when test="text()='Worcester Street'">23233614</xsl:when>
+        </xsl:choose>
+      </xsl:variable>
+      <xsl:variable name="space" select="normalize-space(../../field[@name='Space']/text/text())"/>
+      <org:basedAt rdf:resource="{$building-uri}"/>
+      <adhoc:building rdf:resource="{$building-uri}"/>
+      <xsl:if test="$space">
+        <adhoc:space>
+          <geo:SpatialThing rdf:about="https://data.ox.ac.uk/id/estates/{$space}">
+            <humfrey:noIndex rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean">true</humfrey:noIndex>
+            <rdfs:label>
+              <xsl:value-of select="$space"/>
+            </rdfs:label>
+            <skos:notation rdf:datatype="https://data.ox.ac.uk/id/notation/estates">
+              <xsl:value-of select="$space"/>
+            </skos:notation>
+            <spatialrelations:within rdf:resource="{$building-uri}"/>
+          </geo:SpatialThing>
+        </adhoc:space>
+      </xsl:if>
     </xsl:if>
   </xsl:template>
   
   <xsl:template match="field[@name='Manager0']/lookup[@id]" mode="in-post">
-    <org:reportsTo rdf:resource="{ex:post-uri(key('staff', @id))}"/>
+    <xsl:if test="$internal">
+      <org:reportsTo rdf:resource="{ex:post-uri(key('staff', @id))}"/>
+    </xsl:if>
   </xsl:template>
 
   <xsl:template match="row" mode="infer-manager">
-    <xsl:variable name="team" select="key('teams', fields/field[@name='Team']/lookup/@id)"/>
-    <xsl:variable name="team-of-manager">
-      <xsl:choose>
-        <xsl:when test="fields/field[@name='Manager']/boolean/text()='true'">
-          <xsl:if test="$team/fields/field[@name='Part_x0020_of']/lookup/@id">
-            <xsl:value-of select="key('teams', $team/fields/field[@name='Part_x0020_of']/lookup/@id)/@id"/>
-          </xsl:if>
-        </xsl:when>
-        <xsl:otherwise>
-          <xsl:value-of select="$team/@id"/>
-        </xsl:otherwise>
-      </xsl:choose>
-    </xsl:variable>
-    <xsl:if test="$team-of-manager">
-    <xsl:variable name="managers" select="key('team-managers', $team-of-manager)"/>
-    <xsl:for-each select="$managers">
-      <org:reportsTo rdf:resource="{ex:post-uri(.)}"/>
-    </xsl:for-each>
+    <xsl:if test="$internal">
+      <xsl:variable name="team" select="key('teams', fields/field[@name='Team']/lookup/@id)"/>
+      <xsl:variable name="team-of-manager">
+        <xsl:choose>
+          <xsl:when test="fields/field[@name='Manager']/boolean/text()='true'">
+            <xsl:if test="$team/fields/field[@name='Part_x0020_of']/lookup/@id">
+              <xsl:value-of select="key('teams', $team/fields/field[@name='Part_x0020_of']/lookup/@id)/@id"/>
+            </xsl:if>
+          </xsl:when>
+          <xsl:otherwise>
+            <xsl:value-of select="$team/@id"/>
+          </xsl:otherwise>
+        </xsl:choose>
+      </xsl:variable>
+      <xsl:if test="$team-of-manager">
+        <xsl:variable name="managers" select="key('team-managers', $team-of-manager)"/>
+        <xsl:for-each select="$managers">
+          <org:reportsTo rdf:resource="{ex:post-uri(.)}"/>
+        </xsl:for-each>
+      </xsl:if>
     </xsl:if>
   </xsl:template>
 

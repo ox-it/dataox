@@ -34,6 +34,9 @@
   <xsl:key name="services-by-slug" match="/site/lists/list[@name='Service Catalogue']/rows/row" use="fields/field[@name='Slug']/text/text()"/>
   <xsl:key name="service-classifications" match="/site/lists/list[@name='Service classifications']/rows/row" use="@id"/>
 
+  <xsl:key name="services-by-business-owner" match="/site/lists/list[@name='Service Catalogue']/rows/row" use="fields/field[@name='Business_x0020_Owner']/user/@id"/>
+  <xsl:key name="services-by-service-owner" match="/site/lists/list[@name='Service Catalogue']/rows/row" use="fields/field[@name='Service_x0020_Owner']/user/@id"/>
+
   <xsl:function name="ex:team-uri">
     <xsl:param name="team"/>
     <xsl:choose>
@@ -74,10 +77,42 @@
     </xsl:choose>
   </xsl:function>
 
+  <xsl:function name="ex:post-uri">
+    <xsl:param name="node"/>
+    <xsl:text>https://id.it.ox.ac.uk/post/</xsl:text>
+    <xsl:value-of select="$node/ancestor-or-self::row[1]/@id"/>
+  </xsl:function>
+
   <xsl:function name="ex:service-classification-uri">
     <xsl:param name="service-classification"/>
     <xsl:for-each select="$service-classification">
       <xsl:value-of select="concat($service-classification-base-uri, '/', key('service-classifications', @id)/fields/field[@name='Slug']/text/text())"/>
     </xsl:for-each>
+  </xsl:function>
+
+
+  <xsl:function name="ex:include-service">
+    <xsl:param name="row"/>
+      <xsl:if test="not($row//field[@name='Redact']/boolean='true') and (
+                 $store='itservices' or (
+                         $row//field[@name='Viewable_x0020_by']/text[not(text()='IT Services')]
+                     and $row//field[@name='Archived']/text = 'Live'
+                     and $row//field[@name='Service_x0020_type']/text = 'Customer facing service'))">true</xsl:if>
+    <!--<xsl:choose>
+      <xsl:when test="$row//field[@name='Redact']/boolean='true'"/>
+      <xsl:when test="$store='itservices'">true</xsl:when>
+      <xsl:when test="$row//field[@name='Service_x0020_group_x0020_or_x00']/text/text() = 'Service grouping'"/>
+      <xsl:when test="$row//field[@name='Viewable_x0020_by']/text[not(text()='IT Services')]">true</xsl:when>
+    </xsl:choose>-->
+  </xsl:function>
+
+  <xsl:variable name="root" select="/"/>
+  <xsl:function name="ex:include-person">
+    <xsl:param name="row"/>
+    <xsl:choose>
+      <xsl:when test="$store='itservices'">true</xsl:when>
+      <xsl:when test="key('services-by-business-owner', $row/@id, $root)">true</xsl:when>
+      <xsl:when test="key('services-by-service-owner', $row/@id, $root)">true</xsl:when>
+    </xsl:choose>
   </xsl:function>
 </xsl:stylesheet>

@@ -24,9 +24,7 @@
   <xsl:variable name="internal" select="$store='itservices'"/>
 
   <xsl:template match="site">
-    <xsl:if test="$internal">
       <xsl:apply-imports/>
-    </xsl:if>
   </xsl:template>
 
   <xsl:template match="list[@name='Teams']/rows/row">
