@@ -212,9 +212,7 @@
   </xsl:template>
   
   <xsl:template match="field[@name='Service_x0020_Delivery_x0020_Man']/lookup" mode="in-service">
-    <xsl:if test="$internal">
-      <adhoc:serviceTeam rdf:resource="{ex:team-uri(.)}"/>
-    </xsl:if>
+    <adhoc:serviceTeam rdf:resource="{ex:team-uri(.)}"/>
   </xsl:template>
   
   <xsl:template match="field[@name='GenericUserBases']/text" mode="in-offering">
@@ -242,15 +240,11 @@
   </xsl:template>
 
   <xsl:template match="field[@name='Service_x0020_Owner']/user" mode="in-service">
-    <xsl:if test="$internal">
-      <adhoc:serviceOwner rdf:resource="{ex:agent-uri(.)}"/>
-    </xsl:if>
+    <adhoc:serviceOwner rdf:resource="{ex:agent-uri(.)}"/>
   </xsl:template>
 
   <xsl:template match="field[@name='Business_x0020_Owner']/user" mode="in-service">
-    <xsl:if test="$internal">
-      <adhoc:serviceBusinessOwner rdf:resource="{ex:agent-uri(.)}"/>
-    </xsl:if>
+    <adhoc:serviceBusinessOwner rdf:resource="{ex:agent-uri(.)}"/>
   </xsl:template>
 
   <xsl:template match="field[@name='Slug']/text" mode="in-service">
