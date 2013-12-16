@@ -21,6 +21,9 @@
   <xsl:import href="../common/telephone.xsl"/>
   <xsl:import href="../common/slugify.xsl"/>
 
+  <xsl:param name="store"/>
+  <xsl:variable name="internal" select="$store='itservices'"/>
+
   <xsl:variable name="base-uri">https://id.it.ox.ac.uk/</xsl:variable>
   <xsl:variable name="team-base-uri">https://id.it.ox.ac.uk/team/</xsl:variable>
   <xsl:variable name="service-category-base-uri">https://id.it.ox.ac.uk/service-category</xsl:variable>

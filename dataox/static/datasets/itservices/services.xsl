@@ -19,9 +19,6 @@
   <xsl:import href="common.xsl"/>
   <xsl:output method="xml" indent="yes"/>
 
-  <xsl:param name="store"/>
-  <xsl:variable name="internal" select="$store='itservices'"/>
-
   <xsl:key name="user-bases" match="/site/lists/list[@name='User bases']/rows/row" use="@id"/>
   <xsl:key name="user-base-names" match="/site/lists/list[@name='User bases']/rows/row" use="fields/field[@name='Title']/text/text()"/>
   <xsl:key name="grouped-services" match="/site/lists/list[@name='Service Catalogue']/rows/row" use="fields/field[@name='Service_x0020_group']/lookup/@id"/>

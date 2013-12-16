@@ -20,9 +20,6 @@
   <xsl:import href="common.xsl"/>
   <xsl:output method="xml" indent="yes"/>
 
-  <xsl:param name="store"/>
-  <xsl:variable name="internal" select="$store='itservices'"/>
-
   <xsl:template match="list[@name='User Information List']/rows/row">
     <xsl:variable name="content-type" select=".//field[@name='ContentType']/text/text()"/>
     <xsl:if test="$content-type = 'DomainGroup' and starts-with(.//field[@name='Name']/text, 'AD-OAK\group_')">

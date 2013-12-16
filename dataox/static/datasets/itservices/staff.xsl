@@ -23,8 +23,6 @@
   <xsl:import href="common.xsl"/>
   <xsl:output method="xml" indent="yes"/>
 
-  <xsl:param name="store"/>
-  <xsl:variable name="internal" select="$store='itservices'"/>
   <xsl:key name="post-holders" match="list[@name='Staff']/rows/row" use="fields/field[@name='Person']/user/@id"/>
   <xsl:key name="team-managers" match="list[@name='Staff']/rows/row[.//field[@name='Manager']/boolean/text()='true']" use="fields/field[@name='Team']/lookup/@id"/>
   
