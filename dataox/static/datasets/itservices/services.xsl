@@ -209,7 +209,7 @@
   </xsl:template>
   
   <xsl:template match="field[@name='Service_x0020_Delivery_x0020_Man']/lookup" mode="in-service">
-    <adhoc:serviceTeam rdf:resource="{ex:team-uri(.)}"/>
+    <adhoc:serviceTeam rdf:resource="{ex:team-uri(key('teams', @id))}"/>
   </xsl:template>
   
   <xsl:template match="field[@name='GenericUserBases']/text" mode="in-offering">
