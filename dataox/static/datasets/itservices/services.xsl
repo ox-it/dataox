@@ -314,7 +314,7 @@
     </dcterms:created>
   </xsl:template>
 
-  <xsl:template match="field[@name='Teaser']/text[text()]">
+  <xsl:template match="field[@name='Teaser']/text[text()]" mode="in-service">
     <ui-hints:teaser>
       <xsl:value-of select="text()"/>
     </ui-hints:teaser>
