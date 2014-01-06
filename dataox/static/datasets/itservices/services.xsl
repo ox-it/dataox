@@ -12,6 +12,7 @@
     xmlns:v="http://www.w3.org/2006/vcard/ns#"
     xmlns:cat="http://purl.org/NET/catalogue/"
     xmlns:ex="http://www.example.org/"
+    xmlns:ui-hints="http://purl.org/NET/ui-hints/"
     xmlns:d="http://schemas.microsoft.com/ado/2007/08/dataservices"
     xmlns:m="http://schemas.microsoft.com/ado/2007/08/dataservices/metadata"
     xpath-default-namespace="https://github.com/ox-it/python-sharepoint/"
@@ -311,6 +312,12 @@
     <dcterms:created rdf:datatype="http://www.w3.org/2001/XMLSchema#dateTime">
       <xsl:copy/>
     </dcterms:created>
+  </xsl:template>
+
+  <xsl:template match="field[@name='Teaser']/text[text()]">
+    <ui-hints:teaser>
+      <xsl:value-of select="text()"/>
+    </ui-hints:teaser>
   </xsl:template>
   
   <xsl:template match="field[@name='CatalogueReady']/boolean/text()" mode="in-catalogue-record">
