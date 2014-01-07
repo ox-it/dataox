@@ -98,6 +98,12 @@
     </ui-hints:teaser>
   </xsl:template>
 
+  <xsl:template match="field[@name='Order0']/text[text()]">
+    <ui-hints:sortKey rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">
+      <xsl:value-of select="text()"/>
+    </ui-hints:sortKey>
+  </xsl:template>
+
   <xsl:template match="field[@name='Slug']/text[text()]">
     <skos:notation rdf:datatype="https://id.it.ox.ac.uk/notation/service-category">
       <xsl:value-of select="text()"/>
