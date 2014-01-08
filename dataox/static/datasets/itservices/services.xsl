@@ -76,6 +76,12 @@
     </gr:Offering>
   </xsl:template>
 
+  <xsl:template match="field[@name='Short_x0020_Title']/text[text()]" mode="in-service">
+    <ui-hints:shortLabel>
+      <xsl:value-of select="text()"/>
+    </ui-hints:shortLabel>
+  </xsl:template>
+
   <xsl:template match="field[@name='Title']/text[text()]" mode="in-service">
     <rdfs:label>
       <xsl:value-of select="text()"/>
