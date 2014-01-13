@@ -98,9 +98,9 @@
     </ui-hints:teaser>
   </xsl:template>
 
-  <xsl:template match="field[@name='Order0']/text[text()]">
+  <xsl:template match="field[@name='Order0']/number[text()]">
     <ui-hints:sortKey rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">
-      <xsl:value-of select="text()"/>
+      <xsl:value-of select="floor(text())"/>
     </ui-hints:sortKey>
   </xsl:template>
 
