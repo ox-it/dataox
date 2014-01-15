@@ -2,7 +2,7 @@ import account.forms
 from django import forms
 import account.models
 
-from django.contrib.auth.models import User, UNUSABLE_PASSWORD
+from django.contrib.auth.models import User
 
 class SignupForm(account.forms.SignupForm):
     first_name = forms.CharField(max_length=30)
@@ -28,6 +28,10 @@ class SignupForm(account.forms.SignupForm):
 class PasswordResetForm(account.forms.PasswordResetForm):
     def clean_email(self):
         email = super(PasswordResetForm, self).clean_email()
-        if User.objects.filter(email__iexact=email, password=UNUSABLE_PASSWORD).exists():
+        try:
+            user = User.objects.get(email=email)
+            if user.has_unusable_password():
+                raise forms.ValidationError('Your password cannot be reset.')
+        except User.DoesNotExist:
             raise forms.ValidationError('Your password cannot be reset.')
         return email
