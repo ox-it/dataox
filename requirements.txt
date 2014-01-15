@@ -1,7 +1,12 @@
 feedparser
 django-conneg>=0.2.2
 redis>=2.4.9
-python-sharepoint>=0.2.1
+sharepoint>=0.2.1
 django-user-accounts
 django-maintenancemode
 django-dirtyfields
+python-dateutil
+raven
+django-pipeline
+django-statsd-mozilla
+requests
