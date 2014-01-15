@@ -9,20 +9,16 @@
     xmlns:oo="http://purl.org/openorg/"
     xmlns:rdfs="http://www.w3.org/2000/01/rdf-schema#"
     xmlns:skos="http://www.w3.org/2004/02/skos/core#"
-    xmlns:tio="http://purl.org/tio/ns#"
     xmlns:v="http://www.w3.org/2006/vcard/ns#"
+    xmlns:cat="http://purl.org/NET/catalogue/"
     xmlns:ex="http://www.example.org/"
+    xmlns:ui-hints="http://purl.org/NET/ui-hints/"
     xmlns:d="http://schemas.microsoft.com/ado/2007/08/dataservices"
     xmlns:m="http://schemas.microsoft.com/ado/2007/08/dataservices/metadata"
     xpath-default-namespace="https://github.com/ox-it/python-sharepoint/"
     version="2.0">
   <xsl:import href="common.xsl"/>
   <xsl:output method="xml" indent="yes"/>
-
-  <xsl:param name="store"/>
-  <xsl:variable name="internal" select="$store='itservices'"/>
-
-  <xsl:variable name="service-base-uri">https://data.ox.ac.uk/id/itservices/</xsl:variable>
 
   <xsl:key name="user-bases" match="/site/lists/list[@name='User bases']/rows/row" use="@id"/>
   <xsl:key name="user-base-names" match="/site/lists/list[@name='User bases']/rows/row" use="fields/field[@name='Title']/text/text()"/>
@@ -44,16 +40,6 @@
     </xsl:choose>-->
   </xsl:function>
 
-  <xsl:function name="ex:user-facing-service">
-    <xsl:param name="row"/>
-    <xsl:choose>
-      <xsl:when test="$row//field[@name='Redact']/boolean='true'"/>
-      <xsl:when test="$row//field[@name='Viewable_x0020_by']/text[not(text()='IT Services')]
-                  and $row//field[@name='Archived']/text = ('Live', 'Production')
-                  and $row//field[@name='Service_x0020_type']/text = 'Customer facing service'">true</xsl:when>
-    </xsl:choose>
-  </xsl:function>
-
   <xsl:template match="list[@name='Service Catalogue']/rows">
     <gr:BusinessEntity rdf:about="{$it-services}">
       <xsl:for-each select="row">
@@ -64,47 +50,48 @@
         </xsl:if>
       </xsl:for-each>
     </gr:BusinessEntity>
-    <rdf:Description rdf:about="https://data.ox.ac.uk/id/itservices/service-catalogue/user-facing">
-      <xsl:for-each select="row">
-        <xsl:if test="ex:include-service(.) and ex:user-facing-service(.)">
-          <xsl:comment select=".//field[@name='Title']/text"/>
-          <skos:member rdf:resource="{$service-base-uri}service/{@id}"/>
-        </xsl:if>
-      </xsl:for-each>
-    </rdf:Description>
-    <rdf:Description rdf:about="https://data.ox.ac.uk/id/itservices/service-catalogue">
-      <xsl:for-each select="row">
-        <xsl:if test="ex:include-service(.) and not(ex:user-facing-service(.))">
-          <xsl:comment select=".//field[@name='Title']/text"/>
-          <skos:member rdf:resource="{$service-base-uri}service/{@id}"/>
-        </xsl:if>
-      </xsl:for-each>
-    </rdf:Description>
-    
+    <xsl:for-each select="row">
+      <xsl:if test="ex:include-service(.)">
+        <cat:Record rdf:about="{ex:service-uri('service-catalogue-record', .)}">
+          <xsl:apply-templates select="." mode="in-catalogue-record"/>
+          <cat:catalogue rdf:resource="https://id.it.ox.ac.uk/service-catalogue"/>
+          <cat:item rdf:resource="{ex:service-uri('service', .)}"/>
+        </cat:Record>
+      </xsl:if>
+    </xsl:for-each>
   </xsl:template>
 
   <xsl:template match="list[@name='Service Catalogue']/rows/row">
-    <gr:Offering rdf:about="{$service-base-uri}service-offering/{@id}">
+    <gr:Offering rdf:about="{ex:service-uri('service-offering', .)}">
+      <gr:hasBusinessFunction rdf:resource="http://purl.org/goodrelations/v1#ProvideService"/>
       <gr:includes>
-        <tio:TicketPlaceholder rdf:about="{$service-base-uri}use-of-service/{@id}">
-          <tio:accessTo>
-            <gr:ProductOrService rdf:about="{$service-base-uri}service/{@id}">
-              <rdf:type rdf:resource="http://spi-fm.uca.es/neologism/cerif#Service"/>
-              <oo:organizationPart rdf:resource="{$it-services}"/>
-              <oo:formalOrganization rdf:resource="{$university-of-oxford}"/>
-              <xsl:apply-templates mode="in-service"/>
-            </gr:ProductOrService>
-          </tio:accessTo>
-          <xsl:apply-templates mode="in-ticket-placeholder"/>
-        </tio:TicketPlaceholder>
+        <gr:ProductOrService rdf:about="{ex:service-uri('service', .)}">
+          <rdf:type rdf:resource="http://spi-fm.uca.es/neologism/cerif#Service"/>
+          <oo:organizationPart rdf:resource="{$it-services}"/>
+          <oo:formalOrganization rdf:resource="{$university-of-oxford}"/>
+          <xsl:apply-templates mode="in-service"/>
+        </gr:ProductOrService>
       </gr:includes>
       <xsl:apply-templates mode="in-offering"/>
     </gr:Offering>
   </xsl:template>
 
+  <xsl:template match="field[@name='Short_x0020_Title']/text[text()]" mode="in-service">
+    <ui-hints:shortLabel>
+      <xsl:value-of select="text()"/>
+    </ui-hints:shortLabel>
+  </xsl:template>
+
   <xsl:template match="field[@name='Title']/text[text()]" mode="in-service">
     <rdfs:label>
       <xsl:value-of select="text()"/>
+    </rdfs:label>
+  </xsl:template>
+
+  <xsl:template match="field[@name='Title']/text[text()]" mode="in-offering">
+    <rdfs:label>
+      <xsl:value-of select="text()"/>
+      <xsl:text> (service offering)</xsl:text>
     </rdfs:label>
   </xsl:template>
 
@@ -144,7 +131,7 @@
   <xsl:template match="list[@name='Service Catalogue']/rows/row" mode="service-contact">
     <xsl:if test="fields/field[@name='Initial_x0020_contact_x0020_phon' or @name='Initial_x0020_Contact_x0020_Emai' or @name='Initial_x0020_Contact_x0020_Form']/*/text()">
       <oo:contact>
-        <foaf:Agent rdf:about="{$service-base-uri}service/{@id}/contact">
+        <foaf:Agent rdf:about="{ex:service-uri('service', .)}/contact">
           <xsl:apply-templates select="fields/field[*/text()]" mode="service-contact"/>
         </foaf:Agent>
       </oo:contact>
@@ -175,7 +162,7 @@
     </xsl:variable>
     <xsl:choose>
       <xsl:when test="$id">
-        <dcterms:subject rdf:resource="{$service-base-uri}service-activity-category/{$id}"/>
+        <dcterms:subject rdf:resource="{$base-uri}service-activity-category/{$id}"/>
       </xsl:when>
       <xsl:otherwise>
         <xsl:message>Unexpected activity category: <xsl:value-of select="text()"/></xsl:message>
@@ -194,7 +181,7 @@
     </xsl:variable>
     <xsl:choose>
       <xsl:when test="$id">
-        <dcterms:subject rdf:resource="{$service-base-uri}service-type/{$id}"/>
+        <dcterms:subject rdf:resource="{$base-uri}service-type/{$id}"/>
       </xsl:when>
       <xsl:otherwise>
         <xsl:message>Unexpected service type: <xsl:value-of select="text()"/></xsl:message>
@@ -216,7 +203,7 @@
     </xsl:variable>
     <xsl:choose>
       <xsl:when test="$id">
-        <dcterms:subject rdf:resource="{$service-base-uri}service-lifecycle-status/{$id}"/>
+        <dcterms:subject rdf:resource="{$base-uri}service-lifecycle-status/{$id}"/>
       </xsl:when>
       <xsl:otherwise>
         <xsl:message>Unexpected service lifecycle status: <xsl:value-of select="text()"/></xsl:message>
@@ -229,9 +216,7 @@
   </xsl:template>
   
   <xsl:template match="field[@name='Service_x0020_Delivery_x0020_Man']/lookup" mode="in-service">
-    <xsl:if test="$internal">
-      <adhoc:serviceTeam rdf:resource="{ex:team-uri(.)}"/>
-    </xsl:if>
+    <adhoc:serviceTeam rdf:resource="{ex:team-uri(key('teams', @id))}"/>
   </xsl:template>
   
   <xsl:template match="field[@name='GenericUserBases']/text" mode="in-offering">
@@ -259,17 +244,26 @@
   </xsl:template>
 
   <xsl:template match="field[@name='Service_x0020_Owner']/user" mode="in-service">
-    <xsl:if test="$internal">
-      <adhoc:serviceOwner rdf:resource="{ex:agent-uri(.)}"/>
-    </xsl:if>
+    <adhoc:serviceOwner rdf:resource="{ex:agent-uri(.)}"/>
   </xsl:template>
 
   <xsl:template match="field[@name='Business_x0020_Owner']/user" mode="in-service">
-    <xsl:if test="$internal">
-      <adhoc:serviceBusinessOwner rdf:resource="{ex:agent-uri(.)}"/>
-    </xsl:if>
+    <adhoc:serviceBusinessOwner rdf:resource="{ex:agent-uri(.)}"/>
   </xsl:template>
 
+  <xsl:template match="field[@name='Slug']/text" mode="in-service">
+    <skos:notation rdf:datatype="https://id.it.ox.ac.uk/notation/service">
+      <xsl:choose>
+        <xsl:when test="text()">
+          <xsl:value-of select="text()"/>
+        </xsl:when>
+        <xsl:otherwise>
+          <xsl:value-of select="../../../@id"/>
+        </xsl:otherwise>
+      </xsl:choose>
+    </skos:notation>
+  </xsl:template>
+  
   <xsl:template match="field[@name='Status_x0020_ID']/text[text()]" mode="in-service">
     <foaf:account>
       <foaf:OnlineAccount>
@@ -304,13 +298,37 @@
   <xsl:template match="field[@name='Service_x0020_group']/lookup[@id != '0']" mode="in-service">
     <xsl:variable name="part-of" select="key('services', @id)"/>
     <xsl:if test="$part-of and ex:include-service($part-of)">
-      <dcterms:isPartOf rdf:resource="{$service-base-uri}service/{@id}"/>
+      <dcterms:isPartOf rdf:resource="{ex:service-uri('service', $part-of)}"/>
     </xsl:if>
   </xsl:template>
 
   <xsl:template match="field[@name='Service_x0020_group_x0020_or_x00']/text" mode="in-service">
     <xsl:for-each select="key('grouped-services', ../../../@id)">
-      <dcterms:hasPart rdf:resource="{$service-base-uri}service/{@id}"/>
+      <dcterms:hasPart rdf:resource="{ex:service-uri('service', .)}"/>
     </xsl:for-each>
+  </xsl:template>
+  
+  <xsl:template match="field[@name='Modified']/dateTime/text()" mode="in-catalogue-record">
+    <dcterms:modified rdf:datatype="http://www.w3.org/2001/XMLSchema#dateTime">
+      <xsl:copy/>
+    </dcterms:modified>
+  </xsl:template>
+  
+  <xsl:template match="field[@name='Created']/dateTime/text()" mode="in-catalogue-record">
+    <dcterms:created rdf:datatype="http://www.w3.org/2001/XMLSchema#dateTime">
+      <xsl:copy/>
+    </dcterms:created>
+  </xsl:template>
+
+  <xsl:template match="field[@name='Teaser']/text[text()]" mode="in-service">
+    <ui-hints:teaser>
+      <xsl:value-of select="text()"/>
+    </ui-hints:teaser>
+  </xsl:template>
+  
+  <xsl:template match="field[@name='CatalogueReady']/boolean/text()" mode="in-catalogue-record">
+    <adhoc:catalogueReady rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean">
+      <xsl:copy/>
+    </adhoc:catalogueReady>
   </xsl:template>
 </xsl:stylesheet>

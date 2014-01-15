@@ -3,48 +3,48 @@
 @prefix rdfs:    <http://www.w3.org/2000/01/rdf-schema#> .
 @prefix skos:    <http://www.w3.org/2004/02/skos/core#>.
 
-<https://data.ox.ac.uk/id/itservices/service-type> a skos:ConceptScheme ;
+<https://id.it.ox.ac.uk/service-type> a skos:ConceptScheme ;
   skos:prefLabel "service types"@en ;
   skos:note "A code list for IT Service service types." ;
   dcterms:publisher <http://oxpoints.oucs.ox.ac.uk/id/31337175> ;
   skos:topConcept
-    <https://data.ox.ac.uk/id/itservices/service-type/user-facing> ,
-    <https://data.ox.ac.uk/id/itservices/service-type/supporting> ,
-    <https://data.ox.ac.uk/id/itservices/service-type/itss> ,
-    <https://data.ox.ac.uk/id/itservices/service-type/internal> ;
-  rdfs:seeAlso <https://data.ox.ac.uk/id/itservices/ServiceType> .
+    <https://id.it.ox.ac.uk/service-type/user-facing> ,
+    <https://id.it.ox.ac.uk/service-type/supporting> ,
+    <https://id.it.ox.ac.uk/service-type/itss> ,
+    <https://id.it.ox.ac.uk/service-type/internal> ;
+  rdfs:seeAlso <https://id.it.ox.ac.uk/ServiceType> .
 
-<https://data.ox.ac.uk/id/itservices/ServiceType> a rdfs:Class, owl:Class ;
+<https://id.it.ox.ac.uk/ServiceType> a rdfs:Class, owl:Class ;
   rdfs:subClassOf skos:Concept ;
-  rdfs:seeAlso <https://data.ox.ac.uk/id/itservices/service-type> .
+  rdfs:seeAlso <https://id.it.ox.ac.uk/service-type> .
 
 
-<https://data.ox.ac.uk/id/itservices/service-type/user-facing>
-  a <https://data.ox.ac.uk/id/itservices/ServiceType>, skos:Concept ;
+<https://id.it.ox.ac.uk/service-type/user-facing>
+  a <https://id.it.ox.ac.uk/ServiceType>, skos:Concept ;
   skos:prefLabel "user-facing"@en ;
   skos:definition "A service for users outside of IT Services." ;
-  skos:notation "user-facing"^^<https://data.ox.ac.uk/id/itservices/service-type/notation> ;
-  skos:inScheme <https://data.ox.ac.uk/id/itservices/service-type> .
+  skos:notation "user-facing"^^<https://id.it.ox.ac.uk/service-type/notation> ;
+  skos:inScheme <https://id.it.ox.ac.uk/service-type> .
 
-<https://data.ox.ac.uk/id/itservices/service-type/supporting>
-  a <https://data.ox.ac.uk/id/itservices/ServiceType>, skos:Concept ;
+<https://id.it.ox.ac.uk/service-type/supporting>
+  a <https://id.it.ox.ac.uk/ServiceType>, skos:Concept ;
   skos:prefLabel "supporting"@en ;
   skos:definition "A service with no direct users, but which supports other services." ;
-  skos:notation "supporting"^^<https://data.ox.ac.uk/id/itservices/service-type/notation> ;
-  skos:inScheme <https://data.ox.ac.uk/id/itservices/service-type> .
+  skos:notation "supporting"^^<https://id.it.ox.ac.uk/service-type/notation> ;
+  skos:inScheme <https://id.it.ox.ac.uk/service-type> .
 
-<https://data.ox.ac.uk/id/itservices/service-type/itss>
-  a <https://data.ox.ac.uk/id/itservices/ServiceType>, skos:Concept ;
+<https://id.it.ox.ac.uk/service-type/itss>
+  a <https://id.it.ox.ac.uk/ServiceType>, skos:Concept ;
   skos:prefLabel "ITSS only"@en ;
   skos:definition "A service primarily used only by members of IT Support Staff." ;
-  skos:notation "itss"^^<https://data.ox.ac.uk/id/itservices/service-type/notation> ;
-  skos:inScheme <https://data.ox.ac.uk/id/itservices/service-type> .
+  skos:notation "itss"^^<https://id.it.ox.ac.uk/service-type/notation> ;
+  skos:inScheme <https://id.it.ox.ac.uk/service-type> .
 
-<https://data.ox.ac.uk/id/itservices/service-type/internal>
-  a <https://data.ox.ac.uk/id/itservices/ServiceType>, skos:Concept ;
+<https://id.it.ox.ac.uk/service-type/internal>
+  a <https://id.it.ox.ac.uk/ServiceType>, skos:Concept ;
   skos:prefLabel "internal"@en ;
   skos:definition "A service primarily used only by members of IT Services." ;
-  skos:notation "internal"^^<https://data.ox.ac.uk/id/itservices/service-type/notation> ;
-  skos:inScheme <https://data.ox.ac.uk/id/itservices/service-type> .
+  skos:notation "internal"^^<https://id.it.ox.ac.uk/service-type/notation> ;
+  skos:inScheme <https://id.it.ox.ac.uk/service-type> .
 
 

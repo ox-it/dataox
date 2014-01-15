@@ -20,13 +20,8 @@
   <xsl:import href="common.xsl"/>
   <xsl:output method="xml" indent="yes"/>
 
-  <xsl:param name="store"/>
-  <xsl:variable name="internal" select="$store='itservices'"/>
-
   <xsl:template match="site">
-    <xsl:if test="$internal">
       <xsl:apply-imports/>
-    </xsl:if>
   </xsl:template>
 
   <xsl:template match="list[@name='Teams']/rows/row">

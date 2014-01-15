@@ -152,6 +152,7 @@ A number of departments are currently using vacancy feeds:
 * `Gray Institute for Radiation Oncology and Biology <http://www.rob.ox.ac.uk/opportunities>`_
 * `Department of Pharmacology <http://www.pharm.ox.ac.uk/jobvacancies>`_
 * `IT Services <http://www.it.ox.ac.uk/about/jobs/>`_
+* `Department of Zoology <http://www.zoo.ox.ac.uk/jobs/list>`_
 
 Vacancies are also syndicated to the following job sites:
 
