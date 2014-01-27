@@ -4,8 +4,8 @@
 @prefix skos:    <http://www.w3.org/2004/02/skos/core#>.
 
 <https://id.it.ox.ac.uk/service-lifecycle-status> a skos:ConceptScheme ;
-  skos:prefLabel "service types"@en ;
-  skos:note "A code list for IT Service service types." ;
+  skos:prefLabel "service lifecycle status"@en ;
+  skos:note "A code list for IT Service service lifecycle statuses." ;
   dcterms:publisher <http://oxpoints.oucs.ox.ac.uk/id/31337175> ;
   skos:topConcept
     <https://id.it.ox.ac.uk/service-lifecycle-status/in-development> ,
