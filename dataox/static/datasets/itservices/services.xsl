@@ -29,8 +29,7 @@
     <xsl:param name="row"/>
       <xsl:if test="not($row//field[@name='Redact']/boolean='true') and (
                  $store='itservices' or (
-                         $row//field[@name='Viewable_x0020_by']/text[not(text()='IT Services')]
-                     and $row//field[@name='Archived']/text = 'Live'
+                         $row//field[@name='Archived']/text = ('Live', 'Deprecated')
                      and $row//field[@name='Service_x0020_type']/text = 'Customer facing service'))">true</xsl:if>
     <!--<xsl:choose>
       <xsl:when test="$row//field[@name='Redact']/boolean='true'"/>
