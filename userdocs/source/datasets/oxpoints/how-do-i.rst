@@ -7,6 +7,26 @@ data.
 … direct a user to the reception for a department?
 --------------------------------------------------
 
+Remember that departments don't have locations. First, you'll need to find a place occupied by the department, and then find the reception for that.
+
+A unit may occupy more than one place. If in doubt, give the user the option to choose the place they want to visit. A unit will normally have a primary place (expressed using the ``org:hasPrimarySite`` relationship), to which you may wish to give more weight. Where an organization doesn't have any occupied places, you'll want to find a parent organization that does by traversing ``org:isSubOrganizationOf`` relationships.
+
+So, once you've found a place, you'll want to find out where to direct users so they can be received. For this purpose, some places have an ``oxp:reception`` relationship to another place. If the place doesn't have an associated reception, the best you can do is direct the user to the place itself.
+
+Here are some examples of places where a reception is made explicit:
+
+* A college's primary place is a site or building with the same name as the
+  college itself. That site will contain a building or space with a name like
+  'Lodge'.  There will be a ``oxp:reception`` relationship between the site and
+  the lodge.  Thus, you can always find the main lodge for a college by following
+  the property path ``org:hasPrimarySite/oxp:reception``
+* Some buildings don't have receptions of their own, and visitors should be
+  directed to a reception in another building, from where they will be collected
+  or given further instructions. In this case, don't assume that the building
+  contains its reception.
+
+Once you've found a reception, you'll need to :ref:`find some co-ordinates <find-location-of-place>`.
+
 
 … show where a unit is?
 -----------------------
@@ -16,8 +36,10 @@ data.
 ---------------------------------
 
 
-… show the location of a room on a map?
----------------------------------------
+.. _find-location-of-place:
+
+… show the location of a place on a map?
+----------------------------------------
 
 Places in OxPoints can be annotated with a latitude or longitude. However, not everything has co-ordinates — it doesn't make sense to try to add co-ordinates for every room in a building — and so it's necessary to be able to infer a location for a place.
 
