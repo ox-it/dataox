@@ -16,6 +16,33 @@ data.
 ---------------------------------
 
 
+… show the location of a room on a map?
+---------------------------------------
+
+Places in OxPoints can be annotated with a latitude or longitude. However, not everything has co-ordinates — it doesn't make sense to try to add co-ordinates for every room in a building — and so it's necessary to be able to infer a location for a place.
+
+For any place (not just a room) you should first check whether it has co-ordinates. If not, find its containing place (using ``spatialrelations:within``) and see if that has co-ordinates. You may need to follow the containment links multiple times before you find a place with co-ordinates. Co-ordinates are stored using the ``geo:lat`` and ``geo:long`` properties.
+
+If you're attempting this using SPARQL, you'll want to think of it as "find the first containing place with co-ordinates such that there isn't an intervening place that also has co-ordiantes". This can be expressed as:
+
+.. code-block:: sparql
+
+   SELECT ?place ?lat ?long WHERE {
+       ?place a oxp:Room .
+       OPTIONAL {
+           ?place spatialrelations:within* ?container .
+           ?container geo:lat ?lat ; geo:long ?long .
+           # This next bit excludes containers where there's something
+           # between ?place and ?container that also has co-ordinates.
+           NOT EXISTS {
+               ?place spatialrelations:within* ?intermediate .
+               ?intermediate spatialrelations:within+ ?container ;
+                   geo:lat ?intermediate_lat ;
+                   geo:long ?intermediate_long
+           }
+       }
+   }
+
 … present a list of units or colleges in a sensible order?
 ----------------------------------------------------------
 
