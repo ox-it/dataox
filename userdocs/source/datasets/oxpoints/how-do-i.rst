@@ -25,9 +25,9 @@ The two you'll want to use are ``skos:prefLabel`` and ``ov:sortLabel``. If somet
 
 Examples where this might be the case include:
 
- * colleges like "St John's College" should be displayed with the "St" expanded to "Saint". In this case the sort label is "Saint John's College", and it sorts above "Somerville College".
- * units whose name begins with "Oxford" generally have a sort label with the Oxford moved to the end after a comma. For example "Oxford University Development Office" has a sort label of "Development Office, Oxford University"
- * units whose name begins with "Department of" or "Faculty of" have this moved to the end as well. Examples include "Zoology, Department of" and "Theology, Faculty of"
+* colleges like "St John's College" should be displayed with the "St" expanded to "Saint". In this case the sort label is "Saint John's College", and it sorts above "Somerville College".
+* units whose name begins with "Oxford" generally have a sort label with the Oxford moved to the end after a comma. For example "Oxford University Development Office" has a sort label of "Development Office, Oxford University"
+* units whose name begins with "Department of" or "Faculty of" have this moved to the end as well. Examples include "Zoology, Department of" and "Theology, Faculty of"
 
 You can see `the current list of sort labels <https://data.ox.ac.uk/sparql/?query=SELECT+*+WHERE+{%0D%0A%3Forganization+skos%3AprefLabel+%3FprefLabel+%3B+ov%3AsortLabel+%3FsortLabel%0D%0A}&format=&common_prefixes=on>`_.
 
