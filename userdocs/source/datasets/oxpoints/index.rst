@@ -12,6 +12,11 @@ between them.
 The intent is that these data be usable in a wide variety of ways, from simple
 address queries to more complex maps and mash-ups.
 
+.. toctree::
+
+   data-model
+   how-do-i
+
 
 Bespoke API
 ----------
