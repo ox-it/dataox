@@ -306,6 +306,12 @@
       <dcterms:hasPart rdf:resource="{ex:service-uri('service', .)}"/>
     </xsl:for-each>
   </xsl:template>
+
+  <xsl:template match="field[@name='User_x0020_population']/number" mode="in-service">
+    <adhoc:userPopulation rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">
+      <xsl:value-of select="floor(text())"/>
+    </adhoc:userPopulation>
+  </xsl:template>
   
   <xsl:template match="field[@name='Modified']/dateTime/text()" mode="in-catalogue-record">
     <dcterms:modified rdf:datatype="http://www.w3.org/2001/XMLSchema#dateTime">
