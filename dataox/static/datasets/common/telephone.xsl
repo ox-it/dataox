@@ -12,14 +12,16 @@
     <xsl:variable name="prefix">
       <!-- From page 6 of the Internal Telephone Directory ("Extensions") -->
       <xsl:choose>
-        <xsl:when test="starts-with($extension, '1')">+4418656</xsl:when>
-        <xsl:when test="starts-with($extension, '7')">+4418652</xsl:when>
-        <xsl:when test="starts-with($extension, '8')">+4418652</xsl:when>
+        <xsl:when test="starts-with($extension, '1')">6</xsl:when>
+        <xsl:when test="starts-with($extension, '7')">2</xsl:when>
+        <xsl:when test="starts-with($extension, '8')">2</xsl:when>
       </xsl:choose>
     </xsl:variable>
     <xsl:if test="$prefix">
       <v:tel>
-        <v:Voice rdf:about="tel:{$prefix}{$extension}"/>
+        <v:Voice rdf:about="tel:+441865{$prefix}{$extension}">
+          <rdfs:label>01865 (<xsl:value-of select="$prefix"/>)<xsl:value-of select="$extension"/></rdfs:label>
+        </v:Voice>
       </v:tel>
     </xsl:if>
     <adhoc:oxfordExtensionNumber>
