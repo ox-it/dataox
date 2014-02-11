@@ -2,6 +2,7 @@
 <xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
     xmlns:adhoc="http://vocab.ox.ac.uk/ad-hoc-data-ox/"
     xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+    xmlns:rdfs="http://www.w3.org/2000/01/rdf-schema#"
     xmlns:v="http://www.w3.org/2006/vcard/ns#"
     version="2.0">
 
