@@ -30,7 +30,11 @@ class OxpointsExtents(Transform):
         graph = rdflib.ConjunctiveGraph()
         results = endpoint.query(self.query)
         for result in results:
-            osm_type, osm_id = result.osm.split('/')[:2]
+            try:
+                osm_type, osm_id = result.osm.split('/')[:2]
+            except ValueError:
+                logger.warning("OSM entity for %s, %s is malformed", result.uri, result.osm)
+                continue
             url = self.api_url.format(type=osm_type, id=osm_id)
             if osm_type in ('way', 'relation'):
                 url += '/full'
@@ -40,6 +44,8 @@ class OxpointsExtents(Transform):
             except urllib2.HTTPError, e:
                 if e.code == 410:
                     logger.warning("OSM entity for %s, %s gone", result.uri, result.osm)
+                elif e.code == 404:
+                    logger.warning("OSM entity for %s, %s not found", result.uri, result.osm)
                 else:
                     raise
                 continue
