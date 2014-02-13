@@ -1,15 +1,36 @@
 import datetime
+import json
 
 import dateutil.parser
 from humfrey.linkeddata.resource import BaseResource
 from humfrey.utils.namespaces import NS
+from lxml.builder import E
+import lxml.etree
 import rdflib
 import pytz
+
+from django.http import HttpResponse
+from django_conneg.decorators import renderer
 
 class Vacancy(object):
     types = ('vacancy:Vacancy',)
     #search_item_template_name = 'vacancy/search_item'
     template_name = 'doc/vacancy'
+
+    @classmethod
+    def _describe_patterns(cls):
+        return [
+            '%(uri)s oo:formalOrganization %(formalOrganization)s',
+            '%(uri)s oo:organizationPart %(organizationPart)s',
+            '%(uri)s foaf:based_near %(basedNear)s',
+            '%(uri)s vacancy:salary %(salary)s',
+            '%(uri)s oo:contact %(contact)s',
+            '%(uri)s vacancy:furtherParticulars %(furtherParticulars)s',
+        ]
+
+    related = (('organizationPart', 'oo:organizationPart'),
+               ('formalOrganization', 'oo:formalOrganization'),
+               ('basedNear', 'foaf:based_near'))
 
     def is_closed(self):
         now = pytz.utc.localize(datetime.datetime.utcnow())
@@ -30,6 +51,9 @@ class Vacancy(object):
         if isinstance(closes, rdflib.Literal) and closes.datatype == NS.xsd.dateTime:
             return dateutil.parser.parse(closes)
 
+    @property
+    def id(self):
+        return self.get_with_datatype(NS.skos.notation, NS.oxnotation.vacancy)
 
     def get_json(self):
         html_description, text_description = None, None
@@ -39,7 +63,7 @@ class Vacancy(object):
             else:
                 text_description = unicode(comment)
         vacancy = {'label': self.label,
-                   'id': self.get_with_datatype(NS.skos.notation, NS.oxnotation.vacancy),
+                   'id': self.id,
                    'uri': self.uri,
                    'url': self.doc_url,
                    'webpage': self.foaf_homepage,
@@ -64,10 +88,7 @@ class Vacancy(object):
             if isinstance(contact.v_tel, BaseResource):
                 vacancy['contact']['phone'] = contact.v_tel.label
 
-        related = (('formalOrganization', 'oo:formalOrganization'),
-                   ('organizationPart', 'oo:organizationPart'),
-                   ('basedNear', 'foaf:based_near'))
-        for key, predicate in related:
+        for key, predicate in self.related:
             for obj in self.get_all(predicate):
                 data = {'label': obj.label,
                         'uri': obj.uri,
@@ -77,7 +98,7 @@ class Vacancy(object):
                 adr = obj.get('v:adr')
                 if adr:
                     data['address'] = {'streetAddress': adr.get('v:street-address'),
-                                       'extendedtAddress': adr.get('v:extended-address'),
+                                       'extendedAddress': adr.get('v:extended-address'),
                                        'locality': adr.get('v:locality'),
                                        'postalCode': adr.get('v:postal-code')}
                 if obj.get('geo:lat') and obj.get('geo:long'):
@@ -89,3 +110,114 @@ class Vacancy(object):
                 vacancy[key].append(data)
 
         return vacancy
+
+    def get_xml(self):
+        vacancy = E('vacancy',
+            E('uri', self.uri),
+            E('url', self.doc_url),
+            id=self.id)
+        if self.foaf_homepage:
+            vacancy.append(E('webpage', self.foaf_homepage.uri))
+        if self.label:
+            vacancy.append(E('label', self.label))
+        if self.opens:
+            vacancy.append(E('opens', self.opens.isoformat()))
+        if self.closes:
+            vacancy.append(E('closes', self.closes.isoformat()))
+        if self.dc_spatial:
+            vacancy.append(E('location', unicode(self.dc_spatial)))
+        for comment in self.all.rdfs_comment:
+            if comment.datatype == NS.xtypes['Fragment-XHTML']:
+                vacancy.append(E('description',
+                                 lxml.etree.fromstring(comment),
+                                 media_type='application/xhtml+xml',
+                                 ))
+                vacancy.append(E('description',
+                                 lxml.etree.tostring(lxml.etree.fromstring(comment), method='html'),
+                                 format='application/xhtml+xml',
+                                 media_type='text/html'))
+            elif comment.datatype == NS.xtypes['Fragment-HTML']:
+                comment = lxml.etree.fromstring(comment, parser=lxml.etree.HTMLParser())
+                comment = comment.xpath('/html/body/div')[0]
+                vacancy.append(E('description',
+                                 lxml.etree.tostring(comment, method='html'),
+                                 media_type='text/html',
+                                 format='application/xhtml+xml'))
+                comment.attrib['xmln'] = 'http://www.w3.org/1999/xhtml'
+                vacancy.append(E('description',
+                                 comment,
+                                 media_type='application/xhtml+xml'))
+            else:
+                vacancy.append(E('description',
+                                 unicode(comment),
+                                 media_type='text/plain',
+                                 format='text/plain'))
+        for key, predicate in self.related:
+            related = self.get(predicate)
+            if not related:
+                continue
+            sub = E(key,
+                E('uri', related.uri),
+                E('url', related.doc_url))
+            if related.foaf_homepage:
+                sub.append(E('webpage', related.foaf_homepage.uri))
+            if related.foaf_logo:
+                sub.append(E('logo', related.foaf_logo.uri))
+            if related.label:
+                sub.append(E('label', related.label))
+            if related.v_adr:
+                address = E('address')
+                for p, n in [('v:extended-address', 'extended-address'),
+                             ('v:street-address', 'street-address'),
+                             ('v:locality', 'locality'),
+                             ('v:postal-code', 'postal-code'),
+                             ('v:country', 'country')]:
+                    if related.v_adr.get(p):
+                        address.append(E(n, unicode(related.v_adr.get(p))))
+                sub.append(address)
+            if related.geo_lat and related.geo_long:
+                sub.append(E('location',
+                    E('lat', unicode(related.geo_lat)),
+                    E('long', unicode(related.geo_long))))
+            vacancy.append(sub)
+
+        salary = self.vacancy_salary
+        if isinstance(salary, BaseResource):
+            salary_elem = E('salary')
+            if salary.rdfs_label:
+                salary_elem.append(E('label', unicode(salary.rdfs_label)))
+            if salary.gr_hasMinCurrencyValue:
+                salary_elem.append(E('lower', unicode(salary.gr_hasMinCurrencyValue)))
+            if salary.gr_hasMinCurrencyValue:
+                salary_elem.append(E('upper', unicode(salary.gr_hasMaxCurrencyValue)))
+            if salary.gr_hasCurrency:
+                salary_elem.append(E('currency', unicode(salary.gr_hasCurrency)))
+            vacancy.append(salary_elem)
+
+        contact = self.oo_contact
+        if isinstance(contact, BaseResource):
+            contact_elem = E('contact')
+            if contact.label:
+                contact_elem.append(E('label', contact.label))
+            if isinstance(contact.v_email, BaseResource):
+                contact_elem.append(E('email', contact.v_email.uri.replace('mailto:', '', 1)))
+            if isinstance(contact.v_tel, BaseResource):
+                contact_elem.append(E('phone', contact.v_tel.label))
+            vacancy.append(contact_elem)
+
+        document_urls = E('document_urls')
+        for document in self.all.vacancy_furtherParticulars:
+            document_urls.append(E('document_url', document.uri))
+        if len(document_urls):
+            vacancy.append(document_urls)
+        return vacancy
+
+    @renderer(format='json', mimetypes=('application/json',), name='JSON')
+    def render_json(self, request, context, template_name):
+        return HttpResponse(json.dumps(self.get_json(), indent=2),
+                            content_type='application/json')
+
+    @renderer(format='xml', mimetypes=('application/xml',), name='XML')
+    def render_xml(self, request, context, template_name):
+        return HttpResponse(lxml.etree.tostring(self.get_xml(), pretty_print=True),
+                            content_type='application/xml')
