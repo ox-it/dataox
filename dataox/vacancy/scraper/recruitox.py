@@ -176,6 +176,7 @@ class RecruitOxScraper(Scraper):
         description = html.xpath(".//td[@class='erq_searchv4_heading3']")[-1]
         description.attrib.clear()
         description.tag = 'div'
+        description.attrib['xmlns'] = 'http://www.w3.org/1999/xhtml'
         vacancy.description = etree.tostring(description)
 
         meta = dict(zip([_normalize_space(x.text) for x in html.xpath(".//*[@class='erq_searchv4_heading5_label']")],

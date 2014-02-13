@@ -106,7 +106,7 @@
         <xsl:call-template name="uri"/>
       </xsl:attribute>
       <xsl:for-each select="tei:cell">
-        <xsl:if test="text()">
+        <xsl:if test="normalize-space(text()) and key('columns', position(), $columns)/@slug">
           <xsl:element name="{key('columns', position(), $columns)/@slug}">
             <xsl:value-of select="normalize-space(text())"/>
           </xsl:element>

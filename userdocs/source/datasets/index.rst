@@ -5,5 +5,5 @@ Datasets
 .. toctree::
 
    courses
-   oxpoints
+   oxpoints/index
    vacancy

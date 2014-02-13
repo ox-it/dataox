@@ -5,8 +5,8 @@ import rdflib
 from django.core.urlresolvers import reverse
 from django.http import Http404, HttpResponse
 from django.utils.feedgenerator import RssUserland091Feed, Rss201rev2Feed, Atom1Feed, rfc2822_date
-from django.shortcuts import render_to_response
-from django.template import RequestContext
+from lxml.builder import E
+import lxml.etree
 
 from django_conneg.decorators import renderer
 from django_conneg.views import HTMLView, JSONPView
@@ -274,7 +274,9 @@ FILTER (regex(?vacancyLabel, {0}, 'i') || regex(?vacancyComment, {0}, 'i'))""".f
 
     @renderer(format='xml', mimetypes=('application/xml', 'text/xml'), name='XML')
     def render_xml(self, request, context, template_name):
-        template_name = self.join_template_name(template_name, 'xml')
-        return render_to_response(template_name,
-                          context, context_instance=RequestContext(request),
-                          mimetype='application/xml')
+        vacancies = E('vacancies')
+        for vacancy in context['subjects']:
+            if hasattr(vacancy, 'get_xml'):
+                vacancies.append(vacancy.get_xml())
+        return HttpResponse(lxml.etree.tostring(vacancies, pretty_print=True),
+                            content_type='application/xml')

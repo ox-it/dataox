@@ -29,8 +29,7 @@
     <xsl:param name="row"/>
       <xsl:if test="not($row//field[@name='Redact']/boolean='true') and (
                  $store='itservices' or (
-                         $row//field[@name='Viewable_x0020_by']/text[not(text()='IT Services')]
-                     and $row//field[@name='Archived']/text = 'Live'
+                         $row//field[@name='Archived']/text = ('Live', 'Deprecated')
                      and $row//field[@name='Service_x0020_type']/text = 'Customer facing service'))">true</xsl:if>
     <!--<xsl:choose>
       <xsl:when test="$row//field[@name='Redact']/boolean='true'"/>
@@ -306,6 +305,12 @@
     <xsl:for-each select="key('grouped-services', ../../../@id)">
       <dcterms:hasPart rdf:resource="{ex:service-uri('service', .)}"/>
     </xsl:for-each>
+  </xsl:template>
+
+  <xsl:template match="field[@name='User_x0020_population']/number" mode="in-service">
+    <adhoc:userPopulation rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">
+      <xsl:value-of select="floor(text())"/>
+    </adhoc:userPopulation>
   </xsl:template>
   
   <xsl:template match="field[@name='Modified']/dateTime/text()" mode="in-catalogue-record">
