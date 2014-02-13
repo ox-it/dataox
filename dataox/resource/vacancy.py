@@ -119,7 +119,7 @@ class Vacancy(object):
         if self.foaf_homepage:
             vacancy.append(E('webpage', self.foaf_homepage.uri))
         if self.label:
-            vacancy.append(E('label', self.label))
+            vacancy.append(E('label', unicode(self.label)))
         if self.opens:
             vacancy.append(E('opens', self.opens.isoformat()))
         if self.closes:
@@ -164,7 +164,7 @@ class Vacancy(object):
             if related.foaf_logo:
                 sub.append(E('logo', related.foaf_logo.uri))
             if related.label:
-                sub.append(E('label', related.label))
+                sub.append(E('label', unicode(related.label)))
             if related.v_adr:
                 address = E('address')
                 for p, n in [('v:extended-address', 'extended-address'),
@@ -198,11 +198,11 @@ class Vacancy(object):
         if isinstance(contact, BaseResource):
             contact_elem = E('contact')
             if contact.label:
-                contact_elem.append(E('label', contact.label))
+                contact_elem.append(E('label', unicode(contact.label)))
             if isinstance(contact.v_email, BaseResource):
                 contact_elem.append(E('email', contact.v_email.uri.replace('mailto:', '', 1)))
             if isinstance(contact.v_tel, BaseResource):
-                contact_elem.append(E('phone', contact.v_tel.label))
+                contact_elem.append(E('phone', unicode(contact.v_tel.label)))
             vacancy.append(contact_elem)
 
         document_urls = E('document_urls')
