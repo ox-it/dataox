@@ -158,6 +158,7 @@ class Vacancy(DirtyFieldsMixin, models.Model):
                 triples.append((document_uri, NS.rdf.value, rdflib.Literal(document.text, datatype=NS.xtypes['Fragment-PlainText'])))
 
         if self.salary_grade:
+            # This is no longer used, as we end up losing information.
             locale_code = settings.LANGUAGE_CODE
             locale.setlocale(locale.LC_ALL, ('%s_%s' % (locale_code[:2].lower(), locale_code[3:].upper()), 'UTF8'))
             label = u'Grade %s' % self.salary_grade
@@ -175,11 +176,20 @@ class Vacancy(DirtyFieldsMixin, models.Model):
             if self.salary_grade:
                 triples.append((salary_uri, NS.adhoc.salaryGrade, rdflib.Literal(self.salary_grade)))
 
+            # Our recruit.ox regex can only handle GBP anyway, so the first
+            # two cases will currently never happen.
+            if u'€' in self.salary:
+                currency = 'EUR'
+            elif u'$' in self.salary:
+                currency = 'USD'
+            else:
+                currency = 'GBP'
+
             triples += [
                 (uri, NS.vacancy.salary, salary_uri),
                 (salary_uri, NS.rdf.type, NS.gr.UnitPriceSpecification),
-                (salary_uri, NS.rdfs.label, rdflib.Literal(label)),
-                (salary_uri, NS.gr.hasCurrency, rdflib.Literal('GBP')),
+                (salary_uri, NS.rdfs.label, rdflib.Literal(self.salary)),
+                (salary_uri, NS.gr.hasCurrency, rdflib.Literal(currency)),
             ]
             if self.closing_date:
                 triples.append((salary_uri, NS.gr.validThrough, rdflib.Literal(self.closing_date, datatype=NS.xsd.dateTime)))
