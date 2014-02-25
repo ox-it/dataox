@@ -12,6 +12,20 @@ import pytz
 from django.http import HttpResponse
 from django_conneg.decorators import renderer
 
+def xhtml_to_html(xml):
+    xml = lxml.etree.fromstring(xml)
+    xhtml_ns = '{http://www.w3.org/1999/xhtml}'
+    def walk(e):
+        if e.tag.startswith(xhtml_ns):
+            e.tag = e.tag[len(xhtml_ns):]
+        for c in e:
+            walk(c)
+    walk(xml)
+    html = lxml.etree.Element(xml.tag)
+    html.text, html.tail = xml.text, xml.tail
+    html.extend(xml)
+    return lxml.etree.tostring(html, method='html')
+
 class Vacancy(object):
     types = ('vacancy:Vacancy',)
     #search_item_template_name = 'vacancy/search_item'
@@ -132,8 +146,9 @@ class Vacancy(object):
                                  lxml.etree.fromstring(comment),
                                  media_type='application/xhtml+xml',
                                  ))
+                html_comment = xhtml_to_html(comment)
                 vacancy.append(E('description',
-                                 lxml.etree.tostring(lxml.etree.fromstring(comment), method='html'),
+                                 html_comment,
                                  format='application/xhtml+xml',
                                  media_type='text/html'))
             elif comment.datatype == NS.xtypes['Fragment-HTML']:
@@ -143,7 +158,7 @@ class Vacancy(object):
                                  lxml.etree.tostring(comment, method='html'),
                                  media_type='text/html',
                                  format='application/xhtml+xml'))
-                comment.attrib['xmln'] = 'http://www.w3.org/1999/xhtml'
+                comment.attrib['xmlns'] = 'http://www.w3.org/1999/xhtml'
                 vacancy.append(E('description',
                                  comment,
                                  media_type='application/xhtml+xml'))
