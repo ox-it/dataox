@@ -54,7 +54,7 @@ class RecruitOxScraper(Scraper):
                      'p_form_profile_detail': '',
                      'p_display_apply_ind': 'Y',
                      'p_refresh_search': 'Y'}
-    detail_salary_re = re.compile(ur'^(Grade|Salary)[^\dA-Z]+(?P<grade>[^:]+)[-:][^£]*£? ?(?P<lower>[\d,]+)(?:[^£]*£ ?(?P<upper>[\d,]+)(?:[^£]+£(?P<discretionary>[\d,]+))?)?')
+    detail_salary_re = re.compile(ur'^(Grade|Salary)[^\dA-Z]+(?P<grade>[^:]{,32})[-:][^£]*£? ?(?P<lower>[\d,]+)(?:[^£]*£ ?(?P<upper>[\d,]+)(?:[^£]+£(?P<discretionary>[\d,]+))?)?')
 
     def __init__(self, transform_manager):
         self.quick = transform_manager.update_log.trigger == 'crontab'
