@@ -1,8 +1,8 @@
-oxford-dataox (0.3.2~rc1) unstable; urgency=low
+oxford-dataox (0.4) unstable; urgency=low
 
-  * Snapshot
+  * Release
 
- -- Alexander Dutton <alexander.dutton@it.ox.ac.uk>  Mon, 29 Jul 2013 11:04:07 +0100
+ -- Alexander Dutton <alexander.dutton@it.ox.ac.uk>  Tue, 25 Feb 2014 15:13:30 +0000
 
 oxford-dataox (0.3.1) unstable; urgency=low
 
