@@ -12,6 +12,20 @@ import pytz
 from django.http import HttpResponse
 from django_conneg.decorators import renderer
 
+def xhtml_to_html(xml):
+    xml = lxml.etree.fromstring(xml)
+    xhtml_ns = '{http://www.w3.org/1999/xhtml}'
+    def walk(e):
+        if e.tag.startswith(xhtml_ns):
+            e.tag = e.tag[len(xhtml_ns):]
+        for c in e:
+            walk(c)
+    walk(xml)
+    html = lxml.etree.Element(xml.tag)
+    html.text, html.tail = xml.text, xml.tail
+    html.extend(xml)
+    return lxml.etree.tostring(html, method='html')
+
 class Vacancy(object):
     types = ('vacancy:Vacancy',)
     #search_item_template_name = 'vacancy/search_item'
@@ -119,7 +133,7 @@ class Vacancy(object):
         if self.foaf_homepage:
             vacancy.append(E('webpage', self.foaf_homepage.uri))
         if self.label:
-            vacancy.append(E('label', self.label))
+            vacancy.append(E('label', unicode(self.label)))
         if self.opens:
             vacancy.append(E('opens', self.opens.isoformat()))
         if self.closes:
@@ -132,8 +146,9 @@ class Vacancy(object):
                                  lxml.etree.fromstring(comment),
                                  media_type='application/xhtml+xml',
                                  ))
+                html_comment = xhtml_to_html(comment)
                 vacancy.append(E('description',
-                                 lxml.etree.tostring(lxml.etree.fromstring(comment), method='html'),
+                                 html_comment,
                                  format='application/xhtml+xml',
                                  media_type='text/html'))
             elif comment.datatype == NS.xtypes['Fragment-HTML']:
@@ -143,7 +158,7 @@ class Vacancy(object):
                                  lxml.etree.tostring(comment, method='html'),
                                  media_type='text/html',
                                  format='application/xhtml+xml'))
-                comment.attrib['xmln'] = 'http://www.w3.org/1999/xhtml'
+                comment.attrib['xmlns'] = 'http://www.w3.org/1999/xhtml'
                 vacancy.append(E('description',
                                  comment,
                                  media_type='application/xhtml+xml'))
@@ -164,7 +179,7 @@ class Vacancy(object):
             if related.foaf_logo:
                 sub.append(E('logo', related.foaf_logo.uri))
             if related.label:
-                sub.append(E('label', related.label))
+                sub.append(E('label', unicode(related.label)))
             if related.v_adr:
                 address = E('address')
                 for p, n in [('v:extended-address', 'extended-address'),
@@ -198,11 +213,11 @@ class Vacancy(object):
         if isinstance(contact, BaseResource):
             contact_elem = E('contact')
             if contact.label:
-                contact_elem.append(E('label', contact.label))
+                contact_elem.append(E('label', unicode(contact.label)))
             if isinstance(contact.v_email, BaseResource):
                 contact_elem.append(E('email', contact.v_email.uri.replace('mailto:', '', 1)))
             if isinstance(contact.v_tel, BaseResource):
-                contact_elem.append(E('phone', contact.v_tel.label))
+                contact_elem.append(E('phone', unicode(contact.v_tel.label)))
             vacancy.append(contact_elem)
 
         document_urls = E('document_urls')
