@@ -130,7 +130,7 @@
 
   <xsl:template match="floorplan">
     <access:floorplan>
-      <foaf:Document rdf:resource="{url/text()}">
+      <foaf:Document rdf:about="{url/text()}">
         <rdfs:label>
           <xsl:value-of select="description"/>
         </rdfs:label>
@@ -158,7 +158,7 @@
 
   <xsl:template match="addresses/address[@category='access_enquiries']">
     <access:contact>
-      <foaf:Agent rdf:resource="http://oxpoints.oucs.ox.ac.uk/id/{../../@oxpointsid}/access-contact">
+      <foaf:Agent rdf:about="http://oxpoints.oucs.ox.ac.uk/id/{../../@oxpointsid}/access-contact">
         <xsl:apply-templates/>
       </foaf:Agent>
     </access:contact>
@@ -166,7 +166,7 @@
 
   <xsl:template match="addresses/address[@category='general']">
     <oo:contact>
-      <foaf:Agent rdf:resource="http://oxpoints.oucs.ox.ac.uk/id/{../../@oxpointsid}/contact">
+      <foaf:Agent rdf:about="http://oxpoints.oucs.ox.ac.uk/id/{../../@oxpointsid}/contact">
         <xsl:apply-templates/>
       </foaf:Agent>
     </oo:contact>
