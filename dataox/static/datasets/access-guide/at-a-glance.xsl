@@ -5,9 +5,17 @@
     xmlns:access="http://purl.org/net/accessiblity/"
     xmlns:parkingType="http://purl.org/net/accessiblity/parkingType"
     xmlns:doorEntryType="http://purl.org/net/accessiblity/doorEntryType"
+    xmlns:lyou="http://purl.org/linkingyou/"
     xmlns:humfrey="http://purl.org/NET/humfrey/ns/"
+    xmlns:dataox="https://ox-it.github.io/dataox/ns/"
+    xmlns:foaf="http://xmlns.com/foaf/0.1/"
+    xmlns:rdfs="http://www.w3.org/2000/01/rdf-schema#"
+    xmlns:adhoc="http://vocab.ox.ac.uk/ad-hoc-data-ox/"
+    xmlns:v="http://www.w3.org/2006/vcard/ns#"
+    xmlns:oo="http://purl.org/openorg/"
     version="2.0">
 
+  <xsl:import href="../common/telephone.xsl"/>
   <xsl:output method="xml" indent="yes"/>
 
   <xsl:template match="/">
@@ -16,16 +24,28 @@
     </rdf:RDF>
   </xsl:template>
 
-  <xsl:template match="building">
-    <rdf:Description rdf:about="https://data.ox.ac.uk/id/access-guide-entry/{position()}">
+  <xsl:template match="building[string-length(@oxpointsid) gt 0]">
+    <rdf:Description rdf:about="http://oxpoints.oucs.ox.ac.uk/id/{@oxpointsid}">
       <xsl:apply-templates select="*|@*"/>
     </rdf:Description>
   </xsl:template>
 
+<!--
   <xsl:template match="@oxpointsid">
     <skos:notation rdf:datatype="https://data.ox.ac.uk/id/notation/oxpoints">
       <xsl:value-of select="."/>
     </skos:notation>
+  </xsl:template>
+-->
+
+  <xsl:template match="url">
+    <lyou:space-accessibility rdf:resource="{text()}"/>
+  </xsl:template>
+
+  <xsl:template match="buildingimage">
+    <xsl:if test="string-length(text()) gt 25">
+      <adhoc:accessGuideImage rdf:resource="{text()}"/>
+    </xsl:if>
   </xsl:template>
 
   <xsl:template match="parking|parkinng">
@@ -55,7 +75,7 @@
   <xsl:template match="altentrance">
     <access:hasLevelAccess rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean">
       <xsl:choose>
-        <xsl:when test="text()='1'">true</xsl:when>
+        <xsl:when test="text()='Check'">true</xsl:when>
         <xsl:otherwise>false</xsl:otherwise>
       </xsl:choose>
     </access:hasLevelAccess>
@@ -83,12 +103,111 @@
     </access:numberOfFloors>
   </xsl:template>
 
+  <xsl:template match="liftsallfloors">
+    <xsl:copy-of select="dataox:yes-no-bool('access:liftsToAllFloors', .)"/>
+  </xsl:template>
+  <xsl:template match="hearingsystem">
+    <xsl:copy-of select="dataox:yes-no-bool('access:hasHearingSystem', .)"/>
+  </xsl:template>
+  <xsl:template match="quietspace">
+    <xsl:copy-of select="dataox:yes-no-bool('access:hasQuietSpace', .)"/>
+  </xsl:template>
+  <xsl:template match="caferefreshments">
+    <xsl:copy-of select="dataox:yes-no-bool('access:hasCafeRefreshments', .)"/>
+  </xsl:template>
+  <xsl:template match="adaptedfurniture">
+    <xsl:copy-of select="dataox:yes-no-bool('access:hasAdaptedFurniture', .)"/>
+  </xsl:template>
+  <xsl:template match="computeraccess">
+    <xsl:copy-of select="dataox:yes-no-bool('access:hasComputerAccess', .)"/>
+  </xsl:template>
+
   <xsl:template match="accesstoilets">
     <access:numberOfAccessibleToilets rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">
       <xsl:value-of select="."/>
     </access:numberOfAccessibleToilets>
   </xsl:template>
 
-  <xsl:template match="@*|node()"/>
+  <xsl:template match="floorplan">
+    <access:floorplan>
+      <foaf:Document rdf:resource="{url/text()}">
+        <rdfs:label>
+          <xsl:value-of select="description"/>
+        </rdfs:label>
+      </foaf:Document>
+    </access:floorplan>
+  </xsl:template>
+
+  <xsl:template match="hours/termtime">
+    <adhoc:openingHoursTermTime>
+      <xsl:value-of select="text()"/>
+    </adhoc:openingHoursTermTime>
+  </xsl:template>
+
+  <xsl:template match="hours/vacation">
+    <adhoc:openingHoursVacation>
+      <xsl:value-of select="text()"/>
+    </adhoc:openingHoursVacation>
+  </xsl:template>
+
+  <xsl:template match="hours/closed">
+    <adhoc:openingHoursClosed>
+      <xsl:value-of select="text()"/>
+    </adhoc:openingHoursClosed>
+  </xsl:template>
+
+  <xsl:template match="addresses/address[@category='access_enquiries']">
+    <access:contact>
+      <foaf:Agent rdf:resource="http://oxpoints.oucs.ox.ac.uk/id/{../../@oxpointsid}/access-contact">
+        <xsl:apply-templates/>
+      </foaf:Agent>
+    </access:contact>
+  </xsl:template>
+
+  <xsl:template match="addresses/address[@category='general']">
+    <oo:contact>
+      <foaf:Agent rdf:resource="http://oxpoints.oucs.ox.ac.uk/id/{../../@oxpointsid}/contact">
+        <xsl:apply-templates/>
+      </foaf:Agent>
+    </oo:contact>
+  </xsl:template>
+
+  <xsl:template match="contact_name">
+    <rdfs:label>
+      <xsl:value-of select="text()"/>
+    </rdfs:label>
+  </xsl:template>
+
+  <xsl:template match="contact_email">
+    <v:email rdf:resource="mailto:{text()}"/>
+  </xsl:template>
+
+  <xsl:template match="contact_tel">
+    <xsl:call-template name="telephone-extension"/>
+  </xsl:template>
+
+  <xsl:function name="dataox:yes-no-bool">
+    <xsl:param name="name"/>
+    <xsl:param name="node"/>
+    <xsl:variable name="value">
+      <xsl:choose>
+        <xsl:when test="$node/text()='No'">false</xsl:when>
+        <xsl:when test="$node/text()='Yes'">true</xsl:when>
+        <xsl:otherwise>
+          <xsl:message>Unexpected bool value: <xsl:value-of select="$node/text()"/></xsl:message>
+        </xsl:otherwise>
+      </xsl:choose>
+    </xsl:variable>
+    <xsl:if test="$value">
+      <xsl:element name="{$name}">
+        <xsl:attribute name="rdf:datatype">http://www.w3.org/2001/XMLSchema#boolean</xsl:attribute>
+        <xsl:value-of select="$value"/>
+      </xsl:element>
+    </xsl:if>
+  </xsl:function>
+
+  <xsl:template match="@*|node()">
+    <xsl:apply-templates select="*"/>
+  </xsl:template>
 </xsl:stylesheet>
   
