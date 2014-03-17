@@ -2,10 +2,10 @@
 <xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
     xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
     xmlns:skos="http://www.w3.org/2004/02/skos/core#"
-    xmlns:access="http://purl.org/net/accessiblity/"
-    xmlns:parkingType="http://purl.org/net/accessiblity/parkingType"
-    xmlns:doorEntryType="http://purl.org/net/accessiblity/doorEntryType"
     xmlns:lyou="http://purl.org/linkingyou/"
+    xmlns:access="http://purl.org/net/accessibility/"
+    xmlns:parkingType="http://purl.org/net/accessibility/parkingType"
+    xmlns:doorEntryType="http://purl.org/net/accessibility/doorEntryType"
     xmlns:humfrey="http://purl.org/NET/humfrey/ns/"
     xmlns:dataox="https://ox-it.github.io/dataox/ns/"
     xmlns:foaf="http://xmlns.com/foaf/0.1/"
@@ -59,7 +59,7 @@
       </xsl:choose>
     </xsl:variable>
     <xsl:if test="$term">
-      <access:nearbyParkingType rdf:resource="http://purl.org/net/accessiblity/parkingType/{$term}"/>
+      <access:nearbyParkingType rdf:resource="http://purl.org/net/accessibility/parkingType/{$term}"/>
     </xsl:if>
   </xsl:template>
 
@@ -93,7 +93,7 @@
       </xsl:choose>
     </xsl:variable>
     <xsl:if test="$term">
-      <access:doorEntryType rdf:resource="http://purl.org/net/accessiblity/doorEntryType/{$term}"/>
+      <access:doorEntryType rdf:resource="http://purl.org/net/accessibility/doorEntryType/{$term}"/>
     </xsl:if>
   </xsl:template>
 
