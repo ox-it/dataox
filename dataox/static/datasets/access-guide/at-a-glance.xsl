@@ -4,8 +4,6 @@
     xmlns:skos="http://www.w3.org/2004/02/skos/core#"
     xmlns:lyou="http://purl.org/linkingyou/"
     xmlns:access="http://purl.org/net/accessibility/"
-    xmlns:parkingType="http://purl.org/net/accessibility/parkingType"
-    xmlns:doorEntryType="http://purl.org/net/accessibility/doorEntryType"
     xmlns:humfrey="http://purl.org/NET/humfrey/ns/"
     xmlns:dataox="https://ox-it.github.io/dataox/ns/"
     xmlns:foaf="http://xmlns.com/foaf/0.1/"
@@ -13,6 +11,7 @@
     xmlns:adhoc="http://vocab.ox.ac.uk/ad-hoc-data-ox/"
     xmlns:v="http://www.w3.org/2006/vcard/ns#"
     xmlns:oo="http://purl.org/openorg/"
+    xmlns:rooms="http://vocab.deri.ie/rooms#"
     version="2.0">
 
   <xsl:import href="../common/telephone.xsl"/>
@@ -42,6 +41,18 @@
     <lyou:space-accessibility rdf:resource="{text()}"/>
   </xsl:template>
 
+  <xsl:template match="buildingheading">
+    <adhoc:accessGuideBuildingName>
+      <xsl:value-of select="text()"/>
+    </adhoc:accessGuideBuildingName>
+  </xsl:template>
+
+  <xsl:template match="buildingcontents[text()]">
+    <adhoc:accessGuideBuildingContents>
+      <xsl:value-of select="text()"/>
+    </adhoc:accessGuideBuildingContents>
+  </xsl:template>
+
   <xsl:template match="buildingimage">
     <xsl:if test="string-length(text()) gt 25">
       <adhoc:accessGuideImage rdf:resource="{text()}"/>
@@ -64,36 +75,53 @@
   </xsl:template>
 
   <xsl:template match="entrance">
-    <access:mainEntranceHasLevelAccess rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean">
+    <rooms:primaryEntrance>
+      <rooms:Entrance rdf:about="http://oxpoints.oucs.ox.ac.uk/id/{../@oxpointsid}/main-entrance">
+        <xsl:apply-templates select="../*" mode="in-entrance"/>
+      </rooms:Entrance>
+    </rooms:primaryEntrance>
+  </xsl:template>
+
+  <xsl:template match="entrance" mode="in-entrance">
+    <xsl:variable name="term">
       <xsl:choose>
-        <xsl:when test="text()='Level'">true</xsl:when>
-        <xsl:otherwise>false</xsl:otherwise>
+        <xsl:when test="text()='Level'">Level</xsl:when>
+        <xsl:when test="text()='Not level'">NotLevel</xsl:when>
+        <xsl:when test="text()='Platform lift'">PlatformLift</xsl:when>
+        <xsl:when test="text()='Stair lift'">StairLift</xsl:when>
+        <xsl:otherwise>
+          <xsl:message>Unexpected levelness (entrance) type: <xsl:value-of select="text()"/></xsl:message>
+        </xsl:otherwise>
       </xsl:choose>
-    </access:mainEntranceHasLevelAccess>
+    </xsl:variable>
+    <xsl:if test="$term">
+      <access:levelness rdf:resource="http://purl.org/net/accessiblity/levelness/{$term}"/>
+    </xsl:if>
   </xsl:template>
 
   <xsl:template match="altentrance">
-    <access:hasLevelAccess rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean">
-      <xsl:choose>
-        <xsl:when test="text()='Check'">true</xsl:when>
-        <xsl:otherwise>false</xsl:otherwise>
-      </xsl:choose>
-    </access:hasLevelAccess>
+    <xsl:if test="text()='Check'">
+      <rooms:entrance>
+        <rooms:Entrance>
+          <access:levelness rdf:resource="http://purl.org/net/accessiblity/levelness/Level"/>
+        </rooms:Entrance>
+      </rooms:entrance>
+    </xsl:if>
   </xsl:template>
 
-  <xsl:template match="doorentry">
+  <xsl:template match="doorentry" mode="in-entrance">
     <xsl:variable name="term">
       <xsl:choose>
-        <xsl:when test="text()='Manual'">Manual</xsl:when>
-        <xsl:when test="text()='Powered'">Powered</xsl:when>
-        <xsl:when test="text()='Automatic'">Automatic</xsl:when>
+        <xsl:when test="text()='Manual'">ManualDoor</xsl:when>
+        <xsl:when test="text()='Powered'">PoweredDoor</xsl:when>
+        <xsl:when test="text()='Automatic'">AutomaticDoor</xsl:when>
         <xsl:otherwise>
           <xsl:message>Unexpected door entry type: <xsl:value-of select="text()"/></xsl:message>
         </xsl:otherwise>
       </xsl:choose>
     </xsl:variable>
     <xsl:if test="$term">
-      <access:doorEntryType rdf:resource="http://purl.org/net/accessibility/doorEntryType/{$term}"/>
+      <access:entranceOpeningType rdf:resource="http://purl.org/net/accessiblity/entranceOpeningType/{$term}"/>
     </xsl:if>
   </xsl:template>
 
@@ -120,6 +148,9 @@
   </xsl:template>
   <xsl:template match="computeraccess">
     <xsl:copy-of select="dataox:yes-no-bool('access:hasComputerAccess', .)"/>
+  </xsl:template>
+  <xsl:template match="onsiteparking">
+    <xsl:copy-of select="dataox:yes-no-bool('access:onsiteParking', .)"/>
   </xsl:template>
 
   <xsl:template match="accesstoilets">
@@ -186,11 +217,14 @@
     <xsl:call-template name="telephone-extension"/>
   </xsl:template>
 
+
   <xsl:function name="dataox:yes-no-bool">
     <xsl:param name="name"/>
     <xsl:param name="node"/>
     <xsl:variable name="value">
       <xsl:choose>
+        <xsl:when test="$node/text()='0'">false</xsl:when>
+        <xsl:when test="$node/text()='1'">true</xsl:when>
         <xsl:when test="$node/text()='No'">false</xsl:when>
         <xsl:when test="$node/text()='Yes'">true</xsl:when>
         <xsl:otherwise>
@@ -206,8 +240,8 @@
     </xsl:if>
   </xsl:function>
 
-  <xsl:template match="@*|node()">
-    <xsl:apply-templates select="*"/>
+  <xsl:template match="@*|node()" mode="#all">
+    <xsl:apply-templates select="*" mode="#current"/>
   </xsl:template>
 </xsl:stylesheet>
   
