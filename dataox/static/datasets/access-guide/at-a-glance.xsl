@@ -205,12 +205,12 @@
 
   <xsl:template match="contact_name">
     <rdfs:label>
-      <xsl:value-of select="text()"/>
+      <xsl:value-of select="normalize-space(text())"/>
     </rdfs:label>
   </xsl:template>
 
   <xsl:template match="contact_email">
-    <v:email rdf:resource="mailto:{text()}"/>
+    <v:email rdf:resource="mailto:{normalize-space(text())}"/>
   </xsl:template>
 
   <xsl:template match="contact_tel">
