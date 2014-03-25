@@ -95,7 +95,7 @@
       </xsl:choose>
     </xsl:variable>
     <xsl:if test="$term">
-      <access:levelness rdf:resource="http://purl.org/net/accessiblity/levelness/{$term}"/>
+      <access:levelness rdf:resource="http://purl.org/net/accessibility/levelness/{$term}"/>
     </xsl:if>
   </xsl:template>
 
@@ -103,7 +103,7 @@
     <xsl:if test="text()='Check'">
       <rooms:entrance>
         <rooms:Entrance>
-          <access:levelness rdf:resource="http://purl.org/net/accessiblity/levelness/Level"/>
+          <access:levelness rdf:resource="http://purl.org/net/accessibility/levelness/Level"/>
         </rooms:Entrance>
       </rooms:entrance>
     </xsl:if>
@@ -121,7 +121,7 @@
       </xsl:choose>
     </xsl:variable>
     <xsl:if test="$term">
-      <access:entranceOpeningType rdf:resource="http://purl.org/net/accessiblity/entranceOpeningType/{$term}"/>
+      <access:entranceOpeningType rdf:resource="http://purl.org/net/accessibility/entranceOpeningType/{$term}"/>
     </xsl:if>
   </xsl:template>
 
