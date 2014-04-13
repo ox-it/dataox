@@ -103,7 +103,7 @@
     <xsl:if test="text()='Check'">
       <rooms:entrance>
         <rooms:Entrance>
-          <access:levelness rdf:resource="http://purl.org/net/accessibility/levelness/Level"/>
+          <access:levelness rdf:resource="http://purl.org/net/accessibility/levelness/Accessible"/>
         </rooms:Entrance>
       </rooms:entrance>
     </xsl:if>
