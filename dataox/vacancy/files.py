@@ -58,6 +58,7 @@ class VacancyFileHandler(object):
         file_url = '%s%s/%s' % (file_url_base, document.vacancy.vacancy_id, filename)
 
         document.local_url = file_url
+        document.file_path = file_path
 
         logger.debug("Retrieving vacancy document: %s", document.url)
         filename, headers = retrieve(document.url)

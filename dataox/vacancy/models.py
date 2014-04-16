@@ -3,6 +3,7 @@
 import datetime
 import locale
 import logging
+import os
 import re
 
 import dateutil.parser
@@ -236,9 +237,18 @@ class Document(DirtyFieldsMixin, models.Model):
     vacancy = models.ForeignKey(Vacancy)
     url = models.URLField()
     title = models.CharField(max_length=256)
+    file_path = models.TextField()
     local_url = models.URLField()
     mimetype = models.CharField(max_length=64, blank=True)
     text = models.TextField()
 
     def __unicode__(self):
         return u'{0}: {1}'.format(self.vacancy.vacancy_id, self.title)
+
+    def delete(self):
+        if self.file_path:
+            try:
+                os.unlink(self.file_path)
+            except IOError:
+                logger.exception("Couldn't remove document")
+        super(Document, self).delete()
