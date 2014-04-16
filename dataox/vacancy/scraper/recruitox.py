@@ -244,7 +244,7 @@ class RecruitOxScraper(Scraper):
             changed = True
 
 
-        current_documents = {d.pk: d for d in Document.objects.filter(vacancy=vacancy)}
+        current_documents = dict((d.pk, d) for d in Document.objects.filter(vacancy=vacancy))
         for row in html.xpath(".//table[@class='erqlayouttable']//tr")[1:]:
             anchor = row.xpath('.//a')[0]
             url = urlparse.urljoin(self.detail_url, anchor.attrib['href'])
@@ -262,7 +262,7 @@ class RecruitOxScraper(Scraper):
                 changed = True
             current_documents.pop(document.pk, None)
 
-        for document in current_documents:
+        for document in current_documents.values():
             document.delete()
 
         return changed
