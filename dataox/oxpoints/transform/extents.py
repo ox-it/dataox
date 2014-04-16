@@ -29,7 +29,11 @@ class OxpointsExtents(Transform):
         endpoint = Endpoint(transform_manager.store.query_endpoint)
         graph = rdflib.ConjunctiveGraph()
         results = endpoint.query(self.query)
+        seen = set()
         for result in results:
+            if result.uri in seen:
+                continue
+            seen.add(result.uri)
             try:
                 osm_type, osm_id = result.osm.split('/')[:2]
             except ValueError:
