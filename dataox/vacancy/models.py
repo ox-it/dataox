@@ -61,10 +61,25 @@ class Vacancy(DirtyFieldsMixin, models.Model):
     def __unicode__(self):
         return u'{0}: {1}'.format(self.vacancy_id, self.title)
 
-    def update_location_fields(self, store_slug):
+    def update_location_fields(self, store_slug, department=None):
         # Perform a query against ElasticSearch to find an organization for this location
         search_endpoint = ElasticSearchEndpoint(store_slug, 'organization')
-        results = search_endpoint.query({'query': {'query_string': {'query': self.location.replace('-', ' ')}}})
+        if department:
+            results = search_endpoint.query({'query': {'term': {'finance': department}}})
+            try:
+                department = results['hits']['hits'][0]['_source']['uri']
+            except (IndexError, KeyError):
+                logger.error("Couldn't find department for code %s", department)
+                department = None
+        if department:
+            query = {'query': {'bool': {'must': {'term': {'ancestorOrganization.uri': department}},
+                                        'should': {'query_string': {'query': self.location.replace('-', ' ')}}}},
+                     'filter': {'term': {'graph.uri': 'https://data.ox.ac.uk/graph/oxpoints/data'}}}
+        else:
+            query = {'query': {'query_string': {'query': self.location.replace('-', ' ')}},
+                     'filter': {'term': {'graph.uri': 'https://data.ox.ac.uk/graph/oxpoints/data'}}}
+
+        results = search_endpoint.query(query)
         hits = results['hits']['hits']
         if hits:
             hit = hits[0]['_source']
@@ -80,8 +95,14 @@ class Vacancy(DirtyFieldsMixin, models.Model):
 
         # And now find a location
         search_endpoint = ElasticSearchEndpoint(store_slug, 'spatial-thing')
-        results = search_endpoint.query({'query': {'bool': {'must': {'query_string': {'query': self.location}},
-                                                            'should': [{'terms': {'uri': site_uris}}]}}})
+        if site_uris:
+            query = {'query': {'bool': {'must': {'query_string': {'query': self.location}},
+                                        'should': [{'terms': {'uri': site_uris}}]}},
+                     'filter': {'term': {'graph.uri': 'https://data.ox.ac.uk/graph/oxpoints/data'}}}
+        else:
+            query = {'query': {'query_string': {'query': self.location}},
+                     'filter': {'term': {'graph.uri': 'https://data.ox.ac.uk/graph/oxpoints/data'}}}
+        results = search_endpoint.query(query)
         hits = results['hits']['hits']
         if hits:
             hit = hits[0]['_source']

@@ -25,6 +25,7 @@ class RecruitOxScraper(Scraper):
     site_timezone = pytz.timezone('Europe/London')
     COUNT_KEY = 'dataox:transform:vacancies:count'
 
+    start_search_url = base_url + 'erq_search_package.search_form?p_company=10&p_internal_external=E'
     search_url = base_url + 'erq_search_version_4.start_search_with_params'
     search_params = {'p_company': '10',
                      'p_internal_external': 'E',
@@ -61,8 +62,9 @@ class RecruitOxScraper(Scraper):
         super(RecruitOxScraper, self).__init__(transform_manager)
 
     @classmethod
-    def get_html(cls, url, params):
-        url = '%s?%s' % (url, urllib.urlencode(params))
+    def get_html(cls, url, params=None):
+        if params:
+            url = '%s?%s' % (url, urllib.urlencode(params))
         request = urllib2.Request(url)
         request.headers['User-agent'] = cls.user_agent
         if cls.crawl_delay:
@@ -75,13 +77,24 @@ class RecruitOxScraper(Scraper):
         if self.quick and not self.number_of_vacancies_changed():
             return changed
         
-        vacancy_identifiers = self.get_vacancy_identifiers()
+        departments = self.get_department_options()
 
-        for vacancy_id in vacancy_identifiers:
-            try:
-                changed = self.import_vacancy(vacancy_id) or changed
-            except Exception:
-                logger.exception("Unable to parse vacancy %r", vacancy_id)
+        seen = set()
+        for department in departments:
+            vacancy_ids = self.get_vacancy_identifiers(department)
+            seen.update(vacancy_ids)
+
+            for vacancy_id in vacancy_ids:
+                try:
+                    changed = self.import_vacancy(vacancy_id, department) or changed
+                except Exception:
+                    logger.exception("Unable to parse vacancy %r", vacancy_id)
+
+        now = self.site_timezone.localize(datetime.datetime.now()).replace(microsecond=0)
+        now = now.isoformat()
+        old = set(v.vacancy_id for v in Vacancy.objects.filter(opening_date__lt=now, closing_date__gt=now))
+        logger.info("Added: %r; Removed: %r", seen - old, old - seen)
+
 
         # If vacancies have disappeared, say that they've just closed.
         now = self.site_timezone.localize(datetime.datetime.now()).replace(microsecond=0)
@@ -90,7 +103,7 @@ class RecruitOxScraper(Scraper):
                 closes = dateutil.parser.parse(vacancy.closing_date)
             else:
                 closes = None
-            if (not closes or closes > now) and vacancy.vacancy_id not in vacancy_identifiers:
+            if (not closes or closes > now) and vacancy.vacancy_id not in seen:
                 vacancy.closing_date = now.isoformat()
                 vacancy.save()
                 changed = True
@@ -114,11 +127,17 @@ class RecruitOxScraper(Scraper):
         logger.debug("Expected vacancies: %d; Listed vacancies: %d", old_count, new_count)
         return new_count != old_count
 
-    def get_vacancy_identifiers(self):
+    def get_department_options(self):
+        html = self.get_html(self.start_search_url)
+        options = html.xpath("//select[@name='p_department']/option")[1:]
+        return [option.attrib['value'] for option in options]
+
+    def get_vacancy_identifiers(self, department):
         vacancy_identifiers = set()
         for page_number in itertools.count():
             params = self.search_params.copy()
             params['p_start_from'] = page_number * 10
+            params['p_department'] = department
             html = self.get_html(self.search_url, params)
             logger.info("Got page number %d", page_number)
 
@@ -129,14 +148,9 @@ class RecruitOxScraper(Scraper):
             if pagination['end'] == pagination['count']:
                 break
 
-        now = self.site_timezone.localize(datetime.datetime.now()).replace(microsecond=0)
-        now = now.isoformat()
-        old = set(v.vacancy_id for v in Vacancy.objects.filter(opening_date__lt=now, closing_date__gt=now))
-        logger.info("Added: %r; Removed: %r", vacancy_identifiers - old, old - vacancy_identifiers)
-
         return vacancy_identifiers
 
-    def import_vacancy(self, vacancy_id):
+    def import_vacancy(self, vacancy_id, department):
         changed = False
 
         try:
@@ -195,7 +209,7 @@ class RecruitOxScraper(Scraper):
         location =  ' '.join(location_td[0].text.split()) if location_td else ''
         if location != vacancy.location:
             vacancy.location = location
-            vacancy.update_location_fields(self.transform_manager.store.slug)
+            vacancy.update_location_fields(self.transform_manager.store.slug, department)
 
         closing_time = re.findall(r'\b(\d{1,2})[.:](\d{2})(?:\s*([ap]m))?\b', vacancy.description, re.I)
         if closing_time and not re.search('\W(noon|midday)\W', vacancy.description, re.I):
