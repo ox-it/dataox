@@ -177,6 +177,7 @@
           <xsl:when test="text()='Parks Road'">23233753</xsl:when>
           <xsl:when test="text()='Wellington Square'">23233665</xsl:when>
           <xsl:when test="text()='Worcester Street'">23233614</xsl:when>
+          <xsl:when test="text()='Gibson'">55329098</xsl:when>
         </xsl:choose>
       </xsl:variable>
       <xsl:variable name="space" select="normalize-space(../../field[@name='Space']/text/text())"/>
