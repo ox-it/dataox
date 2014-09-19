@@ -74,6 +74,24 @@
     </xsl:if>
   </xsl:template>
 
+  <xsl:template match="directcontact">
+    <xsl:variable name="term">
+      <xsl:choose>
+        <xsl:when test="normalize-space(text())='Intercom'">Intercom</xsl:when>
+        <xsl:when test="normalize-space(text())='Doorbell'">Doorbell</xsl:when>
+        <xsl:when test="normalize-space(text())='No'">None</xsl:when>
+        <xsl:otherwise>
+          <xsl:message>Unexpected direct contact type: <xsl:value-of select="normalize-space(text())"/></xsl:message>
+        </xsl:otherwise>
+      </xsl:choose>
+    </xsl:variable>
+    <xsl:if test="$term">
+      <access:contactMethodFromEntranceToReception rdf:resource="http://purl.org/net/accessibility/contactMethod/{$term}"/>
+    </xsl:if>
+  </xsl:template>
+
+
+
   <xsl:template match="entrance">
     <rooms:primaryEntrance>
       <rooms:Entrance rdf:about="http://oxpoints.oucs.ox.ac.uk/id/{../@oxpointsid}/main-entrance">
@@ -131,6 +149,12 @@
     </access:numberOfFloors>
   </xsl:template>
 
+  <xsl:template match="onsiteparking">
+    <access:numberOfDisabledParkingSpaces rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">
+      <xsl:copy-of select="."/>
+    </access:numberOfDisabledParkingSpaces>
+  </xsl:template>
+
   <xsl:template match="liftsallfloors">
     <xsl:copy-of select="dataox:yes-no-bool('access:liftsToAllFloors', .)"/>
   </xsl:template>
@@ -148,9 +172,6 @@
   </xsl:template>
   <xsl:template match="computeraccess">
     <xsl:copy-of select="dataox:yes-no-bool('access:hasComputerAccess', .)"/>
-  </xsl:template>
-  <xsl:template match="onsiteparking">
-    <xsl:copy-of select="dataox:yes-no-bool('access:onsiteParking', .)"/>
   </xsl:template>
 
   <xsl:template match="accesstoilets">
@@ -228,7 +249,7 @@
         <xsl:when test="$node/text()='No'">false</xsl:when>
         <xsl:when test="$node/text()='Yes'">true</xsl:when>
         <xsl:otherwise>
-          <xsl:message>Unexpected bool value: <xsl:value-of select="$node/text()"/></xsl:message>
+          <xsl:message>Unexpected bool value '<xsl:value-of select="$node/text()"/>' for <xsl:value-of select="$name"/></xsl:message>
         </xsl:otherwise>
       </xsl:choose>
     </xsl:variable>
