@@ -116,7 +116,7 @@ class OxpointsExtents(Transform):
 
         geom = self.union(outers)
         for inner in inners:
-            geom = geom.SymDifference(inner)
+            geom = geom.Difference(inner)
 
         return geom
 
