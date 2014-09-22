@@ -69,7 +69,7 @@
         </xsl:otherwise>
       </xsl:choose>
     </xsl:variable>
-    <xsl:if test="$term">
+    <xsl:if test="string-length($term) gt 0">
       <access:nearbyParkingType rdf:resource="http://purl.org/net/accessibility/parkingType/{$term}"/>
     </xsl:if>
   </xsl:template>
@@ -85,7 +85,7 @@
         </xsl:otherwise>
       </xsl:choose>
     </xsl:variable>
-    <xsl:if test="$term">
+    <xsl:if test="string-length($term) gt 0">
       <access:contactMethodFromEntranceToReception rdf:resource="http://purl.org/net/accessibility/contactMethod/{$term}"/>
     </xsl:if>
   </xsl:template>
@@ -112,7 +112,7 @@
         </xsl:otherwise>
       </xsl:choose>
     </xsl:variable>
-    <xsl:if test="$term">
+    <xsl:if test="string-length($term) gt 0">
       <access:levelness rdf:resource="http://purl.org/net/accessibility/levelness/{$term}"/>
     </xsl:if>
   </xsl:template>
@@ -138,7 +138,7 @@
         </xsl:otherwise>
       </xsl:choose>
     </xsl:variable>
-    <xsl:if test="$term">
+    <xsl:if test="string-length($term) gt 0">
       <access:entranceOpeningType rdf:resource="http://purl.org/net/accessibility/entranceOpeningType/{$term}"/>
     </xsl:if>
   </xsl:template>
@@ -151,7 +151,7 @@
 
   <xsl:template match="onsiteparking">
     <access:numberOfDisabledParkingSpaces rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">
-      <xsl:copy-of select="."/>
+      <xsl:value-of select="."/>
     </access:numberOfDisabledParkingSpaces>
   </xsl:template>
 
