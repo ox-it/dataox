@@ -122,7 +122,7 @@
     <adhoc:serviceLevelDefinition rdf:resource="{@href}"/>
   </xsl:template>
 
-  <!-- Use this field to go up and re-interpret the row in the contact of its contact information -->
+  <!-- Use this field to go up and re-interpret the row in the context of its contact information -->
   <xsl:template match="field[@name='Initial_x0020_contact_x0020_phon']" mode="in-service">
     <xsl:apply-templates select="../.." mode="service-contact"/>
   </xsl:template>
