@@ -8,5 +8,4 @@ django-dirtyfields
 python-dateutil
 raven
 django-pipeline
-django-statsd-mozilla
 requests
