@@ -356,12 +356,12 @@
   
   <!-- Apply from -->
   <xsl:template match="dt_applyuntil" mode="presentation">
-    <applyFrom>
+    <applyUntil>
       <xsl:call-template name="xcri-date">
         <xsl:with-param name="date" select="normalize-space(text())"/>
         <xsl:with-param name="text" select="normalize-space(../txt_capplyuntiltext/text())"/>
       </xsl:call-template>
-    </applyFrom>
+    </applyUntil>
   </xsl:template>
 
   <!-- Attendance mode-->
