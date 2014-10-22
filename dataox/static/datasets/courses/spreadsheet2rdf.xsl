@@ -45,7 +45,12 @@
   <xsl:function name="ex:slugify">
     <xsl:param name="term"/>
     <xsl:choose>
+      <xsl:when test="starts-with($term, '(')">
+        <!-- Ignore a leading '(' -->
+        <xsl:value-of select="ex:slugify(substring-after($term, '('))"/>
+      </xsl:when>
       <xsl:when test="contains($term, '(')">
+        <!-- Strip everything after a non-leading '(' -->
         <xsl:value-of select="ex:slugify(substring-before($term, '('))"/>
       </xsl:when>
       <xsl:otherwise>
