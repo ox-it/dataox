@@ -97,7 +97,7 @@
   <xsl:function name="ex:include-service">
     <xsl:param name="row"/>
       <xsl:if test="not($row//field[@name='Redact']/boolean='true') and (
-                 $store='itservices' or (
+                 $internal or (
                          $row//field[@name='Viewable_x0020_by']/text[not(text()='IT Services')]
                      and $row//field[@name='Archived']/text = 'Live'
                      and $row//field[@name='Service_x0020_type']/text = 'Customer facing service'))">true</xsl:if>
@@ -113,7 +113,7 @@
   <xsl:function name="ex:include-person">
     <xsl:param name="row"/>
     <xsl:choose>
-      <xsl:when test="$store='itservices'">true</xsl:when>
+      <xsl:when test="$internal">true</xsl:when>
       <xsl:when test="key('services-by-business-owner', $row/@id, $root)">true</xsl:when>
       <xsl:when test="key('services-by-service-owner', $row/@id, $root)">true</xsl:when>
     </xsl:choose>
