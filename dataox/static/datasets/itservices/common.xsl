@@ -22,7 +22,7 @@
   <xsl:import href="../common/slugify.xsl"/>
 
   <xsl:param name="store"/>
-  <xsl:variable name="internal" select="$store='itservices'"/>
+  <xsl:variable name="internal" select="$store='itservices' or $store='itservices-staging'"/>
 
   <xsl:variable name="base-uri">https://id.it.ox.ac.uk/</xsl:variable>
   <xsl:variable name="team-base-uri">https://id.it.ox.ac.uk/team/</xsl:variable>
