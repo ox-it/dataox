@@ -258,6 +258,7 @@ VOCABULARY_URL_OVERRIDES = {
     'oxnotation': None,
     'oxp': 'http://oxpoints.oucs.ox.ac.uk/ns.ttl',
     'pf': None,
+    'lyou': 'http://openorg.ecs.soton.ac.uk/linkingyou/linkingyou.ttl',
 }
 
 SMTP_HOST = 'smtp.ox.ac.uk'
