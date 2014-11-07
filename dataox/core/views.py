@@ -129,7 +129,7 @@ class MaintenanceModeView(HTMLView, TextView):
 class OPDView(StoreView, MappingView, RDFView):
     def get(self, request):
         graph = rdflib.ConjunctiveGraph()
-        doc = rdflib.URIRef('')
+        doc = rdflib.URIRef(request.build_absolute_uri(request.path))
         uni = rdflib.URIRef('http://oxpoints.oucs.ox.ac.uk/id/00000000')
         graph += [
             (doc, NS.rdf.type, NS.oo.OrganizationProfileDocument),
@@ -156,6 +156,12 @@ class OPDView(StoreView, MappingView, RDFView):
               ?point a geo:Point ;
                 geo:lat ?lat ;
                 geo:long ?long .
+              ?dataset a void:Dataset ;
+                oo:organization ?uni ;
+                dcterms:subject ?datasetSubject ;
+                dcterms:conformsTo ?datasetConformsTo ;
+                dcterms:license ?datasetLicense ;
+                void:dataDump ?datasetDataDump .
             } WHERE {
               BIND (%(uni)s AS ?uni) .
               ?uni a ?type ;
@@ -178,6 +184,14 @@ class OPDView(StoreView, MappingView, RDFView):
               OPTIONAL {
                 ?lyouProperty rdfs:isDefinedBy lyou: .
                 ?uni ?lyouProperty ?lyouValue
+              }
+              OPTIONAL {
+                ?uni ^oo:organization ?dataset .
+                ?dataset a void:Dataset ;
+                  dcterms:subject ?datasetSubject ;
+                  dcterms:conformsTo ?datasetConformsTo ;
+                  dcterms:license ?datasetLicense ;
+                  void:dataDump ?datasetDataDump
               }
             }
         """ % {'uni': uni.n3()})
