@@ -125,5 +125,65 @@ class MaintenanceModeView(HTMLView, TextView):
                         'maintenance_mode': settings.MAINTENANCE_MODE}
         setattr(self, request.method.lower(), self.render)
         return super(MaintenanceModeView, self).dispatch(request)
-    
-    
+
+class OPDView(StoreView, MappingView, RDFView):
+    def get(self, request):
+        graph = rdflib.ConjunctiveGraph()
+        doc = rdflib.URIRef('')
+        uni = rdflib.URIRef('http://oxpoints.oucs.ox.ac.uk/id/00000000')
+        graph += [
+            (doc, NS.rdf.type, NS.oo.OrganizationProfileDocument),
+            (doc, NS.foaf.primaryTopic, uni),
+            (doc, NS.dcterms.licence, rdflib.URIRef('http://creativecommons.org/publicdomain/zero/1.0/')),
+        ]
+        graph += self.store.query("""
+            CONSTRUCT {
+              ?uni a ?type ;
+                rdfs:label ?label ;
+                foaf:logo ?logo ;
+                skos:prefLabel ?label ;
+                skos:altLabel ?altLabel ;
+                skos:hiddenLabel ?hiddenLabel ;
+                owl:sameAs ?sameAs ;
+                foaf:homepage ?homepage ;
+                foaf:based_near ?point ,
+                  <http://dbpedia.org/resource/Oxford> ;
+                foaf:account ?account ;
+                ?lyouProperty ?lyouValue .
+              ?account a foaf:OnlineAccount ;
+                foaf:accountName ?accountName ;
+                foaf:accountServiceHomepage ?accountServiceHomepage .
+              ?point a geo:Point ;
+                geo:lat ?lat ;
+                geo:long ?long .
+            } WHERE {
+              BIND (%(uni)s AS ?uni) .
+              ?uni a ?type ;
+              OPTIONAL { ?uni foaf:logo ?logo }
+              OPTIONAL {
+                ?uni skos:prefLabel ?_label
+                BIND(STR(?_label) AS ?label)
+              }
+              OPTIONAL { ?uni skos:altLabel ?altLabel }
+              OPTIONAL { ?uni skos:hiddenLabel ?hiddenLabel }
+              OPTIONAL { ?uni owl:sameAs|skos:exactMatch ?sameAs }
+              OPTIONAL { ?uni foaf:homepage ?homepage }
+              OPTIONAL { ?uni org:hasPrimarySite [ geo:lat ?lat ; geo:long ?long ] }
+              OPTIONAL {
+                ?uni foaf:account ?account .
+                ?account a foaf:OnlineAccount ;
+                  foaf:accountName ?accountName ;
+                  foaf:accountServiceHomepage ?accountServiceHomepage .
+              }
+              OPTIONAL {
+                ?lyouProperty rdfs:isDefinedBy lyou: .
+                ?uni ?lyouProperty ?lyouValue
+              }
+            }
+        """ % {'uni': uni.n3()})
+
+        context = {
+            'graph': graph,
+        }
+        return self.render(request, context)
+

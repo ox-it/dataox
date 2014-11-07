@@ -48,6 +48,7 @@ urlpatterns = patterns('',
 
     # as per http://www.w3.org/TR/void/#well-known
     (r'^.well-known/void$', RedirectView.as_view(url='/datasets/', permanent=False)),
+    (r'^.well-known/openorg$', core_views.OPDView.as_view(), {}, 'openorg'),
 ) + staticfiles_urlpatterns()
 
 handler404 = misc_views.SimpleView.as_view(template_name='404', context={'status_code':404})

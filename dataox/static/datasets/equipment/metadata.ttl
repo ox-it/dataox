@@ -19,6 +19,7 @@
 <https://data.ox.ac.uk/id/dataset/research-facilities> a void:Dataset ;
     rdfs:label "Research equipment and facilities at the University of Oxford" ;
     skos:notation "research-facilities"^^oxnotation:dataset ;
+    oo:organization <http://oxpoints.oucs.ox.ac.uk/id/00000000> ;
 
 #    wdrs:describedby <https://docs.data.ox.ac.uk/datasets/research-facilities.html> ;
 
@@ -28,6 +29,11 @@
     dcterms:license <http://reference.data.gov.uk/id/open-government-licence> ;
 
     void:vocabulary oo:, cerif: ;
+
+    dcterms:subject
+        <http://purl.org/openorg/theme/Equipment> ,
+	<http://purl.org/openorg/theme/Facility> ;
+    dcterms:conformsTo <http://openorg.ecs.soton.ac.uk/wiki/Facilities_and_Equipment> ;
 
     cc:attributionName "University of Oxford" ;
     cc:attributionURL <https://www.research-facilities.ox.ac.uk/> ;

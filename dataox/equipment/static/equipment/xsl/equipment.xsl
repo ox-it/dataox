@@ -19,11 +19,18 @@
     xmlns:org="http://www.w3.org/ns/org#"
     xmlns:tei="http://www.tei-c.org/ns/1.0"
     xmlns:tio="http://purl.org/tio/ns#"
+    xmlns:void="http://rdfs.org/ns/void#"
+    xmlns:cat="http://purl.org/NET/catalog/"
     xmlns:adhoc="http://vocab.ox.ac.uk/ad-hoc-data-ox/"
   >
   <xsl:import href="common.xsl"/>
 
   <xsl:variable name="type">cerif:Equipment</xsl:variable>
+  <xsl:variable name="catalog-uri">https://data.ox.ac.uk/id/dataset/research-facilities/equipment</xsl:variable>
+  <xsl:template name="record-uri">
+    <xsl:text>https://data.ox.ac.uk/id/equipment-record/</xsl:text>
+    <xsl:value-of select="tei:cell[2]/text()"/>
+  </xsl:template>
   <xsl:template name="uri">
     <xsl:text>https://data.ox.ac.uk/id/equipment/</xsl:text>
     <xsl:value-of select="tei:cell[2]/text()"/>
@@ -33,11 +40,38 @@
   <xsl:variable name="general-locations" select="document('')/xsl:stylesheet/ex:general-locations"/>
   <xsl:variable name="makes" select="document('')/xsl:stylesheet/ex:makes"/>
   <xsl:variable name="models" select="document('')/xsl:stylesheet/ex:makes"/>
+  <xsl:variable name="document" select="/"/>
 
   <xsl:key name="org-lookup" match="ex:org" use="@name"/>
   <xsl:key name="general-location-lookup" match="ex:general-location" use="@name"/>
   <xsl:key name="make-lookup" match="ex:make" use="@name"/>
   <xsl:key name="model-lookup" match="ex:model" use="@name"/>
+
+  <xsl:template match="/" mode="in-catalog">
+    <xsl:variable name="items" select="/"/>
+    <xsl:apply-imports/>
+    <xsl:for-each select="$document//tei:table[tei:head='Updates']/tei:row[position() gt 1]">
+      <xsl:variable name="department-code" select="tei:cell[1]/text()"/>
+      <void:subset>
+        <cat:Catalog rdf:about="https://data.ox.ac.uk/id/dataset/research-facilities/equipment/{ex:slugify(tei:cell[1])}">
+	  <rdf:type rdf:resource="http://rdfs.org/ns/void#Dataset"/>
+	  <rdfs:label>
+	    <xsl:text>Equipment from </xsl:text>
+	    <xsl:value-of select="tei:cell[2]"/>
+	  </rdfs:label>
+	  <oo:organizationPart>
+	    <rdf:Description>
+	      <xsl:apply-templates select="$department-code" mode="department-code-notation"/>
+	    </rdf:Description>
+	  </oo:organizationPart>
+	  <dcterms:issued rdf:datatype="http://www.w3.org/2001/XMLSchema#gYearMonth">
+	    <xsl:value-of select="tei:cell[3]"/>
+          </dcterms:issued>
+	  <xsl:apply-templates select="$items/item[department-code/text()=$department-code]" mode="catalog-record-links"/>
+	</cat:Catalog>
+      </void:subset>
+    </xsl:for-each>
+  </xsl:template>
 
   <xsl:template match="item/quantity" mode="inside">
     <xsl:choose>

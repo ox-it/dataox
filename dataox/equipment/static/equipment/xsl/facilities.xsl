@@ -24,7 +24,12 @@
   <xsl:import href="common.xsl"/>
 
   <xsl:variable name="type">cerif:Facility</xsl:variable>
+  <xsl:variable name="catalog-uri">https://data.ox.ac.uk/id/dataset/research-facilities/facilities</xsl:variable>
   <xsl:variable name="group-column">3</xsl:variable>
+  <xsl:template name="record-uri">
+    <xsl:text>https://data.ox.ac.uk/id/facility-record/</xsl:text>
+    <xsl:value-of select="ex:slugify(tei:cell[3]/text())"/>
+  </xsl:template>
   <xsl:template name="uri">
     <xsl:text>https://data.ox.ac.uk/id/facility/</xsl:text>
     <xsl:value-of select="ex:slugify(tei:cell[3]/text())"/>

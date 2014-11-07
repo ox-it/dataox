@@ -2,6 +2,7 @@
 <xsl:stylesheet version="2.0"
     xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
     xmlns:oo="http://purl.org/openorg/"
+    xmlns:cat="http://purl.org/NET/catalog/"
     xmlns:cerif="http://spi-fm.uca.es/neologism/cerif#"
     xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
     xmlns:rdfs="http://www.w3.org/2000/01/rdf-schema#"
@@ -19,13 +20,15 @@
     xmlns:org="http://www.w3.org/ns/org#"
     xmlns:tei="http://www.tei-c.org/ns/1.0"
     xmlns:tio="http://purl.org/tio/ns#"
+    xmlns:void="http://rdfs.org/ns/void#"
     xmlns:adhoc="http://vocab.ox.ac.uk/ad-hoc-data-ox/"
     xmlns:xs="http://www.w3.org/2001/XMLSchema"
   >
 
   <xsl:param name="store" select="'public'"/>
   <xsl:variable name="type" select="'rdf:Resource'"/>
-  <xsl:variable name="group-column"></xsl:variable>
+  <xsl:variable name="group-column"/>
+  <xsl:variable name="catalog-uri"/>
   <xsl:output method="xml" indent="yes"/>
 
   <xsl:function name="ex:slugify">
@@ -41,17 +44,41 @@
   </xsl:function>
 
   <xsl:template match="/">
+    <rdf:RDF>
+      <xsl:apply-templates select="." mode="in-rdf"/>
+    </rdf:RDF>
+  </xsl:template>
+
+  <xsl:template match="/" mode="in-rdf">
     <xsl:variable name="items">
       <xsl:for-each-group select="//tei:table[1]/tei:row[position() &gt; 1]" group-by="if ($group-column) then tei:cell[xs:integer($group-column)] else position()">
         <xsl:call-template name="preprocess"/>
       </xsl:for-each-group>
     </xsl:variable>
-    <rdf:RDF>
-      <xsl:apply-templates select="$items/item" mode="item"/>
-    </rdf:RDF>
+    <rdf:Description rdf:about="https://data.ox.ac.uk/id/dataset/research-facilities">
+      <void:subset>
+        <cat:Catalog rdf:about="{$catalog-uri}">
+          <rdf:type rdf:resource="http://rdfs.org/ns/void#Dataset"/>
+          <xsl:apply-templates select="$items" mode="in-catalog"/>
+          <oo:organization rdf:resource="http://oxpoints.oucs.ox.ac.uk/id/00000000"/>
+        </cat:Catalog>
+      </void:subset>
+    </rdf:Description>
+    <xsl:apply-templates select="$items/item" mode="record"/>
   </xsl:template>
 
-  <xsl:template match="item" mode="item">
+  <xsl:template match="/" mode="in-catalog">
+    <xsl:apply-templates mode="catalog-record-links"/>
+  </xsl:template>
+
+  <xsl:template match="item" mode="catalog-record-links">
+    <xsl:if test="@to-include='Yes' or $store='public'">
+      <cat:item rdf:resource="{@uri}"/>
+      <cat:record rdf:resource="{@record-uri}"/>
+    </xsl:if>
+  </xsl:template>
+
+  <xsl:template match="item" mode="record">
     <!-- This expects three columns per row called "Public", "University" and "SEESEC", each
          containing either "Yes" or "No". $store is passed in as a parameter to the template
          and decided which of these columns will be used.
@@ -59,42 +86,38 @@
          The public target is slightly special. We say that everything exists, just not what
          it is. It also does not get any contact details.
     -->
-    <xsl:variable name="to-include">
-      <xsl:choose>
-        <xsl:when test="$store='public'"><xsl:value-of select="public"/></xsl:when>
-        <xsl:when test="$store='equipment'"><xsl:value-of select="university"/></xsl:when>
-        <xsl:when test="$store='seesec'"><xsl:value-of select="seesec"/></xsl:when>
-        <xsl:otherwise>
-          <xsl:message terminate="yes">Unexpected store: <xsl:value-of select="store"/></xsl:message>
-        </xsl:otherwise>
-      </xsl:choose>
-    </xsl:variable>
 
-    <xsl:if test="$to-include='Yes' or $store='public'">
-      <xsl:element name="{$type}">
-        <xsl:attribute name="rdf:about">
-          <xsl:value-of select="@uri"/>
-        </xsl:attribute>
-
-        <!-- Everything is part of the University of Oxford -->
-        <oo:formalOrganization rdf:resource="http://oxpoints.oucs.ox.ac.uk/id/00000000"/>
-
-        <xsl:if test="$to-include='Yes'">
-          <xsl:apply-templates select="*|row/*" mode="inside"/>
-        </xsl:if>
-      </xsl:element>
-      <xsl:if test="$to-include='Yes'">
+    <xsl:if test="@to-include='Yes' or $store='public'">
+      <cat:CatalogRecord rdf:about="{@record-uri}">
+        <foaf:primaryTopic>
+	  <xsl:apply-templates select="." mode="item"/>
+        </foaf:primaryTopic>
+      </cat:CatalogRecord>
+      <xsl:if test="@to-include='Yes'">
         <xsl:apply-templates select="*|row/*" mode="outside"/>
       </xsl:if>
     </xsl:if>
   </xsl:template>
 
+  <xsl:template match="item" mode="item">
+    <xsl:element name="{$type}">
+      <xsl:attribute name="rdf:about">
+        <xsl:value-of select="@uri"/>
+      </xsl:attribute>
+
+      <!-- Everything is part of the University of Oxford -->
+      <oo:formalOrganization rdf:resource="http://oxpoints.oucs.ox.ac.uk/id/00000000"/>
+
+      <xsl:if test="@to-include='Yes'">
+        <xsl:apply-templates select="*|row/*" mode="inside"/>
+      </xsl:if>
+    </xsl:element>
+  </xsl:template>
+
   <xsl:variable name="columns">
-    <columns>
-      <xsl:for-each select="//tei:row[1]/tei:cell">
-        <column name="{text()}" slug="{ex:slugify(text())}" n="{position()}"/>
-      </xsl:for-each>
-    </columns>
+    <xsl:for-each select="//tei:row[1]/tei:cell">
+      <column name="{text()}" slug="{ex:slugify(text())}" n="{position()}"/>
+    </xsl:for-each>
   </xsl:variable>
   <xsl:key name="columns" match="column" use="number(@n)"/>
 
@@ -102,8 +125,21 @@
 
   <xsl:template name="preprocess">
     <item>
+      <xsl:attribute name="record-uri">
+        <xsl:call-template name="record-uri"/>
+      </xsl:attribute>
       <xsl:attribute name="uri">
         <xsl:call-template name="uri"/>
+      </xsl:attribute>
+      <xsl:attribute name="to-include">
+        <xsl:choose>
+          <xsl:when test="$store='public'"><xsl:value-of select="tei:cell[position() = $columns/column[@slug='public']/@n]"/></xsl:when>
+          <xsl:when test="$store='equipment'"><xsl:value-of select="tei:cell[position() = $columns/column[@slug='university']/@n]"/></xsl:when>
+          <xsl:when test="$store='seesec'"><xsl:value-of select="tei:cell[position() = $columns/column[@slug='seesec']/@n]"/></xsl:when>
+          <xsl:otherwise>
+            <xsl:message terminate="yes">Unexpected store: <xsl:value-of select="$store"/></xsl:message>
+          </xsl:otherwise>
+        </xsl:choose>
       </xsl:attribute>
       <xsl:for-each select="tei:cell">
         <xsl:if test="normalize-space(text()) and key('columns', position(), $columns)/@slug">
@@ -224,22 +260,26 @@
   <xsl:template match="item/department-code" mode="inside">
     <oo:organizationPart>
       <org:Organization rdf:about="https://data.ox.ac.uk/id/equipment-department/{ex:slugify(text())}">
-        <skos:notation>
-          <xsl:attribute name="rdf:datatype">
-            <xsl:text>https://data.ox.ac.uk/id/notation/</xsl:text>
-            <xsl:choose>
-              <xsl:when test="matches(., '^[A-Z\d]{2}$')">twoThree</xsl:when>
-              <xsl:when test="matches(., '^\d{8}$')">oxpoints</xsl:when>
-              <xsl:otherwise>department</xsl:otherwise>
-            </xsl:choose>
-          </xsl:attribute>
-          <xsl:value-of select="."/>
-        </skos:notation>
+        <xsl:apply-templates select="text()" mode="department-code-notation"/>
         <rdfs:label>
           <xsl:value-of select="../department/normalize-space(text())"/>
         </rdfs:label>
       </org:Organization>
     </oo:organizationPart>
+  </xsl:template>
+
+  <xsl:template match="text()" mode="department-code-notation">
+    <skos:notation>
+      <xsl:attribute name="rdf:datatype">
+        <xsl:text>https://data.ox.ac.uk/id/notation/</xsl:text>
+        <xsl:choose>
+          <xsl:when test="matches(., '^[A-Z\d]{2}$')">twoThree</xsl:when>
+          <xsl:when test="matches(., '^\d{8}$')">oxpoints</xsl:when>
+          <xsl:otherwise>department</xsl:otherwise>
+        </xsl:choose>
+      </xsl:attribute>
+      <xsl:value-of select="."/>
+    </skos:notation>
   </xsl:template>
 
   <xsl:template match="item/building-number" mode="inside">
