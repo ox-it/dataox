@@ -122,6 +122,7 @@
   <xsl:key name="columns" match="column" use="number(@n)"/>
 
   <xsl:template name="uri"/>
+  <xsl:template name="record-uri"/>
 
   <xsl:template name="preprocess">
     <item>
