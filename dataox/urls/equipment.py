@@ -19,6 +19,7 @@ urlpatterns = patterns('',
     url(r'^contribute/$', equipment_views.ContributeView.as_view(), name='contribute'),
 
     url(r'^facilities/$', equipment_views.FacilityListView.as_view(), name='facilities'),
+    url(r'^departments/$', equipment_views.LastIssuedView.as_view(), name='last-issued'),
 
     url(r'^browse/(?:(?P<notation>[a-z\-\d\/]+)/)?$', equipment_views.BrowseView.as_view(), name='browse'),
 

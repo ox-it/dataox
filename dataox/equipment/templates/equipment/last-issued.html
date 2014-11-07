@@ -1,0 +1,29 @@
+{% extends "equipment/base.html" %}{% load humfrey_desc %}
+
+{% block title %}Departments{% endblock %}
+
+{% block body_class %}equipment-departments{% endblock %}
+
+{% block content %}
+{% include "equipment/login_prompt.html" %}
+  <h1>Departments</h1>
+  
+  {% if subjects %}
+  <table class="facility-list">
+    <thead>
+      <tr>
+        <th>Department</th>
+        <th>Data last checked</th>
+      </tr>
+    </thead>
+    <tbody>{% for subject in subjects %}
+      <tr class="row-{% cycle "odd" "even" %}">
+        <td>{{ subject.oo_organizationPart|node }}</td>
+        <td>{{ subject.dcterms_issued }}</td>
+      </tr>{% endfor %}
+    </tbody>
+  </table>
+  {% else %}
+  <p>There are no facilities to display.{% if not user.is_authenticated %} Try logging in.{% endif %}</p>
+  {% endif %}
+{% endblock %}

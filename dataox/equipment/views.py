@@ -222,9 +222,11 @@ class BrowseView(EquipmentView, CannedQueryView, RDFView, HTMLView, MappingView)
 
 class FacilityListView(EquipmentView, CannedQueryView, HTMLView, RDFView, MappingView):
     query = """
-        DESCRIBE * WHERE {
+        DESCRIBE ?facility WHERE {
           VALUES ?facilityType { cerif:Facility oo:Facility } .
-          ?facility a ?facilityType ; oo:formalOrganization <http://oxpoints.oucs.ox.ac.uk/id/00000000>
+          ?facility a ?facilityType ;
+            oo:formalOrganization <http://oxpoints.oucs.ox.ac.uk/id/00000000> ;
+            oo:organizationPart ?organizationPart .
         }
     """
 
@@ -232,11 +234,23 @@ class FacilityListView(EquipmentView, CannedQueryView, HTMLView, RDFView, Mappin
     with_labels = True
 
     def get_subjects(self, graph):
-        facilities = set(graph.subjects(NS.rdf.type, NS.cerif.Facility)) \
-                   | set(graph.subjects(NS.rdf.type, NS.oo.Facility))
+        return set(graph.subjects(NS.rdf.type, NS.cerif.Facility)) \
+             | set(graph.subjects(NS.rdf.type, NS.oo.Facility))
 
-        facilities = map(self.resource, facilities)
-        facilities.sort(key=lambda facility: facility.label)
+class LastIssuedView(EquipmentView, CannedQueryView, HTMLView, RDFView, MappingView):
+    equipment_subset_uri = rdflib.URIRef('https://data.ox.ac.uk/id/dataset/research-facilities/equipment')
+    query = """
+        DESCRIBE ?subset WHERE {
+          %(uri)s void:subset ?subset .
+          ?subset oo:organizationPart ?organization ;
+            dcterms:issued ?issued .
+        }
+    """ % {'uri': equipment_subset_uri.n3()}
 
-        return facilities
+    template_name = "equipment/last-issued"
 
+    def get_subjects(self, graph):
+        return graph.subjects(NS.rdf.type, NS.cat.Catalog)
+
+    def sort_subjects(self, subjects):
+        subjects.sort(key=lambda catalog: catalog.oo_organizationPart.label)

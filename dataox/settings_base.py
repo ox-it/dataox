@@ -245,6 +245,7 @@ ADDITIONAL_NAMESPACES = {
     'oxnotation': 'https://data.ox.ac.uk/id/notation/',
     'prog': 'http://purl.org/prog/',
     'oxcap': 'http://purl.ox.ac.uk/oxcap/ns/',
+    'cat': 'http://purl.org/NET/catalog/',
 }
 
 ELASTICSEARCH_SERVER = {'host': 'localhost', 'port': 9200}
