@@ -1,0 +1,43 @@
+CONSTRUCT {
+  ?uni a ?type ;
+    rdfs:label ?label ;
+    foaf:logo ?logo ;
+    skos:prefLabel ?label ;
+    skos:altLabel ?altLabel ;
+    skos:hiddenLabel ?hiddenLabel ;
+    owl:sameAs ?sameAs ;
+    foaf:homepage ?homepage ;
+    foaf:based_near ?point ,
+      <http://dbpedia.org/resource/Oxford> ;
+    foaf:account ?account ;
+    ?lyouProperty ?lyouValue .
+  ?account a foaf:OnlineAccount ;
+    foaf:accountName ?accountName ;
+    foaf:accountServiceHomepage ?accountServiceHomepage .
+  ?point a geo:Point ;
+    geo:lat ?lat ;
+    geo:long ?long .
+} WHERE {
+  BIND (%(uni)s AS ?uni) .
+  ?uni a ?type ;
+  OPTIONAL { ?uni foaf:logo ?logo }
+  OPTIONAL {
+    ?uni skos:prefLabel ?_label
+    BIND(STR(?_label) AS ?label)
+  }
+  OPTIONAL { ?uni skos:altLabel ?altLabel }
+  OPTIONAL { ?uni skos:hiddenLabel ?hiddenLabel }
+  OPTIONAL { ?uni owl:sameAs|skos:exactMatch ?sameAs }
+  OPTIONAL { ?uni foaf:homepage ?homepage }
+  OPTIONAL { ?uni org:hasPrimarySite [ geo:lat ?lat ; geo:long ?long ] }
+  OPTIONAL {
+    ?uni foaf:account ?account .
+    ?account a foaf:OnlineAccount ;
+      foaf:accountName ?accountName ;
+      foaf:accountServiceHomepage ?accountServiceHomepage .
+  }
+  OPTIONAL {
+    ?lyouProperty rdfs:isDefinedBy lyou: .
+    ?uni ?lyouProperty ?lyouValue
+  }
+}

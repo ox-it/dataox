@@ -1,5 +1,7 @@
 from __future__ import division
 
+import pkg_resources
+
 from django.conf import settings
 from django_conneg.views import HTMLView, TextView
 import rdflib
@@ -39,7 +41,7 @@ EXAMPLES = (
     {'slug': 'vacancy-treemap',
      'name': 'Vacancy Treemap',
      'description': 'The distribution of job vacancies across the University.'},
-#	{'slug': 'unicard-explorer',
+#        {'slug': 'unicard-explorer',
 #     'name': 'University Card Explorer',
 #     'description': 'A tool for exploring statistics about University Card holders.'},
 )
@@ -129,72 +131,15 @@ class MaintenanceModeView(HTMLView, TextView):
 class OPDView(StoreView, MappingView, RDFView):
     def get(self, request):
         graph = rdflib.ConjunctiveGraph()
-        doc = rdflib.URIRef(request.build_absolute_uri(request.path))
+        doc = rdflib.URIRef('')
         uni = rdflib.URIRef('http://oxpoints.oucs.ox.ac.uk/id/00000000')
         graph += [
             (doc, NS.rdf.type, NS.oo.OrganizationProfileDocument),
             (doc, NS.foaf.primaryTopic, uni),
             (doc, NS.dcterms.licence, rdflib.URIRef('http://creativecommons.org/publicdomain/zero/1.0/')),
         ]
-        graph += self.store.query("""
-            CONSTRUCT {
-              ?uni a ?type ;
-                rdfs:label ?label ;
-                foaf:logo ?logo ;
-                skos:prefLabel ?label ;
-                skos:altLabel ?altLabel ;
-                skos:hiddenLabel ?hiddenLabel ;
-                owl:sameAs ?sameAs ;
-                foaf:homepage ?homepage ;
-                foaf:based_near ?point ,
-                  <http://dbpedia.org/resource/Oxford> ;
-                foaf:account ?account ;
-                ?lyouProperty ?lyouValue .
-              ?account a foaf:OnlineAccount ;
-                foaf:accountName ?accountName ;
-                foaf:accountServiceHomepage ?accountServiceHomepage .
-              ?point a geo:Point ;
-                geo:lat ?lat ;
-                geo:long ?long .
-              ?dataset a void:Dataset ;
-                oo:organization ?uni ;
-                dcterms:subject ?datasetSubject ;
-                dcterms:conformsTo ?datasetConformsTo ;
-                dcterms:license ?datasetLicense ;
-                void:dataDump ?datasetDataDump .
-            } WHERE {
-              BIND (%(uni)s AS ?uni) .
-              ?uni a ?type ;
-              OPTIONAL { ?uni foaf:logo ?logo }
-              OPTIONAL {
-                ?uni skos:prefLabel ?_label
-                BIND(STR(?_label) AS ?label)
-              }
-              OPTIONAL { ?uni skos:altLabel ?altLabel }
-              OPTIONAL { ?uni skos:hiddenLabel ?hiddenLabel }
-              OPTIONAL { ?uni owl:sameAs|skos:exactMatch ?sameAs }
-              OPTIONAL { ?uni foaf:homepage ?homepage }
-              OPTIONAL { ?uni org:hasPrimarySite [ geo:lat ?lat ; geo:long ?long ] }
-              OPTIONAL {
-                ?uni foaf:account ?account .
-                ?account a foaf:OnlineAccount ;
-                  foaf:accountName ?accountName ;
-                  foaf:accountServiceHomepage ?accountServiceHomepage .
-              }
-              OPTIONAL {
-                ?lyouProperty rdfs:isDefinedBy lyou: .
-                ?uni ?lyouProperty ?lyouValue
-              }
-              OPTIONAL {
-                ?uni ^oo:organization ?dataset .
-                ?dataset a void:Dataset ;
-                  dcterms:subject ?datasetSubject ;
-                  dcterms:conformsTo ?datasetConformsTo ;
-                  dcterms:license ?datasetLicense ;
-                  void:dataDump ?datasetDataDump
-              }
-            }
-        """ % {'uni': uni.n3()})
+        query = pkg_resources.resource_string('dataox.core', 'data/openorg-query.rq')
+        graph += self.store.query(query % {'uni': uni.n3()})
 
         context = {
             'graph': graph,

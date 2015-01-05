@@ -38,8 +38,13 @@
     cc:attributionName "University of Oxford" ;
     cc:attributionURL <https://www.research-facilities.ox.ac.uk/> ;
 
+    oo:organization <http://oxpoints.oucs.ox.ac.uk/id/00000000> ;
     oo:contact <https://data.ox.ac.uk/id/open-data-team> ;
-    oo:corrections <https://data.ox.ac.uk/id/dataset/research-facilities/corrections> .
+    oo:corrections <https://data.ox.ac.uk/id/dataset/research-facilities/corrections> ;
+    dcterms:subject
+      <http://purl.org/openorg/theme/Equipment> ,
+      <http://purl.org/openorg/theme/Facility> ;
+    dcterms:conformsTo <http://openorg.ecs.soton.ac.uk/wiki/Facilities_and_Equipment> .
 
 <https://data.ox.ac.uk/id/dataset/research-facilities/corrections> a foaf:Agent ;
     foaf:name "Research Facilities Team, Research Services Office" ;
