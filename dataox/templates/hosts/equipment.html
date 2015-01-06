@@ -121,14 +121,11 @@
             {% if user.is_authenticated %}
             <p class="iam">logged in as <span class="realName">{{ user.first_name }} {{ user.last_name }}</span> </p>
             <p class="logInOut">
-            {% if user.has_usable_password %}<a href="{% url "account_password" %}">change password</a><br>{% endif %}
-            <a href="{% url "account_logout" %}">log out</a></p>
+            <a href="{{ logout_url }}">log out</a></p>
             {% else %}
             <p>Log in to see more results</p>
             <p class="logInOut">
-              <a href="{% url "account_login" %}?next={{ request.get_full_path|urlencode }}">log in</a>
-              <br>
-              <a href="{% url "account_signup" %}?next={{ request.get_full_path|urlencode }}">register</a>
+              <a href="{{ login_url }}">log in</a>
             </p>
             
             {% endif %}

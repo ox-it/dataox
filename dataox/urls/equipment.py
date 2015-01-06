@@ -1,8 +1,7 @@
-from django.conf.urls import patterns, url, include
+from django.conf.urls import patterns, url
 from django.contrib.staticfiles.urls import staticfiles_urlpatterns
 
-from django.contrib.auth import views as auth_views
-from django_webauth.views import LogoutView
+import django_webauth.views
 
 from humfrey.misc import views as misc_views
 
@@ -23,7 +22,8 @@ urlpatterns = patterns('',
 
     url(r'^browse/(?:(?P<notation>[a-z\-\d\/]+)/)?$', equipment_views.BrowseView.as_view(), name='browse'),
 
-    url(r'^account/', include('dataox.equipment.account.urls')),
+    url(r'^accounts/webauth/$', django_webauth.views.LoginView.as_view(), name='account_webauth'),
+    url(r'^accounts/logout/$', django_webauth.views.LogoutView.as_view(), name="account_logout"),
 
     url(r'^$', misc_views.SimpleView.as_view(template_name="equipment/index"), name='index'),
     url(r'^about/$', misc_views.SimpleView.as_view(template_name="equipment/about"), name='about'),

@@ -68,7 +68,7 @@
   
   <p>Access to information about this item of equipment is restricted to
      members of the University. To view information about it, please
-     <a href="{% url "account_login" %}?next={{ request.get_full_path|urlencode }}">log in</a>.</p>
+     <a href="{{ login_url }}">log in</a>.</p>
   {% else %}
   <h1>{{ subject.label }}</h1>
   {% if item.source.page %}<p>{% for page in item.source.page %}

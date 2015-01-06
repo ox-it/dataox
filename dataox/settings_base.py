@@ -50,7 +50,6 @@ INSTALLED_APPS = (
     'dataox.vacancy',
     'djcelery',
     'pipeline',
-    'account',
     'maintenancemode',
     'raven.contrib.django',
 )
@@ -125,6 +124,7 @@ TEMPLATE_CONTEXT_PROCESSORS = (
     "django.core.context_processors.static",
     "django.core.context_processors.request",
     "django.contrib.messages.context_processors.messages",
+    "dataox.auth.context_processors.login_urls",
     "dataox.core.context_processors.base_template_chooser",
     "dataox.analytics.context_processors.do_not_track",
 )
@@ -137,7 +137,6 @@ AUTHENTICATION_BACKENDS = (
     'django.contrib.auth.backends.ModelBackend',
     'guardian.backends.ObjectPermissionBackend',
     'django_webauth.backends.webauth_ldap.WebauthLDAPBackend',
-    'account.auth_backends.EmailAuthenticationBackend',
 )
 
 MIDDLEWARE_CLASSES = (
@@ -204,8 +203,8 @@ SERVER_EMAIL = 'opendata-admin@maillist.ox.ac.uk'
 REDIS_PARAMS = {'host': 'localhost',
                 'port': 6379}
 
-LOGIN_URL = '/account/login/'
-LOGOUT_URL = '/account/logout/'
+LOGIN_URL = '/accounts/webauth/'
+LOGOUT_URL = '/accounts/logout/'
 LOGIN_REDIRECT_URL = '/'
 
 ID_MAPPING = (
