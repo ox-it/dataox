@@ -136,7 +136,7 @@ SOURCE_URL = 'https://source.data.ox.ac.uk/'
 AUTHENTICATION_BACKENDS = (
     'django.contrib.auth.backends.ModelBackend',
     'guardian.backends.ObjectPermissionBackend',
-    'django_webauth.backends.webauth_ldap.WebauthLDAPBackend',
+    'django_webauth.backends.WebauthLDAP',
 )
 
 MIDDLEWARE_CLASSES = (

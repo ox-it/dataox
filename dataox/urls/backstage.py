@@ -16,7 +16,7 @@ urlpatterns = patterns('',
     url(r'^update/', include('humfrey.update.urls', 'update')),
     url(r'^stores/', include('humfrey.sparql.urls.admin', 'sparql-admin')),
 
-    url(r'^accounts/login/$', django_webauth.views.LoginView.as_view(), name='account_webauth'),
+    url(r'^accounts/webauth/$', django_webauth.views.LoginView.as_view(), name='account_webauth'),
     url(r'^accounts/logout/$', django_webauth.views.LogoutView.as_view(), name="account_logout"),
 
     url(r'^sharepoint/', include('dataox.sharepoint.urls', 'sharepoint')),
