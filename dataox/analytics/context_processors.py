@@ -5,6 +5,8 @@ We use the IT Services "optional analytics" JavaScript documented at
 http://infodev.oucs.ox.ac.uk/analytics/.
 """
 
+import json
+
 from django_hosts import reverse_full
 
 # hostname will be used with the _setDomainName Google Analytics option; see:
@@ -29,10 +31,28 @@ def do_not_track(request):
     meta = analytics_meta_by_host.get(request.host.name)
     if meta:
         request.using_analytics = True
-        return {'analytics': {'do_not_track': request.META.get('HTTP_DNT') == '1',
-                              'id': meta['analytics_id'],
-                              'hostname': meta['hostname'],
-                              'login_possible': meta['login_possible'],
-                              'privacy_policy_url': meta['privacy_policy_url']}}
+        analytics = {'do_not_track': request.META.get('HTTP_DNT') == '1',
+                     'id': meta['analytics_id'],
+                     'hostname': meta['hostname'],
+                     'login_possible': meta['login_possible'],
+                     'privacy_policy_url': meta['privacy_policy_url']}
+
+        extra_gaq = []
+        group_names = set(g.name for g in request.user.groups.all())
+        print group_names
+        status, affiliations = None, set()
+        for group_name in group_names:
+            if group_name.startswith('status:'):
+                status = group_name[7:]
+            elif group_name.startswith('affiliation:'):
+                affiliations.add(group_name[12:])
+        extra_gaq.append(['_setCustomVar', 1, 'authenticated', 'yes' if request.user.is_authenticated() else 'no', 2])
+        if status:
+            extra_gaq.append(['_setCustomVar', 2, 'status', status, 1])
+        if affiliations:
+            extra_gaq.append(['_setCustomVar', 3, 'affiliation', ','.join(sorted(affiliations)), 1])
+        analytics['extra_gaq'] = json.dumps(extra_gaq)
+
+        return {'analytics': analytics}
     else:
         return {}
