@@ -299,6 +299,7 @@
     <xsl:element name="{$name}">
       <xsl:if test="xhtml:div">
         <xsl:attribute name="rdf:datatype">http://purl.org/xtypes/Fragment-XHTML</xsl:attribute>
+        <xsl:attribute name="rdf:parseType">Literal</xsl:attribute>
       </xsl:if>
       <xsl:copy-of select="node()" copy-namespaces="no"/>
     </xsl:element>
