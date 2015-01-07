@@ -102,7 +102,7 @@
 				</xsl:choose>
 			</xsl:when>
 			<xsl:otherwise>
-				<xsl:value-of select="."/>
+				<xsl:value-of select="replace(replace(replace(., '&amp;', '&amp;amp;'), '&gt;', '&amp;gt;'), '&lt;', '&amp;lt;')"/>
 			</xsl:otherwise>
 		</xsl:choose>
 	</xsl:template>
