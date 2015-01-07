@@ -20,6 +20,7 @@
     xmlns:tei="http://www.tei-c.org/ns/1.0"
     xmlns:tio="http://purl.org/tio/ns#"
     xmlns:adhoc="http://vocab.ox.ac.uk/ad-hoc-data-ox/"
+    xmlns:xhtml="http://www.w3.org/1999/xhtml"
   >
   <xsl:import href="common.xsl"/>
 
@@ -63,6 +64,12 @@
         </rdfs:label>
       </org:Organization>
     </oo:organizationPart>
+  </xsl:template>
+
+  <xsl:template match="item/brief-description-of-service-capability" mode="inside">
+    <xsl:apply-templates select="." mode="xhtml-or-text">
+      <xsl:with-param name="name">rdfs:comment</xsl:with-param>
+    </xsl:apply-templates>
   </xsl:template>
 
   <xsl:template match="item/contact-email" mode="inside">

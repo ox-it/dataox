@@ -151,9 +151,9 @@
   </xsl:template>
 
   <xsl:template match="item/equipment-details" mode="inside">
-    <rdfs:comment>
-      <xsl:value-of select="normalize-space(.)"/>
-    </rdfs:comment>
+    <xsl:apply-templates select="." mode="xhtml-or-text">
+      <xsl:with-param name="name">rdfs:comment</xsl:with-param>
+    </xsl:apply-templates>
   </xsl:template>
 
   <xsl:template match="item/general-location" mode="inside">

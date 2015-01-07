@@ -23,6 +23,7 @@
     xmlns:void="http://rdfs.org/ns/void#"
     xmlns:adhoc="http://vocab.ox.ac.uk/ad-hoc-data-ox/"
     xmlns:xs="http://www.w3.org/2001/XMLSchema"
+    xmlns:xhtml="http://www.w3.org/1999/xhtml"
   >
 
   <xsl:param name="store" select="'public'"/>
@@ -143,9 +144,9 @@
         </xsl:choose>
       </xsl:attribute>
       <xsl:for-each select="tei:cell">
-        <xsl:if test="normalize-space(text()) and key('columns', position(), $columns)/@slug">
+        <xsl:if test="node() and key('columns', position(), $columns)/@slug">
           <xsl:element name="{key('columns', position(), $columns)/@slug}">
-            <xsl:value-of select="normalize-space(text())"/>
+            <xsl:copy-of select="node()"/>
           </xsl:element>
         </xsl:if>
       </xsl:for-each>
@@ -154,7 +155,7 @@
           <xsl:for-each select="tei:cell">
             <xsl:if test="text()">
               <xsl:element name="{key('columns', position(), $columns)/@slug}">
-                <xsl:value-of select="normalize-space(text())"/>
+                <xsl:copy-of select="node()"/>
               </xsl:element>
             </xsl:if>
           </xsl:for-each>
@@ -291,6 +292,16 @@
         </skos:notation>
       </rdf:Resource>
     </spatialrelations:within>
+  </xsl:template>
+
+  <xsl:template match="*" mode="xhtml-or-text">
+    <xsl:param name="name"/>
+    <xsl:element name="{$name}">
+      <xsl:if test="xhtml:div">
+        <xsl:attribute name="rdf:datatype">http://purl.org/xtypes/Fragment-XHTML</xsl:attribute>
+      </xsl:if>
+      <xsl:copy-of select="node()" copy-namespaces="no"/>
+    </xsl:element>
   </xsl:template>
 
   <xsl:template match="*" mode="skos inside outside"/>
