@@ -26,6 +26,8 @@
     xmlns:xhtml="http://www.w3.org/1999/xhtml"
   >
 
+  <xsl:include href="nodetostring.xsl"/>
+
   <xsl:param name="store" select="'public'"/>
   <xsl:variable name="type" select="'rdf:Resource'"/>
   <xsl:variable name="group-column"/>
@@ -299,9 +301,8 @@
     <xsl:element name="{$name}">
       <xsl:if test="xhtml:div">
         <xsl:attribute name="rdf:datatype">http://purl.org/xtypes/Fragment-XHTML</xsl:attribute>
-        <xsl:attribute name="rdf:parseType">Literal</xsl:attribute>
       </xsl:if>
-      <xsl:copy-of select="node()" copy-namespaces="no"/>
+      <xsl:apply-templates select="node()" mode="nodetostring"/>
     </xsl:element>
   </xsl:template>
 
