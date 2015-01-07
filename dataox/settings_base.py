@@ -147,7 +147,7 @@ MIDDLEWARE_CLASSES = (
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'humfrey.base.middleware.AccessControlAllowOriginMiddleware',
     'maintenancemode.middleware.MaintenanceModeMiddleware',
-   # 'oauth2app.middleware.OAuth2Middleware',
+    'oauth2app.middleware.OAuth2Middleware',
     'django_conneg.support.middleware.BasicAuthMiddleware',
     'humfrey.pingback.middleware.PingbackMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
