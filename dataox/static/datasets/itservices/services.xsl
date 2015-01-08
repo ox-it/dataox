@@ -140,7 +140,7 @@
     <xsl:call-template name="telephone-extension"/>
   </xsl:template>
   <xsl:template match="field[@name='Initial_x0020_Contact_x0020_Emai']" mode="service-contact">
-    <xsl:for-each select="tokenize(text/text(), '\s+')">
+    <xsl:for-each select="tokenize(normalize-space(text/text()), '\s+')">
       <v:email rdf:resource="mailto:{.}"/>
     </xsl:for-each>
   </xsl:template>
