@@ -72,7 +72,7 @@
     </xsl:apply-templates>
   </xsl:template>
 
-  <xsl:template match="item/contact-email" mode="inside">
+  <xsl:template match="item/contact-email[text()]" mode="inside">
     <oo:contact>
       <foaf:Agent rdf:about="{../@uri}/contact">
         <xsl:if test="../contact-name/text()">
