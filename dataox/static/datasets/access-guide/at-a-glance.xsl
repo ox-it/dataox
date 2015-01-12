@@ -37,8 +37,12 @@
   </xsl:template>
 -->
 
-  <xsl:template match="url">
+  <xsl:template match="building/url">
     <lyou:space-accessibility rdf:resource="{text()}"/>
+  </xsl:template>
+
+  <xsl:template match="address/url">
+    <foaf:homepage rdf:resource="{text()}"/>
   </xsl:template>
 
   <xsl:template match="buildingheading">
