@@ -16,7 +16,7 @@
 @prefix dcat: <http://www.w3.org/ns/dcat#> .
 @prefix wdrs: <http://www.w3.org/2007/05/powder-s#> .
 
-<https://data.ox.ac.uk/id/dataset/research-facilities> a void:Dataset ;
+<https://data.ox.ac.uk/id/dataset/research-facilities> a dcat:Dataset, void:Dataset ;
     rdfs:label "Research equipment and facilities at the University of Oxford" ;
     skos:notation "research-facilities"^^oxnotation:dataset ;
     oo:organization <http://oxpoints.oucs.ox.ac.uk/id/00000000> ;

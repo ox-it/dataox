@@ -17,6 +17,17 @@ CONSTRUCT {
   ?point a geo:Point ;
     geo:lat ?lat ;
     geo:long ?long .
+  ?opdDataset
+    oo:organization ?uni ;
+    oo:contact ?datasetContact ;
+    oo:corrections ?datasetCorrections ;
+    dcterms:subject ?datasetSubject ;
+    dcterms:conformsTo ?datasetConformsTo ;
+    dcterms:license ?datasetLicense .
+  ?datasetCorrections a foaf:Agent ;
+    foaf:mbox ?datasetCorrectionsEmail .
+  ?datasetContact a foaf:Agent ;
+    foaf:mbox ?datasetContactEmail .
 } WHERE {
   BIND (%(uni)s AS ?uni) .
   ?uni a ?type ;
@@ -39,5 +50,21 @@ CONSTRUCT {
   OPTIONAL {
     ?lyouProperty rdfs:isDefinedBy lyou: .
     ?uni ?lyouProperty ?lyouValue
+  }
+  OPTIONAL {
+    ?dataset a void:Dataset ;
+      <http://purl.org/NET/humfrey/ns/dataDumpWithLabels> ?opdDataset ;
+      oo:organization ?uni ;
+      dcterms:subject ?datasetSubject ;
+      dcterms:conformsTo ?datasetConformsTo ;
+      dcterms:license ?datasetLicense .
+    OPTIONAL {
+      ?dataset oo:contact ?datasetContact
+      OPTIONAL { ?datasetContact v:email|foaf:mbox ?datasetContactEmail }
+    }
+    OPTIONAL {
+      ?dataset oo:corrections ?datasetCorrections
+      OPTIONAL { ?datasetCorrections v:email|foaf:mbox ?datasetCorrectionsEmail }
+    }
   }
 }
