@@ -17,6 +17,10 @@
       <tr>
         <th>Managed by:</th>
         <td>{{ subject.oo_organizationPart|node|default:"" }}{% if subject.oo_organizationPart and subject.oo_formalOrganization %}, {% endif %}{{ subject.oo_formalOrganization.label|default:"" }}</td>
+      </tr>{% endif %}{% if subject.foaf_page %}
+      <tr>
+        <th>More information:</th>
+        <td><a href="{{ subject.foaf_page.uri }}">{{ subject.foaf_page.uri }}</a></td>
       </tr>{% endif %}
     </tbody>
   </table>
