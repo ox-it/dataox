@@ -17,7 +17,7 @@ CONSTRUCT {
   ?point a geo:Point ;
     geo:lat ?lat ;
     geo:long ?long .
-  ?dataset a dcat:Dataset ;
+  ?opdDataset
     oo:organization ?uni ;
     oo:contact ?datasetContact ;
     oo:corrections ?datasetCorrections ;
@@ -53,6 +53,7 @@ CONSTRUCT {
   }
   OPTIONAL {
     ?dataset a void:Dataset ;
+      <http://purl.org/NET/humfrey/ns/dataDumpWithLabels> ?opdDataset ;
       oo:organization ?uni ;
       dcterms:subject ?datasetSubject ;
       dcterms:conformsTo ?datasetConformsTo ;
