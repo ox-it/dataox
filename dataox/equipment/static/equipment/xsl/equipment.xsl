@@ -187,34 +187,6 @@
     </xsl:if>
   </xsl:template>
 
-  <xsl:template match="item/primary-contact-email|item/secondary-contact-email|item/tertiary-contact-email" mode="inside">
-    <xsl:variable name="contact-name">
-      <xsl:choose>
-        <xsl:when test="self::primary-contact-email"><xsl:value-of select="../primary-contact-name"/></xsl:when>
-        <xsl:when test="self::secondary-contact-email"><xsl:value-of select="../secondary-contact-name"/></xsl:when>
-        <xsl:when test="self::tertiary-contact-email"><xsl:value-of select="../tertiary-contact-name"/></xsl:when>
-      </xsl:choose>
-    </xsl:variable>
-    <xsl:variable name="uri-part">
-      <xsl:choose>
-        <xsl:when test="self::primary-contact-email">primary-contact</xsl:when>
-        <xsl:when test="self::secondary-contact-email">secondary-contact</xsl:when>
-        <xsl:when test="self::tertiary-contact-email">tertiary-contact</xsl:when>
-      </xsl:choose>
-    </xsl:variable>
-    <oo:contact>
-      <foaf:Agent rdf:about="{../@uri}/{$uri-part}">
-        <xsl:if test="$contact-name">
-          <foaf:name><xsl:value-of select="$contact-name"/></foaf:name>
-        </xsl:if>
-        <vcard:email rdf:resource="mailto:{text()}"/>
-      </foaf:Agent>
-    </oo:contact>
-    <xsl:if test="$uri-part = 'primary-contact'">
-      <oo:primaryContact rdf:resource="{../@uri}/{$uri-part}"/>
-    </xsl:if>
-  </xsl:template>
-
   <xsl:template match="item/small-research-facility" mode="inside">
     <xsl:if test="text() and lower-case(text())!='no'">
       <oo:relatedFacility>

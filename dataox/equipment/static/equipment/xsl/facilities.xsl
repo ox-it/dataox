@@ -72,21 +72,6 @@
     </xsl:apply-templates>
   </xsl:template>
 
-  <xsl:template match="item/contact-email" mode="inside">
-    <oo:contact>
-      <foaf:Agent rdf:about="{../@uri}/contact">
-        <xsl:if test="../contact-name/text()">
-          <foaf:name>
-            <xsl:value-of select="../contact-name/text()"/>
-          </foaf:name>
-        </xsl:if>
-        <xsl:for-each select="tokenize(normalize-space(text()), '\s+')">
-          <vcard:email rdf:resource="mailto:{.}"/>
-        </xsl:for-each>
-      </foaf:Agent>
-    </oo:contact>
-  </xsl:template>
-
   <!-- Columns we don't care about, which are handled in common.xsl -->
   <xsl:template match="item/availability" mode="inside"/>
   <xsl:template match="item/access" mode="inside"/>
