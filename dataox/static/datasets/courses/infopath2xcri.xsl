@@ -17,7 +17,7 @@
             <course>
               <xsl:apply-templates select="current-group()[1]/*" mode="course-attribute"/>
               <!-- all are graduate training -->
-              <dc:subject xsi:type="ox-rdf:notation" identifier="GT">Graduate Training</dc:subject>
+              <dc:subject xsi:type="ox-rdf:notation" identifier="RD">General Researcher Development</dc:subject>
               <xsl:apply-templates select="current-group()[1]/*" mode="course"/>
               <xsl:for-each select="current-group()">
                 <presentation>
