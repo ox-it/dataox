@@ -1,5 +1,6 @@
-from .settings_base import *
+from dataox.settings.base import *
 
+DEBUG = False
 STAGING = True
 
 INSTALLED_APPS += (

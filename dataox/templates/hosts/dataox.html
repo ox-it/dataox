@@ -47,12 +47,12 @@
     <nav>
       <ul>
 {% block nav %}
-        <li><a href="{% host_url index on data %}">home</a></li>
-        <li><a href="{% host_url datasets on data  %}">datasets</a></li>
-        <li><a href="{% host_url explore on data  %}">explore</a></li>
-        <li><a href="{% host_url sparql:endpoint on data  %}">sparql</a></li>
+        <li><a href="{% host_url "index" host "data" %}">home</a></li>
+        <li><a href="{% host_url "datasets" host "data"  %}">datasets</a></li>
+        <li><a href="{% host_url "explore" host "data"  %}">explore</a></li>
+        <li><a href="{% host_url "sparql:endpoint" host "data"  %}">sparql</a></li>
         <li><a href="https://docs.data.ox.ac.uk/">documentation</a></li>
-        <li><a href="{% host_url contact on data  %}">contact</a></li>
+        <li><a href="{% host_url "contact" host "data"  %}">contact</a></li>
 {% endblock %}
       </ul>
 {% block search_box %}
