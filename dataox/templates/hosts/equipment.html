@@ -77,7 +77,7 @@
   <title>{% block title %}This gets replaced{% endblock %} | Research Facilities and Equipment at Oxford</title>
 </head>
 {% block body %}
-<body data-dataox-search-url="{% url "search" %}" class="{% block body_class %}{% endblock %}">{% if 0 and staging %}{% include "staging/tab.html" %}{% endif %}
+<body data-dataox-search-url="{% url "search" %}" class="{% block body_class %}{% endblock %}">
   <div id="page">
     <header class="pageHeader">
       <div class="siteTitle"><a href="{% url "index" %}" id="homeLink">Research Facilities and Equipment at Oxford</a></div>
