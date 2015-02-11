@@ -3,6 +3,7 @@ import os
 
 from .components.static import *
 from .components.email import *
+from .components.humfrey import *
 from .components.monkey_patches import *
 from .components.celery import *
 
