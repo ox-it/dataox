@@ -35,7 +35,7 @@ INSTALLED_APPS = (
     'dataox.equipment',
 )
 
-ROOT_HOSTCONF = 'dataox.hosts'
+ROOT_HOSTCONF = 'dataox.hosts.production'
 ROOT_URLCONF = 'dataox.urls.empty'
 DEFAULT_HOST = 'empty'
 

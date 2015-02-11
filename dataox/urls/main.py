@@ -1,6 +1,5 @@
 from django.conf.urls import patterns, include, url
 from django.views.generic import RedirectView
-from django.contrib.staticfiles.urls import staticfiles_urlpatterns
 
 from humfrey.desc import views as desc_views
 from humfrey.misc import views as misc_views
@@ -8,6 +7,8 @@ from humfrey.graphviz import views as graphviz_views
 from humfrey.elasticsearch import views as elasticsearch_views
 
 from dataox.core import views as core_views
+
+from .common import * #@UnusedWildImport
 
 search_args = {'opensearch_meta': {'ShortName': 'data.ox.ac.uk',
                                    'LongName': 'Open Data Service',
@@ -49,8 +50,4 @@ urlpatterns = patterns('',
     # as per http://www.w3.org/TR/void/#well-known
     (r'^.well-known/void$', RedirectView.as_view(url='/datasets/', permanent=False)),
     (r'^.well-known/openorg$', core_views.OPDView.as_view(), {}, 'openorg'),
-) + staticfiles_urlpatterns()
-
-handler404 = misc_views.SimpleView.as_view(template_name='404', context={'status_code':404})
-handler500 = core_views.ServerErrorView.as_view()
-
+) + common_urlpatterns

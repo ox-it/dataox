@@ -14,7 +14,7 @@ STAGING = False
 TIME_ZONE = 'Europe/London'
 LANGUAGE_CODE = 'en-gb'
 
-INTERNAL_IPS = os.environ.get('DATAOX_INTERNAL_IPS', '').split()
+INTERNAL_IPS = os.environ.get('DATAOX_INTERNAL_IPS', '127.0.0.1').split()
 
 try:
     SECRET_KEY = os.environ['SECRET_KEY']
@@ -68,7 +68,7 @@ ADMINS = (
 MANAGERS = ADMINS
 
 ROOT_URLCONF = 'dataox.urls.empty'
-ROOT_HOSTCONF = 'dataox.hosts'
+ROOT_HOSTCONF = 'dataox.hosts.production'
 DEFAULT_HOST = 'empty'
 
 OAUTH2_ACCESS_TOKEN_LENGTH = 20
@@ -99,7 +99,7 @@ AUTHENTICATION_BACKENDS = (
 )
 
 MIDDLEWARE_CLASSES = (
-    'django_hosts.middleware.HostsMiddleware',
+    'django_hosts.middleware.HostsRequestMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
 #    'django.middleware.csrf.CsrfViewMiddleware',
@@ -111,6 +111,7 @@ MIDDLEWARE_CLASSES = (
     'humfrey.pingback.middleware.PingbackMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'dataox.auth.middleware.AuthenticatedAsMiddleware',
+    'django_hosts.middleware.HostsResponseMiddleware',
 )
 
 # For django-registration

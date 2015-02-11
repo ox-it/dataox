@@ -22,16 +22,21 @@ from humfrey.sparql.views import CannedQueryView, StoreView
 from humfrey.utils.namespaces import NS
 
 from . import forms, resource
+import django_hosts
+from django.utils.functional import cached_property
 
 class EquipmentView(object):
     """
     Mixin to choose between public and internal indexes.
     """
     
-    id_mapping = (('https://data.ox.ac.uk/id/equipment/', 'https://www.research-facilities.ox.ac.uk/view:equipment/', True),
-                  ('https://data.ox.ac.uk/id/facility/', 'https://www.research-facilities.ox.ac.uk/view:facility/', True),
-                  ('http://id.southampton.ac.uk/', 'https://www.research-facilities.ox.ac.uk/view:soton/', False),
-                  ('http://oxpoints.oucs.ox.ac.uk/id/', 'https://www.research-facilities.ox.ac.uk/view:oxpoints/', False))
+    @cached_property
+    def id_mapping(self):
+        host = '//' + django_hosts.reverse.reverse_host('equipment')
+        return (('https://data.ox.ac.uk/id/equipment/', host + '/view:equipment/', True),
+                      ('https://data.ox.ac.uk/id/facility/', host + '/view:facility/', True),
+                      ('http://id.southampton.ac.uk/', host + '/view:soton/', False),
+                      ('http://oxpoints.oucs.ox.ac.uk/id/', host + '/view:oxpoints/', False))
 
     resource_registry = resource.resource_registry
 

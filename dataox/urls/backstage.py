@@ -1,12 +1,10 @@
 from django.conf.urls import patterns, include, url
 from django.contrib import admin
-from django.contrib.auth import views as auth_views
-from django.contrib.staticfiles.urls import staticfiles_urlpatterns
-
-from humfrey.misc import views as misc_views
 import django_webauth.views
 
-from .main import handler404, handler500
+from humfrey.misc import views as misc_views
+
+from .common import * #@UnusedWildImport
 
 admin.autodiscover()
 
@@ -22,4 +20,4 @@ urlpatterns = patterns('',
 
     url(r'^oauth2/', include('oauth2app.urls', 'oauth2app')),
     url(r'^admin/', admin.site.urls),
-) + staticfiles_urlpatterns()
+) + common_urlpatterns

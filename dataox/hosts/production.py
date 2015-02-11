@@ -8,5 +8,5 @@ host_patterns = patterns('',
     host(r'id.it.ox.ac.uk', 'dataox.urls.id', name='id-it'),
     host(r'www.research-facilities.ox.ac.uk', 'dataox.urls.equipment', name='equipment'),
     host(r'$x^', 'dataox.urls.empty', name='empty'),
-    host(r'$x^', 'dataox.staging.urls', name='staging'),
+    host(r'$x^', 'dataox.urls.host_index', name='host-index'),
 )

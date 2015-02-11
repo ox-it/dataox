@@ -1,6 +1,4 @@
-from django.conf import settings
-
-__all__ = ['base_template_chooser', 'maintenance_mode']
+__all__ = ['base_template_chooser']
 
 _base_templates = {'data': 'hosts/dataox.html',
                    'backstage': 'hosts/backstage.html',
