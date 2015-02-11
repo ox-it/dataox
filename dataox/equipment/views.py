@@ -70,7 +70,7 @@ class ContributeView(HTMLView, MappingView, StoreView):
     recipients_to = [('Research Services', 'research.facilities@admin.ox.ac.uk')]
     recipients_cc = [('Open Data Team', 'opendata-admin@maillist.ox.ac.uk')]
 
-    @method_decorator(login_required(login_url='/webauth/login/'))
+    @method_decorator(login_required)
     def dispatch(self, request):
         return super(ContributeView, self).dispatch(request)
 
