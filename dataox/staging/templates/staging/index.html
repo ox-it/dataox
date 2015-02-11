@@ -16,10 +16,10 @@
      instances of the domains served by the Open Data Service:</p>
 
   <ul>
-    <li><a href="{% host_url index on data %}">data.ox.ac.uk</a></li>
-    <li><a href="{% host_url index on backstage %}">backstage.data.ox.ac.uk</a></li>
-    <li><a href="{% host_url index on equipment %}">www.research-facilities.ox.ac.uk</a></li>
-    <li><a href="{% host_url index on course %}">course.data.ox.ac.uk</a></li>
+    <li><a href="{% host_url "index" host "data" %}">data.ox.ac.uk</a></li>
+    <li><a href="{% host_url "index" host "backstage" %}">backstage.data.ox.ac.uk</a></li>
+    <li><a href="{% host_url "index" host "equipment" %}">www.research-facilities.ox.ac.uk</a></li>
+    <li><a href="{% host_url "index" host "course" %}">course.data.ox.ac.uk</a></li>
   </ul>
     
 {% endblock %}

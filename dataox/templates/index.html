@@ -20,12 +20,12 @@
       <h2>Exploring the data</h2>      
       
       <p>To get started, have a look at our
-         <a href="{% host_url datasets on data %}">datasets</a> or use the
+         <a href="{% host_url "datasets" host "data" %}">datasets</a> or use the
          <a href="{% url "explore" %}">explore page</a> to get a flavour of
          what's available.</p>
 
       <p>All data are also available through
-         <a href="{% host_url sparql:endpoint on data %}">our SPARQL endpoint</a>. The
+         <a href="{% host_url "sparql:endpoint" host "data" %}">our SPARQL endpoint</a>. The
          site also supports
          <a href="http://en.wikipedia.org/wiki/Content_negotiation">content
          negotiation</a>, allowing you to request data in a variety of RDF
@@ -44,7 +44,7 @@
 
       <p>If you've got an example of something produced using data from this
          site then we'd be delighted to hear from you so we can include it in
-         our <a href="{% host_url explore on data %}#examples">list of
+         our <a href="{% host_url "explore" host "data" %}#examples">list of
          examples</a>.</p>
     </section>
 {% endblock %}

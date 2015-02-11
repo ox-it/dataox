@@ -2,7 +2,7 @@
 
 {% block header_text %}
 <p class="title">Course data for the University of Oxford</p>
-<p>course.data.ox.ac.uk <i>(part of <a href="{% host_url index on data %}">data.ox.ac.uk</a>)</i></p>
+<p>course.data.ox.ac.uk <i>(part of <a href="{% host_url "index" host "data" %}">data.ox.ac.uk</a>)</i></p>
 {% endblock %}
 
 {% block extra_head %}{{ block.super }}
@@ -14,5 +14,5 @@
 {% block nav %}
   <li><a href="{% url "index" %}">home</a></li>
   <li><a href="{% url "catalogues" %}">catalogues</a></li>
-  <li><a href="{% host_url contact on data %}">contact</a></li>
+  <li><a href="{% host_url "contact" host "data" %}">contact</a></li>
 {% endblock %}
