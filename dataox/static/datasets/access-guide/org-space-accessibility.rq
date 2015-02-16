@@ -1,0 +1,10 @@
+PREFIX lyou: <http://purl.org/linkingyou/>
+
+CONSTRUCT {
+ ?org lyou:space-accessibility ?guide
+} WHERE {
+ GRAPH <https://data.ox.ac.uk/graph/access-guide/at-a-glance> {
+  ?building lyou:space-accessibility ?guide .
+ }
+ ?org org:hasPrimarySite ?building.
+}
