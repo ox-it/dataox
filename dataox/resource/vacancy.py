@@ -214,8 +214,8 @@ class Vacancy(object):
         contact = self.oo_contact
         if isinstance(contact, BaseResource):
             contact_elem = E('contact')
-            if contact.label:
-                contact_elem.append(E('label', unicode(contact.label)))
+            if contact.actual_label:
+                contact_elem.append(E('label', unicode(contact.actual_label)))
             if isinstance(contact.v_email, BaseResource):
                 contact_elem.append(E('email', contact.v_email.uri.replace('mailto:', '', 1)))
             if isinstance(contact.v_tel, BaseResource):
