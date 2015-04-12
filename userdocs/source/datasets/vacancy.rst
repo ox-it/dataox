@@ -122,6 +122,8 @@ system, so be wary of making assumptions about the data. In particular:
    still open.
  * Some files (linked using ``foaf:page``) don't have titles
    (``dcterms:title``).
+ * Not all contact details have ``label`` data. You shoud be able to handle
+   this element being missing.
 
 
 Limitations
