@@ -247,7 +247,7 @@ class RecruitOxScraper(Scraper):
         current_documents = dict((d.pk, d) for d in Document.objects.filter(vacancy=vacancy))
         for row in html.xpath(".//table[@class='erqlayouttable']//tr")[1:]:
             anchor = row.xpath('.//a')[0]
-            url = urlparse.urljoin(self.detail_url, anchor.attrib['href'])
+            url = urlparse.urljoin(self.detail_url, anchor.attrib['href'].replace(' ', '%20'))
 
             try:
                 document = Document.objects.get(url=url, vacancy=vacancy)
