@@ -98,7 +98,7 @@ class Vacancy(object):
         if isinstance(contact, BaseResource):
             vacancy['contact'] = {}
             if contact.actual_label:
-                vacancy['label'] = contact.actual_label
+                vacancy['contact']['label'] = contact.actual_label
             if isinstance(contact.v_email, BaseResource):
                 vacancy['contact']['email'] = contact.v_email.uri.replace('mailto:', '', 1)
             if isinstance(contact.v_tel, BaseResource):
