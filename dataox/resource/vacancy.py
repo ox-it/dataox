@@ -96,7 +96,9 @@ class Vacancy(object):
 
         contact = self.oo_contact
         if isinstance(contact, BaseResource):
-            vacancy['contact'] = {'label': contact.label}
+            vacancy['contact'] = {}
+            if contact.actual_label:
+                vacancy['label'] = contact.actual_label
             if isinstance(contact.v_email, BaseResource):
                 vacancy['contact']['email'] = contact.v_email.uri.replace('mailto:', '', 1)
             if isinstance(contact.v_tel, BaseResource):
@@ -132,8 +134,8 @@ class Vacancy(object):
             id=self.id)
         if self.foaf_homepage:
             vacancy.append(E('webpage', self.foaf_homepage.uri))
-        if self.label:
-            vacancy.append(E('label', unicode(self.label)))
+        if self.actual_label:
+            vacancy.append(E('label', unicode(self.actual_label)))
         if self.opens:
             vacancy.append(E('opens', self.opens.isoformat()))
         if self.closes:
@@ -178,8 +180,8 @@ class Vacancy(object):
                 sub.append(E('webpage', related.foaf_homepage.uri))
             if related.foaf_logo:
                 sub.append(E('logo', related.foaf_logo.uri))
-            if related.label:
-                sub.append(E('label', unicode(related.label)))
+            if related.actual_label:
+                sub.append(E('label', unicode(related.actual_label)))
             if related.v_adr:
                 address = E('address')
                 for p, n in [('v:extended-address', 'extended-address'),
@@ -212,8 +214,8 @@ class Vacancy(object):
         contact = self.oo_contact
         if isinstance(contact, BaseResource):
             contact_elem = E('contact')
-            if contact.label:
-                contact_elem.append(E('label', unicode(contact.label)))
+            if contact.actual_label:
+                contact_elem.append(E('label', unicode(contact.actual_label)))
             if isinstance(contact.v_email, BaseResource):
                 contact_elem.append(E('email', contact.v_email.uri.replace('mailto:', '', 1)))
             if isinstance(contact.v_tel, BaseResource):
