@@ -143,4 +143,6 @@ GUARDIAN_RAISE_403 = True
 
 from ..maintenancemode import MAINTENANCE_MODE
 
+MAINTENTANCE_MODE_LOCK_DIRECTORY = os.environ.get('MAINTENTANCE_MODE_LOCK_DIRECTORY')
+
 # Monkey patches
