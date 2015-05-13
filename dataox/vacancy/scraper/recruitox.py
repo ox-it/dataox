@@ -22,6 +22,8 @@ def _normalize_space(text):
 
 class RecruitOxScraper(Scraper):
     base_url = 'https://www.recruit.ox.ac.uk/pls/hrisliverecruit/'
+    feed_url = urlparse.urljoin(base_url, 'Erq_search_xml_api.build_search_xml?p_internal_external=A&p_company=10')
+
     site_timezone = pytz.timezone('Europe/London')
     COUNT_KEY = 'dataox:transform:vacancies:count'
 
@@ -57,21 +59,40 @@ class RecruitOxScraper(Scraper):
                      'p_refresh_search': 'Y'}
     detail_salary_re = re.compile(ur'^(Grade|Salary)[^\dA-Z]+(?P<grade>[^:]{,32})[-:][^£]*£? ?(?P<lower>[\d,]+)(?:[^£]*£ ?(?P<upper>[\d,]+)(?:[^£]+£(?P<discretionary>[\d,]+))?)?')
 
+    category_mapping = {'AC': 'academic',
+                        'ST': 'support-technical',
+                        'TS': 'temporary-staffing-service',
+                        'RE': 'research',
+                        'PM': 'professional-management'}
+
     def __init__(self, transform_manager):
         self.quick = transform_manager.update_log.trigger == 'crontab'
         super(RecruitOxScraper, self).__init__(transform_manager)
 
     @classmethod
-    def get_html(cls, url, params=None):
+    def get_page(cls, url, params=None, parser_cls=etree.HTMLParser):
         if params:
             url = '%s?%s' % (url, urllib.urlencode(params))
         request = urllib2.Request(url)
         request.headers['User-agent'] = cls.user_agent
         if cls.crawl_delay:
             time.sleep(cls.crawl_delay)
-        return etree.parse(urllib2.urlopen(request), parser=etree.HTMLParser(encoding="WINDOWS-1252"))
+        return etree.parse(urllib2.urlopen(request),
+                           parser=parser_cls(encoding="WINDOWS-1252"))
+
+    def get_vacancy_elems(self):
+        feed_xml = self.get_page(self.feed_url, parser_cls=etree.XMLParser)
+        vacancy_elems = {}
+        for vacancy_elem in feed_xml.xpath('/currentVacancies/vacancy'):
+            for elem in vacancy_elem:
+                if elem.text:
+                    elem.text = elem.text.strip('\n')
+            vacancy_elems[vacancy_elem.find('recruitmentId').text] = vacancy_elem
+        return vacancy_elems
 
     def import_vacancies(self):
+        self.vacancy_elems = self.get_vacancy_elems()
+
         changed = False
 
         if self.quick and not self.number_of_vacancies_changed():
@@ -113,7 +134,7 @@ class RecruitOxScraper(Scraper):
     def number_of_vacancies_changed(self):
         params = self.search_params.copy()
         params['p_start_from'] = '0'
-        html = self.get_html(RecruitOxScraper.search_url, params)
+        html = self.get_page(RecruitOxScraper.search_url, params)
 
         pagination = html.xpath(".//span[@class='erq_searchv4_count']")[0].text.strip()
         pagination = self.search_pagination_re.match(pagination).groupdict()
@@ -128,7 +149,7 @@ class RecruitOxScraper(Scraper):
         return new_count != old_count
 
     def get_department_options(self):
-        html = self.get_html(self.start_search_url)
+        html = self.get_page(self.start_search_url)
         options = html.xpath("//select[@name='p_department']/option")[1:]
         return [option.attrib['value'] for option in options]
 
@@ -138,7 +159,7 @@ class RecruitOxScraper(Scraper):
             params = self.search_params.copy()
             params['p_start_from'] = page_number * 10
             params['p_department'] = department
-            html = self.get_html(self.search_url, params)
+            html = self.get_page(self.search_url, params)
             logger.info("Got page number %d", page_number)
 
             vacancy_identifiers.update(map(unicode, html.xpath(self.search_vacancy_identifier_xpath)))
@@ -166,7 +187,7 @@ class RecruitOxScraper(Scraper):
 
         params = self.detail_params.copy()
         params['p_recruitment_id'] = vacancy_id
-        html = self.get_html(self.detail_url, params)
+        html = self.get_page(self.detail_url, params)
         vacancy.url = '%s?%s' % (self.detail_url, urllib.urlencode(params))
 
         title_td = html.xpath(".//td[@class='erq_searchv4_heading1']")
@@ -234,6 +255,20 @@ class RecruitOxScraper(Scraper):
             vacancy.closing_date = self.site_timezone.localize(closing_date).replace(microsecond=0).isoformat()
 
         vacancy.internal = 'INTERNAL APPLICANTS ONLY' in vacancy.description
+
+        vacancy_elem = self.vacancy_elems.get(vacancy_id)
+        if vacancy_elem is not None:
+            vacancy.tags = vacancy_elem.find('tagsText').text
+            closing_time = vacancy_elem.find('recruitmentClosesTime').text
+            if vacancy.closing_date and closing_time:
+                closing_date = dateutil.parser.parse(vacancy.closing_date)
+                closing_date.replace(hour=int(closing_time[:2]),
+                                     minute=int(closing_time[3:5]))
+                vacancy.closing_date = closing_date.isoformat()
+            category = (vacancy_elem.find('competitionType').find('code').text or '').strip()
+            print repr(category)
+            print repr(self.category_mapping.get(category))
+            vacancy.category = self.category_mapping.get(category, '')
 
         meta.pop('Vacancy ID :')
         if meta:

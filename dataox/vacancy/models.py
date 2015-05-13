@@ -20,6 +20,14 @@ from humfrey.utils.namespaces import NS
 logger = logging.getLogger(__name__)
 email_re = re.compile(r'(?P<localpart>[a-zA-Z\d\-._]+)@(?P<host>[a-zA-Z\d\-.]+)')
 
+category_choices = (
+    ('academic', 'Academic'),
+    ('support-technical', 'Support and Technical'),
+    ('professional-management', 'Professional and Management'),
+    ('research', 'Research'),
+    ('temporary-staffing-service', 'Temporary Staffing Service'),
+)
+
 class Vacancy(DirtyFieldsMixin, models.Model):
     vacancy_id = models.CharField(max_length=10)
     title = models.CharField(max_length=512)
@@ -30,6 +38,8 @@ class Vacancy(DirtyFieldsMixin, models.Model):
     basedNear = models.CharField(max_length=256, blank=True)
     
     description = models.TextField()
+    tags = models.TextField(blank=True)
+    category = models.TextField(choices=category_choices, blank=True)
     
     salary = models.CharField(max_length=512, blank=True)
     salary_grade = models.CharField(max_length=32, blank=True)
@@ -163,6 +173,13 @@ class Vacancy(DirtyFieldsMixin, models.Model):
             triples.append((uri, NS.oo.organizationPart, rdflib.URIRef(organizationPart)))
         for basedNear in self.basedNear.split():
             triples.append((uri, NS.foaf.based_near, rdflib.URIRef(basedNear)))
+
+        if self.tags:
+            tags = set(tag.strip() for tag in self.tags.split(','))
+            for tag in tags:
+                triples.append((uri, NS.dc.subject, rdflib.Literal(tag)))
+        if self.category:
+            triples.append((uri, NS.dcterms.subject, rdflib.URIRef('https://data.ox.ac.uk/id/vacancy-category/' + self.category)))
 
         for document in self.document_set.all():
             if not document.local_url:
