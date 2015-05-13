@@ -1,0 +1,13 @@
+{% load humfrey_desc %}
+    <h2 itemprop="name">{{ subject.label }}</h2>
+    {% if subject.foaf_homepage %}<a itemprop="url" href="{{ subject.foaf_homepage }}">Homepage</a>{% endif %}
+    {% if subject.foaf_logo %}<img itemprop="logo" src="{{ subject.foaf_logo }}" alt=""/>{% endif %}
+    {% with subject.v_adr as adr %}{% if adr %}
+    <div itemscope itemprop="address" itemtype="http://schema.org/PostalAddress">
+      <div itemprop="streetAddress">{{ adr|property:"v:street-address"|default:"" }}</div>
+      <div itemprop="extendedAddress">{{ adr|property:"v:extended-address"|default:"" }}</div>
+      <div itemprop="addressLocality">{{ adr|property:"v:locality"|default:"" }}</div>
+      <div itemprop="postalCode">{{ adr|property:"v:postal-code"|default:"" }}</div>
+      <div itemprop="addressCountry">{{ adr|property:"v:country"|default:"" }}</div>
+    </div>
+    {% endif %}{% endwith %}
