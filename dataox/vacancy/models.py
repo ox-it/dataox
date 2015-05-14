@@ -28,6 +28,9 @@ category_choices = (
     ('temporary-staffing-service', 'Temporary Staffing Service'),
 )
 
+feed_names = set(['naturejobs', 'jobs-ac-uk', 'all'])
+feed_uri_prefix = rdflib.URIRef('https://data.ox.ac.uk/id/vacancy-feed/')
+
 class Vacancy(DirtyFieldsMixin, models.Model):
     vacancy_id = models.CharField(max_length=10)
     title = models.CharField(max_length=512)
@@ -174,10 +177,14 @@ class Vacancy(DirtyFieldsMixin, models.Model):
         for basedNear in self.basedNear.split():
             triples.append((uri, NS.foaf.based_near, rdflib.URIRef(basedNear)))
 
+        triples.append((feed_uri_prefix + 'all', NS.skos.member, uri))
         if self.tags:
             tags = set(tag.strip() for tag in self.tags.split(','))
             for tag in tags:
-                triples.append((uri, NS.dc.subject, rdflib.Literal(tag)))
+                if tag.lower() in feed_names:
+                    triples.append((feed_uri_prefix + tag.lower(), NS.skos.member, uri))
+                else:
+                    triples.append((uri, NS.dc.subject, rdflib.Literal(tag)))
         if self.category:
             triples.append((uri, NS.dcterms.subject, rdflib.URIRef('https://data.ox.ac.uk/id/vacancy-category/' + self.category)))
 

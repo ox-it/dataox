@@ -258,7 +258,7 @@ class RecruitOxScraper(Scraper):
 
         vacancy_elem = self.vacancy_elems.get(vacancy_id)
         if vacancy_elem is not None:
-            vacancy.tags = vacancy_elem.find('tagsText').text
+            tags = vacancy_elem.find('tagsText').text or ''
             closing_time = vacancy_elem.find('recruitmentClosesTime').text
             if vacancy.closing_date and closing_time:
                 closing_date = dateutil.parser.parse(vacancy.closing_date)
@@ -266,8 +266,6 @@ class RecruitOxScraper(Scraper):
                                      minute=int(closing_time[3:5]))
                 vacancy.closing_date = closing_date.isoformat()
             category = (vacancy_elem.find('competitionType').find('code').text or '').strip()
-            print repr(category)
-            print repr(self.category_mapping.get(category))
             vacancy.category = self.category_mapping.get(category, '')
 
         meta.pop('Vacancy ID :')

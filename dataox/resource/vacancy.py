@@ -229,6 +229,55 @@ class Vacancy(object):
             vacancy.append(document_urls)
         return vacancy
 
+    def get_naturejobs_xml(self):
+        organization_part = self.get('oo:organizationPart')
+        formal_organization = self.get('oo:formalOrganization')
+
+        employer_name = ', '.join([org.actual_label for org in [organization_part,
+                                                                formal_organization]
+                                   if org]) or 'University of Oxford'
+
+        try:
+            employer_url = (organization_part or formal_organization).get('foaf:homepage').uri
+        except AttributeError:
+            employer_url = 'http://www.ox.ac.uk/'
+
+        job = E('job',
+            E('requisition-number', self.id),
+            E('employer-name', employer_name),
+            E('employer-url', employer_url),
+            E('application-url', self.foaf_homepage.uri),
+
+        )
+        for comment in self.all.rdfs_comment:
+            if comment.datatype == NS.xtypes['Fragment-XHTML']:
+                html_comment = xhtml_to_html(comment)
+                job.append(E('description', html_comment))
+                break
+
+        if self.actual_label:
+            job.append(E('title', unicode(self.actual_label)))
+        if self.opens:
+            job.append(E('created-on', self.opens.isoformat()))
+        if self.closes:
+            job.append(E('expires-on', self.closes.isoformat()))
+
+        try:
+            adr = (organization_part or formal_organization).get('v:adr')
+        except AttributeError:
+            adr = None
+        if adr:
+            address = E('address')
+            for p, n in [('v:extended-address', 'address-line-1'),
+                         ('v:street-address', 'address-line-2'),
+                         ('v:locality', 'city'),
+                         ('v:postal-code', 'postal-code'),
+                         ('v:country', 'country')]:
+                if adr.get(p):
+                    address.append(E(n, unicode(adr.get(p))))
+
+        return job
+
     @renderer(format='json', mimetypes=('application/json',), name='JSON')
     def render_json(self, request, context, template_name):
         return HttpResponse(json.dumps(self.get_json(), indent=2),
@@ -237,4 +286,9 @@ class Vacancy(object):
     @renderer(format='xml', mimetypes=('application/xml',), name='XML')
     def render_xml(self, request, context, template_name):
         return HttpResponse(lxml.etree.tostring(self.get_xml(), pretty_print=True),
+                            content_type='application/xml')
+
+    @renderer(format='naturejobs-xml', mimetypes=('x-application/naturejobs+xml',), name='NatureJobs XML')
+    def render_naturejobs_xml(self, request, context, template_name):
+        return HttpResponse(lxml.etree.tostring(self.get_naturejobs_xml(), pretty_print=True),
                             content_type='application/xml')

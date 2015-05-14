@@ -8,7 +8,7 @@ urlpatterns = patterns('',
     # Units
     (r'^vacancies/(?P<oxpoints_id>\d{8})(?:\.(?P<format>[\da-z\-]+))?$', views.VacancyView.as_view(), {}, 'vacancies'),
     # Everything
-    (r'^vacancies/all(?:\.(?P<format>[\da-z]+))?$', views.VacancyView.as_view(), {}, 'vacancies-all'),
+    (r'^vacancies/(?P<feed_name>[a-z\-]+)(?:\.(?P<format>[\da-z\-]+))?$', views.VacancyView.as_view(), {}, 'vacancies-named-feed'),
     # Unit and subunits
     (r'^all-vacancies/(?P<oxpoints_id>\d{8})(?:\.(?P<format>[\da-z\-]+))?$', views.VacancyView.as_view(all=True), {}, 'all-vacancies'),
 )

@@ -23,7 +23,7 @@
   </aside>
   
   {% if items %}
-  <p>There are currently {{ items|length }} vacancies{% if unit %} within {{ unit.label }}{% if keyword %} that mention '<strong>{{ keyword }}</strong>'{% endif %}{% endif %}:</p>
+  <p>There are currently {{ items|length }} vacancies{% if unit %}{% if unit %} within {{ unit.label }}{% endif %}{% if keyword %} that mention '<strong>{{ keyword }}</strong>'{% endif %}{% endif %}:</p>
   
   <table class="sparql-results">
     <thead>
@@ -42,7 +42,7 @@
     </tbody>
   </table>
   {% else %}
-  <p>There are not currently any vacancies within {{ unit.label }}{% if keyword %} that mention '<strong>{{ keyword }}</strong>'{% endif %}.</p>
+  <p>There are not currently any vacancies{% if unit %} within {{ unit.label }}{% endif %}{% if keyword %} that mention '<strong>{{ keyword }}</strong>'{% endif %}.</p>
   {% endif %}
   
 
