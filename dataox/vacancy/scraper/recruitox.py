@@ -258,7 +258,7 @@ class RecruitOxScraper(Scraper):
 
         vacancy_elem = self.vacancy_elems.get(vacancy_id)
         if vacancy_elem is not None:
-            tags = vacancy_elem.find('tagsText').text or ''
+            vacancy.tags = vacancy_elem.find('tagsText').text or ''
             closing_time = vacancy_elem.find('recruitmentClosesTime').text
             if vacancy.closing_date and closing_time:
                 closing_date = dateutil.parser.parse(vacancy.closing_date)
