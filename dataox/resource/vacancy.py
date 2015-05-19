@@ -251,7 +251,7 @@ class Vacancy(object):
             E('employer-name', employer_name),
             E('employer-url', employer_url),
         )
-        if self.homepage:
+        if self.foaf_homepage:
             job.append(E('application-url', self.foaf_homepage.uri))
 
         for comment in self.all.rdfs_comment:
