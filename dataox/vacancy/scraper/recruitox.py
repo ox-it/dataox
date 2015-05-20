@@ -211,6 +211,8 @@ class RecruitOxScraper(Scraper):
         description = html.xpath(".//td[@class='erq_searchv4_heading3']")[-1]
         description.attrib.clear()
         description.tag = 'div'
+        for anchor in description.xpath('.//a[@target]'):
+            del anchor.attrib['target']
         description.attrib['xmlns'] = 'http://www.w3.org/1999/xhtml'
         vacancy.description = etree.tostring(description)
 
