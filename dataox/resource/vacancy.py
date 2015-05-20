@@ -250,9 +250,10 @@ class Vacancy(object):
             E('requisition-number', unicode(self.id)),
             E('employer-name', employer_name),
             E('employer-url', employer_url),
-            E('application-url', self.foaf_homepage.uri),
-
         )
+        if self.homepage:
+            job.append(E('application-url', self.foaf_homepage.uri))
+
         for comment in self.all.rdfs_comment:
             if comment.datatype == NS.xtypes['Fragment-XHTML']:
                 html_comment = xhtml_to_html(comment, serialize=False)
