@@ -276,7 +276,6 @@ class RecruitOxScraper(Scraper):
             vacancy.save()
             changed = True
 
-
         current_documents = dict((d.pk, d) for d in Document.objects.filter(vacancy=vacancy))
         for row in html.xpath(".//table[@class='erqlayouttable']//tr")[1:]:
             anchor = row.xpath('.//a')[0]

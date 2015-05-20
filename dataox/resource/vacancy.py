@@ -12,7 +12,7 @@ import pytz
 from django.http import HttpResponse
 from django_conneg.decorators import renderer
 
-def xhtml_to_html(xml):
+def xhtml_to_html(xml, serialize=True):
     xml = lxml.etree.fromstring(xml)
     xhtml_ns = '{http://www.w3.org/1999/xhtml}'
     def walk(e):
@@ -24,7 +24,10 @@ def xhtml_to_html(xml):
     html = lxml.etree.Element(xml.tag)
     html.text, html.tail = xml.text, xml.tail
     html.extend(xml)
-    return lxml.etree.tostring(html, method='html')
+    if serialize:
+        return lxml.etree.tostring(html, method='html')
+    else:
+        return html
 
 class Vacancy(object):
     types = ('vacancy:Vacancy',)
@@ -232,6 +235,7 @@ class Vacancy(object):
     def get_naturejobs_xml(self):
         organization_part = self.get('oo:organizationPart')
         formal_organization = self.get('oo:formalOrganization')
+        based_near = self.get('foaf:based_near')
 
         employer_name = ', '.join([org.actual_label for org in [organization_part,
                                                                 formal_organization]
@@ -251,30 +255,53 @@ class Vacancy(object):
         )
         for comment in self.all.rdfs_comment:
             if comment.datatype == NS.xtypes['Fragment-XHTML']:
-                html_comment = xhtml_to_html(comment)
-                job.append(E('description', html_comment))
+                html_comment = xhtml_to_html(comment, serialize=False)
+                try:
+                    salary = self.get('vacancy:salary').actual_label
+                except AttributeError:
+                    pass
+                else:
+                    if salary is not None:
+                        salary = E('p', E('em', salary))
+                        html_comment.text, salary.tail = None, html_comment.text
+                        html_comment.insert(0, salary)
+                job.append(E('description',
+                             lxml.etree.tostring(html_comment, method='html')))
                 break
 
         if self.actual_label:
             job.append(E('title', unicode(self.actual_label)))
         if self.opens:
-            job.append(E('created-on', self.opens.isoformat()))
+            job.append(E('created-on', self.opens.strftime('%Y-%m-%d')))
         if self.closes:
-            job.append(E('expires-on', self.closes.isoformat()))
+            job.append(E('expires-on', self.closes.strftime('%Y-%m-%d')))
 
         try:
-            adr = (organization_part or formal_organization).get('v:adr')
+            adr = (based_near or organization_part or formal_organization).get('v:adr')
         except AttributeError:
             adr = None
+
+        address_data = {}
         if adr:
-            address = E('address')
             for p, n in [('v:extended-address', 'address-line-1'),
                          ('v:street-address', 'address-line-2'),
                          ('v:locality', 'city'),
                          ('v:postal-code', 'postal-code'),
                          ('v:country', 'country')]:
                 if adr.get(p):
-                    address.append(E(n, unicode(adr.get(p))))
+                    address_data[n] = unicode(adr.get(p))
+        if 'city' not in address_data:
+            address_data['city'] = 'Oxford'
+        if 'country' not in address_data:
+            address_data['country'] = 'United Kingdom'
+        if 'address-line-2' in address_data and 'address-line-1' not in address_data:
+            address_data['address-line-1'] = address_data.pop('address-line-2')
+
+        address = E('address')
+        for n in ['address-line-1', 'address-line-2', 'city', 'postal-code', 'country']:
+            if n in address_data:
+                address.append(E(n, address_data[n]))
+        job.append(address)
 
         return job
 
