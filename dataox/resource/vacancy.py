@@ -263,7 +263,7 @@ class Vacancy(object):
                     pass
                 else:
                     if salary is not None:
-                        salary = E('p', E('em', unicode(salary)))
+                        salary = E('p', E('em', "Salary: " + unicode(salary)))
                         html_comment.text, salary.tail = None, html_comment.text
                         html_comment.insert(0, salary)
                 job.append(E('description',
