@@ -263,9 +263,9 @@ class Vacancy(object):
                     pass
                 else:
                     if salary is not None:
-                        salary = E('p', E('em', salary))
+                        salary = E('p', E('em', unicode(salary)))
                         html_comment.text, salary.tail = None, html_comment.text
-                        html_comment.insert(0, unicode(salary))
+                        html_comment.insert(0, salary)
                 job.append(E('description',
                              lxml.etree.tostring(html_comment, method='html')))
                 break
