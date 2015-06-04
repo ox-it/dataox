@@ -7,6 +7,7 @@ import os
 import re
 
 import dateutil.parser
+import html2text
 from lxml import etree
 import pytz
 import rdflib
@@ -260,20 +261,10 @@ class Vacancy(DirtyFieldsMixin, models.Model):
 
     @property
     def plain_description(self):
-        return self.flatten(etree.fromstring(self.description)).strip()
-
-    def _flatten(self, elem):
-        if elem.tag == 'br':
-            yield '\n'
-            yield (elem.tail or '').strip()
-        else:
-            yield (elem.text or '').strip()
-            for child in elem:
-                for text in self._flatten(child):
-                    yield text
-            yield (elem.tail or '').strip()
-    def flatten(self, elem):
-        return ''.join(self._flatten(elem))
+        h = html2text.HTML2Text()
+        h.ignore_links = True
+        h.unicode_snob = True
+        return h.handle(self.description)
 
     class Meta:
         verbose_name_plural = 'vacancies'
