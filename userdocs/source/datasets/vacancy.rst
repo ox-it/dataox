@@ -98,7 +98,8 @@ Here's an example entry in an XML feed:
 Data
 ----
 
-The data is updated every fifteen minutes betwen 7AM and 6PM weekdays from an XML feed from the recruitment site.
+The data is updated every fifteen minutes between 7AM and 6PM weekdays, from an
+XML feed exposed by the recruitment site.
 
 
 Data quality
