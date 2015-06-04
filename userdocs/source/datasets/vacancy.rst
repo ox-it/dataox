@@ -98,28 +98,20 @@ Here's an example entry in an XML feed:
 Data
 ----
 
-The data is updated up to every ten minutes by scraping the recruitment site.
-
-.. note::
-
-   Only if the number of vacancies has changed are the vacancies imported.
-   As almost all vacancies close — and so disappear — at midday, the only way
-   this will lead to new vacancies being missed is if the same number of
-   vacancies are created as are closed within that ten minute window. Were
-   this to happen, the new vacancies will be picked up the next time another
-   vacancy is added.
+The data is updated every fifteen minutes betwen 7AM and 6PM weekdays from an XML feed from the recruitment site.
 
 
 Data quality
 ~~~~~~~~~~~~
 
-There doesn't seem to be much input validation being the scenes in the source
+There doesn't seem to be much input validation behind the scenes in the source
 system, so be wary of making assumptions about the data. In particular:
 
  * The HTML in the descriptions is not always well-formed. In these cases
    there will be a (malformed) HTML description, but no plain-text description.
  * Some vacancies don't have closing dates listed. You should assume these are
-   still open.
+   still open. The Temporary Staffing Service (TSS) vacancies don't have
+   closing dates, as people are always invited to apply.
  * Some files (linked using ``foaf:page``) don't have titles
    (``dcterms:title``).
  * Not all contact details have ``label`` data. You shoud be able to handle
@@ -158,6 +150,9 @@ A number of departments are currently using vacancy feeds:
 
 Vacancies are also syndicated to the following job sites:
 
+* `Naturejobs <http://www.nature.com/naturejobs/science/jobs?utf8=%E2%9C%93&q=oxford+university&where=&commit=Find+Jobs>`,
+  but only those tagged with "naturejobs" (case-insensitive) in the
+  recruitment system.
 * `Indeed <http://www.indeed.co.uk/University-of-Oxford-jobs>`_
 * `Jobrapido <http://uk.jobrapido.com/?w=www.ox.ac.uk&p=1&shm=all>`_
 * `Simply Hired <http://www.simplyhired.co.uk/>`_
