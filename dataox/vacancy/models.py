@@ -163,6 +163,7 @@ class Vacancy(DirtyFieldsMixin, models.Model):
 
         if self.description:
             try:
+                etree.fromstring(self.description)
                 triples += [
                     (uri, NS.rdfs.comment, rdflib.Literal(self.description, datatype=NS.xtypes['Fragment-XHTML'])),
                     (uri, NS.rdfs.comment, rdflib.Literal(self.plain_description)),

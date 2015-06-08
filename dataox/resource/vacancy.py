@@ -257,18 +257,20 @@ class Vacancy(object):
         for comment in self.all.rdfs_comment:
             if comment.datatype == NS.xtypes['Fragment-XHTML']:
                 html_comment = xhtml_to_html(comment, serialize=False)
-                try:
-                    salary = self.get('vacancy:salary').actual_label
-                except AttributeError:
-                    pass
-                else:
-                    if salary is not None:
-                        salary = E('p', E('em', "Salary: " + unicode(salary)))
-                        html_comment.text, salary.tail = None, html_comment.text
-                        html_comment.insert(0, salary)
-                job.append(E('description',
-                             lxml.etree.tostring(html_comment, method='html')))
                 break
+        else:
+            html_comment = lxml.etree.fromstring('<div><p>No description available.</p></div>')
+        try:
+            salary = self.get('vacancy:salary').actual_label
+        except AttributeError:
+            pass
+        else:
+            if salary is not None:
+                salary = E('p', E('em', "Salary: " + unicode(salary)))
+                html_comment.text, salary.tail = None, html_comment.text
+                html_comment.insert(0, salary)
+        job.append(E('description',
+                     lxml.etree.tostring(html_comment, method='html')))
 
         if self.actual_label:
             job.append(E('title', unicode(self.actual_label)))
