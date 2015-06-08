@@ -12,7 +12,7 @@ import pytz
 from django.http import HttpResponse
 from django_conneg.decorators import renderer
 
-def xhtml_to_html(xml):
+def xhtml_to_html(xml, serialize=True):
     xml = lxml.etree.fromstring(xml)
     xhtml_ns = '{http://www.w3.org/1999/xhtml}'
     def walk(e):
@@ -24,7 +24,10 @@ def xhtml_to_html(xml):
     html = lxml.etree.Element(xml.tag)
     html.text, html.tail = xml.text, xml.tail
     html.extend(xml)
-    return lxml.etree.tostring(html, method='html')
+    if serialize:
+        return lxml.etree.tostring(html, method='html')
+    else:
+        return html
 
 class Vacancy(object):
     types = ('vacancy:Vacancy',)
@@ -98,7 +101,7 @@ class Vacancy(object):
         if isinstance(contact, BaseResource):
             vacancy['contact'] = {}
             if contact.actual_label:
-                vacancy['label'] = contact.actual_label
+                vacancy['contact']['label'] = contact.actual_label
             if isinstance(contact.v_email, BaseResource):
                 vacancy['contact']['email'] = contact.v_email.uri.replace('mailto:', '', 1)
             if isinstance(contact.v_tel, BaseResource):
@@ -229,6 +232,80 @@ class Vacancy(object):
             vacancy.append(document_urls)
         return vacancy
 
+    def get_naturejobs_xml(self):
+        organization_part = self.get('oo:organizationPart')
+        formal_organization = self.get('oo:formalOrganization')
+        based_near = self.get('foaf:based_near')
+
+        employer_name = ', '.join([org.actual_label for org in [organization_part,
+                                                                formal_organization]
+                                   if org]) or 'University of Oxford'
+
+        try:
+            employer_url = (organization_part or formal_organization).get('foaf:homepage').uri
+        except AttributeError:
+            employer_url = 'http://www.ox.ac.uk/'
+
+        job = E('job',
+            E('requisition-number', unicode(self.id)),
+            E('employer-name', employer_name),
+            E('employer-url', employer_url),
+        )
+        if self.foaf_homepage:
+            job.append(E('application-url', self.foaf_homepage.uri))
+
+        for comment in self.all.rdfs_comment:
+            if comment.datatype == NS.xtypes['Fragment-XHTML']:
+                html_comment = xhtml_to_html(comment, serialize=False)
+                try:
+                    salary = self.get('vacancy:salary').actual_label
+                except AttributeError:
+                    pass
+                else:
+                    if salary is not None:
+                        salary = E('p', E('em', "Salary: " + unicode(salary)))
+                        html_comment.text, salary.tail = None, html_comment.text
+                        html_comment.insert(0, salary)
+                job.append(E('description',
+                             lxml.etree.tostring(html_comment, method='html')))
+                break
+
+        if self.actual_label:
+            job.append(E('title', unicode(self.actual_label)))
+        if self.opens:
+            job.append(E('created-on', self.opens.strftime('%Y-%m-%d')))
+        if self.closes:
+            job.append(E('expires-on', self.closes.strftime('%Y-%m-%d')))
+
+        try:
+            adr = (based_near or organization_part or formal_organization).get('v:adr')
+        except AttributeError:
+            adr = None
+
+        address_data = {}
+        if adr:
+            for p, n in [('v:extended-address', 'address-line-1'),
+                         ('v:street-address', 'address-line-2'),
+                         ('v:locality', 'city'),
+                         ('v:postal-code', 'postal-code'),
+                         ('v:country', 'country')]:
+                if adr.get(p):
+                    address_data[n] = unicode(adr.get(p))
+        if 'city' not in address_data:
+            address_data['city'] = 'Oxford'
+        if 'country' not in address_data:
+            address_data['country'] = 'United Kingdom'
+        if 'address-line-2' in address_data and 'address-line-1' not in address_data:
+            address_data['address-line-1'] = address_data.pop('address-line-2')
+
+        address = E('address')
+        for n in ['address-line-1', 'address-line-2', 'city', 'postal-code', 'country']:
+            if n in address_data:
+                address.append(E(n, address_data[n]))
+        job.append(address)
+
+        return job
+
     @renderer(format='json', mimetypes=('application/json',), name='JSON')
     def render_json(self, request, context, template_name):
         return HttpResponse(json.dumps(self.get_json(), indent=2),
@@ -237,4 +314,9 @@ class Vacancy(object):
     @renderer(format='xml', mimetypes=('application/xml',), name='XML')
     def render_xml(self, request, context, template_name):
         return HttpResponse(lxml.etree.tostring(self.get_xml(), pretty_print=True),
+                            content_type='application/xml')
+
+    @renderer(format='naturejobs-xml', mimetypes=('x-application/naturejobs+xml',), name='NatureJobs XML')
+    def render_naturejobs_xml(self, request, context, template_name):
+        return HttpResponse(lxml.etree.tostring(self.get_naturejobs_xml(), pretty_print=True),
                             content_type='application/xml')

@@ -1,5 +1,6 @@
 feedparser
 django-conneg>=0.2.2
+html2text
 redis>=2.4.9
 sharepoint>=0.2.1
 django-maintenancemode

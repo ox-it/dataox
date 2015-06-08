@@ -15,6 +15,7 @@ from humfrey.linkeddata.resource import Resource, BaseResource
 from humfrey.linkeddata.views import MappingView
 from humfrey.results.views.standard import RDFView, ResultSetView
 from humfrey.sparql.views import CannedQueryView, StoreView
+from dataox.vacancy.models import feed_uri_prefix, feed_names
 
 class IndexView(HTMLView):
     def get(self, request):
@@ -134,7 +135,7 @@ class VacancyView(FeedView, RDFView, StoreView, MappingView):
     @property
     def reverse_name(self):
         if not self.kwargs.get('oxpoints_id'):
-            return 'old-feeds:vacancies-all'
+            return 'old-feeds:vacancies-named-feed'
         return 'old-feeds:all-vacancies' if self.all else 'old-feeds:vacancies'
 
     def first_query(self):
@@ -162,15 +163,16 @@ class VacancyView(FeedView, RDFView, StoreView, MappingView):
                  sparqlFilter=self.sparqlFilter)
         else:
             return """\
-    CONSTRUCT {
+    CONSTRUCT {{
       ?vacancy a vacancy:Vacancy
-    } WHERE {
-      GRAPH <https://data.ox.ac.uk/graph/vacancies/current> {
+    }} WHERE {{
+      GRAPH <https://data.ox.ac.uk/graph/vacancies/current> {{
+          {feed_uri} skos:member ?vacancy .
           ?vacancy a vacancy:Vacancy .
-      }
+      }}
       ?vacancy vacancy:applicationClosingDate ?closing .
       FILTER (?closing > now()) .
-    }"""
+    }}""".format(feed_uri=self.feed_uri.n3())
 
     def second_query(self, vacancies):
         return """\
@@ -196,6 +198,11 @@ DESCRIBE ?vacancy ?organizationPart ?location ?address ?contact ?phone ?salary {
             return rdflib.URIRef('http://oxpoints.oucs.ox.ac.uk/id/{0}'.format(self.kwargs['oxpoints_id']))
 
     @property
+    def feed_uri(self):
+        if 'feed_name' in self.kwargs:
+            return feed_uri_prefix + self.kwargs['feed_name']
+
+    @property
     def sparqlFilter(self):
         if 'keyword' in self.request.GET:
             keyword = rdflib.Literal(self.request.GET['keyword']).n3()
@@ -205,11 +212,13 @@ DESCRIBE ?vacancy ?organizationPart ?location ?address ?contact ?phone ?salary {
 FILTER (regex(?vacancyLabel, {0}, 'i') || regex(?vacancyComment, {0}, 'i'))""".format(keyword)
         return ""
 
-    def get(self, request, oxpoints_id=None, format=None):
+    def get(self, request, feed_name=None, oxpoints_id=None, format=None):
         self.graph = self.endpoint.query(self.first_query())
-        if not self.graph:
+        if feed_name and feed_name not in feed_names:
             raise Http404
         self.graph += self.endpoint.query(self.second_query(self.graph.subjects(NS.rdf.type, NS.vacancy.Vacancy)))
+        if self.unit and not self.graph.value(self.unit, NS.rdf.type):
+            self.graph += self.endpoint.describe(self.unit)
 
         subjects = [Resource(v, self.graph, self.endpoint) for v in self.graph.subjects(NS.rdf.type, NS.vacancy.Vacancy)]
         subjects.sort(key=lambda v: (v.vacancy_applicationClosingDate, v.label, v.uri))
@@ -224,7 +233,6 @@ FILTER (regex(?vacancyLabel, {0}, 'i') || regex(?vacancyComment, {0}, 'i'))""".f
         for subject in subjects:
             if hasattr(subject, 'get_json'):
                 self.context['vacancies'].append(subject.get_json())
-
         return super(VacancyView, self).get(request, oxpoints_id=oxpoints_id, format=format)
 
     @property
@@ -280,3 +288,13 @@ FILTER (regex(?vacancyLabel, {0}, 'i') || regex(?vacancyComment, {0}, 'i'))""".f
                 vacancies.append(vacancy.get_xml())
         return HttpResponse(lxml.etree.tostring(vacancies, pretty_print=True),
                             content_type='application/xml')
+
+    @renderer(format='naturejobs-xml', mimetypes=('x-application/naturejobs+xml',), name='NatureJobs XML')
+    def render_naturejobs_xml(self, request, context, template_name):
+        vacancies = E('jobs')
+        for vacancy in context['subjects']:
+            if hasattr(vacancy, 'get_naturejobs_xml'):
+                vacancies.append(vacancy.get_naturejobs_xml())
+        return HttpResponse(lxml.etree.tostring(vacancies, pretty_print=True),
+                            content_type='application/xml')
+

@@ -7,6 +7,7 @@ import os
 import re
 
 import dateutil.parser
+import html2text
 from lxml import etree
 import pytz
 import rdflib
@@ -20,6 +21,17 @@ from humfrey.utils.namespaces import NS
 logger = logging.getLogger(__name__)
 email_re = re.compile(r'(?P<localpart>[a-zA-Z\d\-._]+)@(?P<host>[a-zA-Z\d\-.]+)')
 
+category_choices = (
+    ('academic', 'Academic'),
+    ('support-technical', 'Support and Technical'),
+    ('professional-management', 'Professional and Management'),
+    ('research', 'Research'),
+    ('temporary-staffing-service', 'Temporary Staffing Service'),
+)
+
+feed_names = set(['naturejobs', 'jobs-ac-uk', 'all'])
+feed_uri_prefix = rdflib.URIRef('https://data.ox.ac.uk/id/vacancy-feed/')
+
 class Vacancy(DirtyFieldsMixin, models.Model):
     vacancy_id = models.CharField(max_length=10)
     title = models.CharField(max_length=512)
@@ -30,6 +42,8 @@ class Vacancy(DirtyFieldsMixin, models.Model):
     basedNear = models.CharField(max_length=256, blank=True)
     
     description = models.TextField()
+    tags = models.TextField(blank=True)
+    category = models.TextField(choices=category_choices, blank=True)
     
     salary = models.CharField(max_length=512, blank=True)
     salary_grade = models.CharField(max_length=32, blank=True)
@@ -164,6 +178,17 @@ class Vacancy(DirtyFieldsMixin, models.Model):
         for basedNear in self.basedNear.split():
             triples.append((uri, NS.foaf.based_near, rdflib.URIRef(basedNear)))
 
+        triples.append((feed_uri_prefix + 'all', NS.skos.member, uri))
+        if self.tags:
+            tags = set(tag.strip() for tag in self.tags.split(','))
+            for tag in tags:
+                if tag.lower() in feed_names:
+                    triples.append((feed_uri_prefix + tag.lower(), NS.skos.member, uri))
+                else:
+                    triples.append((uri, NS.dc.subject, rdflib.Literal(tag)))
+        if self.category:
+            triples.append((uri, NS.dcterms.subject, rdflib.URIRef('https://data.ox.ac.uk/id/vacancy-category/' + self.category)))
+
         for document in self.document_set.all():
             if not document.local_url:
                 continue
@@ -236,20 +261,10 @@ class Vacancy(DirtyFieldsMixin, models.Model):
 
     @property
     def plain_description(self):
-        return self.flatten(etree.fromstring(self.description)).strip()
-
-    def _flatten(self, elem):
-        if elem.tag == 'br':
-            yield '\n'
-            yield (elem.tail or '').strip()
-        else:
-            yield (elem.text or '').strip()
-            for child in elem:
-                for text in self._flatten(child):
-                    yield text
-            yield (elem.tail or '').strip()
-    def flatten(self, elem):
-        return ''.join(self._flatten(elem))
+        h = html2text.HTML2Text()
+        h.ignore_links = True
+        h.unicode_snob = True
+        return h.handle(self.description)
 
     class Meta:
         verbose_name_plural = 'vacancies'
