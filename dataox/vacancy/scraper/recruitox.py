@@ -70,11 +70,12 @@ class RecruitOxScraper(Scraper):
         return ' '.join(text.split()) if text else ''
 
     def import_vacancies(self):
+        changed = False
         seen = set()
         for vacancy_elem in self.get_vacancy_elems():
             vacancy_id = vacancy_elem.find('recruitmentId').text
             try:
-                self.import_vacancy(vacancy_id, vacancy_elem)
+                changed = self.import_vacancy(vacancy_id, vacancy_elem) or changed
             except Exception:
                 logger.exception("Unable to parse vacancy %r", vacancy_id)
             seen.add(vacancy_id)
@@ -95,6 +96,9 @@ class RecruitOxScraper(Scraper):
                             vacancy.vacancy_id, vacancy.closing_date)
                 vacancy.closing_date = now.isoformat()
                 vacancy.save()
+                changed = True
+
+        return changed
 
     def get_description(self, vacancy_id, vacancy_elem):
         """
@@ -144,6 +148,7 @@ class RecruitOxScraper(Scraper):
         return self.site_timezone.localize(dt).isoformat()
 
     def import_vacancy(self, vacancy_id, vacancy_elem):
+        changed = False
         try:
             vacancy = Vacancy.objects.get(vacancy_id=vacancy_id)
         except Vacancy.DoesNotExist:
@@ -190,6 +195,7 @@ class RecruitOxScraper(Scraper):
         vacancy.category = self.category_mapping.get(category, '')
 
         if vacancy.is_dirty():
+            changed = True
             vacancy.save()
 
         current_documents = dict((d.pk, d) for d in Document.objects.filter(vacancy=vacancy))
@@ -205,8 +211,12 @@ class RecruitOxScraper(Scraper):
                 logger.warning("File %s for vacancy %s has no title", url, vacancy_id)
 
             if document.is_dirty():
+                changed = True
                 document.save()
             current_documents.pop(document.pk, None)
 
         for document in current_documents.values():
+            changed = True
             document.delete()
+
+        return changed
