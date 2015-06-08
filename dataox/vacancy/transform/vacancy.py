@@ -22,10 +22,6 @@ class RetrieveVacancies(Transform):
 
     site_timezone = pytz.timezone(settings.TIME_ZONE)
 
-
-    #save_directory = "c:\\documents and settings\\orie2163\\my documents\\python\\jobs\\"
-    #job_directory = "c:\\documents and settings\\orie2163\\my documents\\python\\jobs\\%s\\"
-
     def __init__(self, current_transform, archive_transform):
         self.current_transform = current_transform
         self.archive_transform = archive_transform
@@ -53,7 +49,7 @@ class RetrieveVacancies(Transform):
                     logger.exception("Could not retrieve file: %s", document.url)
             logger.info("Finished retrieving documents; starting to serialize")
 
-        if not changed:
+        if transform_manager.update_log.trigger == 'crontab' and not changed:
             logger.info("Nothing changed; we're done here.")
             return
 
