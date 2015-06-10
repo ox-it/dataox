@@ -340,18 +340,18 @@
   <xsl:template match="course-prerequisite" mode="in-course">
     <xcri:regulations>
       <xsl:choose>
-        <xsl:when test=".='PU'">Course open to the public.</xsl:when>
-        <xsl:when test=".='OX'">Course open to members of the University of Oxford.</xsl:when>
-        <xsl:when test=".='ST'">Course open to staff of the University of Oxford.</xsl:when>
+        <xsl:when test="upper-case(.)='PU'">Course open to the public.</xsl:when>
+        <xsl:when test="upper-case(.)='OX'">Course open to members of the University of Oxford.</xsl:when>
+        <xsl:when test="upper-case(.)='ST'">Course open to staff of the University of Oxford.</xsl:when>
       </xsl:choose>
     </xcri:regulations>
     <oxcap:eligibility>
       <xsl:attribute name="rdf:resource">
         <xsl:text>http://purl.ox.ac.uk/oxcap/ns/eligibility-</xsl:text>
         <xsl:choose>
-          <xsl:when test=".='PU'">public</xsl:when>
-          <xsl:when test=".='OX'">members</xsl:when>
-          <xsl:when test=".='ST'">staff</xsl:when>
+          <xsl:when test="upper-case(.)='PU'">public</xsl:when>
+          <xsl:when test="upper-case(.)='OX'">members</xsl:when>
+          <xsl:when test="upper-case(.)='ST'">staff</xsl:when>
         </xsl:choose>
       </xsl:attribute>
     </oxcap:eligibility>
@@ -377,18 +377,18 @@
   </xsl:template>
 
   <xsl:template match="course-subject" mode="in-course">
-    <xsl:for-each select="tokenize(text(), ' ')">
+    <xsl:for-each select="tokenize(text(), '[ ,]+')">
       <dcterms:subject rdf:resource="http://jacs.dataincubator.org/{lower-case(.)}"/>
     </xsl:for-each>
   </xsl:template>
 
   <xsl:template match="course-skill" mode="in-course">
-    <xsl:for-each select="tokenize(text(), ' ')">
+    <xsl:for-each select="tokenize(text(), '[ ,]+')">
       <dcterms:subject rdf:resource="https://data.ox.ac.uk/id/ox-rdf/descriptor/{.}"/>
     </xsl:for-each>
   </xsl:template>
   <xsl:template match="course-research-methods" mode="in-course">
-    <xsl:for-each select="tokenize(text(), ' ')">
+    <xsl:for-each select="tokenize(text(), '[ ,]+')">
       <dcterms:subject rdf:resource="https://data.ox.ac.uk/id/ox-rm/descriptor/{.}"/>
     </xsl:for-each>
   </xsl:template>

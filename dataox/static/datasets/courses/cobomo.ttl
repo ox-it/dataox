@@ -11,6 +11,7 @@
         <https://course.data.ox.ac.uk/id/careers/catalogue> ,
         <https://course.data.ox.ac.uk/id/medsci/catalogue> ,
         <https://course.data.ox.ac.uk/id/humanities/catalogue> ,
+        <https://course.data.ox.ac.uk/id/oli/catalogue> ,
         <https://course.data.ox.ac.uk/id/sharepoint/catalogue> .
 
 <https://data.ox.ac.uk/graph/courses/cobomo/metadata> a sd:Graph ;
