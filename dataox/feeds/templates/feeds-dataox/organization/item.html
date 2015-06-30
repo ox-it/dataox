@@ -8,6 +8,6 @@
       <div itemprop="extendedAddress">{{ adr|property:"v:extended-address"|default:"" }}</div>
       <div itemprop="addressLocality">{{ adr|property:"v:locality"|default:"" }}</div>
       <div itemprop="postalCode">{{ adr|property:"v:postal-code"|default:"" }}</div>
-      <div itemprop="addressCountry">{{ adr|property:"v:country"|default:"" }}</div>
+      <div itemprop="addressCountry">{{ adr|property:"v:country-name"|default:"" }}</div>
     </div>
     {% endif %}{% endwith %}

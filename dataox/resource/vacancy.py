@@ -191,7 +191,7 @@ class Vacancy(object):
                              ('v:street-address', 'street-address'),
                              ('v:locality', 'locality'),
                              ('v:postal-code', 'postal-code'),
-                             ('v:country', 'country')]:
+                             ('v:country-name', 'country')]:
                     if related.v_adr.get(p):
                         address.append(E(n, unicode(related.v_adr.get(p))))
                 sub.append(address)
@@ -290,7 +290,7 @@ class Vacancy(object):
                          ('v:street-address', 'address-line-2'),
                          ('v:locality', 'city'),
                          ('v:postal-code', 'postal-code'),
-                         ('v:country', 'country')]:
+                         ('v:country-name', 'country')]:
                 if adr.get(p):
                     address_data[n] = unicode(adr.get(p))
         if 'city' not in address_data:
