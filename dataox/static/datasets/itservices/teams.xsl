@@ -53,4 +53,11 @@
   <xsl:template match="field[@name='Telephone_x0020_extension']/text/text()">
     <xsl:call-template name="telephone-extension"/>
   </xsl:template>
+
+  <xsl:template match="field[@name='Slug']/text[text()]">
+    <skos:notation rdf:datatype="https://id.it.ox.ac.uk/notation/team">
+      <xsl:value-of select="."/>
+    </skos:notation>
+  </xsl:template>
+
 </xsl:stylesheet>
