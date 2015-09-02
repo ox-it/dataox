@@ -75,14 +75,17 @@
 
   <xsl:template match="item/quantity" mode="inside">
     <xsl:choose>
+      <xsl:when test="number(text()) != number(text())">
+        <rdf:type rdf:resource="http://purl.org/goodrelations/v1#SomeItems"/>
+      </xsl:when>
       <xsl:when test="text() &gt; 1">
         <rdf:type rdf:resource="http://purl.org/goodrelations/v1#SomeItems"/>
         <gr:hasInventoryLevel>
-          <gr:QuantitativeValue rdf:about="{../@uri}/quantity">
-            <gr:hasValue rdf:datatype="http://www.w3.org/2001/XMLSchema#int">
+          <gr:QuantitativeValueFloat rdf:about="{../@uri}/quantity">
+            <gr:hasValueFloat rdf:datatype="http://www.w3.org/2001/XMLSchema#int">
               <xsl:value-of select="text()"/>
-            </gr:hasValue>
-          </gr:QuantitativeValue>
+            </gr:hasValueFloat>
+          </gr:QuantitativeValueFloat>
         </gr:hasInventoryLevel>
       </xsl:when>
       <xsl:otherwise>
