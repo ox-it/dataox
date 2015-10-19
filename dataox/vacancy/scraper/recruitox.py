@@ -53,7 +53,12 @@ class RecruitOxScraper(Scraper):
         request.headers['User-agent'] = cls.user_agent
         if cls.crawl_delay:
             time.sleep(cls.crawl_delay)
-        return etree.parse(urllib2.urlopen(request),
+        response = urllib2.urlopen(request)
+        # Hack because the next v20 of CoreHR adds leading whitespace to the XML feed.
+        if parser_cls == etree.XMLParser:
+            from cStringIO import StringIO
+            response = StringIO(response.read().strip())
+        return etree.parse(response,
                            parser=parser_cls(encoding="WINDOWS-1252"))
 
     def get_vacancy_elems(self):
