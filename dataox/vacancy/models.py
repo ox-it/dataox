@@ -1,10 +1,18 @@
 # -*- coding: utf-8 -*-
 
+import cgi
 import datetime
+import email
+import urlparse
 import locale
 import logging
+import mimetypes
 import os
 import re
+import shutil
+import tempfile
+import time
+import urllib2
 
 import dateutil.parser
 import html2text
@@ -17,6 +25,8 @@ from django.conf import settings
 from django.db import models
 from humfrey.elasticsearch.query import ElasticSearchEndpoint
 from humfrey.utils.namespaces import NS
+
+from .converters import converters
 
 logger = logging.getLogger(__name__)
 email_re = re.compile(r'(?P<localpart>[a-zA-Z\d\-._]+)@(?P<host>[a-zA-Z\d\-.]+)')
@@ -31,6 +41,9 @@ category_choices = (
 
 feed_names = set(['naturejobs', 'jobs-ac-uk', 'all'])
 feed_uri_prefix = rdflib.URIRef('https://data.ox.ac.uk/id/vacancy-feed/')
+
+def _parse_http_date(ts):
+    return pytz.utc.localize(datetime.datetime(*email.utils.parsedate(ts)[:7]))
 
 class Vacancy(DirtyFieldsMixin, models.Model):
     vacancy_id = models.CharField(max_length=10)
@@ -270,9 +283,11 @@ class Vacancy(DirtyFieldsMixin, models.Model):
     class Meta:
         verbose_name_plural = 'vacancies'
 
+
 class Document(DirtyFieldsMixin, models.Model):
     vacancy = models.ForeignKey(Vacancy)
-    url = models.URLField()
+    url = models.URLField(max_length=2048, null=True)
+    index = models.IntegerField(null=True)
     title = models.CharField(max_length=256)
     file_path = models.TextField()
     local_url = models.URLField()
@@ -281,6 +296,67 @@ class Document(DirtyFieldsMixin, models.Model):
 
     def __unicode__(self):
         return u'{0}: {1}'.format(self.vacancy.vacancy_id, self.title)
+
+    def ensure_present(self, url):
+        if self.file_path:
+            return
+
+        file_path_base = os.path.join(settings.SOURCE_DIRECTORY, 'vacancies')
+        file_url_base = urlparse.urljoin(settings.SOURCE_URL, 'vacancies/')
+
+        logger.debug("Retrieving vacancy document: %s %d", self.vacancy.vacancy_id, self.index)
+
+        response = urllib2.urlopen(url)
+
+        self.mimetype, _ = cgi.parse_header(response.headers.get('Content-Type') or '')
+
+        try:
+            content_disposition = response.headers['Content-Disposition']
+            if not content_disposition.startswith('attachment'):
+                content_disposition = 'attachment; ' + content_disposition
+            target_filename = cgi.parse_header(content_disposition)[1]['filename']
+        except KeyError:
+            target_filename = '{0}{1}'.format(self.id, mimetypes.guess_extension(self.mimetype) or '.obj')
+
+        self.file_path = os.path.join(file_path_base, self.vacancy.vacancy_id.encode('utf-8'), target_filename)
+        self.local_url = '%s%s/%s' % (file_url_base, self.vacancy.vacancy_id, target_filename)
+
+        with tempfile.NamedTemporaryFile(delete=False) as f:
+            while True:
+                block = response.read(4096)
+                if not block:
+                    break
+                f.write(block)
+
+        try:
+            last_modified = _parse_http_date(response.headers['last-modified'])
+        except KeyError:
+            pass
+        else:
+            last_modified_ts = time.mktime(last_modified.timetuple())
+            os.utime(f.name, (last_modified_ts, last_modified_ts))
+
+        if not os.path.exists(os.path.dirname(self.file_path)):
+            os.makedirs(os.path.dirname(self.file_path))
+        shutil.copy2(f.name, self.file_path)
+
+        try:
+            converter = converters[self.mimetype]()
+        except KeyError:
+            logger.warning("Unsupported mimetype for conversion '%s' for file %s",
+                           self.mimetype, self.local_url)
+            self.text = ''
+        else:
+            try:
+                text = converter.convert_to_text(self.file_path, self.mimetype)
+                logger.debug("Converted")
+            except Exception:
+                logger.exception("Failed to convert %r (%r) to text using %s",
+                                 self.local_url, self.mimetype, converter.__class__.__name__)
+                self.text = ''
+            else:
+                text = re.sub(ur'[\x00-\x08\x0b\x0c\x0e-\x1f\ud800-\udfff]', '', text)
+                self.text = text
 
     def delete(self):
         if self.file_path:

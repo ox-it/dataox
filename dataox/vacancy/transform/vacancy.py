@@ -12,7 +12,6 @@ from humfrey.update.transform.base import Transform
 from humfrey.streaming import RDFXMLSerializer
 
 from ..scraper import RecruitOxScraper, JobsAcScraper
-from ..files import VacancyFileHandler
 from ..models import Vacancy, Document
 
 logger = logging.getLogger(__name__)
@@ -27,7 +26,6 @@ class RetrieveVacancies(Transform):
         self.archive_transform = archive_transform
 
         self.scrapers = (RecruitOxScraper, JobsAcScraper)
-        self.file_handler = VacancyFileHandler()
 
     def execute(self, transform_manager):
         scrapers = [scraper(transform_manager) for scraper in self.scrapers]
@@ -37,17 +35,6 @@ class RetrieveVacancies(Transform):
 
         for scraper in scrapers:
             changed = scraper.import_vacancies() or changed
-            
-        documents = Document.objects.filter(local_url='').select_related('vacancy')
-        if documents:
-            logger.info("Finished importing vacancies; retrieving %d new documents", documents.count())
-            file_handler = VacancyFileHandler()
-            for document in documents:
-                try:
-                    changed = file_handler.retrieve(document) or changed
-                except Exception:
-                    logger.exception("Could not retrieve file: %s", document.url)
-            logger.info("Finished retrieving documents; starting to serialize")
 
         if transform_manager.update_log.trigger == 'crontab' and not changed:
             logger.info("Nothing changed; we're done here.")

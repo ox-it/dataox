@@ -163,6 +163,8 @@ class RecruitOxScraper(Scraper):
         params['p_recruitment_id'] = vacancy_id
         vacancy.url = '%s?%s' % (self.detail_url, urllib.urlencode(params))
 
+        page = self.get_page(vacancy.url)
+
         vacancy.title = self.normalize_space(vacancy_elem.find('shortDescription').text)
         vacancy.salary = self.normalize_space(vacancy_elem.find('gradeAndSalaryText').text)
 
@@ -204,16 +206,21 @@ class RecruitOxScraper(Scraper):
             vacancy.save()
 
         current_documents = dict((d.pk, d) for d in Document.objects.filter(vacancy=vacancy))
-        for document_elem in vacancy_elem.xpath('documentLink'):
+        for i, anchor_elem in enumerate(page.xpath("//*[@class='erqanchor8point']")):
             url = urlparse.urljoin(self.detail_url,
-                                   document_elem.find('documentURL').text.strip().replace(' ', '%20'))
+                                   anchor_elem.attrib['href'].replace(' ', '%20'))
             try:
-                document = Document.objects.get(url=url, vacancy=vacancy)
+                document = Document.objects.get(index=i,
+                                                title=(anchor_elem.text or '').strip(),
+                                                vacancy=vacancy)
             except Document.DoesNotExist:
-                document = Document(url=url, vacancy=vacancy)
-            document.title = (document_elem.find('documentName').text or '').strip()
+                document = Document(index=i,
+                                    title=(anchor_elem.text or '').strip(),
+                                    vacancy=vacancy)
             if document.title == '':
-                logger.warning("File %s for vacancy %s has no title", url, vacancy_id)
+                logger.warning("File %d for vacancy %s has no title", i, vacancy_id)
+
+            document.ensure_present(url)
 
             if document.is_dirty():
                 changed = True
