@@ -317,6 +317,9 @@ class Document(DirtyFieldsMixin, models.Model):
             target_filename = cgi.parse_header(content_disposition)[1]['filename']
         except KeyError:
             target_filename = '{0}{1}'.format(self.id, mimetypes.guess_extension(self.mimetype) or '.obj')
+        else:
+            if self.mimetype in ('binary/octet-stream', 'application/octet-stream'):
+                self.mimetype, _ = mimetypes.guess_type(target_filename)
 
         self.file_path = os.path.join(file_path_base, self.vacancy.vacancy_id.encode('utf-8'), target_filename)
         self.local_url = '%s%s/%s' % (file_url_base, self.vacancy.vacancy_id, target_filename)
