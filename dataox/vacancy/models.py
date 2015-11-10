@@ -341,6 +341,7 @@ class Document(DirtyFieldsMixin, models.Model):
 
         if not os.path.exists(os.path.dirname(self.file_path)):
             os.makedirs(os.path.dirname(self.file_path))
+        os.chmod(f.name, 0644) # octal, remember
         shutil.move(f.name, self.file_path)
 
         try:
