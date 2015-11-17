@@ -87,6 +87,6 @@
 #   lyou:foundation-prospectus
     lyou:opendays <http://www.ox.ac.uk/admissions/undergraduate_courses/open_days_events_and_visiting/> ;
     lyou:events-graduation <http://www.ox.ac.uk/students/graduation/> ;
-    lyou:about-parents <http://www.ox.ac.uk/document.rm?id=2552> ;
+    lyou:about-parents <http://www.ox.ac.uk/sites/files/oxford/field/field_document/P%26C_guide_2013.pdf> ;
     lyou:international-students <http://www.ox.ac.uk/admissions/international_students/> .
 
