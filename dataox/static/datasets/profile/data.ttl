@@ -38,7 +38,7 @@
     lyou:news <http://www.ox.ac.uk/media/> ;
     lyou:jobs <http://www.ox.ac.uk/about_the_university/jobs/> ;
     lyou:legal <http://www.ox.ac.uk/copyright.html> ;
-    lyou:contact <http://www.ox.ac.uk/applications/dynamic/contact_us.rm?id=164> ;
+    lyou:contact <http://www.ox.ac.uk/contact-us> ;
 
     lyou:about-leader <http://www.admin.ox.ac.uk/vc/person/> ;
     lyou:about-executive <https://www1.admin.ox.ac.uk/council/> ;
