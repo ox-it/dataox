@@ -63,7 +63,7 @@ class XCRICAPSerializer(BaseXCRICAPSerializer):
         self.serialize_memberApplyTo(xg, presentation)
         self.serialize_bookingEndpoint(xg, presentation)
         self.serialize_missing_applicationProcedure(xg, presentation)
-	sessions = list(self.graph.objects(presentation, NS.oxcap.consistsOf))
+        sessions = list(self.graph.objects(presentation, NS.oxcap.consistsOf))
         sessions.sort(key=lambda s: self.graph.value(s, NS.mlo.start))
         for i, session in enumerate(sessions):
             yield self.session_element(xg, session, i)
@@ -74,10 +74,11 @@ class XCRICAPSerializer(BaseXCRICAPSerializer):
         xg.endElement('oxcap:session')
 
     def session_content(self, xg, session, i):
+        xg.startElement('dc:identifier', {})
+        xg.characters(unicode(i))
+        xg.endElement('dc:identifier')
+        self.serialize_common(xg, session)
         self.serialize_common_descriptive_elements(xg, session)
-	xg.startElement('dc:identifier', {})
-	xg.characters(unicode(i))
-	xg.endElement('dc:identifier')
         self.serialize_date(xg, session, NS.mlo.start, 'mlo:start')
         self.serialize_date(xg, session, NS.xcri.end, 'xcri:end')
 
