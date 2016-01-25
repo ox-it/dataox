@@ -39,7 +39,7 @@
         </xsl:when>
         <xsl:when test="$user//field[@name='ContentType']/text='Person'">
           <xsl:value-of select="$person-base-uri"/>
-          <xsl:value-of select="substring-after($user//field[@name='Name']/text, 'AD-OAK\')"/>
+          <xsl:value-of select="$user//field[@name='UserName']/text/text()"/>
         </xsl:when>
         <xsl:otherwise>
           <xsl:message terminate="yes">Unexpected ContentType: "<xsl:value-of select="$user//field[@name='ContentType']/text"/>" on user <xsl:value-of select="@id"/>; terminating.</xsl:message>
