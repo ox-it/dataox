@@ -36,7 +36,8 @@
 
   <xsl:template match="list[@name='User Information List']/rows/row">
     <xsl:variable name="content-type" select=".//field[@name='ContentType']/text/text()"/>
-    <xsl:if test="$content-type = 'Person' and ex:include-person(.)">
+    <xsl:variable name="username" select=".//field[@name='UserName']/text/text()"/>
+    <xsl:if test="$content-type = 'Person' and $username and ex:include-person(.)">
       <foaf:Person rdf:about="{ex:agent-uri(.)}">
         <xsl:apply-templates mode="in-person"/>
         <xsl:variable name="post" select="key('post-holders', @id)"/>
