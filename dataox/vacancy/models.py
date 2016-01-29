@@ -3,6 +3,7 @@
 import cgi
 import datetime
 import email
+import urllib
 import urlparse
 import locale
 import logging
@@ -314,7 +315,7 @@ class Document(DirtyFieldsMixin, models.Model):
             content_disposition = response.headers['Content-Disposition']
             if not content_disposition.startswith('attachment'):
                 content_disposition = 'attachment; ' + content_disposition
-            target_filename = cgi.parse_header(content_disposition)[1]['filename']
+            target_filename = urllib.quote(cgi.parse_header(content_disposition)[1]['filename'], '')
         except KeyError:
             target_filename = '{0}{1}'.format(self.id, mimetypes.guess_extension(self.mimetype) or '.obj')
         else:
