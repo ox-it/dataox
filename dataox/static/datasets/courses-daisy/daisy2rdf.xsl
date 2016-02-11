@@ -17,6 +17,7 @@
     xmlns:xcri="http://xcri.org/profiles/1.2/"
     xmlns:daisy="http://daisy.socsci.ox.ac.uk/ns/"
     xmlns:humfrey="http://purl.org/NET/humfrey/ns/"
+    xmlns:oxcap="http://purl.ox.ac.uk/oxcap/ns/"
     xmlns="http://xcri.org/profiles/1.2/catalog"
     xpath-default-namespace="http://xcri.org/profiles/1.2/catalog">
   <xsl:import href="../courses/xcri2rdf.xsl"/>
@@ -37,7 +38,7 @@
   </xsl:template>
 
   <xsl:template match="course" mode="in-catalog">
-    <xsl:if test="$store='courses' or not(daisy:publicView/text()='0')">
+    <xsl:if test="$store='courses' or @oxcap:visibility = 'PB'">
       <xsl:apply-imports/>
     </xsl:if>
   </xsl:template>
