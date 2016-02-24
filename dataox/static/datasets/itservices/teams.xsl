@@ -13,6 +13,7 @@
     xmlns:tio="http://purl.org/tio/ns#"
     xmlns:v="http://www.w3.org/2006/vcard/ns#"
     xmlns:ex="http://www.example.org/"
+    xmlns:uihints="http://purl.org/NET/ui-hints/"
     xmlns:d="http://schemas.microsoft.com/ado/2007/08/dataservices"
     xmlns:m="http://schemas.microsoft.com/ado/2007/08/dataservices/metadata"
     xpath-default-namespace="https://github.com/ox-it/python-sharepoint/"
@@ -58,6 +59,12 @@
     <skos:notation rdf:datatype="https://id.it.ox.ac.uk/notation/team">
       <xsl:value-of select="."/>
     </skos:notation>
+  </xsl:template>
+
+  <xsl:template match="field[@name='BackgroundColor']/text[text()]">
+    <uihints:backgroundColor>
+      <xsl:value-of select="."/>
+    </uihints:backgroundColor>
   </xsl:template>
 
 </xsl:stylesheet>
