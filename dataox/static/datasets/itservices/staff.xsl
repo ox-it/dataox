@@ -98,7 +98,12 @@
 
   <xsl:template match="field[@name='Picture']/url[@href]" mode="in-person">
     <xsl:if test="$internal">
-      <xsl:variable name="username" select="../../field[@name='UserName']/text"/>
+      <xsl:variable name="username">
+        <xsl:if test="contains(@href, 'ad-oak_')">
+          <xsl:text>ad-oak_</xsl:text>
+        </xsl:if>
+        <xsl:value-of select="../../field[@name='UserName']/text"/>
+      </xsl:variable>
       <foaf:img>
         <foaf:Image rdf:about="https://backstage.data.ox.ac.uk/sharepoint/user-profile-image/{$username}/large/">
           <foaf:thumbnail>

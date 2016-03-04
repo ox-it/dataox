@@ -17,7 +17,7 @@ from humfrey.utils.views import RedisView
 logger = logging.getLogger(__name__)
 
 class UserProfileImageView(RedisView, ContentNegotiatedView):
-    url = 'https://mysite.nexus.ox.ac.uk/User%20Photos/Profile%20Pictures/ad-oak_{username}_{size}Thumb.jpg'
+    url = 'https://mysite.nexus.ox.ac.uk/User%20Photos/Profile%20Pictures/{username}_{size}Thumb.jpg'
     sizes = {'small': 'S', 'medium': 'M', 'large': 'L'}
     
     def dispatch(self, request, *args, **kwargs):
