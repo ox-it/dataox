@@ -99,7 +99,7 @@
   <xsl:template match="field[@name='Picture']/url[@href]" mode="in-person">
     <xsl:if test="$internal">
       <xsl:variable name="username">
-        <xsl:if test="contains(@href, 'ad-oak_')">
+        <xsl:if test="contains(@href, 'ad-oak_') or contains(@href, 'AD-OAK_')">
           <xsl:text>ad-oak_</xsl:text>
         </xsl:if>
         <xsl:value-of select="../../field[@name='UserName']/text"/>
