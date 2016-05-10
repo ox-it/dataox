@@ -103,6 +103,8 @@ def update_seesec(sender, store, graphs, when, **kwargs):
         logger.error("Failed to upload equipment to SEESEC (%d):\n\n%s",
                      response.status_code,
                      response.text)
+    else:
+        logger.info("Successfully uploaded equipment to SEESEC")
 
 graphs_updated.connect(update_seesec.delay)
 
