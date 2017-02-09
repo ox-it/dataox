@@ -1,7 +1,6 @@
 import logging
 import requests
 import tempfile
-import urllib2
 
 from celery.task import task
 from django.conf import settings

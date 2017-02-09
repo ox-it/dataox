@@ -1,7 +1,7 @@
 from django.http import HttpResponse, Http404
 from django_conneg.decorators import renderer
 from django_conneg.views import HTMLView, ContentNegotiatedView
-from django_hosts import reverse_full
+from django_hosts import reverse
 
 from humfrey.desc import views as desc_views
 from humfrey.elasticsearch import views as elasticsearch_views
@@ -22,11 +22,11 @@ class CourseView(object):
 
     @property
     def desc_view(self):
-        return reverse_full('data', 'desc')
+        return reverse('desc', host='data')
 
     @property
     def doc_view(self):
-        return reverse_full('data', 'doc-generic')
+        return reverse('doc-generic', host='data')
 
     @property
     def store_name(self):

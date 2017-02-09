@@ -1,2 +1,2 @@
-import resource
-import tasks
+from . import resource
+from . import tasks

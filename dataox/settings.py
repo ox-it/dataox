@@ -1,9 +1,17 @@
-import imp
+import email.utils
 import os
 import platform
 
-DEBUG = False
-STAGING = False
+DEBUG = bool(os.environ.get('DJANGO_DEBUG'))
+
+ALLOWED_HOSTS = os.environ.get('DJANGO_ALLOWED_HOSTS', '').split() if not DEBUG else ['*']
+
+SECRET_KEY = os.environ.get('DJANGO_SECRET_KEY')
+if not SECRET_KEY and DEBUG:
+    SECRET_KEY = 'Ui2ahcah9Lotheec1wahthoh4Ahnoo4aeGe1ooHengaishi5Bahshaeyahng4pai'
+
+if 'DJANGO_ADMINS' in os.environ:
+    ADMINS = [email.utils.parseaddr(addr.strip()) for addr in os.environ['DJANGO_ADMINS'].split(',')]
 
 # Localization
 TIME_ZONE = 'Europe/London'
@@ -26,11 +34,11 @@ INSTALLED_APPS = (
     'django_hosts',
     'django_webauth',
     'guardian',
+    'humfrey',
     'humfrey.desc',
     'humfrey.archive',
     'humfrey.ckan',
     'humfrey.elasticsearch',
-    'humfrey.feeds',
     'humfrey.sparql',
     'humfrey.streaming',
     'humfrey.update',
@@ -39,12 +47,12 @@ INSTALLED_APPS = (
     'humfrey.pingback',
     'humfrey.thumbnail',
     'humfrey.utils',
+    'dataox',
     'dataox.analytics',
     'dataox.core',
     'dataox.course',
     'dataox.equipment',
     'dataox.resource',
-    'dataox.feeds',
     'oauth2app',
     'dataox.old_feeds',
     'dataox.vacancy',
@@ -64,13 +72,11 @@ MANAGERS = ADMINS
 
 ROOT_URLCONF = 'dataox.urls.empty'
 ROOT_HOSTCONF = 'dataox.hosts'
-DEFAULT_HOST = 'empty'
+DEFAULT_HOST = 'data'
 
 STATIC_URL = '//static.data.ox.ac.uk/'
-STATICFILES_DIRS = (
-    os.path.join(imp.find_module('dataox')[1], 'static'),
-    os.path.join(imp.find_module('humfrey')[1], 'static'),
-)
+STATICFILES_DIRS = ()
+STATIC_ROOT = os.environ.get('DJANGO_STATIC_ROOT')
 
 # OpenLayers should be installed as a system-wide package. To build the Debian
 # package, clone git://github.com/ox-it/debian-packaging.git and build the
@@ -88,22 +94,24 @@ else:
     raise AssertionError("Unsupported distribution")
 del distname
 
-PIPELINE_JS = {
-    'dataox': {'source_filenames': ('app/dataox-1.0.js',),
-               'output_filename': 'app/dataox-1.0.min.js'},
-    'equipment': {'source_filenames': ('equipment/base.js',),
-                  'output_filename': 'equipment.min.js'},
-    'courses': {'source_filenames': ('app/courses-1.0.js',),
-                'output_filename': 'app/courses-1.0.min.js'},
-    'html5shiv': {'source_filenames': ('lib/html5shiv.js',),
-                  'output_filename': 'lib/html5shiv.min.js'},
-    'oauth2': {'source_filenames': ('lib/oauth2/oauth2/oauth2.js',),
-               'output_filename': 'lib/oauth2.min.js'},
-    'jquery.collapsible': {'source_filenames': ('lib/jquery-collapsible-content/js/jQuery.collapsible.js',),
-                           'output_filename': 'lib/jquery.collapsible.min.js'},
+PIPELINE = {
+    'JAVASCRIPT': {
+        'dataox': {'source_filenames': ('app/dataox-1.0.js',),
+                   'output_filename': 'app/dataox-1.0.min.js'},
+        'equipment': {'source_filenames': ('equipment/base.js',),
+                      'output_filename': 'equipment.min.js'},
+        'courses': {'source_filenames': ('app/courses-1.0.js',),
+                    'output_filename': 'app/courses-1.0.min.js'},
+        'html5shiv': {'source_filenames': ('lib/html5shiv.js',),
+                      'output_filename': 'lib/html5shiv.min.js'},
+        'oauth2': {'source_filenames': ('lib/oauth2/oauth2/oauth2.js',),
+                   'output_filename': 'lib/oauth2.min.js'},
+        'jquery.collapsible': {'source_filenames': ('lib/jquery-collapsible-content/js/jQuery.collapsible.js',),
+                               'output_filename': 'lib/jquery.collapsible.min.js'},
+    },
+    'JS_COMPRESSOR': 'pipeline.compressors.closure.ClosureCompressor',
 }
 
-PIPELINE_JS_COMPRESSOR = 'pipeline.compressors.closure.ClosureCompressor'
 PIPELINE_CLOSURE_ARGUMENTS = '--jscomp_off uselessCode'
 STATICFILES_STORAGE = 'pipeline.storage.PipelineStorage'
 
@@ -111,23 +119,26 @@ STATICFILES_STORAGE = 'pipeline.storage.PipelineStorage'
 OAUTH2_ACCESS_TOKEN_LENGTH = 20
 OAUTH2_REFRESH_TOKEN_LENGTH = 20
 
-
-TEMPLATE_DIRS = (
-    os.path.join(imp.find_module('dataox')[1], 'templates'),
-)
-
-TEMPLATE_CONTEXT_PROCESSORS = (
-    "django.contrib.auth.context_processors.auth",
-    "django.core.context_processors.debug",
-    "django.core.context_processors.i18n",
-    "django.core.context_processors.media",
-    "django.core.context_processors.static",
-    "django.core.context_processors.request",
-    "django.contrib.messages.context_processors.messages",
-    "dataox.auth.context_processors.login_urls",
-    "dataox.core.context_processors.base_template_chooser",
-    "dataox.analytics.context_processors.do_not_track",
-)
+TEMPLATES = [
+    {
+        'BACKEND': 'django.template.backends.django.DjangoTemplates',
+        'APP_DIRS': True,
+        'OPTIONS': {
+            'context_processors': [
+                "django.contrib.auth.context_processors.auth",
+                "django.template.context_processors.debug",
+                "django.template.context_processors.i18n",
+                "django.template.context_processors.media",
+                "django.template.context_processors.static",
+                "django.template.context_processors.request",
+                "django.contrib.messages.context_processors.messages",
+                "dataox.auth.context_processors.login_urls",
+                "dataox.core.context_processors.base_template_chooser",
+                "dataox.analytics.context_processors.do_not_track",
+            ],
+        },
+    },
+]
 
 IMAGE_TYPES = ('foaf:Image',)
 
@@ -140,7 +151,7 @@ AUTHENTICATION_BACKENDS = (
 )
 
 MIDDLEWARE_CLASSES = (
-    'django_hosts.middleware.HostsMiddleware',
+    'django_hosts.middleware.HostsRequestMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
 #    'django.middleware.csrf.CsrfViewMiddleware',
@@ -152,6 +163,7 @@ MIDDLEWARE_CLASSES = (
     'humfrey.pingback.middleware.PingbackMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'dataox.auth.middleware.AuthenticatedAsMiddleware',
+    'django_hosts.middleware.HostsResponseMiddleware',
 )
 
 DEFAULT_STORE = 'public'
@@ -266,7 +278,7 @@ SMTP_HOST = 'smtp.ox.ac.uk'
 THUMBNAIL_WIDTHS = (200, 220, 400)
 THUMBNAIL_HEIGHTS = (120, 80,)
 
-SESSION_COOKIE_SECURE = True
+SESSION_COOKIE_SECURE = not DEBUG
 SESSION_EXPIRE_AT_BROWSER_CLOSE = True
 
 # Celery
@@ -305,39 +317,3 @@ HUMFREY_FEEDS = {
 }
 
 from .maintenancemode import MAINTENANCE_MODE
-
-# Monkey patches
-
-import sys
-import rdflib
-import urllib2
-
-if map(int, rdflib.__version__.split('.')[0]) < 3:
-    from datetime import date, time, datetime
-    l = sys.modules['rdflib.Literal']
-    _XSD_NS = l._XSD_NS
-    l._PythonToXSD = [
-        (basestring, (None,None)),
-        (float     , (None,_XSD_NS[u'float'])),
-        (bool      , (lambda i:str(i).lower(),_XSD_NS[u'boolean'])),
-        (int       , (None,_XSD_NS[u'integer'])),
-        (long      , (None,_XSD_NS[u'long'])),
-        (datetime  , (lambda i:i.isoformat(),_XSD_NS[u'dateTime'])),
-        (date      , (lambda i:i.isoformat(),_XSD_NS[u'date'])),
-        (time      , (lambda i:i.isoformat(),_XSD_NS[u'time'])),
-    ]
-    del date, datetime, time, l, _XSD_NS
-
-# http://bugs.python.org/issue9639 (Python 2.6.6 regression)
-
-
-if sys.version_info[:2] == (2, 6) and sys.version_info[2] >= 6:
-    def fixed_http_error_401(self, req, fp, code, msg, headers):
-        url = req.get_full_url()
-        response = self.http_error_auth_reqed('www-authenticate',
-                                          url, req, headers)
-        self.retried = 0
-        return response
-
-    urllib2.HTTPBasicAuthHandler.http_error_401 = fixed_http_error_401
-del rdflib, sys, urllib2

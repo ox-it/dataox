@@ -9,7 +9,6 @@ from django.utils.decorators import method_decorator
 from django.contrib.auth.decorators import login_required
 from django_conneg.http import HttpResponseSeeOther
 from django_conneg.views import HTMLView
-from django_hosts import reverse_full
 import rdflib
 
 from humfrey.desc import views as desc_views

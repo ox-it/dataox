@@ -1,5 +1,5 @@
 import inspect
-import urlparse
+import urllib.parse
 
 from django.conf import settings
 
@@ -69,7 +69,7 @@ if settings.STAGING:
     uri.doc_forwards = new_doc_forwards
 
     def _new_get_host_path(url):
-        parsed_url = urlparse.urlparse(url)
+        parsed_url = urllib.parse.urlparse(url)
         return '/{0}{1}'.format(parsed_url.netloc, parsed_url.path)
     uri._get_host_path = _new_get_host_path
 

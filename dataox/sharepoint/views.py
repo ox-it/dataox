@@ -1,8 +1,9 @@
 import base64
-import httplib
+import http.client
 import logging
 import random
-import urllib2
+import urllib.parse
+import urllib.request
 
 from django.contrib.auth.decorators import login_required
 from django.core.exceptions import PermissionDenied
@@ -60,22 +61,22 @@ class UserProfileImageView(RedisView, ContentNegotiatedView):
                                                 url='https://sharepoint.nexus.ox.ac.uk/')
         except Credential.DoesNotExist:
             logger.warning("Missing SharePoint credentials", exc_info=1)
-            raise HttpError(status_code=httplib.SERVICE_UNAVAILABLE)
+            raise HttpError(status_code=http.client.SERVICE_UNAVAILABLE)
             
-        sp_request = urllib2.Request(url)
+        sp_request = urllib.request.Request(url)
         sp_request.add_header('Authorization',
                               'Basic ' +
                               base64.b64encode(':'.join([credential.username,
                                                          credential.password])))
         
         try:
-            response = urllib2.urlopen(sp_request)
+            response = urllib.request.urlopen(sp_request)
             return response.headers['Content-type'], response.read()
-        except urllib2.HTTPError as e:
+        except urllib.request.HTTPError as e:
             if e.code == 404:
                 raise Http404
             if e.code in (401, 403):
                 logger.warning("Failed authentication accessing profile image: %d",
                                e.code, exc_info=1)
-                raise HttpError(status_code=httplib.SERVICE_UNAVAILABLE)
+                raise HttpError(status_code=http.client.SERVICE_UNAVAILABLE)
             raise

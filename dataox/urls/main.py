@@ -1,4 +1,4 @@
-from django.conf.urls import patterns, include, url
+from django.conf.urls import include, url
 from django.views.generic import RedirectView
 from django.contrib.staticfiles.urls import staticfiles_urlpatterns
 
@@ -16,40 +16,40 @@ search_args = {'opensearch_meta': {'ShortName': 'data.ox.ac.uk',
                                    'SyndicationRight': 'open'},
                'opensearch_images': [{'url': 'https://static.data.ox.ac.uk/favicon.ico'}]}
 
-urlpatterns = patterns('',
-    (r'^$', misc_views.SimpleView.as_view(template_name='index'), {}, 'index'),
+urlpatterns = [
+    url(r'^$', misc_views.SimpleView.as_view(template_name='index'), name='index'),
 
-    (r'^id/.*$', desc_views.IdView.as_view(), {}, 'id'),
+    url(r'^id/.*$', desc_views.IdView.as_view(), name='id'),
 
-    (r'^doc.+$', desc_views.DocView.as_view(), {}, 'doc'),
-    (r'^doc/$', desc_views.DocView.as_view(), {}, 'doc-generic'),
-    (r'^desc/$', desc_views.DescView.as_view(), {}, 'desc'),
+    url(r'^doc.+$', desc_views.DocView.as_view(), name='doc'),
+    url(r'^doc/$', desc_views.DocView.as_view(), name='doc-generic'),
+    url(r'^desc/$', desc_views.DescView.as_view(), name='desc'),
 
     url(r'^search/$', elasticsearch_views.SearchView.as_view(**search_args), name='search'),
 
-    (r'^datasets/$', core_views.DatasetView.as_view(), {}, 'datasets'),
+    url(r'^datasets/$', core_views.DatasetView.as_view(), name='datasets'),
 
-    (r'^contact/$', misc_views.SimpleView.as_view(template_name='contact'), {}, 'contact'),
-    (r'^legal-and-privacy/$', misc_views.SimpleView.as_view(template_name='legal'), {}, 'legal'),
-    (r'^forbidden/$', misc_views.SimpleView.as_view(template_name='forbidden', context={'status_code': 403}), {}, 'forbidden'),
+    url(r'^contact/$', misc_views.SimpleView.as_view(template_name='contact'), name='contact'),
+    url(r'^legal-and-privacy/$', misc_views.SimpleView.as_view(template_name='legal'), name='legal'),
+    url(r'^forbidden/$', misc_views.SimpleView.as_view(template_name='forbidden', context={'status_code': 403}), name='forbidden'),
 
-    (r'^explore/$', core_views.ExploreView.as_view(), {}, 'explore'),
-    (r'^explore/resources/$', core_views.ExampleResourceView.as_view(), {}, 'explore-resource'),
-    (r'^explore/queries/$', core_views.ExampleQueryView.as_view(), {}, 'explore-query'),
+    url(r'^explore/$', core_views.ExploreView.as_view(), name='explore'),
+    url(r'^explore/resources/$', core_views.ExampleResourceView.as_view(), name='explore-resource'),
+    url(r'^explore/queries/$', core_views.ExampleQueryView.as_view(), name='explore-query'),
 
-    (r'^explore/(?P<slug>[a-z\d-]+)/$', core_views.ExampleDetailView.as_view(), {}, 'example-detail'),
-    (r'^explore/example:(?P<slug>[a-z\d-]+)/$', RedirectView.as_view(url='/explore/%(slug)s/')),
+    url(r'^explore/(?P<slug>[a-z\d-]+)/$', core_views.ExampleDetailView.as_view(), name='example-detail'),
+    url(r'^explore/example:(?P<slug>[a-z\d-]+)/$', RedirectView.as_view(url='/explore/%(slug)s/')),
 
-    (r'^pingback/', include('humfrey.pingback.urls', 'pingback')),
-    (r'^sparql/', include('humfrey.sparql.urls.simple', 'sparql')),
-    (r'^feeds/', include('dataox.old_feeds.urls', 'old-feeds')),
+    url(r'^pingback/', include('humfrey.pingback.urls', 'pingback')),
+    url(r'^sparql/', include('humfrey.sparql.urls.simple', 'sparql')),
+    url(r'^feeds/', include('dataox.old_feeds.urls', 'old-feeds')),
 
-    (r'^graphviz/$', graphviz_views.GraphVizView.as_view(), {}, 'graphviz'),
+    url(r'^graphviz/$', graphviz_views.GraphVizView.as_view(), name='graphviz'),
 
     # as per http://www.w3.org/TR/void/#well-known
-    (r'^.well-known/void$', RedirectView.as_view(url='/datasets/', permanent=False)),
-    (r'^.well-known/openorg$', core_views.OPDView.as_view(), {}, 'openorg'),
-) + staticfiles_urlpatterns()
+    url(r'^.well-known/void$', RedirectView.as_view(url='/datasets/', permanent=False)),
+    url(r'^.well-known/openorg$', core_views.OPDView.as_view(), name='openorg'),
+] + staticfiles_urlpatterns()
 
 handler404 = misc_views.SimpleView.as_view(template_name='404', context={'status_code':404})
 handler500 = core_views.ServerErrorView.as_view()

@@ -1,5 +1,5 @@
 import json
-import urllib2
+import urllib.request
 
 from django import forms
 import rdflib
@@ -13,7 +13,7 @@ def AdvancedSearchForm(*args, **kwargs):
          'facets': {'formalOrganisation': {'terms': {'field': 'formalOrganisation.uri'}},
                     'basedNear': {'terms': {'field': 'basedNear.uri'}}}}
 
-    results = json.load(urllib2.urlopen(search_url, json.dumps(q)))
+    results = json.load(urllib.request.urlopen(search_url, json.dumps(q)))
 
     formal_organisation_choices = [t['term'] for t in results['facets']['formalOrganisation']['terms']]
     based_near_choices = [t['term'] for t in results['facets']['basedNear']['terms']]

@@ -13,9 +13,9 @@
     <p>Use these as starting points to dive into the data.</p>
 
     <dl>
-      <dt><a href="{% host_url explore-resource on data %}">Example resources</a></dt>
-      <dt><a href="{% host_url explore-query on data %}">Example queries</a></dt>
-      <dt><a href="{% host_url old-feeds:index on data %}">RSS and Atom feeds</a></dt>
+      <dt><a href="{% host_url "explore-resource" host "data" %}">Example resources</a></dt>
+      <dt><a href="{% host_url "explore-query" host "data" %}">Example queries</a></dt>
+      <dt><a href="{% host_url "old-feeds:index" host "data" %}">RSS and Atom feeds</a></dt>
     </dl>
   </section>
   
@@ -24,7 +24,7 @@
 
     <dl>
 {% for example in examples %}
-      <dt><a href="{% host_url example-detail example.slug on data %}">{{ example.name }}</a></dt>
+      <dt><a href="{% host_url "example-detail" example.slug host "data" %}">{{ example.name }}</a></dt>
       <dd>{{ example.description|safe }}</dd>
 {% endfor %}
     </dl>

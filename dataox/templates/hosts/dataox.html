@@ -1,4 +1,4 @@
-{% load hosts %}{% load compressed %}<!DOCTYPE html>
+{% load hosts %}{% load pipeline %}<!DOCTYPE html>
 <html lang="en-GB">
   <head>
     <meta charset="utf-8">
@@ -24,10 +24,10 @@
     </script>
     <script type="text/javascript" src="{{ STATIC_URL }}lib/jquery/jquery.min.js"></script>
     <script type="text/javascript" src="{{ STATIC_URL }}lib/openlayers/OpenLayers.js"></script>
-    {% compressed_js 'dataox' %}
+    {% javascript 'dataox' %}
     <script type="text/javascript" src="{{ STATIC_URL }}js/base.js"></script>
     {% block extra_head %}{% endblock %}
-    <link href="{% host_url search on data %}?opensearchdescription" type="application/opensearchdescription+xml" rel="search" title="data.ox.ac.uk">
+    <link href="{% host_url "search" host "data" %}?opensearchdescription" type="application/opensearchdescription+xml" rel="search" title="data.ox.ac.uk">
   </head>
 
 {% block body %}
@@ -47,17 +47,17 @@
     <nav>
       <ul>
 {% block nav %}
-        <li><a href="{% host_url index on data %}">home</a></li>
-        <li><a href="{% host_url datasets on data  %}">datasets</a></li>
-        <li><a href="{% host_url explore on data  %}">explore</a></li>
-        <li><a href="{% host_url sparql:endpoint on data  %}">sparql</a></li>
+        <li><a href="{% host_url "index" host "data" %}">home</a></li>
+        <li><a href="{% host_url "datasets" host "data"  %}">datasets</a></li>
+        <li><a href="{% host_url "explore" host "data"  %}">explore</a></li>
+        <li><a href="{% host_url "sparql:endpoint" host "data"  %}">sparql</a></li>
         <li><a href="https://docs.data.ox.ac.uk/">documentation</a></li>
-        <li><a href="{% host_url contact on data  %}">contact</a></li>
+        <li><a href="{% host_url "contact" host "data"  %}">contact</a></li>
 {% endblock %}
       </ul>
 {% block search_box %}
       <div class="search-form">
-        <form method="get" action="{% block search_target %}{% host_url search on data %}{% endblock %}" style="display:inline;">
+        <form method="get" action="{% block search_target %}{% host_url "search" host "data" %}{% endblock %}" style="display:inline;">
           <label for="search-query">Search&hellip;</label>
           <input id="search-query" name="q" style="width:100px"/>
           <input class="search-submit" type="submit" value="Search"/>
@@ -73,7 +73,7 @@
       <footer>{% block footer %}
         Site © University of Oxford •
         <a href="http://creativecommons.org/licenses/by-sa/2.0/uk/" title="Attribution-ShareAlike 2.0 UK: England &amp; Wales">CC-BY-SA 2.0</a> •
-        <a href="{% host_url legal on data %}">Legal and privacy</a> •
+        <a href="{% host_url "legal" host "data" %}">Legal and privacy</a> •
         <a href="https://github.com/ox-it/dataox">Source</a>
       {% endblock %}</footer>
     </div>

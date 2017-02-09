@@ -144,5 +144,5 @@ if __name__ == '__main__':
     transform = OxpointsExtents()
     endpoint = Endpoint('https://data.ox.ac.uk/sparql/')
     graph = transform.get_graph(endpoint)
-    print graph.serialize(format='turtle')
+    print(graph.serialize(format='turtle'))
 

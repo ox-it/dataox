@@ -1,4 +1,4 @@
-from django.conf.urls import patterns, include, url
+from django.conf.urls import include, url
 from django.contrib import admin
 from django.contrib.auth import views as auth_views
 from django.contrib.staticfiles.urls import staticfiles_urlpatterns
@@ -10,7 +10,7 @@ from .main import handler404, handler500
 
 admin.autodiscover()
 
-urlpatterns = patterns('',
+urlpatterns = [
     url(r'^$', misc_views.SimpleView.as_view(template_name='backstage/index'), name='index'),
     url(r'^feeds/', include('humfrey.feeds.urls', 'feeds')),
     url(r'^update/', include('humfrey.update.urls', 'update')),
@@ -23,4 +23,4 @@ urlpatterns = patterns('',
 
     url(r'^oauth2/', include('oauth2app.urls', 'oauth2app')),
     url(r'^admin/', admin.site.urls),
-) + staticfiles_urlpatterns()
+] + staticfiles_urlpatterns()

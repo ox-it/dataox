@@ -1,14 +1,14 @@
-from django.conf.urls import patterns
+from django.conf.urls import url
 
 from . import views
 
-urlpatterns = patterns('',
-    (r'^$', views.IndexView.as_view(), {}, 'index'),
-    (r'^vacancies/$', views.VacancyIndexView.as_view(), {}, 'vacancies-index'),
+urlpatterns = [
+    url(r'^$', views.IndexView.as_view(), name='index'),
+    url(r'^vacancies/$', views.VacancyIndexView.as_view(), name='vacancies-index'),
     # Units
-    (r'^vacancies/(?P<oxpoints_id>\d{8})(?:\.(?P<format>[\da-z\-]+))?$', views.VacancyView.as_view(), {}, 'vacancies'),
+    url(r'^vacancies/(?P<oxpoints_id>\d{8})(?:\.(?P<format>[\da-z\-]+))?$', views.VacancyView.as_view(), name='vacancies'),
     # Everything
-    (r'^vacancies/(?P<feed_name>[a-z\-]+)(?:\.(?P<format>[\da-z\-]+))?$', views.VacancyView.as_view(), {}, 'vacancies-named-feed'),
+    url(r'^vacancies/(?P<feed_name>[a-z\-]+)(?:\.(?P<format>[\da-z\-]+))?$', views.VacancyView.as_view(), name='vacancies-named-feed'),
     # Unit and subunits
-    (r'^all-vacancies/(?P<oxpoints_id>\d{8})(?:\.(?P<format>[\da-z\-]+))?$', views.VacancyView.as_view(all=True), {}, 'all-vacancies'),
-)
+    url(r'^all-vacancies/(?P<oxpoints_id>\d{8})(?:\.(?P<format>[\da-z\-]+))?$', views.VacancyView.as_view(all=True), name='all-vacancies'),
+]

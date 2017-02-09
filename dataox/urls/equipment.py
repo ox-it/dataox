@@ -1,4 +1,4 @@
-from django.conf.urls import patterns, url
+from django.conf.urls import url
 from django.contrib.staticfiles.urls import staticfiles_urlpatterns
 
 import django_webauth.views
@@ -9,7 +9,7 @@ from dataox.equipment import views as equipment_views
 
 from .main import handler404, handler500
 
-urlpatterns = patterns('',
+urlpatterns = [
     url(r'^search/$', equipment_views.SearchView.as_view(), name='search'),
 
     url(r'^view/$', equipment_views.DocView.as_view(), name='doc-generic'),
@@ -30,4 +30,4 @@ urlpatterns = patterns('',
     url(r'^contact/$', misc_views.SimpleView.as_view(template_name="equipment/contact"), name='contact'),
     url(r'^legal-and-privacy/$', misc_views.SimpleView.as_view(template_name='legal'), name='legal'),
     
-) + staticfiles_urlpatterns()
+] + staticfiles_urlpatterns()

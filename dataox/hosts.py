@@ -1,12 +1,22 @@
+import collections
+import os
+import re
+
 from django_hosts import patterns, host
 
-host_patterns = patterns('',
-    host(r'data.ox.ac.uk', 'dataox.urls.main', name='data'),
-    host(r'backstage.data.ox.ac.uk', 'dataox.urls.backstage', name='backstage'),
-    host(r'static.data.ox.ac.uk', 'dataox.urls.static', name='static'),
-    host(r'course.data.ox.ac.uk', 'dataox.urls.course', name='course'),
-    host(r'id.it.ox.ac.uk', 'dataox.urls.id', name='id-it'),
-    host(r'www.research-facilities.ox.ac.uk', 'dataox.urls.equipment', name='equipment'),
-    host(r'$x^', 'dataox.urls.empty', name='empty'),
-    host(r'$x^', 'dataox.staging.urls', name='staging'),
+hosts = collections.OrderedDict([
+    ('data', 'dataox.urls.main'),
+    ('backstage', 'dataox.urls.backstage'),
+    ('static', 'dataox.urls.static'),
+    ('course', 'dataox.urls.course'),
+    ('id-it', 'dataox.urls.id'),
+    ('equipment', 'dataox.urls.equipment'),
+    ('empty', 'dataox.urls.empty'),
+])
+
+host_patterns = patterns('', *[
+    host('^{}$'.format(re.escape(os.environ.get('DATAOX_DOMAIN_{}'.format(name.upper()),
+                                                '127.0.0.{}:8000'.format(i)))),
+         hosts[name], name)
+    for i, name in enumerate(hosts, 1)]
 )

@@ -3,8 +3,8 @@
 import cgi
 import datetime
 import email
-import urllib
-import urlparse
+import urllib.parse
+import urllib.request
 import locale
 import logging
 import mimetypes
@@ -13,7 +13,6 @@ import re
 import shutil
 import tempfile
 import time
-import urllib2
 
 import dateutil.parser
 import html2text
@@ -303,11 +302,11 @@ class Document(DirtyFieldsMixin, models.Model):
             return
 
         file_path_base = os.path.join(settings.SOURCE_DIRECTORY, 'vacancies')
-        file_url_base = urlparse.urljoin(settings.SOURCE_URL, 'vacancies/')
+        file_url_base = urllib.parse.urljoin(settings.SOURCE_URL, 'vacancies/')
 
         logger.debug("Retrieving vacancy document: %s %d", self.vacancy.vacancy_id, self.index)
 
-        response = urllib2.urlopen(url)
+        response = urllib.request.urlopen(url)
 
         self.mimetype, _ = cgi.parse_header(response.headers.get('Content-Type') or '')
 
@@ -342,7 +341,7 @@ class Document(DirtyFieldsMixin, models.Model):
 
         if not os.path.exists(os.path.dirname(self.file_path)):
             os.makedirs(os.path.dirname(self.file_path))
-        os.chmod(f.name, 0644) # octal, remember
+        os.chmod(f.name, 0o644) # octal, remember
         shutil.move(f.name, self.file_path)
 
         try:
@@ -360,7 +359,7 @@ class Document(DirtyFieldsMixin, models.Model):
                                  self.local_url, self.mimetype, converter.__class__.__name__)
                 self.text = ''
             else:
-                text = re.sub(ur'[\x00-\x08\x0b\x0c\x0e-\x1f\ud800-\udfff]', '', text)
+                text = re.sub(r'[\x00-\x08\x0b\x0c\x0e-\x1f\ud800-\udfff]', '', text)
                 self.text = text
 
     def delete(self):
