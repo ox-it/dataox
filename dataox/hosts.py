@@ -15,7 +15,7 @@ hosts = collections.OrderedDict([
 ])
 
 host_patterns = patterns('', *[
-    host('^{}$'.format(re.escape(os.environ.get('DATAOX_DOMAIN_{}'.format(name.upper()),
+    host('^{}$'.format(re.escape(os.environ.get('DATAOX_DOMAIN_{}'.format(name.upper().replace('-', '_')),
                                                 '127.0.0.{}:8000'.format(i)))),
          hosts[name], name)
     for i, name in enumerate(hosts, 1)]
