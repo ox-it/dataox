@@ -56,7 +56,6 @@ INSTALLED_APPS = (
     'oauth2app',
     'dataox.old_feeds',
     'dataox.vacancy',
-    'djcelery',
     'pipeline',
     'maintenancemode',
     'raven.contrib.django',
@@ -296,9 +295,6 @@ CELERY_IMPORTS = (
 )
 CELERYBEAT_SCHEDULER = 'djcelery.schedulers.DatabaseScheduler'
 CELERYD_LOG_LEVEL = 'DEBUG'
-
-import djcelery
-djcelery.setup_loader()
 
 DEPENDENT_TASKS = {'humfrey.update.update': ('humfrey.ckan.upload_dataset_metadata',
                                              'humfrey.update.run_dependents',
