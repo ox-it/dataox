@@ -28,7 +28,10 @@ analytics_meta_by_host = dict((host, meta) for meta in analytics_meta
                                            for host in meta['hosts'])
 
 def do_not_track(request):
-    meta = analytics_meta_by_host.get(request.host.name)
+    try:
+        meta = analytics_meta_by_host.get(request.host.name)
+    except AttributeError:
+        meta = None
     if meta:
         request.using_analytics = True
         analytics = {'do_not_track': request.META.get('HTTP_DNT') == '1',
