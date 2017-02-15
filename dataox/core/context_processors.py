@@ -13,7 +13,10 @@ _default_template = _base_templates['data']
 _default_service_name = _service_names['data']
 
 def base_template_chooser(request):
-    host = request.host.name
+    try:
+        host = request.host.name
+    except AttributeError:
+        host = 'data'
     base_template_name = _base_templates.get(host, _default_template)
     return {'base_template_name': base_template_name,
             'host': host,

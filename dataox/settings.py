@@ -12,6 +12,7 @@ if not SECRET_KEY and DEBUG:
 
 if 'DJANGO_ADMINS' in os.environ:
     ADMINS = [email.utils.parseaddr(addr.strip()) for addr in os.environ['DJANGO_ADMINS'].split(',')]
+    MANAGERS = ADMINS
 
 # Localization
 TIME_ZONE = 'Europe/London'
@@ -64,11 +65,6 @@ INSTALLED_APPS = (
 
 DATABASES = {'default': {'ENGINE': 'django.db.backends.postgresql_psycopg2',
                          'NAME': 'humfrey-dataox'}}
-
-ADMINS = (
-    ('data.ox.ac.uk administrators', 'opendata-admin@maillist.ox.ac.uk'),
-)
-MANAGERS = ADMINS
 
 ROOT_URLCONF = 'dataox.urls.empty'
 ROOT_HOSTCONF = 'dataox.hosts'
