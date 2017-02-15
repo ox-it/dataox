@@ -11,3 +11,4 @@ django-pipeline
 requests
 ldap3
 -e git+git://github.com/ox-it/django-webauth#egg=django-webauth
+-e git+git://github.com/ox-it/oauth2app#egg=oauth2app
