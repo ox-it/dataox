@@ -64,7 +64,7 @@ INSTALLED_APPS = (
 )
 
 DATABASES = {'default': {'ENGINE': 'django.db.backends.postgresql_psycopg2',
-                         'NAME': 'humfrey-dataox'}}
+                         'NAME': 'dataox'}}
 
 ROOT_URLCONF = 'dataox.urls.empty'
 ROOT_HOSTCONF = 'dataox.hosts'
