@@ -8,6 +8,7 @@ django-dirtyfields
 python-dateutil
 raven
 django-pipeline
+django-celery-beat
 requests
 ldap3
 -e git+git://github.com/ox-it/django-webauth#egg=django-webauth

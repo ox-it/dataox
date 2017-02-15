@@ -24,6 +24,7 @@ INTERNAL_IPS = (
 )
 
 INSTALLED_APPS = (
+    'django_celery_beat',
     'django.contrib.auth',
     'django.contrib.admin',
     'django.contrib.messages',
@@ -293,8 +294,6 @@ CELERY_IMPORTS = (
     'humfrey.elasticsearch.tasks',
     'humfrey.update.tasks',
 )
-CELERYBEAT_SCHEDULER = 'djcelery.schedulers.DatabaseScheduler'
-CELERYD_LOG_LEVEL = 'DEBUG'
 
 DEPENDENT_TASKS = {'humfrey.update.update': ('humfrey.ckan.upload_dataset_metadata',
                                              'humfrey.update.run_dependents',
