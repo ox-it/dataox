@@ -9,5 +9,5 @@ python-dateutil
 raven
 django-pipeline
 requests
-python3-ldap
+ldap3
 -e git+git://github.com/ox-it/django-webauth#egg=django-webauth
