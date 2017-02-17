@@ -85,7 +85,6 @@ elif distname == 'debian':
                          ('lib/jquery', '/usr/share/javascript/jquery'),
                          ('lib/jquery-cookie', '/usr/share/javascript/jquery-cookie'),
                          ('lib/jquery-ui', '/usr/share/javascript/jquery-ui'),
-                         ('lib/datatables', '/usr/share/javascript/datatables'))
 else:
     raise AssertionError("Unsupported distribution")
 del distname
