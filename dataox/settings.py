@@ -84,7 +84,7 @@ elif distname == 'debian':
     STATICFILES_DIRS += (('lib/openlayers', '/usr/share/javascript/openlayers'),
                          ('lib/jquery', '/usr/share/javascript/jquery'),
                          ('lib/jquery-cookie', '/usr/share/javascript/jquery-cookie'),
-                         ('lib/jquery-ui', '/usr/share/javascript/jquery-ui'),
+                         ('lib/jquery-ui', '/usr/share/javascript/jquery-ui'))
 else:
     raise AssertionError("Unsupported distribution")
 del distname
