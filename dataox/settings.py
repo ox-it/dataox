@@ -70,7 +70,7 @@ ROOT_URLCONF = 'dataox.urls.empty'
 ROOT_HOSTCONF = 'dataox.hosts'
 DEFAULT_HOST = 'data'
 
-STATIC_URL = '//static.data.ox.ac.uk/'
+STATIC_URL = os.environ['DJANGO_STATIC_URL']
 STATICFILES_DIRS = ()
 STATIC_ROOT = os.environ.get('DJANGO_STATIC_ROOT')
 

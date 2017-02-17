@@ -12,6 +12,7 @@ hosts = collections.OrderedDict([
     ('id-it', 'dataox.urls.id'),
     ('equipment', 'dataox.urls.equipment'),
     ('empty', 'dataox.urls.empty'),
+    ('docs', 'dataox.urls.empty'),
 ])
 
 host_patterns = patterns('', *[

@@ -51,7 +51,7 @@
         <li><a href="{% host_url "datasets" host "data"  %}">datasets</a></li>
         <li><a href="{% host_url "explore" host "data"  %}">explore</a></li>
         <li><a href="{% host_url "sparql:endpoint" host "data"  %}">sparql</a></li>
-        <li><a href="https://docs.data.ox.ac.uk/">documentation</a></li>
+        <li><a href="{% host_url "index" host "docs"  %}">documentation</a></li>
         <li><a href="{% host_url "contact" host "data"  %}">contact</a></li>
 {% endblock %}
       </ul>
