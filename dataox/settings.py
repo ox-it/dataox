@@ -105,11 +105,11 @@ PIPELINE = {
                                'output_filename': 'lib/jquery.collapsible.min.js'},
     },
     'JS_COMPRESSOR': 'pipeline.compressors.closure.ClosureCompressor',
+    'CLOSURE_BINARY': '/usr/bin/closure-compiler',
 }
 
 PIPELINE_CLOSURE_ARGUMENTS = '--jscomp_off uselessCode'
 STATICFILES_STORAGE = 'pipeline.storage.PipelineStorage'
-CLOSURE_BINARY = '/usr/bin/closure-compiler'
 
 
 OAUTH2_ACCESS_TOKEN_LENGTH = 20
