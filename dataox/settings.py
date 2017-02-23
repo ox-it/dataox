@@ -170,6 +170,8 @@ DEFAULT_HTTP_PROTOCOL = 'https'
 ENDPOINT_QUERY = 'http://localhost:3030/public/query'
 ENDPOINT_GRAPH = 'http://localhost:3030/public/data'
 
+IMAGE_CACHE_DIRECTORY = os.environ.get('IMAGE_CACHE_DIRECTORY')
+
 HUMFREY_FEEDS = {
     'organization': 'dataox.feeds.organization.OrganizationFeedView',
 }
