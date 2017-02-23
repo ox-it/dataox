@@ -18,11 +18,7 @@ if 'DJANGO_ADMINS' in os.environ:
 TIME_ZONE = 'Europe/London'
 LANGUAGE_CODE = 'en-gb'
 
-INTERNAL_IPS = (
-    '127.0.0.1',       # localhost
-    '129.67.101.12',   # oucs-alexd.oucs.ox.ac.uk
-    '192.168.122.1',   # virt-manager host
-)
+INTERNAL_IPS = os.environ.get('DJANGO_INTERNAL_IPS', '').split()
 
 INSTALLED_APPS = (
     'django_celery_beat',
