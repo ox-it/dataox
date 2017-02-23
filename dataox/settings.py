@@ -1,4 +1,6 @@
 import email.utils
+
+import collections
 import os
 import platform
 
@@ -211,13 +213,38 @@ LOGIN_URL = '/accounts/webauth/'
 LOGOUT_URL = '/accounts/logout/'
 LOGIN_REDIRECT_URL = '/'
 
+
+HOST_URLCONFS = collections.OrderedDict([
+    ('data', 'dataox.urls.main'),
+    ('backstage', 'dataox.urls.backstage'),
+    ('static', 'dataox.urls.static'),
+    ('course', 'dataox.urls.course'),
+    ('id-it', 'dataox.urls.id'),
+    ('equipment', 'dataox.urls.equipment'),
+    ('empty', 'dataox.urls.empty'),
+    ('docs', 'dataox.urls.empty'),
+])
+
+HOST_DOMAINS = {
+    name: os.environ.get('DATAOX_DOMAIN_{}'.format(name.upper().replace('-', '_')),
+                         '127.0.0.{}:8000'.format(i))
+    for i, name in enumerate(HOST_URLCONFS, 1)
+}
+
+
 ID_MAPPING = (
-    ('https://data.ox.ac.uk/id/equipment/', 'https://www.research-facilities.ox.ac.uk/view:equipment/', True),
-    ('https://data.ox.ac.uk/id/facility/', 'https://www.research-facilities.ox.ac.uk/view:facility/', True),
-    ('https://data.ox.ac.uk/id/', 'https://data.ox.ac.uk/doc/', True),
-    ('http://oxpoints.oucs.ox.ac.uk/id/', 'https://data.ox.ac.uk/doc:oxpoints/', False),
-    ('http://id.it.ox.ac.uk/', 'https://data.ox.ac.uk/doc:it/', True),
-    ('http://id.conted.ox.ac.uk/', 'https://course.data.ox.ac.uk/doc:conted/', False),
+    ('https://data.ox.ac.uk/id/equipment/',
+     'https://{equipment}/view:equipment/'.format(**HOST_DOMAINS), True),
+    ('https://data.ox.ac.uk/id/facility/',
+     'https://{equipment}/view:facility/'.format(**HOST_DOMAINS), True),
+    ('https://data.ox.ac.uk/id/',
+     'https://{data}/doc/'.format(**HOST_DOMAINS), True),
+    ('http://oxpoints.oucs.ox.ac.uk/id/',
+     'https://{data}/doc:oxpoints/'.format(**HOST_DOMAINS), False),
+    ('http://id.it.ox.ac.uk/',
+     'https://{data}/doc:it/'.format(**HOST_DOMAINS), True),
+    ('http://id.conted.ox.ac.uk/',
+     'https://{course}/doc:conted/'.format(**HOST_DOMAINS), False),
 )
 
 HTML_MIMETYPES = ('application/xhtml+xml', 'text/html')
