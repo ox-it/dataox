@@ -1,6 +1,6 @@
 from django.conf.urls import patterns, url
 from django.contrib.staticfiles.urls import staticfiles_urlpatterns
-from django_hosts import reverse_full
+from django_hosts import reverse
 
 from humfrey.desc import views as desc_views
 from humfrey.misc import views as misc_views
@@ -10,10 +10,10 @@ from .main import handler500
 class IdView(desc_views.IdView):
     @property
     def doc_view(self):
-        return reverse_full('data', 'doc-generic')
+        return reverse('doc-generic', host=settings.DEFAULT_HOST)
     @property
     def desc_view(self):
-        return reverse_full('data', 'desc')
+        return reverse('data', host=settings.DEFAULT_HOST)
 
 urlpatterns = patterns('',
     url(r'^.*', IdView.as_view(), {}, 'id'),
