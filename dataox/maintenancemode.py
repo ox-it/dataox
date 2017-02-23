@@ -15,7 +15,7 @@ class _MaintenanceMode(object):
             self._lock_directory = lock_directory
         return self._lock_directory
             
-    def __nonzero__(self):
+    def __bool__(self):
         if not self.lock_directory:
             return False
         return any(not fn.startswith('.') for fn in os.listdir(self.lock_directory))
