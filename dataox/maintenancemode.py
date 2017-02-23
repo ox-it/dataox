@@ -22,10 +22,10 @@ class _MaintenanceMode(object):
 
     def started(self):
         ctime = float('inf')
-        for fn in os.listdir(self._lock_directory):
+        for fn in os.listdir(self.lock_directory):
             if fn.startswith('.'):
                 continue
-            fn = os.path.join(self._lock_directory, fn)
+            fn = os.path.join(self.lock_directory, fn)
             ctime = min(ctime, os.lstat(fn).st_ctime)
             #return ctime
         ctime = datetime.datetime.fromtimestamp(ctime)
