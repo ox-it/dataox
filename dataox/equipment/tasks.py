@@ -2,7 +2,7 @@ import logging
 import requests
 import tempfile
 
-from celery.task import task
+from celery import shared_task
 from django.conf import settings
 from humfrey.signals import graphs_updated
 from humfrey.streaming.csv import CSVSerializer
@@ -72,7 +72,7 @@ WHERE {
 }
 """
 
-@task(name='dataox.equipment.update_seesec', ignore_result=True)
+@shared_task(name='dataox.equipment.update_seesec', ignore_result=True)
 def update_seesec(sender, store, graphs, when, **kwargs):
     if store.slug != 'seesec':
         return
