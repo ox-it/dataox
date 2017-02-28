@@ -236,17 +236,17 @@ HOST_DOMAINS = {
 
 ID_MAPPING = (
     ('https://data.ox.ac.uk/id/equipment/',
-     'https://{equipment}/view:equipment/'.format(**HOST_DOMAINS), True),
+     '//{equipment}/view:equipment/'.format(**HOST_DOMAINS), True),
     ('https://data.ox.ac.uk/id/facility/',
-     'https://{equipment}/view:facility/'.format(**HOST_DOMAINS), True),
+     '//{equipment}/view:facility/'.format(**HOST_DOMAINS), True),
     ('https://data.ox.ac.uk/id/',
-     'https://{data}/doc/'.format(**HOST_DOMAINS), True),
+     '//{data}/doc/'.format(**HOST_DOMAINS), True),
     ('http://oxpoints.oucs.ox.ac.uk/id/',
-     'https://{data}/doc:oxpoints/'.format(**HOST_DOMAINS), False),
+     '//{data}/doc:oxpoints/'.format(**HOST_DOMAINS), False),
     ('http://id.it.ox.ac.uk/',
-     'https://{data}/doc:it/'.format(**HOST_DOMAINS), True),
+     '//{data}/doc:it/'.format(**HOST_DOMAINS), True),
     ('http://id.conted.ox.ac.uk/',
-     'https://{course}/doc:conted/'.format(**HOST_DOMAINS), False),
+     '//{course}/doc:conted/'.format(**HOST_DOMAINS), False),
 )
 
 HTML_MIMETYPES = ('application/xhtml+xml', 'text/html')

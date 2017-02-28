@@ -35,6 +35,5 @@ class _MaintenanceMode(object):
             logger.warning("We've been in maintenance mode too long")
         
         return ctime
-            
 
 MAINTENANCE_MODE = _MaintenanceMode()
