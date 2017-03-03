@@ -17,8 +17,7 @@
     <ul>
       <li><a href="#data-protection">Data protection and privacy</a>
         <ul>
-          <li><a href="#cookies">Cookies</a></li>{% if analytics_enabled %}
-          <li><a href="#analytics">Cookies for analytics</a></li>{% endif %}
+          <li><a href="#cookies">Cookies</a></li>
         </ul>
       </li>
       <li><a href="#terms-of-use">Terms of use</a>
@@ -68,29 +67,9 @@
         <dd>This is a Django CSRF
             (<a hre="http://en.wikipedia.org/wiki/Cross-site_request_forgery">cross-site
             request forgery</a>) prevention cookie. It will only be set on pages
-            that allow you to submit data to the website.</dd>{% if analytics_enabled %}
-        <dt><code>use_analytics</code></dt>
-        <dd>This records whether you have opted out of receiving Google
-            Analytics cookies.</dd>
-        <dt><code>__utma</code>, <code>__utmb</code>, <code>__utmc</code>, <code>__utmz</code></dt>
-        <dd>These are Google Analytics cookies, which we use to collect various
-            metrics on the use of this site. <a href="#analytics">See below</a>
-            for more information, and how to opt out.</dd>
-        {% endif %}
-        
+            that allow you to submit data to the website.</dd>
       </dl>
-    </section>{% if analytics %}
-    
-    <section id="analytics">
-      <h3>Cookies for analytics</h3>
-      
-      <p>This site uses <a href="http://en.wikipedia.org/wiki/Google_Analytics">Google
-         Analytics</a> to collect statistics on the use of this website. We do
-         not share the information we collect with anyone outside of the University,
-         and we are unable to identify you individually though Google Analytics.</p>
-      
-      <div id="analytics-controls"/>
-    </section>{% endif %}
+    </section>
   </section>
   
   <section id="terms-of-use">

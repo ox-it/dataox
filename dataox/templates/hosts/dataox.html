@@ -12,7 +12,6 @@
     <link rel="stylesheet" type="text/css" href="{{ STATIC_URL }}css/large.css" media="screen and (min-width: 1600px)" />
     <link rel="stylesheet" type="text/css" href="{{ STATIC_URL }}font-awesome/css/font-awesome.min.css">
 
-    {% include "analytics/include_head.html" %}
     <link rel="icon" href="{{ STATIC_URL }}favicon.ico" type="image/x-icon"/>{% if no_index %}
     <meta name="robots" content="noindex"/>{% endif %}{% for renderer in renderers %}{% for mimetype in renderer.mimetypes %}
     <link rel="alternate" type="{{ mimetype }}" href="{{ renderer.url }}">{% endfor %}{% endfor %}
@@ -77,7 +76,6 @@
         <a href="https://github.com/ox-it/dataox">Source</a>
       {% endblock %}</footer>
     </div>
-    {% include "analytics/include_foot.html" %}
   </body>
 {% endblock %}
 </html>
