@@ -1,8 +1,7 @@
-from collections import defaultdict
 import logging
 import rdflib
 import time
-import urllib2
+import urllib.request
 
 from humfrey.sparql.endpoint import Endpoint
 from humfrey.update.transform.base import Transform
@@ -60,9 +59,9 @@ class OxpointsExtents(Transform):
                     url += '/full'
 
                 try:
-                    response = urllib2.urlopen(url)
+                    response = urllib.request.urlopen(url)
                     time.sleep(0.25)
-                except urllib2.HTTPError, e:
+                except urllib.request.HTTPError as e:
                     if e.code == 410:
                         logger.warning("OSM entity for %s, %s gone", uri, osm)
                     elif e.code == 404:
@@ -70,7 +69,7 @@ class OxpointsExtents(Transform):
                     else:
                         raise
                     break
-                except urllib2.URLError:
+                except urllib.request.URLError:
                     logger.exception("URL error")
                     break
 

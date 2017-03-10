@@ -1,4 +1,5 @@
-from django.conf.urls import patterns, url
+from django.conf import settings
+from django.conf.urls import url
 from django.contrib.staticfiles.urls import staticfiles_urlpatterns
 from django_hosts import reverse
 
@@ -15,8 +16,8 @@ class IdView(desc_views.IdView):
     def desc_view(self):
         return reverse('data', host=settings.DEFAULT_HOST)
 
-urlpatterns = patterns('',
+urlpatterns = [
     url(r'^.*', IdView.as_view(), {}, 'id'),
-) + staticfiles_urlpatterns()
+] + staticfiles_urlpatterns()
 
 handler404 = misc_views.SimpleView.as_view(template_name='404-id', context={'status_code':404})
