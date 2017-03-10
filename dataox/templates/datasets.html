@@ -25,7 +25,7 @@
               {% endfor %}
             </td>
             <td>{{ subject.dcterms_license|node|default:"<em>unknown</em>" }}</td>
-            <td>{{ subject.dcterms_description|node|linebreaksbr }}</td>
+            <td>{{ subject.dcterms_description|node }}</td>
             <td class="badges">
               {% if subject.dcterms_license.foaf_logo %}
                 <a href="{{ subject.dcterms_license.doc_url }}">
