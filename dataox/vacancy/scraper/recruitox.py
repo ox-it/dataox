@@ -1,12 +1,11 @@
 # -*- coding: utf-8 -*-
 import datetime
-import itertools
 import logging
 import re
 import time
-import urllib
-import urllib2
-import urlparse
+import urllib.parse
+import urllib.request
+from io import StringIO
 
 import dateutil.parser
 from django.db.models import Q
@@ -18,17 +17,19 @@ from ..models import Vacancy, Document
 
 logger = logging.getLogger(__name__)
 
+
 def _normalize_space(text):
     return ' '.join(text.split())
 
+
 class RecruitOxScraper(Scraper):
     base_url = 'https://www.recruit.ox.ac.uk/pls/hrisliverecruit/'
-    feed_url = urlparse.urljoin(base_url, 'Erq_search_xml_api.build_search_xml?p_internal_external=A&p_company=10')
-    detail_url = urlparse.urljoin(base_url, 'erq_jobspec_version_4.display_form')
+    feed_url = urllib.parse.urljoin(base_url, 'Erq_search_xml_api.build_search_xml?p_internal_external=A&p_company=10')
+    detail_url = urllib.parse.urljoin(base_url, 'erq_jobspec_version_4.display_form')
 
     site_timezone = pytz.timezone('Europe/London')
 
-    detail_salary_re = re.compile(ur'^(Grade|Salary)[^\dA-Z]+(?P<grade>[^:]{,32})[-:][^£]*£? ?(?P<lower>[\d,]+)(?:[^£]*£ ?(?P<upper>[\d,]+)(?:[^£]+£(?P<discretionary>[\d,]+))?)?')
+    detail_salary_re = re.compile(r'^(Grade|Salary)[^\dA-Z]+(?P<grade>[^:]{,32})[-:][^£]*£? ?(?P<lower>[\d,]+)(?:[^£]*£ ?(?P<upper>[\d,]+)(?:[^£]+£(?P<discretionary>[\d,]+))?)?')
 
     category_mapping = {'AC': 'academic',
                         'ST': 'support-technical',
@@ -48,15 +49,14 @@ class RecruitOxScraper(Scraper):
     @classmethod
     def get_page(cls, url, params=None, parser_cls=etree.HTMLParser):
         if params:
-            url = '%s?%s' % (url, urllib.urlencode(params))
-        request = urllib2.Request(url)
+            url = '%s?%s' % (url, urllib.parse.urlencode(params))
+        request = urllib.request.Request(url)
         request.headers['User-agent'] = cls.user_agent
         if cls.crawl_delay:
             time.sleep(cls.crawl_delay)
-        response = urllib2.urlopen(request)
+        response = urllib.request.urlopen(request)
         # Hack because the next v20 of CoreHR adds leading whitespace to the XML feed.
         if parser_cls == etree.XMLParser:
-            from cStringIO import StringIO
             response = StringIO(response.read().strip())
         return etree.parse(response,
                            parser=parser_cls(encoding="WINDOWS-1252"))
@@ -86,8 +86,9 @@ class RecruitOxScraper(Scraper):
             seen.add(vacancy_id)
 
         now = self.site_timezone.localize(datetime.datetime.now()).replace(microsecond=0)
-        old = set(v.vacancy_id for v in Vacancy.objects.filter(Q(opening_date__lt=now.isoformat()),
-                                                               Q(closing_date__isnull=True) | Q(closing_date__gt=now.isoformat())))
+        old = set(v.vacancy_id
+                  for v in Vacancy.objects.filter(Q(opening_date__lt=now.isoformat()),
+                                                  Q(closing_date__isnull=True) | Q(closing_date__gt=now.isoformat())))
         logger.info("Added: %r; Removed: %r", sorted(seen - old), sorted(old - seen))
 
         # If vacancies have disappeared, say that they've just closed.
@@ -161,7 +162,7 @@ class RecruitOxScraper(Scraper):
 
         params = self.detail_params.copy()
         params['p_recruitment_id'] = vacancy_id
-        vacancy.url = '%s?%s' % (self.detail_url, urllib.urlencode(params))
+        vacancy.url = '%s?%s' % (self.detail_url, urllib.parse.urlencode(params))
 
         page = self.get_page(vacancy.url)
 
@@ -207,8 +208,8 @@ class RecruitOxScraper(Scraper):
 
         current_documents = dict((d.pk, d) for d in Document.objects.filter(vacancy=vacancy))
         for i, anchor_elem in enumerate(page.xpath("//*[@class='erqanchor8point']")):
-            url = urlparse.urljoin(self.detail_url,
-                                   anchor_elem.attrib['href'].replace(' ', '%20'))
+            url = urllib.parse.urljoin(self.detail_url,
+                                       anchor_elem.attrib['href'].replace(' ', '%20'))
             try:
                 document = Document.objects.get(index=i,
                                                 title=(anchor_elem.text or '').strip(),
