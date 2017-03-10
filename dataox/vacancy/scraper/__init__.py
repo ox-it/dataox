@@ -1,2 +1,2 @@
-from jobsac import JobsAcScraper
-from recruitox import RecruitOxScraper
+from .jobsac import JobsAcScraper
+from .recruitox import RecruitOxScraper
