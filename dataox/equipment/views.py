@@ -114,18 +114,18 @@ class ContributeView(HTMLView, MappingView, StoreView):
 
 class SearchView(EquipmentView, elasticsearch_views.SearchView):
     @property
-    def facets(self):
-        facets = {
+    def aggregations(self):
+        aggregations = {
             'institution': {'terms': {'field': 'formalOrganisation.uri', 'size': 100}},
             'basedNear': {'terms': {'field': 'basedNear.uri', 'size': 100}},
             'category': {'terms': {'field': 'category.uri'}},
             'shareability': {'terms': {'field': 'shareability.uri'}},
         }
         if 'filter.formalOrganisation.uri' in self.request.GET:
-            facets['department'] = {'terms': {'field': 'equipmentOf.uri', 'size': 100}}
+            aggregations['department'] = {'terms': {'field': 'equipmentOf.uri', 'size': 100}}
         if 'filter.category.uri' in self.request.GET:
-            facets['subcategory'] = {'terms': {'field': 'subcategory.uri'}}
-        return facets
+            aggregations['subcategory'] = {'terms': {'field': 'subcategory.uri'}}
+        return aggregations
 
         #          'oxford': {'terms': {'field': 'oxfordUniversityEquipment'}},
 

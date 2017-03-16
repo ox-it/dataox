@@ -46,7 +46,7 @@ class DocView(CourseView, desc_views.DocView): pass
 class SearchView(CourseView, elasticsearch_views.SearchView):
     default_types = ('course',)
 
-    facets = {'subject': {'terms': {'field': 'subject.uri',
+    aggregations = {'subject': {'terms': {'field': 'subject.uri',
                                         'size': 20}},
               'offeredBy': {'terms': {'field': 'offeredBy.uri',
                                       'size': 20}}}

@@ -105,25 +105,25 @@
     <div class="sidebar-item">
       <h2>refine by&hellip;</h2>
       {% if facets.shareability %}
-        {% include "elasticsearch/facet.html" with facet=facets.shareability facet_name="shareability" terse=1 %}
+        {% include "elasticsearch/aggregation.html" with facet=facets.shareability facet_name="shareability" terse=1 %}
       {% endif %}
       {% if facets.institution %}
-        {% include "elasticsearch/facet.html" with facet=facets.institution facet_name="institution" terse=1 %}
+        {% include "elasticsearch/aggregation.html" with facet=facets.institution facet_name="institution" terse=1 %}
       {% endif %}
       {% if facets.department %}
-        {% include "elasticsearch/facet.html" with facet=facets.department facet_name="department" terse=1 %}
+        {% include "elasticsearch/aggregation.html" with facet=facets.department facet_name="department" terse=1 %}
       {% endif %}
       {% if facets.basedNear %}
-        {% include "elasticsearch/facet.html" with facet=facets.basedNear facet_name="location" terse=1 %}
+        {% include "elasticsearch/aggregation.html" with facet=facets.basedNear facet_name="location" terse=1 %}
       {% endif %}
       {% if facets.category %}
-        {% include "elasticsearch/facet.html" with facet=facets.category facet_name="category" terse=1 %}
+        {% include "elasticsearch/aggregation.html" with facet=facets.category facet_name="category" terse=1 %}
       {% endif %}
       {% if facets.subcategory %}
-        {% include "elasticsearch/facet.html" with facet=facets.subcategory facet_name="subcategory" terse=1 %}
+        {% include "elasticsearch/aggregation.html" with facet=facets.subcategory facet_name="subcategory" terse=1 %}
       {% endif %}
       {% if facets.oxford %}
-        {% include "elasticsearch/facet.html" with facet=facets.oxford facet_name="Oxford?" terse=1 %}
+        {% include "elasticsearch/aggregation.html" with facet=facets.oxford facet_name="Oxford?" terse=1 %}
       {% endif %}
     </div>
   {% endif %}

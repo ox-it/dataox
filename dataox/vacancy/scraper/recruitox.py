@@ -5,7 +5,7 @@ import re
 import time
 import urllib.parse
 import urllib.request
-from io import StringIO
+from io import BytesIO
 
 import dateutil.parser
 from django.db.models import Q
@@ -57,7 +57,7 @@ class RecruitOxScraper(Scraper):
         response = urllib.request.urlopen(request)
         # Hack because the next v20 of CoreHR adds leading whitespace to the XML feed.
         if parser_cls == etree.XMLParser:
-            response = StringIO(response.read().strip())
+            response = BytesIO(response.read().strip())
         return etree.parse(response,
                            parser=parser_cls(encoding="WINDOWS-1252"))
 
@@ -144,7 +144,7 @@ class RecruitOxScraper(Scraper):
             del anchor.attrib['target']
         description.attrib['xmlns'] = 'http://www.w3.org/1999/xhtml'
 
-        return etree.tostring(description)
+        return etree.tostring(description).decode()
 
     def get_parsed_date(self, dt):
         if not dt:

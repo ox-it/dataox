@@ -4,6 +4,8 @@ import tempfile
 
 from celery import shared_task
 from django.conf import settings
+from django.dispatch import receiver
+
 from humfrey.signals import graphs_updated
 from humfrey.streaming.csv import CSVSerializer
 from humfrey.utils.user_agents import USER_AGENTS
@@ -73,8 +75,10 @@ WHERE {
 """
 
 @shared_task(name='dataox.equipment.update_seesec', ignore_result=True)
-def update_seesec(sender, store, graphs, when, **kwargs):
-    if store.slug != 'seesec':
+def update_seesec(store_id, graphs):
+    from humfrey.sparql.models import Store
+    store = Store.objects.get(pk=store_id)
+    if store_id != 'seesec':
         return
     
     if not (watch_graphs & graphs):
@@ -105,14 +109,16 @@ def update_seesec(sender, store, graphs, when, **kwargs):
     else:
         logger.info("Successfully uploaded equipment to SEESEC")
 
-graphs_updated.connect(update_seesec.delay)
+
+@receiver(graphs_updated)
+def graphs_updated_receiver(sender, store_id, graphs, **kwargs):
+    update_seesec.delay(store_id, graphs)
+
 
 if __name__ == '__main__':
     from datetime import datetime
-    from humfrey.sparql.models import Store
     logging.basicConfig(level=logging.DEBUG)
 
     update_seesec(None,
-                    store=Store.objects.get(slug='seesec'),
-                    graphs=set([rdflib.URIRef('https://data.ox.ac.uk/graph/equipment/facilities')]),
-                    when=datetime.now())
+                    store_id='seesec',
+                    graphs=set([rdflib.URIRef('https://data.ox.ac.uk/graph/equipment/facilities')]))
