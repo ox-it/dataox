@@ -6,7 +6,7 @@ class UNOConverter(object):
         text = []
         for line in unoconv.stdout:
             text.append(line)
-        text = ''.join(text).decode('utf-8', 'ignore')
+        text = b''.join(text).decode('utf-8', 'ignore')
         # The replacement is to work around an OpenOffice/LibreOffice bug:
         # https://bugs.freedesktop.org/show_bug.cgi?id=51905
         text = text.replace(u'\x1e', u'\N{NON-BREAKING HYPHEN}')
@@ -20,7 +20,7 @@ class PDFConverter(object):
         text = []
         for line in pdftotext.stdout:
             text.append(line)
-        text = ''.join(text).decode('utf-8', 'ignore')
+        text = b''.join(text).decode('utf-8', 'ignore')
         return text
 
 converters = {

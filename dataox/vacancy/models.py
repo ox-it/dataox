@@ -98,13 +98,15 @@ class Vacancy(DirtyFieldsMixin, models.Model):
             except (IndexError, KeyError):
                 logger.error("Couldn't find department for code %s", department)
                 department = None
+
+        location = self.location.replace('-', ' ').replace('/', ' ')
         if department:
             query = {'query': {'bool': {'must': {'term': {'ancestorOrganization.uri': department}},
-                                        'should': {'query_string': {'query': self.location.replace('-', ' ')}}}},
-                     'filter': {'term': {'graph.uri': 'https://data.ox.ac.uk/graph/oxpoints/data'}}}
+                                        'should': {'query_string': {'query': location}},
+                                        'filter': {'term': {'graph.uri': 'https://data.ox.ac.uk/graph/oxpoints/data'}}}}}
         else:
-            query = {'query': {'query_string': {'query': self.location.replace('-', ' ')}},
-                     'filter': {'term': {'graph.uri': 'https://data.ox.ac.uk/graph/oxpoints/data'}}}
+            query = {'query': {'bool': {'must': {'query_string': {'query': location}},
+                                        'filter': {'term': {'graph.uri': 'https://data.ox.ac.uk/graph/oxpoints/data'}}}}}
 
         results = search_endpoint.query(query)
         hits = results['hits']['hits']
@@ -123,12 +125,12 @@ class Vacancy(DirtyFieldsMixin, models.Model):
         # And now find a location
         search_endpoint = ElasticSearchEndpoint(store_slug, 'spatial-thing')
         if site_uris:
-            query = {'query': {'bool': {'must': {'query_string': {'query': self.location}},
-                                        'should': [{'terms': {'uri': site_uris}}]}},
-                     'filter': {'term': {'graph.uri': 'https://data.ox.ac.uk/graph/oxpoints/data'}}}
+            query = {'query': {'bool': {'must': {'query_string': {'query': location}},
+                                        'should': [{'terms': {'uri': site_uris}}],
+                                        'filter': {'term': {'graph.uri': 'https://data.ox.ac.uk/graph/oxpoints/data'}}}}}
         else:
-            query = {'query': {'query_string': {'query': self.location}},
-                     'filter': {'term': {'graph.uri': 'https://data.ox.ac.uk/graph/oxpoints/data'}}}
+            query = {'query': {'bool': {'must': {'query_string': {'query': location}},
+                                        'filter': {'term': {'graph.uri': 'https://data.ox.ac.uk/graph/oxpoints/data'}}}}}
         results = search_endpoint.query(query)
         hits = results['hits']['hits']
         if hits:
@@ -314,14 +316,14 @@ class Document(DirtyFieldsMixin, models.Model):
             content_disposition = response.headers['Content-Disposition']
             if not content_disposition.startswith('attachment'):
                 content_disposition = 'attachment; ' + content_disposition
-            target_filename = urllib.quote(cgi.parse_header(content_disposition)[1]['filename'], '')
+            target_filename = urllib.parse.quote(cgi.parse_header(content_disposition)[1]['filename'], '')
         except KeyError:
             target_filename = '{0}{1}'.format(self.id, mimetypes.guess_extension(self.mimetype) or '.obj')
         else:
             if self.mimetype in ('binary/octet-stream', 'application/octet-stream'):
                 self.mimetype, _ = mimetypes.guess_type(target_filename)
 
-        self.file_path = os.path.join(file_path_base, self.vacancy.vacancy_id.encode('utf-8'), target_filename)
+        self.file_path = os.path.join(file_path_base, self.vacancy.vacancy_id, target_filename)
         self.local_url = '%s%s/%s' % (file_url_base, self.vacancy.vacancy_id, target_filename)
 
         with tempfile.NamedTemporaryFile(delete=False) as f:
@@ -331,11 +333,8 @@ class Document(DirtyFieldsMixin, models.Model):
                     break
                 f.write(block)
 
-        try:
+        if 'last-modified' in response.headers:
             last_modified = _parse_http_date(response.headers['last-modified'])
-        except KeyError:
-            pass
-        else:
             last_modified_ts = time.mktime(last_modified.timetuple())
             os.utime(f.name, (last_modified_ts, last_modified_ts))
 

@@ -170,6 +170,7 @@ ENDPOINT_GRAPH = 'http://localhost:3030/public/data'
 
 IMAGE_CACHE_DIRECTORY = os.environ.get('IMAGE_CACHE_DIRECTORY')
 DOWNLOAD_CACHE = os.environ.get('DOWNLOAD_CACHE_DIRECTORY')
+SOURCE_DIRECTORY = os.environ.get('SOURCE_DIRECTORY')
 
 HUMFREY_FEEDS = {
     'organization': 'dataox.feeds.organization.OrganizationFeedView',
