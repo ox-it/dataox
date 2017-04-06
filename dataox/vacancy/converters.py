@@ -1,4 +1,6 @@
 import subprocess
+import unicodedata
+
 
 class UNOConverter(object):
     def convert_to_text(self, file_path, mimetype):
@@ -10,7 +12,7 @@ class UNOConverter(object):
         # The replacement is to work around an OpenOffice/LibreOffice bug:
         # https://bugs.freedesktop.org/show_bug.cgi?id=51905
         text = text.replace(u'\x1e', u'\N{NON-BREAKING HYPHEN}')
-        return text
+        return unicodedata.normalize('NFC', text)
 
 class PDFConverter(object):
     def convert_to_text(self, file_path, mimetype):
@@ -21,7 +23,7 @@ class PDFConverter(object):
         for line in pdftotext.stdout:
             text.append(line)
         text = b''.join(text).decode('utf-8', 'ignore')
-        return text
+        return unicodedata.normalize('NFC', text)
 
 converters = {
     'application/pdf': PDFConverter,
