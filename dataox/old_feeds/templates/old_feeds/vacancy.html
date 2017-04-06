@@ -48,7 +48,7 @@
 
 {% for vacancy in vacancies %}
 <section id="vacancy-{{ vacancy.id }}">
-  <h2>{% if vacancy.webpage %}<a href="{{ vacancy.webpage }}">{{ vacancy.label }}</a>{% else %}{{ vacancy.label }}{% endif %}</h2>
+  <h2>{% if vacancy.webpage %}<a href="{{ vacancy.webpage.uri }}">{{ vacancy.label }}</a>{% else %}{{ vacancy.label }}{% endif %}</h2>
   <p>Closes: <strong>{{ vacancy.closes.toPython|default:"<em>unknown</em>" }}</strong>; salary: <strong>{{ vacancy.salary.label|default:"<em>not specified</em>" }}</strong></p>{% if vacancy.html_description %}
   {{ vacancy.html_description|sanitize_html }}{% endif %}
 </section>
