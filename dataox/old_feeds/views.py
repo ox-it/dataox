@@ -178,18 +178,21 @@ class VacancyView(FeedView, RDFView, StoreView, MappingView):
         return """\
 DESCRIBE ?vacancy ?organizationPart ?location ?address ?contact ?phone ?salary {{
   VALUES ?vacancy {{ {vacancies} }} .
-  {{ }}
-  UNION
-  {{ ?vacancy oo:organizationPart|oo:formalOrganization ?organizationPart
-     OPTIONAL {{ ?organizationPart v:adr ?address }} }}
-  UNION
-  {{ ?vacancy foaf:based_near ?location
-     OPTIONAL {{ ?location v:adr ?address }} }}
-  UNION
-  {{ ?vacancy oo:contact ?contact
-     OPTIONAL {{ ?contact v:tel ?phone }} }}
-  UNION
-  {{ ?vacancy vacancy:salary ?salary }}
+  OPTIONAL {{
+    ?vacancy oo:organizationPart|oo:formalOrganization ?organizationPart
+    OPTIONAL {{ ?organizationPart v:adr ?address }}
+  }}
+  OPTIONAL {{
+    ?vacancy foaf:based_near ?location
+    OPTIONAL {{ ?location v:adr ?address }}
+  }}
+  OPTIONAL {{
+    ?vacancy oo:contact ?contact
+    OPTIONAL {{ ?contact v:tel ?phone }}
+  }}
+  OPTIONAL {{
+    ?vacancy vacancy:salary ?salary
+  }}
 }}""".format(vacancies=" ".join(vacancy.n3() for vacancy in vacancies))
 
     @property
