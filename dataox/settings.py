@@ -327,4 +327,6 @@ HUMFREY_FEEDS = {
     'organization': 'dataox.feeds.organization.OrganizationFeedView',
 }
 
+WEBAUTH_LDAP_USER = os.environ.get('WEBAUTH_LDAP_USER')
+
 from .maintenancemode import MAINTENANCE_MODE
