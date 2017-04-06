@@ -76,9 +76,9 @@ class Vacancy(object):
         html_description, text_description = None, None
         for comment in self.all.rdfs_comment:
             if comment.datatype in (NS.xtypes['Fragment-XHTML'], NS.xtypes['Fragment-HTML']):
-                html_description = unicode(comment)
+                html_description = str(comment)
             else:
-                text_description = unicode(comment)
+                text_description = str(comment)
         vacancy = {'label': self.label,
                    'id': self.id,
                    'uri': self.uri,
@@ -138,13 +138,13 @@ class Vacancy(object):
         if self.foaf_homepage:
             vacancy.append(E('webpage', self.foaf_homepage.uri))
         if self.actual_label:
-            vacancy.append(E('label', unicode(self.actual_label)))
+            vacancy.append(E('label', str(self.actual_label)))
         if self.opens:
             vacancy.append(E('opens', self.opens.isoformat()))
         if self.closes:
             vacancy.append(E('closes', self.closes.isoformat()))
         if self.dc_spatial:
-            vacancy.append(E('location', unicode(self.dc_spatial)))
+            vacancy.append(E('location', str(self.dc_spatial)))
         for comment in self.all.rdfs_comment:
             if comment.datatype == NS.xtypes['Fragment-XHTML']:
                 vacancy.append(E('description',
@@ -169,7 +169,7 @@ class Vacancy(object):
                                  media_type='application/xhtml+xml'))
             else:
                 vacancy.append(E('description',
-                                 unicode(comment),
+                                 str(comment),
                                  media_type='text/plain',
                                  format='text/plain'))
         for key, predicate in self.related:
@@ -184,7 +184,7 @@ class Vacancy(object):
             if related.foaf_logo:
                 sub.append(E('logo', related.foaf_logo.uri))
             if related.actual_label:
-                sub.append(E('label', unicode(related.actual_label)))
+                sub.append(E('label', str(related.actual_label)))
             if related.v_adr:
                 address = E('address')
                 for p, n in [('v:extended-address', 'extended-address'),
@@ -193,36 +193,36 @@ class Vacancy(object):
                              ('v:postal-code', 'postal-code'),
                              ('v:country-name', 'country')]:
                     if related.v_adr.get(p):
-                        address.append(E(n, unicode(related.v_adr.get(p))))
+                        address.append(E(n, str(related.v_adr.get(p))))
                 sub.append(address)
             if related.geo_lat and related.geo_long:
                 sub.append(E('location',
-                    E('lat', unicode(related.geo_lat)),
-                    E('long', unicode(related.geo_long))))
+                    E('lat', str(related.geo_lat)),
+                    E('long', str(related.geo_long))))
             vacancy.append(sub)
 
         salary = self.vacancy_salary
         if isinstance(salary, BaseResource):
             salary_elem = E('salary')
             if salary.rdfs_label:
-                salary_elem.append(E('label', unicode(salary.rdfs_label)))
+                salary_elem.append(E('label', str(salary.rdfs_label)))
             if salary.gr_hasMinCurrencyValue:
-                salary_elem.append(E('lower', unicode(salary.gr_hasMinCurrencyValue)))
+                salary_elem.append(E('lower', str(salary.gr_hasMinCurrencyValue)))
             if salary.gr_hasMinCurrencyValue:
-                salary_elem.append(E('upper', unicode(salary.gr_hasMaxCurrencyValue)))
+                salary_elem.append(E('upper', str(salary.gr_hasMaxCurrencyValue)))
             if salary.gr_hasCurrency:
-                salary_elem.append(E('currency', unicode(salary.gr_hasCurrency)))
+                salary_elem.append(E('currency', str(salary.gr_hasCurrency)))
             vacancy.append(salary_elem)
 
         contact = self.oo_contact
         if isinstance(contact, BaseResource):
             contact_elem = E('contact')
             if contact.actual_label:
-                contact_elem.append(E('label', unicode(contact.actual_label)))
+                contact_elem.append(E('label', str(contact.actual_label)))
             if isinstance(contact.v_email, BaseResource):
                 contact_elem.append(E('email', contact.v_email.uri.replace('mailto:', '', 1)))
             if isinstance(contact.v_tel, BaseResource):
-                contact_elem.append(E('phone', unicode(contact.v_tel.label)))
+                contact_elem.append(E('phone', str(contact.v_tel.label)))
             vacancy.append(contact_elem)
 
         document_urls = E('document_urls')
@@ -247,7 +247,7 @@ class Vacancy(object):
             employer_url = 'http://www.ox.ac.uk/'
 
         job = E('job',
-            E('requisition-number', unicode(self.id)),
+            E('requisition-number', str(self.id)),
             E('employer-name', employer_name),
             E('employer-url', employer_url),
         )
@@ -266,14 +266,14 @@ class Vacancy(object):
             pass
         else:
             if salary is not None:
-                salary = E('p', E('em', "Salary: " + unicode(salary)))
+                salary = E('p', E('em', "Salary: " + str(salary)))
                 html_comment.text, salary.tail = None, html_comment.text
                 html_comment.insert(0, salary)
         job.append(E('description',
                      lxml.etree.tostring(html_comment, method='html')))
 
         if self.actual_label:
-            job.append(E('title', unicode(self.actual_label)))
+            job.append(E('title', str(self.actual_label)))
         if self.opens:
             job.append(E('created-on', self.opens.strftime('%Y-%m-%d')))
         if self.closes:
@@ -292,7 +292,7 @@ class Vacancy(object):
                          ('v:postal-code', 'postal-code'),
                          ('v:country-name', 'country')]:
                 if adr.get(p):
-                    address_data[n] = unicode(adr.get(p))
+                    address_data[n] = str(adr.get(p))
         if 'city' not in address_data:
             address_data['city'] = 'Oxford'
         if 'country' not in address_data:
