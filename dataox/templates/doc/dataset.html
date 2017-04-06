@@ -7,7 +7,7 @@
     <div class="badges" style="float:right">
       {% if subject.dcterms_license.foaf_logo %}
         <a href="{{ subject.dcterms_license.doc_url }}">
-          <img src="{{ subject.dcterms_license.foaf_logo.uri }}" alt="{{ subject.dcterms_license }}"/>
+          <img src="{{ subject.dcterms_license.foaf_logo.uri }}" alt="{{ subject.dcterms_license.label }}"/>
         </a>
       {% endif %}
       {% if subject.open_data_stars %}
