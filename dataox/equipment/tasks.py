@@ -81,7 +81,7 @@ def update_seesec(store_id, graphs):
     if store_id != 'seesec':
         return
     
-    if not (watch_graphs & graphs):
+    if not (watch_graphs & set(graphs)):
         logger.debug("No SEESEC graphs updated; not updating")
         return 
 
