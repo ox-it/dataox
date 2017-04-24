@@ -38,7 +38,7 @@ class OxpointsExtents(Transform):
         endpoint = Endpoint(transform_manager.store.query_endpoint)
         graph = self.get_graph(endpoint)
 
-        with open(transform_manager('rdf'), 'w') as target:
+        with open(transform_manager('rdf'), 'wb') as target:
             graph.serialize(target)
 
         return target.name
