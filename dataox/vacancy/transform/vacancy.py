@@ -40,10 +40,10 @@ class RetrieveVacancies(Transform):
             logger.info("Nothing changed; we're done here.")
             return
 
-        transforms = {'current': {'file': open(transform_manager('rdf'), 'w'),
+        transforms = {'current': {'file': open(transform_manager('rdf'), 'wb'),
                                   'transform': self.current_transform,
                                   'vacancies': []},
-                      'archive': {'file': open(transform_manager('rdf'), 'w'),
+                      'archive': {'file': open(transform_manager('rdf'), 'wb'),
                                   'transform': self.archive_transform,
                                   'vacancies': []}}
 
