@@ -63,11 +63,11 @@
     var searchURL = "{% url "search" %}";
   </script>
   <script type="text/javascript" src="{{ STATIC_URL }}lib/jquery/jquery.min.js"></script>
-  {% compressed_js 'jquery.collapsible' %}
+  {% javascript 'jquery.collapsible' %}
   <script type="text/javascript" src="{{ STATIC_URL }}lib/jquery-ui/jquery-ui.min.js"></script>
   <script type="text/javascript" src="{{ STATIC_URL }}lib/openlayers/OpenLayers.js"></script>
-  {% compressed_js 'dataox' %}
-  {% compressed_js 'equipment' %}
+  {% javascript 'dataox' %}
+  {% javascript 'equipment' %}
   {% block extra_head %}{% endblock %}
   
 
