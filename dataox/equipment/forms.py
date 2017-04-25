@@ -18,8 +18,8 @@ def AdvancedSearchForm(*args, **kwargs):
     reader = codecs.getreader('utf-8')
     results = json.load(reader(urllib.request.urlopen(search_url, json.dumps(q).encode())))
 
-    formal_organisation_choices = [t['term'] for t in results['aggregations']['formalOrganisation']['terms']]
-    based_near_choices = [t['term'] for t in results['aggregations']['basedNear']['terms']]
+    formal_organisation_choices = [t['key'] for t in results['aggregations']['formalOrganisation']['buckets']]
+    based_near_choices = [t['key'] for t in results['aggregations']['basedNear']['buckets']]
 
     labels = get_labels(map(rdflib.URIRef, formal_organisation_choices + based_near_choices),
                         endpoint=store.query_endpoint)
