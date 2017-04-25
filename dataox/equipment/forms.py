@@ -6,17 +6,18 @@ import rdflib
 
 from humfrey.sparql.utils import get_labels
 
+
 def AdvancedSearchForm(*args, **kwargs):
     search_url, store = kwargs.pop('search_url'), kwargs.pop('store')
 
     q = {'size': 0,
-         'facets': {'formalOrganisation': {'terms': {'field': 'formalOrganisation.uri'}},
-                    'basedNear': {'terms': {'field': 'basedNear.uri'}}}}
+         'aggregations': {'formalOrganisation': {'terms': {'field': 'formalOrganisation.uri'}},
+                          'basedNear': {'terms': {'field': 'basedNear.uri'}}}}
 
-    results = json.load(urllib.request.urlopen(search_url, json.dumps(q)))
+    results = json.load(urllib.request.urlopen(search_url, json.dumps(q).encode()))
 
-    formal_organisation_choices = [t['term'] for t in results['facets']['formalOrganisation']['terms']]
-    based_near_choices = [t['term'] for t in results['facets']['basedNear']['terms']]
+    formal_organisation_choices = [t['term'] for t in results['aggregations']['formalOrganisation']['terms']]
+    based_near_choices = [t['term'] for t in results['aggregations']['basedNear']['terms']]
 
     labels = get_labels(map(rdflib.URIRef, formal_organisation_choices + based_near_choices),
                         endpoint=store.query_endpoint)
