@@ -1,3 +1,4 @@
+import codecs
 import json
 import urllib.request
 
@@ -14,7 +15,8 @@ def AdvancedSearchForm(*args, **kwargs):
          'aggregations': {'formalOrganisation': {'terms': {'field': 'formalOrganisation.uri'}},
                           'basedNear': {'terms': {'field': 'basedNear.uri'}}}}
 
-    results = json.load(urllib.request.urlopen(search_url, json.dumps(q).encode()))
+    reader = codecs.getreader('utf-8')
+    results = json.load(reader(urllib.request.urlopen(search_url, json.dumps(q).encode())))
 
     formal_organisation_choices = [t['term'] for t in results['aggregations']['formalOrganisation']['terms']]
     based_near_choices = [t['term'] for t in results['aggregations']['basedNear']['terms']]
@@ -37,6 +39,7 @@ def AdvancedSearchForm(*args, **kwargs):
     form = type('AdvancedSearchForm', (forms.Form,), attrs)
 
     return form(*args, **kwargs)
+
 
 class ContributeForm(forms.Form):
     manufacturer = forms.CharField(label="Manufacturer:")
