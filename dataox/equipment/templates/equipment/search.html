@@ -104,26 +104,26 @@
   {% if facets and hits.total %}
     <div class="sidebar-item">
       <h2>refine by&hellip;</h2>
-      {% if facets.shareability %}
-        {% include "elasticsearch/aggregation.html" with facet=facets.shareability facet_name="shareability" terse=1 %}
+      {% if aggregations.shareability %}
+        {% include "elasticsearch/aggregation.html" with aggregation=aggregations.shareability aggregation_name="shareability" terse=1 %}
       {% endif %}
-      {% if facets.institution %}
-        {% include "elasticsearch/aggregation.html" with facet=facets.institution facet_name="institution" terse=1 %}
+      {% if aggregations.institution %}
+        {% include "elasticsearch/aggregation.html" with aggregation=aggregations.institution aggregation_name="institution" terse=1 %}
       {% endif %}
-      {% if facets.department %}
-        {% include "elasticsearch/aggregation.html" with facet=facets.department facet_name="department" terse=1 %}
+      {% if aggregations.department %}
+        {% include "elasticsearch/aggregation.html" with aggregation=aggregations.department aggregation_name="department" terse=1 %}
       {% endif %}
-      {% if facets.basedNear %}
-        {% include "elasticsearch/aggregation.html" with facet=facets.basedNear facet_name="location" terse=1 %}
+      {% if aggregations.basedNear %}
+        {% include "elasticsearch/aggregation.html" with aggregation=aggregations.basedNear aggregation_name="location" terse=1 %}
       {% endif %}
-      {% if facets.category %}
-        {% include "elasticsearch/aggregation.html" with facet=facets.category facet_name="category" terse=1 %}
+      {% if aggregations.category %}
+        {% include "elasticsearch/aggregation.html" with aggregation=aggregations.category aggregation_name="category" terse=1 %}
       {% endif %}
-      {% if facets.subcategory %}
-        {% include "elasticsearch/aggregation.html" with facet=facets.subcategory facet_name="subcategory" terse=1 %}
+      {% if aggregations.subcategory %}
+        {% include "elasticsearch/aggregation.html" with aggregation=aggregations.subcategory aggregation_name="subcategory" terse=1 %}
       {% endif %}
-      {% if facets.oxford %}
-        {% include "elasticsearch/aggregation.html" with facet=facets.oxford facet_name="Oxford?" terse=1 %}
+      {% if aggregations.oxford %}
+        {% include "elasticsearch/aggregation.html" with aggregation=aggregations.oxford aggregation_name="Oxford?" terse=1 %}
       {% endif %}
     </div>
   {% endif %}

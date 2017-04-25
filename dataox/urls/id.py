@@ -14,7 +14,7 @@ class IdView(desc_views.IdView):
         return reverse('doc-generic', host=settings.DEFAULT_HOST)
     @property
     def desc_view(self):
-        return reverse('data', host=settings.DEFAULT_HOST)
+        return reverse('desc', host=settings.DEFAULT_HOST)
 
 urlpatterns = [
     url(r'^.*', IdView.as_view(), {}, 'id'),
