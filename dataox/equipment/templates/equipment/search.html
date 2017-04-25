@@ -105,25 +105,25 @@
     <div class="sidebar-item">
       <h2>refine by&hellip;</h2>
       {% if aggregations.shareability %}
-        {% include "elasticsearch/aggregation.html" with aggregation=aggregations.shareability aggregation_name="shareability" terse=1 %}
+        {% include "elasticsearch/aggregation.html" with aggregation=aggregations.shareability aggregation_name="shareability" %}
       {% endif %}
       {% if aggregations.institution %}
-        {% include "elasticsearch/aggregation.html" with aggregation=aggregations.institution aggregation_name="institution" terse=1 %}
+        {% include "elasticsearch/aggregation.html" with aggregation=aggregations.institution aggregation_name="institution" %}
       {% endif %}
       {% if aggregations.department %}
-        {% include "elasticsearch/aggregation.html" with aggregation=aggregations.department aggregation_name="department" terse=1 %}
+        {% include "elasticsearch/aggregation.html" with aggregation=aggregations.department aggregation_name="department" %}
       {% endif %}
       {% if aggregations.basedNear %}
-        {% include "elasticsearch/aggregation.html" with aggregation=aggregations.basedNear aggregation_name="location" terse=1 %}
+        {% include "elasticsearch/aggregation.html" with aggregation=aggregations.basedNear aggregation_name="location" %}
       {% endif %}
       {% if aggregations.category %}
-        {% include "elasticsearch/aggregation.html" with aggregation=aggregations.category aggregation_name="category" terse=1 %}
+        {% include "elasticsearch/aggregation.html" with aggregation=aggregations.category aggregation_name="category" %}
       {% endif %}
       {% if aggregations.subcategory %}
-        {% include "elasticsearch/aggregation.html" with aggregation=aggregations.subcategory aggregation_name="subcategory" terse=1 %}
+        {% include "elasticsearch/aggregation.html" with aggregation=aggregations.subcategory aggregation_name="subcategory" %}
       {% endif %}
       {% if aggregations.oxford %}
-        {% include "elasticsearch/aggregation.html" with aggregation=aggregations.oxford aggregation_name="Oxford?" terse=1 %}
+        {% include "elasticsearch/aggregation.html" with aggregation=aggregations.oxford aggregation_name="Oxford?" %}
       {% endif %}
     </div>
   {% endif %}
