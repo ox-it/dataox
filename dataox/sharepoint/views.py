@@ -67,7 +67,7 @@ class UserProfileImageView(RedisView, ContentNegotiatedView):
         sp_request.add_header('Authorization',
                               'Basic ' +
                               base64.b64encode(':'.join([credential.username,
-                                                         credential.password])))
+                                                         credential.password]).encode()).decode())
         
         try:
             response = urllib.request.urlopen(sp_request)
