@@ -39,10 +39,11 @@ class UserProfileImageView(RedisView, ContentNegotiatedView):
         redis = self.get_redis_client()
         value = redis.get(key)
         if value:
-            content_type, content = value.split('\0', 1)
+            content_type, content = value.split(b'\0', 1)
+            content_type = content_type.decode()
         else:
             content_type, content = self.get_image(url)
-            redis.set(key, '\0'.join((content_type, content)))
+            redis.set(key, b'\0'.join((content_type.encode(), content)))
             redis.expire(key, random.randrange(4*3600, 8*3600))
         
         response = HttpResponse(content)
