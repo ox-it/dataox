@@ -76,10 +76,10 @@ class FeedView(HTMLView, JSONPView):
         elif isinstance(value, rdflib.Literal):
             value = value.toPython()
             if isinstance(value, rdflib.Literal):
-                value = unicode(value)
+                value = str(value)
             return self.simplify_for_json(value)
         elif isinstance(value, (rdflib.URIRef, rdflib.BNode)):
-            return unicode(value)
+            return str(value)
         else:
             return super(FeedView, self).simplify_for_json(value)
 
