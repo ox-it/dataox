@@ -271,6 +271,9 @@ class Vacancy(object):
                 salary = E('p', E('em', "Salary: " + str(salary)))
                 html_comment.text, salary.tail = None, html_comment.text
                 html_comment.insert(0, salary)
+
+        if isinstance(html_comment, bytes):
+            html_comment = html_comment.decode('utf-8')
         job.append(E('description',
                      lxml.etree.tostring(html_comment, method='html')))
 
