@@ -152,6 +152,8 @@ class Vacancy(object):
                                  media_type='application/xhtml+xml',
                                  ))
                 html_comment = xhtml_to_html(comment)
+                if isinstance(html_comment, bytes):
+                    html_comment = html_comment.decode('utf-8')
                 vacancy.append(E('description',
                                  html_comment,
                                  format='application/xhtml+xml',
