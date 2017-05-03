@@ -202,18 +202,18 @@ class BrowseView(EquipmentView, CannedQueryView, RDFView, HTMLView, MappingView)
     def finalize_context(self, request, context, notation):
         self.undefer()
         graph = context['_graph']
-        context['equipment'] = map(self.resource, set(graph.subjects(NS.rdf.type, NS.oo.Equipment)) \
-                                                | set(graph.subjects(NS.rdf.type, NS.cerif.Equipment)))
+        context['equipment'] = list(map(self.resource, set(graph.subjects(NS.rdf.type, NS.oo.Equipment)) \
+                                                     | set(graph.subjects(NS.rdf.type, NS.cerif.Equipment))))
         context['equipment'].sort(key=lambda s:s.label)
         if self.notation:
             concept = graph.value(None, NS.skos.notation, self.notation)
             if not concept:
                 raise Http404
             context['concept'] = self.resource(concept)
-            context['concepts'] = map(self.resource, graph.objects(concept, NS.skos.narrower))
+            context['concepts'] = list(map(self.resource, graph.objects(concept, NS.skos.narrower)))
             context['level'] = 'subcategory' if '/' in self.notation else 'category'
         else:
-            context['concepts'] = map(self.resource, graph.objects(self.concept_scheme, NS.skos.hasTopConcept))
+            context['concepts'] = list(map(self.resource, graph.objects(self.concept_scheme, NS.skos.hasTopConcept)))
             context['level'] = 'index'
         context['concepts'].sort(key=lambda s:s.label)
 
