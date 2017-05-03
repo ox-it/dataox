@@ -98,7 +98,7 @@ def add_root_elements(self, handler):
         handler.addQuickElement(u"category", cat)
     if self.feed['feed_copyright'] is not None:
         handler.addQuickElement(u"copyright", self.feed['feed_copyright'])
-    handler.addQuickElement(u"lastBuildDate", rfc2822_date(self.latest_post_date()).decode('utf-8'))
+    handler.addQuickElement(u"lastBuildDate", rfc2822_date(self.latest_post_date()))
     if self.feed['ttl'] is not None:
         handler.addQuickElement(u"ttl", self.feed['ttl'])        
 
