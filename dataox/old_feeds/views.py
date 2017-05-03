@@ -66,7 +66,7 @@ class FeedView(HTMLView, JSONPView):
 
         for item in context['items']:
             feed.add_item(item['title'], item['link'], item['description'], pubdate=item['date'])
-        return HttpResponse(feed.writeString('utf-8'), mimetype=mimetype)
+        return HttpResponse(feed.writeString('utf-8'), content_type=mimetype)
 
     def simplify_for_json(self, value):
         if isinstance(value, BaseResource):
