@@ -271,7 +271,7 @@ class Vacancy(object):
                 html_comment.insert(0, salary)
 
         job.append(E('description',
-                     lxml.etree.tostring(html_comment, method='html')))
+                     lxml.etree.tostring(html_comment, method='html').decode()))
 
         if self.actual_label:
             job.append(E('title', str(self.actual_label)))
