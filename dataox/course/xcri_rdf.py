@@ -75,7 +75,7 @@ class XCRICAPSerializer(BaseXCRICAPSerializer):
 
     def session_content(self, xg, session, i):
         xg.startElement('dc:identifier', {})
-        xg.characters(unicode(i))
+        xg.characters(str(i))
         xg.endElement('dc:identifier')
         self.serialize_common(xg, session)
         self.serialize_common_descriptive_elements(xg, session)
@@ -109,13 +109,13 @@ class XCRICAPSerializer(BaseXCRICAPSerializer):
         nodes = []
         if memberApplyTo:
             nodes.extend([u"Members of the University of Oxford should apply via ",
-                      E.a(unicode(memberApplyTo), href=unicode(memberApplyTo))])
+                      E.a(str(memberApplyTo), href=str(memberApplyTo))])
         if memberApplyTo and applyTo:
             nodes.extend([u", and members of the public should apply via ",
-                      E.a(unicode(applyTo), href=unicode(applyTo))])
+                      E.a(str(applyTo), href=str(applyTo))])
         elif applyTo:
             nodes.extend([u"Apply via ",
-                      E.a(unicode(applyTo), href=unicode(applyTo))])
+                      E.a(str(applyTo), href=str(applyTo))])
         nodes.append(u'.')
         div = E.div(E.p(*nodes))
         xg.startElement('xcri:applicationProcedure', {})
