@@ -85,8 +85,8 @@ class Vacancy(DirtyFieldsMixin, models.Model):
     def closing_date_dt(self):
         return dateutil.parser.parse(self.closing_date) if self.closing_date else None
     
-    def __unicode__(self):
-        return u'{0}: {1}'.format(self.vacancy_id, self.title)
+    def __str__(self):
+        return '{0}: {1}'.format(self.vacancy_id, self.title)
 
     def update_location_fields(self, store_slug, department=None):
         # Perform a query against ElasticSearch to find an organization for this location
@@ -224,14 +224,14 @@ class Vacancy(DirtyFieldsMixin, models.Model):
             # This is no longer used, as we end up losing information.
             locale_code = settings.LANGUAGE_CODE
             locale.setlocale(locale.LC_ALL, ('%s_%s' % (locale_code[:2].lower(), locale_code[3:].upper()), 'UTF8'))
-            label = u'Grade %s' % self.salary_grade
+            label = 'Grade %s' % self.salary_grade
             if self.salary_lower:
-                label += u': £' + locale.format('%d', self.salary_lower, grouping=True)
+                label += ': £' + locale.format('%d', self.salary_lower, grouping=True)
                 triples.append((salary_uri, NS.gr.hasMinCurrencyValue, rdflib.Literal(self.salary_lower)))
                 if self.salary_upper and self.salary_lower != self.salary_upper:
-                    label += u' to £' + locale.format('%d', self.salary_upper, grouping=True)
+                    label += ' to £' + locale.format('%d', self.salary_upper, grouping=True)
                 if self.salary_discretionary:
-                    label += u', with discretionary range to £' + locale.format('%d', self.salary_discretionary, grouping=True)
+                    label += ', with discretionary range to £' + locale.format('%d', self.salary_discretionary, grouping=True)
             if self.salary_upper:
                 triples.append((salary_uri, NS.gr.hasMaxCurrencyValue, rdflib.Literal(self.salary_discretionary or self.salary_upper)))
                 if self.salary_upper == self.salary_lower:
@@ -241,9 +241,9 @@ class Vacancy(DirtyFieldsMixin, models.Model):
 
             # Our recruit.ox regex can only handle GBP anyway, so the first
             # two cases will currently never happen.
-            if u'€' in self.salary:
+            if '€' in self.salary:
                 currency = 'EUR'
-            elif u'$' in self.salary:
+            elif '$' in self.salary:
                 currency = 'USD'
             else:
                 currency = 'GBP'
@@ -296,8 +296,8 @@ class Document(DirtyFieldsMixin, models.Model):
     mimetype = models.CharField(max_length=64, blank=True)
     text = models.TextField()
 
-    def __unicode__(self):
-        return u'{0}: {1}'.format(self.vacancy.vacancy_id, self.title)
+    def __str__(self):
+        return '{0}: {1}'.format(self.vacancy.vacancy_id, self.title)
 
     def ensure_present(self, url):
         if self.file_path:
