@@ -25,7 +25,7 @@ def xhtml_to_html(xml, serialize=True):
     html.text, html.tail = xml.text, xml.tail
     html.extend(xml)
     if serialize:
-        return lxml.etree.tostring(html, method='html')
+        return lxml.etree.tostring(html, method='html').decode('utf-8')
     else:
         return html
 
@@ -152,8 +152,6 @@ class Vacancy(object):
                                  media_type='application/xhtml+xml',
                                  ))
                 html_comment = xhtml_to_html(comment)
-                if isinstance(html_comment, bytes):
-                    html_comment = html_comment.decode('utf-8')
                 vacancy.append(E('description',
                                  html_comment,
                                  format='application/xhtml+xml',
@@ -272,8 +270,6 @@ class Vacancy(object):
                 html_comment.text, salary.tail = None, html_comment.text
                 html_comment.insert(0, salary)
 
-        if isinstance(html_comment, bytes):
-            html_comment = html_comment.decode('utf-8')
         job.append(E('description',
                      lxml.etree.tostring(html_comment, method='html')))
 
