@@ -54,7 +54,8 @@ class Account(object):
 
     def widget_templates(self):
         widgets = super(Account, self).widget_templates()
-        service_homepage = self.foaf_accountServiceHomepage._identifier
-        if service_homepage in self._WIDGET_TEMPLATES:
-            widgets.append((self._WIDGET_TEMPLATES[service_homepage], self))
+        if self.get('foaf:accountServiceHomepage'):
+            service_homepage = self.foaf_accountServiceHomepage._identifier
+            if service_homepage in self._WIDGET_TEMPLATES:
+                widgets.append((self._WIDGET_TEMPLATES[service_homepage], self))
         return widgets
