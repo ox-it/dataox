@@ -192,14 +192,14 @@ class CatalogDetailView(CourseView, sparql_views.CannedQueryView, RDFView, Conte
         graph = context['graph']()
         self.wrangle_two_three_codes(graph)
         serializer = XCRICAPSerializer(graph, self.catalog_uri)
-        return HttpResponse(serializer.generator(), mimetype='application/xcri-cap+xml')
+        return HttpResponse(serializer.generator(), content_type='application/xcri-cap+xml')
 
     @renderer(format='xcricap-full', mimetypes=(), name="XCRI-CAP 1.2 (Full)")
     def render_xcricap_full(self, request, context, template_name):
         graph = context['graph']()
         self.wrangle_two_three_codes(graph)
         serializer = XCRICAPSerializer(graph, self.catalog_uri, simple=False)
-        return HttpResponse(serializer.generator(), mimetype='application/xcri-cap+xml')
+        return HttpResponse(serializer.generator(), content_type='application/xcri-cap+xml')
 
     def wrangle_two_three_codes(self, graph):
         """
