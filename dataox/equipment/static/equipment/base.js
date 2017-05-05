@@ -19,7 +19,7 @@ $(function() {
 });
 
 $(function() {
-  $('.facet h3').not('.facet-active h3').collapsible();
-  $('.facet-active h3').collapsible(false);
+  $('.aggregation h3').not('.aggregation-active h3').collapsible();
+  $('.aggregation-active h3').collapsible(false);
 });
 
