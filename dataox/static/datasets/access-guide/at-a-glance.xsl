@@ -235,7 +235,9 @@
   </xsl:template>
 
   <xsl:template match="contact_email">
-    <v:email rdf:resource="mailto:{normalize-space(text())}"/>
+      <xsl:for-each select="tokenize(normalize-space(text()), '[ ,]+')">
+        <v:email rdf:resource="mailto:{.}"/>
+      </xsl:for-each>
   </xsl:template>
 
   <xsl:template match="contact_tel">
