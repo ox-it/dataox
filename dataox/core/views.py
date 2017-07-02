@@ -138,7 +138,7 @@ class OPDView(StoreView, MappingView, RDFView):
             (doc, NS.foaf.primaryTopic, uni),
             (doc, NS.dcterms.licence, rdflib.URIRef('http://creativecommons.org/publicdomain/zero/1.0/')),
         ]
-        query = pkg_resources.resource_string('dataox.core', 'data/openorg-query.rq')
+        query = pkg_resources.resource_string('dataox.core', 'data/openorg-query.rq').decode()
         graph += self.store.query(query % {'uni': uni.n3()})
 
         context = {
