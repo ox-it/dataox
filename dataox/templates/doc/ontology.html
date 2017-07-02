@@ -19,7 +19,7 @@
   </thead>
   <tbody>
 {% for class in subject.defined_classes %}
-    <tr class="row-{% cycle odd,even %}">
+    <tr class="row-{% cycle 'odd' 'even' %}">
       <td>
         <a href="{{ class.doc_url }}"><strong>{{ class.label2 }}</strong></a>
         {% if class.rdfs_subClassOf %}<br/> <abbr title="sub-class of">&#8838;</abbr>
@@ -62,7 +62,7 @@
   </thead>
   <tbody>
 {% for property in subject.defined_properties %}
-    <tr class="row-{% cycle odd,even %}">
+    <tr class="row-{% cycle 'odd' 'even' %}">
       <td>
         <a href="{{ property.doc_url }}"><strong>{{ property.label2 }}</strong></a>
         {% if property.rdfs_domain or property.rdfs_range %}<br/>
