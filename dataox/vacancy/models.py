@@ -39,7 +39,7 @@ category_choices = (
     ('temporary-staffing-service', 'Temporary Staffing Service'),
 )
 
-feed_names = set(['naturejobs', 'jobs-ac-uk', 'all'])
+feed_names = {'naturejobs', 'jobs-ac-uk', 'all'} | {c[0] for c in category_choices}
 feed_uri_prefix = rdflib.URIRef('https://data.ox.ac.uk/id/vacancy-feed/')
 
 def _parse_http_date(ts):
@@ -138,7 +138,6 @@ class Vacancy(DirtyFieldsMixin, models.Model):
             logger.debug("Matched '%s' to spatial-thing '%s' (%s)", self.location, hit.get('label'), hit['uri'])
             self.basedNear = hit['uri']
 
-
     def triples(self, base_uri):
         uri = rdflib.URIRef(base_uri + self.vacancy_id)
         contact_uri = rdflib.URIRef(uri + '/contact')
@@ -204,6 +203,7 @@ class Vacancy(DirtyFieldsMixin, models.Model):
                     triples.append((uri, NS.dc.subject, rdflib.Literal(tag)))
         if self.category:
             triples.append((uri, NS.dcterms.subject, rdflib.URIRef('https://data.ox.ac.uk/id/vacancy-category/' + self.category)))
+            triples.append((feed_uri_prefix + self.category, NS.skos.member, uri))
 
         for document in self.document_set.all():
             if not document.local_url:
