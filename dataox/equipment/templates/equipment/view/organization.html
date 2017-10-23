@@ -11,7 +11,7 @@
   {% endif %}
 
   {% if subject.foaf_homepage %}
-  <p class="homepage">Homepage: <span>{{ subject.foaf_homepage|node }}</span></p>
+  <p class="homepage">Homepage: <span><a href="{{ subject.foaf_homepage.uri }}">{{ subject.foaf_homepage.uri }}</a></span></p>
   {% endif %}
 
 {% if subject.allEquipment %}
