@@ -11,7 +11,7 @@ import pytz
 from humfrey.update.transform.base import Transform
 from humfrey.streaming import RDFXMLSerializer
 
-from ..scraper import RecruitOxScraper, JobsAcScraper
+from ..scraper import RecruitOxScraper
 from ..models import Vacancy, Document
 
 logger = logging.getLogger(__name__)
@@ -25,7 +25,7 @@ class RetrieveVacancies(Transform):
         self.current_transform = current_transform
         self.archive_transform = archive_transform
 
-        self.scrapers = (RecruitOxScraper, JobsAcScraper)
+        self.scrapers = (RecruitOxScraper,)
 
     def execute(self, transform_manager):
         scrapers = [scraper(transform_manager) for scraper in self.scrapers]
