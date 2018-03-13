@@ -69,6 +69,7 @@ class RecruitOxScraper(Scraper):
                 if elem.text:
                     elem.text = elem.text.strip('\n')
                     elem.text = elem.text.strip('\r')
+                    elem.text = elem.text.strip('\f')
         return vacancy_elems
 
     @classmethod
