@@ -105,9 +105,7 @@ def add_root_elements(self, handler):
 class VacancyIndexView(HTMLView, CannedQueryView, ResultSetView):
     query = """
       SELECT ?unit (SAMPLE(?unitLabel_) as ?unitLabel) (COUNT(DISTINCT ?vacancy) as ?vacancies) (SAMPLE(?subUnit_) as ?subUnit) WHERE {
-        {?type rdfs:subClassOf* org:Organization}
-          UNION
-        {?type rdfs:subClassOf* oxp:Department}
+        ?type rdfs:subClassOf* org:Organization
         GRAPH <https://data.ox.ac.uk/graph/oxpoints/data> {
             ?unit rdf:type ?type ; skos:prefLabel ?unitLabel_ .
         }
