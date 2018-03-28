@@ -190,7 +190,7 @@ class RecruitOxScraper(Scraper):
         vacancy.contact_phone = self.normalize_space(vacancy_elem.find('contactPhoneText').text)
 
         location =  self.normalize_space(vacancy_elem.find('orgGroupLocationText').text)
-        if location != vacancy.location:
+        if (location != vacancy.location) or (vacancy.organizationPart == ''):
             vacancy.location = location
             vacancy.update_location_fields(self.transform_manager.store.slug,
                                            self.normalize_space(vacancy_elem.xpath('department/code')[0].text))
