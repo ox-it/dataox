@@ -191,7 +191,7 @@ class RecruitOxScraper(Scraper):
         vacancy.contact_email = self.normalize_space(vacancy_elem.find('contactEmailText').text)
         vacancy.contact_phone = self.normalize_space(vacancy_elem.find('contactPhoneText').text)
 
-        department_code = vacancy_elem.xpath('department/code')[0].text
+        department_code = self.normalize_space(vacancy_elem.xpath('department/code')[0].text)
         search_endpoint = ElasticSearchEndpoint(self.transform_manager.store.slug, 'organization')
         
         if department_code:
