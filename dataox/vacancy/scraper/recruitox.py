@@ -15,6 +15,8 @@ import pytz
 from .base import Scraper
 from ..models import Vacancy, Document
 
+from humfrey.elasticsearch.query import ElasticSearchEndpoint
+
 logger = logging.getLogger(__name__)
 
 
@@ -189,11 +191,22 @@ class RecruitOxScraper(Scraper):
         vacancy.contact_email = self.normalize_space(vacancy_elem.find('contactEmailText').text)
         vacancy.contact_phone = self.normalize_space(vacancy_elem.find('contactPhoneText').text)
 
+        department_code = vacancy_elem.xpath('department/code')[0].text
+        search_endpoint = ElasticSearchEndpoint(self.transform_manager.store.slug, 'organization')
+        
+        if department_code:
+            results = search_endpoint.query({'query': {'term': {'finance': department_code}}})
+            try:
+                department = results['hits']['hits'][0]['_source']['uri']
+            except (IndexError, KeyError):
+                logger.error("Couldn't find department for code %s", department_code)
+                department = None
+
         location =  self.normalize_space(vacancy_elem.find('orgGroupLocationText').text)
-        if (location != vacancy.location) or (vacancy.organizationPart == ''):
+        if (location != vacancy.location) or ((department) and (vacancy.organizationPart != department)):
             vacancy.location = location
             vacancy.update_location_fields(self.transform_manager.store.slug,
-                                           self.normalize_space(vacancy_elem.xpath('department/code')[0].text))
+                                           self.normalize_space(department))
 
         vacancy.opening_date = self.get_parsed_date(vacancy_elem.find('externalOpenDateTime').text)
         vacancy.closing_date = self.get_parsed_date(vacancy_elem.find('externalCloseDateTime').text)

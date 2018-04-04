@@ -53,11 +53,11 @@ class Vacancy(DirtyFieldsMixin, models.Model):
     organizationPart = models.CharField(max_length=256, blank=True)
     formalOrganization = models.CharField(max_length=256, blank=True)
     basedNear = models.CharField(max_length=256, blank=True)
-    
+
     description = models.TextField()
     tags = models.TextField(blank=True)
     category = models.TextField(choices=category_choices, blank=True)
-    
+
     salary = models.CharField(max_length=512, blank=True)
     salary_grade = models.CharField(max_length=32, blank=True)
     salary_lower = models.PositiveIntegerField(null=True, blank=True)
@@ -67,7 +67,7 @@ class Vacancy(DirtyFieldsMixin, models.Model):
     contact_name = models.CharField(max_length=128, blank=True)
     contact_email = models.CharField(max_length=128, blank=True)
     contact_phone = models.CharField(max_length=128, blank=True)
-    
+
     url = models.URLField(max_length=2048, blank=True)
     apply_url = models.URLField(max_length=2048, blank=True)
 
@@ -75,7 +75,7 @@ class Vacancy(DirtyFieldsMixin, models.Model):
     closing_date = models.CharField(max_length=25, null=True, blank=True)
 
     internal = models.BooleanField()
-    
+
     last_checked = models.DateTimeField(auto_now=True)
 
     @property
@@ -84,20 +84,13 @@ class Vacancy(DirtyFieldsMixin, models.Model):
     @property
     def closing_date_dt(self):
         return dateutil.parser.parse(self.closing_date) if self.closing_date else None
-    
+
     def __str__(self):
         return '{0}: {1}'.format(self.vacancy_id, self.title)
 
     def update_location_fields(self, store_slug, department=None):
         # Perform a query against ElasticSearch to find an organization for this location
         search_endpoint = ElasticSearchEndpoint(store_slug, 'organization')
-        if department:
-            results = search_endpoint.query({'query': {'term': {'finance': department}}})
-            try:
-                department = results['hits']['hits'][0]['_source']['uri']
-            except (IndexError, KeyError):
-                logger.error("Couldn't find department for code %s", department)
-                department = None
 
         location = self.location.replace('-', ' ').replace('/', ' ')
         if department:
@@ -151,7 +144,7 @@ class Vacancy(DirtyFieldsMixin, models.Model):
             (uri, NS.rdfs.label, rdflib.Literal(self.title)),
             (uri, NS.skos.notation, rdflib.Literal(self.vacancy_id, datatype=NS.oxnotation.vacancy)),
         ]
-        
+
         if self.closing_date:
             triples.append((uri, NS.vacancy.applicationClosingDate, rdflib.Literal(self.closing_date, datatype=NS.xsd.dateTime)))
 
