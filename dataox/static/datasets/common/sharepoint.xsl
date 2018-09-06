@@ -24,9 +24,6 @@
   <xsl:key name="users" match="/site/lists/list[@name='User Information List']/rows/row" use="@id"/>
 
   <xsl:function name="ex:agent-uri">
-    <xsl:message>
-      <xsl:value-of select="//"/>
-    </xsl:message>
     <xsl:param name="element"/>
     <xsl:for-each select="$element">
       <xsl:variable name="user" select="key('users', @id)"/>
