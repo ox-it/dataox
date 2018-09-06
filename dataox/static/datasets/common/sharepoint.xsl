@@ -18,15 +18,15 @@
     xpath-default-namespace="https://github.com/ox-it/python-sharepoint/"
     version="2.0">
   <xsl:output method="xml" indent="yes"/>
-  <xsl:message>
-    <xsl:value-of select="//"/>
-  </xsl:message>
   <xsl:variable name="person-base-uri">https://data.ox.ac.uk/id/person/</xsl:variable>
   <xsl:variable name="group-base-uri">https://data.ox.ac.uk/id/group/unit-member/</xsl:variable>
 
   <xsl:key name="users" match="/site/lists/list[@name='User Information List']/rows/row" use="@id"/>
 
   <xsl:function name="ex:agent-uri">
+    <xsl:message>
+      <xsl:value-of select="//"/>
+    </xsl:message>
     <xsl:param name="element"/>
     <xsl:for-each select="$element">
       <xsl:variable name="user" select="key('users', @id)"/>
