@@ -18,7 +18,9 @@
     xpath-default-namespace="https://github.com/ox-it/python-sharepoint/"
     version="2.0">
   <xsl:output method="xml" indent="yes"/>
-
+  <xsl:message>
+    <xsl:value-of select="//"/>
+  </xsl:message>
   <xsl:variable name="person-base-uri">https://data.ox.ac.uk/id/person/</xsl:variable>
   <xsl:variable name="group-base-uri">https://data.ox.ac.uk/id/group/unit-member/</xsl:variable>
 
