@@ -34,6 +34,7 @@
             InVaLiD user <xsl:value-of select="@id"/> on row <xsl:value-of select="../../../@id"/> of list "<xsl:value-of select="../../../../../@name"/>"
             Whole row:
             <xsl:value-of select="../../.."/>
+            <xsl:value-of select="$user"/>
           </xsl:message>
           <xsl:value-of select="concat($group-base-uri, @id)"/>
         </xsl:when>
