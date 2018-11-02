@@ -309,6 +309,83 @@ class Vacancy(object):
 
         return job
 
+    def get_naturecareers_xml(self):
+        organization_part = self.get('oo:organizationPart')
+        formal_organization = self.get('oo:formalOrganization')
+        based_near = self.get('foaf:based_near')
+
+        employer_name = ', '.join([org.actual_label for org in [organization_part,
+                                                                formal_organization]
+                                   if org]) or 'University of Oxford'
+
+        try:
+            employer_url = (organization_part or formal_organization).get('foaf:homepage').uri
+        except AttributeError:
+            employer_url = 'http://www.ox.ac.uk/'
+
+        job = E('job',
+            E('requisitionNumber', str(self.id)),
+            E('employerName', employer_name),
+            E('employerUrl', employer_url),
+        )
+        if self.foaf_homepage:
+            job.append(E('applicationUrl', self.foaf_homepage.uri))
+
+        for comment in self.all.rdfs_comment:
+            if comment.datatype == NS.xtypes['Fragment-XHTML']:
+                html_comment = xhtml_to_html(comment, serialize=False)
+                break
+        else:
+            html_comment = lxml.etree.fromstring('<div><p>No description available.</p></div>')
+        try:
+            salary = self.get('vacancy:salary').actual_label
+        except AttributeError:
+            pass
+        else:
+            if salary is not None:
+                salary = E('p', E('em', "Salary: " + str(salary)))
+                html_comment.text, salary.tail = None, html_comment.text
+                html_comment.insert(0, salary)
+
+        job.append(E('description',
+                     lxml.etree.tostring(html_comment, method='html').decode()))
+
+        if self.actual_label:
+            job.append(E('title', str(self.actual_label)))
+        if self.opens:
+            job.append(E('createdOn', self.opens.strftime('%Y-%m-%d')))
+        if self.closes:
+            job.append(E('expiresOn', self.closes.strftime('%Y-%m-%d')))
+
+        try:
+            adr = (based_near or organization_part or formal_organization).get('v:adr')
+        except AttributeError:
+            adr = None
+
+        address_data = {}
+        if adr:
+            for p, n in [('v:extended-address', 'addressLine1'),
+                         ('v:street-address', 'addressLine2'),
+                         ('v:locality', 'city'),
+                         ('v:postal-code', 'postalCode'),
+                         ('v:country-name', 'country')]:
+                if adr.get(p):
+                    address_data[n] = str(adr.get(p))
+        if 'city' not in address_data:
+            address_data['city'] = 'Oxford'
+        if 'country' not in address_data:
+            address_data['country'] = 'United Kingdom'
+        if 'addressLine2' in address_data and 'addressLine1' not in address_data:
+            address_data['addressLine1'] = address_data.pop('addressLine2')
+
+        address = E('address')
+        for n in ['addressLine1', 'addressLine2', 'city', 'postalCode', 'country']:
+            if n in address_data:
+                address.append(E(n, address_data[n]))
+        job.append(address)
+
+        return job
+
     @renderer(format='json', mimetypes=('application/json',), name='JSON')
     def render_json(self, request, context, template_name):
         return HttpResponse(json.dumps(self.get_json(), indent=2),
