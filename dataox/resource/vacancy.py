@@ -343,7 +343,7 @@ class Vacancy(object):
             pass
         else:
             if salary is not None:
-                salary = E('p', E('em', "Salary: " + str(salary)))
+                salary = E('p', E('em', "Salary: <![CDATA[" + str(salary) + "]]>"))
                 html_comment.text, salary.tail = None, html_comment.text
                 html_comment.insert(0, salary)
 
