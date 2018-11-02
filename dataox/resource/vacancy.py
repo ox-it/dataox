@@ -4,13 +4,22 @@ import json
 import dateutil.parser
 from humfrey.linkeddata.resource import BaseResource
 from humfrey.utils.namespaces import NS
-from lxml.builder import E
+from lxml.builder import ElementMaker
+from lxml.etree import CDATA
 import lxml.etree
 import rdflib
 import pytz
 
 from django.http import HttpResponse
 from django_conneg.decorators import renderer
+
+def add_cdata(element, cdata):
+    assert not element.text, "Can't add a CDATA section. Element already has some text: %r" % element.text
+    element.text = cdata
+
+E = ElementMaker(typemap={
+    CDATA: add_cdata
+})
 
 def xhtml_to_html(xml, serialize=True):
     xml = lxml.etree.fromstring(xml)
@@ -343,7 +352,7 @@ class Vacancy(object):
             pass
         else:
             if salary is not None:
-                salary = E('p', E('em', "Salary: <![CDATA[" + str(salary) + "]]>"))
+                salary = E('p', E('em', E('CDATA', "Salary: " + str(salary))))
                 html_comment.text, salary.tail = None, html_comment.text
                 html_comment.insert(0, salary)
 
