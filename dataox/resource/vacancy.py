@@ -343,12 +343,12 @@ class Vacancy(object):
             pass
         else:
             if salary is not None:
-                salary = etree.CDATA(E('p', E('em', "Salary: " + str(salary))))
+                salary = E('p', E('em', "Salary: " + str(salary)))
                 html_comment.text, salary.tail = None, html_comment.text
                 html_comment.insert(0, salary)
 
         job.append(E('description',
-                     lxml.etree.tostring(html_comment, method='html').decode()))
+                     lxml.etree.tostring(lxml.etree.CDATA(lxml.etree.tostring(html_comment, method='html')))))
 
         if self.actual_label:
             job.append(E('title', str(self.actual_label)))
