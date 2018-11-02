@@ -325,6 +325,7 @@ class Vacancy(object):
 
         job = E('job',
             E('requisitionNumber', str(self.id)),
+            E('referenceId', str(self.id)),
             E('employerName', employer_name),
             E('employerUrl', employer_url),
         )
