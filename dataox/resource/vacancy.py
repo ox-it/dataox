@@ -380,11 +380,13 @@ class Vacancy(object):
         if 'addressLine2' in address_data and 'addressLine1' not in address_data:
             address_data['addressLine1'] = address_data.pop('addressLine2')
 
+        addresses = E('addresses')
         address = E('address')
         for n in ['addressLine1', 'addressLine2', 'city', 'postalCode', 'country']:
             if n in address_data:
                 address.append(E(n, address_data[n]))
-        job.append(address)
+        addresses.append(address)
+        job.append(addresses)
 
         return job
 
