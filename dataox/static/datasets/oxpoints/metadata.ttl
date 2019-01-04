@@ -25,7 +25,7 @@
     dcterms:description "OxPoints is the University's geospatial, temporal and organisational RDF store.\n\nOxPoints aims to contain information about most political and built entities within the University, including college, department, building and rooms." ;
     
     foaf:homepage <http://www.oucs.ox.ac.uk/oxpoints/> ;
-    wdrs:describedby <https://docs.data.ox.ac.uk/datasets/oxpoints.html> ;
+    wdrs:describedby <https://docs.data.ox.ac.uk/datasets/oxpoints/index.html> ;
 
     dcterms:license <http://creativecommons.org/publicdomain/zero/1.0/> ;
     dcterms:rightsHolder <http://oxpoints.oucs.ox.ac.uk/id/00000000> ;
