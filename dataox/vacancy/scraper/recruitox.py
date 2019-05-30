@@ -25,7 +25,7 @@ def _normalize_space(text):
 
 
 class RecruitOxScraper(Scraper):
-    base_url = 'https://www.recruit.ox.ac.uk/pls/hrisliverecruit/'
+    base_url = 'https://my.corehr.com/pls/uoxrecruit/'
     feed_url = urllib.parse.urljoin(base_url, 'Erq_search_xml_api.build_search_xml?p_internal_external=A&p_company=10')
     detail_url = urllib.parse.urljoin(base_url, 'erq_jobspec_version_4.display_form')
 
