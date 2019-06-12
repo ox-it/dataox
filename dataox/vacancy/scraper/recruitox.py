@@ -138,7 +138,7 @@ class RecruitOxScraper(Scraper):
             # The HTMLParser wraps in /html/body if there isn't one already,
             # so we traverse down to our div element with [0][0]
             description = etree.fromstring(''.join(description),
-                                           parser=etree.HTMLParser(encoding='WINDOWS-1252'))[0][0]
+                                           parser=etree.HTMLParser(encoding='utf-8'))[0][0]
         except etree.ParseError:
             logger.exception("Failed to parse description for vacancy %s", vacancy_id)
             return None
