@@ -61,7 +61,7 @@ class RecruitOxScraper(Scraper):
         if parser_cls == etree.XMLParser:
             response = BytesIO(response.read().strip())
         return etree.parse(response,
-                           parser=parser_cls(encoding="ISO 8859-1"))
+                           parser=parser_cls(encoding="utf-8"))
 
     def get_vacancy_elems(self):
         feed_xml = self.get_page(self.feed_url, parser_cls=etree.XMLParser)
