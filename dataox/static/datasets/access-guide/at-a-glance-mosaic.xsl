@@ -1,8 +1,17 @@
 <?xml version="1.0" encoding="utf-8"?>
 <xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
     xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+    xmlns:skos="http://www.w3.org/2004/02/skos/core#"
     xmlns:lyou="http://purl.org/linkingyou/"
+    xmlns:access="http://purl.org/net/accessibility/"
+    xmlns:humfrey="http://purl.org/NET/humfrey/ns/"
+    xmlns:dataox="https://ox-it.github.io/dataox/ns/"
+    xmlns:foaf="http://xmlns.com/foaf/0.1/"
+    xmlns:rdfs="http://www.w3.org/2000/01/rdf-schema#"
     xmlns:adhoc="http://vocab.ox.ac.uk/ad-hoc-data-ox/"
+    xmlns:v="http://www.w3.org/2006/vcard/ns#"
+    xmlns:oo="http://purl.org/openorg/"
+    xmlns:rooms="http://vocab.deri.ie/rooms#"
     version="2.0">
 
   <xsl:output method="xml" indent="yes"/>
