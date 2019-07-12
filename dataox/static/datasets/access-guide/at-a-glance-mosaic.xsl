@@ -18,11 +18,11 @@
 
   <xsl:template match="/">
     <rdf:RDF>
-      <xsl:apply-templates select="/items/item"/>
+      <xsl:apply-templates select="/items/item[string-length(listing_details/tertiary_text/text()) gt 0]"/>
     </rdf:RDF>
   </xsl:template>
 
-  <xsl:template match="item[string-length(listing_details/tertiary_text/text()) gt 0]">
+  <xsl:template match="item">
     <rdf:Description rdf:about="http://oxpoints.oucs.ox.ac.uk/id/{listing_details/tertiary_text}">
       <xsl:apply-templates select="*|@*"/>
     </rdf:Description>
