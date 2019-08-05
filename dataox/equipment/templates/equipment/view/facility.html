@@ -4,7 +4,6 @@
 {% block content %}
 {% include "equipment/login_prompt.html" %}
   <h1>{{ subject.label }}</h1>
-  
   <table>
     <tbody>{% if subject.dcterms_subject %}
       <tr>
@@ -21,6 +20,9 @@
       <tr>
         <th>More information:</th>
         <td><a href="{{ subject.foaf_page.uri }}">{{ subject.foaf_page.uri }}</a></td>
+      </tr>{% endif %}{% if subject.rdfs_comment %}
+      <tr>
+	<td colspan="2">{{ subject.rdfs_comment|safe }}</td>
       </tr>{% endif %}
     </tbody>
   </table>
