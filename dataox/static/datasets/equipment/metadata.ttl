@@ -46,19 +46,16 @@
       <http://purl.org/openorg/theme/Facility> ;
     dcterms:conformsTo <http://openorg.ecs.soton.ac.uk/wiki/Facilities_and_Equipment> .
 
-<https://data.ox.ac.uk/id/dataset/research-facilities/corrections> a foaf:Agent ;
-    foaf:name "Research Facilities Team, Research Services Office" ;
-    org:postIn <http://oxpoints.oucs.ox.ac.uk/id/23233536> ;
-    foaf:mbox <mailto:research.facilities@admin.ox.ac.uk> .
-
 <https://data.ox.ac.uk/id/dataset/catalogue> dcat:dataset <https://data.ox.ac.uk/id/dataset/research-facilities> .
 
 <https://data.ox.ac.uk/graph/equipment/equipment> a sd:Graph ;
     dcterms:license <http://reference.data.gov.uk/id/open-government-licence> ;
+    oo:corrections <mailto:research.facilities@admin.ox.ac.uk> ;
     void:inDataset <https://data.ox.ac.uk/id/dataset/research-facilities> .
 
 <https://data.ox.ac.uk/graph/equipment/facilities> a sd:Graph ;
     dcterms:license <http://reference.data.gov.uk/id/open-government-licence> ;
+    oo:corrections <mailto:research.facilities@admin.ox.ac.uk> ;
     void:inDataset <https://data.ox.ac.uk/id/dataset/research-facilities> .
 
 <https://data.ox.ac.uk/graph/equipment/taxonomy> a sd:Graph ;
