@@ -154,9 +154,12 @@
   </xsl:template>
 
   <xsl:template match="item/equipment-details" mode="inside">
-    <xsl:apply-templates select="." mode="xhtml-or-text">
-      <xsl:with-param name="name">rdfs:comment</xsl:with-param>
-    </xsl:apply-templates>
+    <!--<xsl:apply-templates select="." mode="xhtml-or-text">-->
+      <!--<xsl:with-param name="name">rdfs:comment</xsl:with-param>-->
+      <dcterms:description rdf:datatype="http://purl.org/xtypes/Fragment-PlainText">
+        <xsl:value-of select="text()"/>
+      </dcterms:description>
+    <!--</xsl:apply-templates>-->
   </xsl:template>
 
   <xsl:template match="item/general-location" mode="inside">
