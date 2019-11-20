@@ -67,9 +67,9 @@
   </xsl:template>
 
   <xsl:template match="item/brief-description-of-service-capability" mode="inside">
-    <xsl:apply-templates select="." mode="xhtml-or-text">
-      <xsl:with-param name="name">rdfs:comment</xsl:with-param>
-    </xsl:apply-templates>
+    <dcterms:description rdf:datatype="http://purl.org/xtypes/Fragment-PlainText">
+      <xsl:value-of select="text()"/>
+    </dcterms:description>
   </xsl:template>
 
   <!-- Columns we don't care about, which are handled in common.xsl -->
