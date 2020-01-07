@@ -16,6 +16,10 @@
       <tr>
         <th>Managed by:</th>
         <td>{{ subject.oo_organizationPart|node|default:"" }}{% if subject.oo_organizationPart and subject.oo_formalOrganization %}, {% endif %}{{ subject.oo_formalOrganization.label|default:"" }}</td>
+      </tr>{% endif %}{% if subject.dcterms_description %}
+      <tr>
+        <th>Description:</th>
+        <td>{{ subject.description|safe }}</td>
       </tr>{% endif %}{% if subject.foaf_page %}
       <tr>
         <th>More information:</th>
