@@ -2,6 +2,7 @@ from django.conf.urls import include, url
 from django.contrib import admin
 from django.contrib.auth import views as auth_views
 from django.contrib.staticfiles.urls import staticfiles_urlpatterns
+from django.contrib.auth.views import LoginView
 
 from humfrey.misc import views as misc_views
 import django_webauth.views
@@ -23,4 +24,6 @@ urlpatterns = [
 
     url(r'^oauth2/', include('oauth2app.urls', 'oauth2app')),
     url(r'^admin/', admin.site.urls),
+
+    url(r'shibboleth-login/', LoginView.as_view(redirect_authenticated_user=True), name='shibboleth-login'),
 ] + staticfiles_urlpatterns()
