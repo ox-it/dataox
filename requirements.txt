@@ -15,4 +15,5 @@ requests
 ldap3
 celery
 -e git+git://github.com/ox-it/django-webauth#egg=django-webauth
+-e git+git://github.com/ox-it/oxford-django-shibboleth#egg=django-shibboleth
 -e git+git://github.com/ox-it/oauth2app#egg=oauth2app
