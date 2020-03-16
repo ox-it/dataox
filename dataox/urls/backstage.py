@@ -25,5 +25,5 @@ urlpatterns = [
     url(r'^oauth2/', include('oauth2app.urls', 'oauth2app')),
     url(r'^admin/', admin.site.urls),
 
-    url(r'shibboleth-login/', LoginView.as_view(redirect_authenticated_user=True), name='shibboleth-login'),
+    url(r'^shibboleth-login/', LoginView.as_view(redirect_authenticated_user=True), name='shibboleth-login'),
 ] + staticfiles_urlpatterns()

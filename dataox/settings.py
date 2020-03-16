@@ -213,7 +213,8 @@ SERVER_EMAIL = 'opendata-admin@maillist.ox.ac.uk'
 REDIS_PARAMS = {'host': 'localhost',
                 'port': 6379}
 
-LOGIN_URL = '/accounts/webauth/'
+#LOGIN_URL = '/accounts/webauth/'
+LOGIN_URL = '/shibboleth-login'
 LOGOUT_URL = '/accounts/logout/'
 LOGIN_REDIRECT_URL = '/'
 

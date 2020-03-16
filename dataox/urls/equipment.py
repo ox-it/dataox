@@ -1,5 +1,6 @@
 from django.conf.urls import url
 from django.contrib.staticfiles.urls import staticfiles_urlpatterns
+from django.contrib.auth.views import LoginView
 
 import django_webauth.views
 
@@ -24,6 +25,8 @@ urlpatterns = [
 
     url(r'^accounts/webauth/$', django_webauth.views.LoginView.as_view(), name='account_webauth'),
     url(r'^accounts/logout/$', django_webauth.views.LogoutView.as_view(), name="account_logout"),
+
+    url(r'^shibboleth-login/', LoginView.as_view(redirect_authenticated_user=True), name='shibboleth-login'),
 
     url(r'^$', misc_views.SimpleView.as_view(template_name="equipment/index"), name='index'),
     url(r'^about/$', misc_views.SimpleView.as_view(template_name="equipment/about"), name='about'),
