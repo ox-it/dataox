@@ -46,18 +46,26 @@
     lyou:search <https://search.ox.ac.uk/s/search.html> ;
     lyou:press <http://www.ox.ac.uk/news-and-events/> ;
     lyou:news <http://www.ox.ac.uk/news-and-events/> ;
-    lyou:jobs <https://www.ox.ac.uk/about/jobs/> ;
+    lyou:jobs <https://www.jobs.ox.ac.uk/home/> ;
     lyou:legal <http://www.ox.ac.uk/legal> ;
     lyou:contact <http://www.ox.ac.uk/contact-us> ;
 
     lyou:about-leader <https://www.ox.ac.uk/about/organisation/university-officers/vice-chancellor> ;
     lyou:about-executive <https://www1.admin.ox.ac.uk/council/> ;
-    lyou:about-strategy <http://www.admin.ox.ac.uk/pras/planning/strategicplan/> ;
+    lyou:about-strategy <http://www.ox.ac.uk/about/organisation/strategic-plan-2018-23/research> ;
+    lyou:research-data-funders-policies <https://researchsupport.admin.ox.ac.uk/> ;
+    lyou:research-data-policy <http://researchdata.ox.ac.uk/university-of-oxford-policy-on-the-management-of-data-supporting-research-outputs/> ;
+    lyou:research-data-management-planning <http://researchdata.ox.ac.uk/home/introduction-to-rdm/> ;
+    lyou:research-data-repository <http://researchdata.ox.ac.uk/home/managing-your-data-at-oxford/storage-and-backup/> ;
+    lyou:research-data-item-identifier-scheme-homepage <https://www.bodleian.ox.ac.uk/about/policies/doi> ;
+    lyou:research-publications-repository <https://ora.ox.ac.uk/> ;
+    lyou:research-data-access <http://researchdata.ox.ac.uk/home/managing-your-data-at-oxford/storage-and-backup/> ;
+    lyou:research-data-repository-long-term <https://ora.ox.ac.uk/> ;
     lyou:about-sites <https://www.ox.ac.uk/visitors/visiting-oxford/how-get-oxford>  ;
     lyou:press-facts <https://www.ox.ac.uk/about/facts-and-figures> ;
 #   lyou:legal-policies
-    lyou:legal-data-protection <http://www.admin.ox.ac.uk/councilsec/compliance/dataprotection/> ;
-#   lyou:legal-environment
+    lyou:legal-data-protection <https://compliance.admin.ox.ac.uk/data-protection-policy/> ;
+    lyou:legal-environment <https://www.ox.ac.uk/sites/files/oxford/field/field_document/EMS_P_0001_Policy_2016_%28Signed%29.pdf> ;
     lyou:legal-equality <http://www.admin.ox.ac.uk/eop/> ; # Kinda (i.e., the bit that deals with equality, not the policy itself)
     lyou:legal-foi <http://www.admin.ox.ac.uk/councilsec/compliance/foi/> ;
     lyou:legal-ict <http://www.admin.ox.ac.uk/statutes/regulations/196-052.shtml> ;
@@ -68,11 +76,11 @@
     lyou:open-data <https://data.ox.ac.uk/> ;
 
     lyou:research <http://www.ox.ac.uk/research/> ;
-#   lyou:legal-ethics
+    lyou:legal-ethics <https://researchsupport.admin.ox.ac.uk/governance/integrity/policy> ;
 #   lyou:conferences ;
 #   lyou:public-lectures
     lyou:business-incubation <https://innovation.ox.ac.uk> ;
-#   lyou:business-ktp
+    lyou:business-ktp <https://www.ox.ac.uk/research/innovation-and-partnership/partnerships/second-researcher> ;
     lyou:academic-depts <http://www.ox.ac.uk/about/departments-a_z> ;
     lyou:support-depts <https://www.ox.ac.uk/staff/about_the_university/services_az> ;
     lyou:conference-facilities <http://www.conference-oxford.com/> ;
