@@ -140,6 +140,7 @@ AUTHENTICATION_BACKENDS = (
     'django.contrib.auth.backends.ModelBackend',
     'guardian.backends.ObjectPermissionBackend',
     'django_webauth.backends.WebauthLDAP',
+    'djoxshib.backends.ShibbolethBackend',
 )
 
 MIDDLEWARE_CLASSES = (
@@ -148,6 +149,7 @@ MIDDLEWARE_CLASSES = (
     'django.contrib.sessions.middleware.SessionMiddleware',
 #    'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
+    'django.contrib.auth.middleware.PersistentRemoteUserMiddleware',
     'humfrey.base.middleware.AccessControlAllowOriginMiddleware',
     'maintenancemode.middleware.MaintenanceModeMiddleware',
     'oauth2app.middleware.OAuth2Middleware',
@@ -211,7 +213,8 @@ SERVER_EMAIL = 'opendata-admin@maillist.ox.ac.uk'
 REDIS_PARAMS = {'host': 'localhost',
                 'port': 6379}
 
-LOGIN_URL = '/accounts/webauth/'
+#LOGIN_URL = '/accounts/webauth/'
+LOGIN_URL = '/shibboleth-login'
 LOGOUT_URL = '/accounts/logout/'
 LOGIN_REDIRECT_URL = '/'
 
