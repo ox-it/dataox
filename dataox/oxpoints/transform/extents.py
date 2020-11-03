@@ -92,6 +92,23 @@ class OxpointsExtents(Transform):
         return graph
 
     def process_relation(self, xml, osm_id, uri):
+        url = self.api_url.format(type='relation', id=osm_id)
+        url += '/full'
+        try:
+            response = urllib.request.urlopen(url)
+            time.sleep(0.25)
+        except urllib.request.HTTPError as e:
+            if e.code == 410:
+                logger.warning("OSM entity for %s, %s gone", osm_id, uri)
+            elif e.code == 404:
+                logger.warning("OSM entity for %s, %s not found", osm_id, uri)
+            else:
+                raise
+        except urllib.request.URLError:
+            logger.exception("URL error")
+
+        xml = etree.parse(response)
+
         relation = xml.xpath("/osm/relation[@id='{0}']".format(osm_id))[0]
         if not relation.xpath("tag[@k='type' and @v='multipolygon']"):
             logger.warning("Relation %s for %s is not of type multipolygon", osm_id, uri)
@@ -99,19 +116,22 @@ class OxpointsExtents(Transform):
 
         outers, inners = [], []
         for member in sorted(relation.xpath("member"), key=lambda m:m.attrib.get('role'), reverse=True):
-            if member.attrib.get('type') != 'way':
-                logger.warning("Member %s of relation %s for %s is not a way",
+            if member.attrib.get('type') != 'way' and member.attrib.get('type') != 'relation':
+                logger.warning("Member %s of relation %s for %s is not a way or relation",
                                member.attrib.get('ref'), osm_id, uri)
             if member.attrib.get('role') not in ('inner', 'outer'):
                 logger.warning("Member %s of relation %s for %s is not inner or outer",
                                member.attrib.get('ref'), osm_id, uri)
                 continue
 
-            way = self.process_way(xml, member.attrib['ref'], uri)
+            if member.attrib.get('type') == 'way':
+                child = self.process_way(xml, member.attrib['ref'], uri)
+            elif member.attrib.get('type') == 'relation':
+                child = self.process_relation(xml, member.attrib['ref'], uri)
             if member.attrib.get('role') == 'outer':
-                outers.append(way)
+                outers.append(child)
             else:
-                inners.append(way)
+                inners.append(child)
 
         geom = self.union(outers)
         for inner in inners:
