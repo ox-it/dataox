@@ -34,5 +34,4 @@ Research Archive <http://ora.ox.ac.uk/>`_ and the University's `DataBank
 Service status
 --------------
 
-The Open Data Service is offered as a beta service, and is currently undergoing
-active development as we add new datasets and functionality.
+The Open Data Service was offered as a beta service, and is no longer under active development. We won't add new datasets and functionality. Existing datasets will continue to be supported and maintained. Any future planned change to this will be discussed with service users in advance.
