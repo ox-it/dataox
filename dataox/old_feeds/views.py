@@ -2,7 +2,7 @@ import types
 
 import dateutil.parser
 import rdflib
-from django.core.urlresolvers import reverse
+from django.urls import reverse
 from django.http import Http404, HttpResponse
 from django.utils.feedgenerator import RssUserland091Feed, Rss201rev2Feed, Atom1Feed, rfc2822_date
 from lxml.builder import E

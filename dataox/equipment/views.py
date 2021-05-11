@@ -3,7 +3,7 @@ import functools
 from django.conf import settings
 from django.http import Http404
 from django.template import loader, RequestContext
-from django.core.urlresolvers import reverse
+from django.urls import reverse
 from django.core.mail import EmailMessage
 from django.utils.decorators import method_decorator
 from django.contrib.auth.decorators import login_required
