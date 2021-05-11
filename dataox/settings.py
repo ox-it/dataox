@@ -74,17 +74,10 @@ STATIC_ROOT = os.environ.get('DJANGO_STATIC_ROOT')
 # OpenLayers should be installed as a system-wide package. To build the Debian
 # package, clone git://github.com/ox-it/debian-packaging.git and build the
 # package in the openlayers directory.
-distname, _, _ = platform.linux_distribution()
-if distname == 'Fedora':
-    STATICFILES_DIRS += (('lib/openlayers', '/usr/share/openlayers/www'),)
-elif distname == 'debian':
-    STATICFILES_DIRS += (('lib/openlayers', '/usr/share/javascript/openlayers'),
-                         ('lib/jquery', '/usr/share/javascript/jquery'),
-                         ('lib/jquery-cookie', '/usr/share/javascript/jquery-cookie'),
-                         ('lib/jquery-ui', '/usr/share/javascript/jquery-ui'))
-else:
-    raise AssertionError("Unsupported distribution")
-del distname
+STATICFILES_DIRS += (('lib/openlayers', '/usr/share/javascript/openlayers'),
+    ('lib/jquery', '/usr/share/javascript/jquery'),
+    ('lib/jquery-cookie', '/usr/share/javascript/jquery-cookie'),
+    ('lib/jquery-ui', '/usr/share/javascript/jquery-ui'))
 
 PIPELINE = {
     'JAVASCRIPT': {
