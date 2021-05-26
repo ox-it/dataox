@@ -2,6 +2,8 @@ from django.conf.urls import url
 
 from . import views
 
+app_name = 'old-feeds'
+
 urlpatterns = [
     url(r'^$', views.IndexView.as_view(), name='index'),
     url(r'^vacancies/$', views.VacancyIndexView.as_view(), name='vacancies-index'),
