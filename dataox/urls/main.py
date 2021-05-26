@@ -40,9 +40,9 @@ urlpatterns = [
     url(r'^explore/(?P<slug>[a-z\d-]+)/$', core_views.ExampleDetailView.as_view(), name='example-detail'),
     url(r'^explore/example:(?P<slug>[a-z\d-]+)/$', RedirectView.as_view(url='/explore/%(slug)s/')),
 
-    url(r'^pingback/', include('humfrey.pingback.urls', 'pingback')),
-    url(r'^sparql/', include('humfrey.sparql.urls.simple', 'sparql')),
-    url(r'^feeds/', include('dataox.old_feeds.urls', 'old-feeds')),
+    url(r'^pingback/', include('humfrey.pingback.urls')),
+    url(r'^sparql/', include('humfrey.sparql.urls.simple')),
+    url(r'^feeds/', include('dataox.old_feeds.urls')),
 
     url(r'^graphviz/$', graphviz_views.GraphVizView.as_view(), name='graphviz'),
 
