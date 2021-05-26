@@ -2,7 +2,7 @@ import types
 
 import dateutil.parser
 import rdflib
-from django.core.urlresolvers import reverse
+from django.urls import reverse
 from django.http import Http404, HttpResponse
 from django.utils.feedgenerator import RssUserland091Feed, Rss201rev2Feed, Atom1Feed, rfc2822_date
 from lxml.builder import E
@@ -41,12 +41,12 @@ class FeedView(HTMLView, JSONPView):
 
         if kwargs.get('format'):
             return self.render_to_format(request, context, self.template_name, kwargs['format'])
-        else: 
+        else:
             return self.render(request, context, self.template_name)
 
     @renderer(format='rss1', mimetypes=('application/rss+xml',), name='RSS 0.9 Feed')
     def render_rss1(self, request, context, template_name):
-        return self.renderGeneralFeed(request, context, RssUserland091Feed, 'application/rss+xml')    
+        return self.renderGeneralFeed(request, context, RssUserland091Feed, 'application/rss+xml')
 
     @renderer(format='rss', mimetypes=('application/rss+xml',), name='RSS 2.01 Feed')
     def render_rss2(self, request, context, template_name):
@@ -83,10 +83,10 @@ class FeedView(HTMLView, JSONPView):
         else:
             return super(FeedView, self).simplify_for_json(value)
 
-# This is a nasty workaround for the (known) bug in Django: 
+# This is a nasty workaround for the (known) bug in Django:
 # https://code.djangoproject.com/ticket/14202
-# This is the troublesome method with a correction, 
-# and must be assigned to the relevant feed class before use! 
+# This is the troublesome method with a correction,
+# and must be assigned to the relevant feed class before use!
 def add_root_elements(self, handler):
     handler.addQuickElement(u"title", self.feed['title'])
     handler.addQuickElement(u"link", self.feed['link'])
@@ -100,7 +100,7 @@ def add_root_elements(self, handler):
         handler.addQuickElement(u"copyright", self.feed['feed_copyright'])
     handler.addQuickElement(u"lastBuildDate", rfc2822_date(self.latest_post_date()))
     if self.feed['ttl'] is not None:
-        handler.addQuickElement(u"ttl", self.feed['ttl'])        
+        handler.addQuickElement(u"ttl", self.feed['ttl'])
 
 class VacancyIndexView(HTMLView, CannedQueryView, ResultSetView):
     query = """
@@ -300,4 +300,3 @@ FILTER (regex(?vacancyLabel, {0}, 'i') || regex(?vacancyComment, {0}, 'i'))""".f
                 vacancies.append(vacancy.get_naturejobs_xml())
         return HttpResponse(lxml.etree.tostring(vacancies, pretty_print=True),
                             content_type='application/xml')
-

@@ -3,7 +3,7 @@ import functools
 from django.conf import settings
 from django.http import Http404
 from django.template import loader, RequestContext
-from django.core.urlresolvers import reverse
+from django.urls import reverse
 from django.core.mail import EmailMessage
 from django.utils.decorators import method_decorator
 from django.contrib.auth.decorators import login_required
@@ -26,7 +26,7 @@ class EquipmentView(object):
     """
     Mixin to choose between public and internal indexes.
     """
-    
+
     id_mapping = (('https://data.ox.ac.uk/id/equipment/', 'https://www.research-facilities.ox.ac.uk/view:equipment/', True),
                   ('https://data.ox.ac.uk/id/facility/', 'https://www.research-facilities.ox.ac.uk/view:facility/', True),
                   ('http://id.southampton.ac.uk/', 'https://www.research-facilities.ox.ac.uk/view:soton/', False),
@@ -152,7 +152,7 @@ class BrowseView(EquipmentView, CannedQueryView, RDFView, HTMLView, MappingView)
     def notation(self):
         if self.kwargs.get('notation'):
             return rdflib.Literal(self.kwargs['notation'], datatype=self.datatype)
-    
+
     def get_query(self, request, notation):
         if self.notation:
             return """
@@ -189,7 +189,7 @@ class BrowseView(EquipmentView, CannedQueryView, RDFView, HTMLView, MappingView)
                     skos:prefLabel ?conceptLabel ;
                     skos:notation ?conceptNotation .
                   EXISTS {{
-                    ?narrower skos:narrower*/^dcterms:subject ?equipment 
+                    ?narrower skos:narrower*/^dcterms:subject ?equipment
                   }} .
                   OPTIONAL {{
                     ?narrower skos:narrower ?evenNarrower .
