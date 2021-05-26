@@ -2,7 +2,6 @@ feedparser
 django-conneg
 html2text
 redis>=2.4.9
-sharepoint
 django-maintenancemode
 django-dirtyfields
 gssapi
@@ -17,3 +16,4 @@ celery
 -e git+git://github.com/ox-it/django-webauth#egg=django-webauth
 -e git+git://github.com/ox-it/oxford-django-shibboleth#egg=django-shibboleth
 -e git+git://github.com/ox-it/oauth2app#egg=oauth2app
+-e git+git://github.com/ox-it/python-sharepoint#egg=sharepoint

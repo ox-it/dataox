@@ -5,6 +5,7 @@ import os
 import platform
 
 DEBUG = bool(os.environ.get('DJANGO_DEBUG'))
+#DEBUG = True
 
 ALLOWED_HOSTS = os.environ.get('DJANGO_ALLOWED_HOSTS', '').split() if not DEBUG else ['*']
 
@@ -74,17 +75,17 @@ STATIC_ROOT = os.environ.get('DJANGO_STATIC_ROOT')
 # OpenLayers should be installed as a system-wide package. To build the Debian
 # package, clone git://github.com/ox-it/debian-packaging.git and build the
 # package in the openlayers directory.
-distname, _, _ = platform.linux_distribution()
-if distname == 'Fedora':
-    STATICFILES_DIRS += (('lib/openlayers', '/usr/share/openlayers/www'),)
-elif distname == 'debian':
-    STATICFILES_DIRS += (('lib/openlayers', '/usr/share/javascript/openlayers'),
-                         ('lib/jquery', '/usr/share/javascript/jquery'),
-                         ('lib/jquery-cookie', '/usr/share/javascript/jquery-cookie'),
-                         ('lib/jquery-ui', '/usr/share/javascript/jquery-ui'))
-else:
-    raise AssertionError("Unsupported distribution")
-del distname
+#distname, _, _ = platform.linux_distribution()
+#if distname == 'Fedora':
+#    STATICFILES_DIRS += (('lib/openlayers', '/usr/share/openlayers/www'),)
+#elif distname == 'debian':
+STATICFILES_DIRS += (('lib/openlayers', '/usr/share/javascript/openlayers'),
+                     ('lib/jquery', '/usr/share/javascript/jquery'),
+                     ('lib/jquery-cookie', '/usr/share/javascript/jquery-cookie'),
+                     ('lib/jquery-ui', '/usr/share/javascript/jquery-ui'))
+#else:
+#    raise AssertionError("Unsupported distribution")
+#del distname
 
 PIPELINE = {
     'JAVASCRIPT': {
@@ -206,9 +207,9 @@ EMAIL_HOST = 'smtp.ox.ac.uk'
 EMAIL_PORT = 587
 EMAIL_SUBJECT_PREFIX = '[dataox] '
 DEFAULT_FROM_EMAIL = 'opendata@it.ox.ac.uk'
-SERVER_EMAIL = 'Open Data Service Administrators <opendata-admin@maillist.ox.ac.uk>'
+# SERVER_EMAIL = 'Open Data Service Administrators <opendata-admin@maillist.ox.ac.uk>'
 
-SERVER_EMAIL = 'opendata-admin@maillist.ox.ac.uk'
+#SERVER_EMAIL = 'opendata-admin@maillist.ox.ac.uk'
 
 REDIS_PARAMS = {'host': 'localhost',
                 'port': 6379}
