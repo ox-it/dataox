@@ -280,7 +280,7 @@ class Vacancy(DirtyFieldsMixin, models.Model):
 
 
 class Document(DirtyFieldsMixin, models.Model):
-    vacancy = models.ForeignKey(Vacancy)
+    vacancy = models.ForeignKey(Vacancy, on_delete=models.CASCADE)
     url = models.URLField(max_length=2048, null=True)
     index = models.IntegerField(null=True)
     title = models.CharField(max_length=256)
