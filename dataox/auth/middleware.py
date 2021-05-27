@@ -1,4 +1,5 @@
-class AuthenticatedAsMiddleware(object):
+from django.utils.deprecation import MiddlewareMixin
+class AuthenticatedAsMiddleware(MiddlewareMixin):
     """
     Adds the authenticated user's username as a header on responses.
     """

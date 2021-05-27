@@ -144,7 +144,7 @@ AUTHENTICATION_BACKENDS = (
     'djoxshib.backends.ShibbolethBackend',
 )
 
-MIDDLEWARE_CLASSES = (
+MIDDLEWARE = (
     'django_hosts.middleware.HostsRequestMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
