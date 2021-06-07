@@ -1,0 +1,916 @@
+{
+    "mappings": {
+    	"properties": {
+    		"availability": {
+    			"properties": {
+    				"closes": {
+    					"type": "date"
+    				},
+    				"opens": {
+    					"type": "date"
+    				},
+                    "label": {
+    					"type": "text",
+    					"fields": {
+    						"keyword": {
+    							"type": "keyword",
+    							"ignore_above": 256
+    						}
+    					}
+    				},
+    				"uri": {
+    					"type": "keyword"
+    				}
+    			}
+    		},
+    		"description": {
+    			"type": "text",
+    			"fields": {
+    				"keyword": {
+    					"type": "keyword",
+    					"ignore_above": 256
+    				}
+    			}
+    		},
+    		"descriptionHTML": {
+    			"type": "text",
+    			"fields": {
+    				"keyword": {
+    					"type": "keyword",
+    					"ignore_above": 256
+    				}
+    			}
+    		},
+    		"formalOrganization": {
+    			"properties": {
+    				"label": {
+    					"type": "text",
+    					"fields": {
+    						"keyword": {
+    							"type": "keyword",
+    							"ignore_above": 256
+    						}
+    					}
+    				},
+    				"uri": {
+    					"type": "keyword"
+    				}
+    			}
+    		},
+    		"homepage": {
+    			"properties": {
+    				"uri": {
+    					"type": "keyword"
+    				}
+    			}
+    		},
+    		"internalApplicationsOnly": {
+    			"type": "boolean"
+    		},
+    		"label": {
+    			"type": "text"
+    		},
+    		"location": {
+    			"type": "geo_point"
+    		},
+    		"organizationPart": {
+    			"properties": {
+    				"label": {
+    					"type": "text",
+    					"fields": {
+    						"keyword": {
+    							"type": "keyword",
+    							"ignore_above": 256
+    						}
+    					}
+    				},
+    				"uri": {
+    					"type": "keyword"
+    				}
+    			}
+    		},
+    		"organizationPartAncestor": {
+    			"properties": {
+    				"label": {
+    					"type": "text",
+    					"fields": {
+    						"keyword": {
+    							"type": "keyword",
+    							"ignore_above": 256
+    						}
+    					}
+    				},
+    				"uri": {
+    					"type": "keyword"
+    				}
+    			}
+    		},
+    		"salary": {
+    			"properties": {
+    				"currency": {
+    					"type": "text",
+    					"fields": {
+    						"keyword": {
+    							"type": "keyword",
+    							"ignore_above": 256
+    						}
+    					}
+    				},
+    				"grade": {
+    					"type": "keyword"
+    				},
+    				"label": {
+    					"type": "text",
+    					"fields": {
+    						"keyword": {
+    							"type": "keyword",
+    							"ignore_above": 256
+    						}
+    					}
+    				},
+    				"lower": {
+    					"type": "long"
+    				},
+    				"upper": {
+    					"type": "long"
+    				},
+    				"uri": {
+    					"type": "keyword"
+    				}
+    			}
+    		},
+    		"uri": {
+    			"type": "keyword"
+    		},
+    		"account": {
+    			"properties": {
+    				"facebook": {
+    					"type": "text",
+    					"fields": {
+    						"keyword": {
+    							"type": "keyword",
+    							"ignore_above": 256
+    						}
+    					}
+    				},
+    				"twitter": {
+    					"type": "text",
+    					"fields": {
+    						"keyword": {
+    							"type": "keyword",
+    							"ignore_above": 256
+    						}
+    					}
+    				},
+    				"youtube": {
+    					"type": "text",
+    					"fields": {
+    						"keyword": {
+    							"type": "keyword",
+    							"ignore_above": 256
+    						}
+    					}
+    				}
+    			}
+    		},
+    		"ancestorOrganization": {
+    			"properties": {
+    				"label": {
+    					"type": "text",
+    					"fields": {
+    						"keyword": {
+    							"type": "keyword",
+    							"ignore_above": 256
+    						}
+    					}
+    				},
+    				"uri": {
+    					"type": "keyword"
+    				}
+    			}
+    		},
+    		"finance": {
+    			"type": "keyword"
+    		},
+    		"graph": {
+    			"properties": {
+    				"uri": {
+    					"type": "keyword"
+    				}
+    			}
+    		},
+    		"image": {
+    			"type": "keyword"
+    		},
+    		"oucs": {
+    			"type": "text",
+    			"fields": {
+    				"keyword": {
+    					"type": "keyword",
+    					"ignore_above": 256
+    				}
+    			}
+    		},
+    		"rootOrganization": {
+    			"properties": {
+    				"label": {
+    					"type": "text",
+    					"fields": {
+    						"keyword": {
+    							"type": "keyword",
+    							"ignore_above": 256
+    						}
+    					}
+    				},
+    				"uri": {
+    					"type": "keyword"
+    				}
+    			}
+    		},
+    		"site": {
+    			"properties": {
+    				"address": {
+    					"properties": {
+    						"extended": {
+    							"type": "text",
+    							"fields": {
+    								"keyword": {
+    									"type": "keyword",
+    									"ignore_above": 256
+    								}
+    							}
+    						},
+    						"locality": {
+    							"type": "text",
+    							"fields": {
+    								"keyword": {
+    									"type": "keyword",
+    									"ignore_above": 256
+    								}
+    							}
+    						},
+    						"postCode": {
+    							"type": "text",
+    							"fields": {
+    								"keyword": {
+    									"type": "keyword",
+    									"ignore_above": 256
+    								}
+    							}
+    						},
+    						"street": {
+    							"type": "text",
+    							"fields": {
+    								"keyword": {
+    									"type": "keyword",
+    									"ignore_above": 256
+    								}
+    							}
+    						}
+    					}
+    				},
+    				"altLabel": {
+    					"type": "text",
+    					"fields": {
+    						"keyword": {
+    							"type": "keyword",
+    							"ignore_above": 256
+    						}
+    					}
+    				},
+    				"hiddenLabel": {
+    					"type": "text",
+    					"fields": {
+    						"keyword": {
+    							"type": "keyword",
+    							"ignore_above": 256
+    						}
+    					}
+    				},
+    				"label": {
+    					"type": "text",
+    					"fields": {
+    						"keyword": {
+    							"type": "keyword",
+    							"ignore_above": 256
+    						}
+    					}
+    				},
+    				"uri": {
+    					"type": "keyword"
+    				}
+    			}
+    		},
+    		"type": {
+    			"properties": {
+    				"label": {
+    					"type": "text",
+    					"fields": {
+    						"keyword": {
+    							"type": "keyword",
+    							"ignore_above": 256
+    						}
+    					}
+    				},
+    				"uri": {
+    					"type": "keyword"
+    				}
+    			}
+    		},
+    		"offeredBy": {
+    			"properties": {
+    				"label": {
+    					"type": "text",
+    					"fields": {
+    						"keyword": {
+    							"type": "keyword",
+    							"ignore_above": 256
+    						}
+    					}
+    				},
+    				"uri": {
+    					"type": "keyword"
+    				}
+    			}
+    		},
+    		"lifecycleStatus": {
+    			"properties": {
+    				"uri": {
+    					"type": "keyword"
+    				}
+    			}
+    		},
+    		"serviceLevelDefinition": {
+    			"properties": {
+    				"uri": {
+    					"type": "keyword"
+    				}
+    			}
+    		},
+    		"serviceType": {
+    			"properties": {
+    				"uri": {
+    					"type": "keyword"
+    				}
+    			}
+    		},
+    		"broader": {
+    			"properties": {
+    				"uri": {
+    					"type": "keyword"
+    				}
+    			}
+    		},
+    		"definition": {
+    			"type": "text",
+    			"fields": {
+    				"keyword": {
+    					"type": "keyword",
+    					"ignore_above": 256
+    				}
+    			}
+    		},
+    		"featured": {
+    			"properties": {
+    				"uri": {
+    					"type": "keyword"
+    				}
+    			}
+    		},
+    		"scheme": {
+    			"properties": {
+    				"uri": {
+    					"type": "text",
+    					"fields": {
+    						"keyword": {
+    							"type": "keyword",
+    							"ignore_above": 256
+    						}
+    					}
+    				}
+    			}
+    		},
+    		"address": {
+    			"properties": {
+    				"extended": {
+    					"type": "text",
+    					"fields": {
+    						"keyword": {
+    							"type": "keyword",
+    							"ignore_above": 256
+    						}
+    					}
+    				},
+    				"inferred": {
+    					"type": "boolean"
+    				},
+    				"locality": {
+    					"type": "text",
+    					"fields": {
+    						"keyword": {
+    							"type": "keyword",
+    							"ignore_above": 256
+    						}
+    					}
+    				},
+    				"placeLabel": {
+    					"type": "text",
+    					"fields": {
+    						"keyword": {
+    							"type": "keyword",
+    							"ignore_above": 256
+    						}
+    					}
+    				},
+    				"postCode": {
+    					"type": "text",
+    					"fields": {
+    						"keyword": {
+    							"type": "keyword",
+    							"ignore_above": 256
+    						}
+    					}
+    				},
+    				"street": {
+    					"type": "text",
+    					"fields": {
+    						"keyword": {
+    							"type": "keyword",
+    							"ignore_above": 256
+    						}
+    					}
+    				}
+    			}
+    		},
+    		"altLabel": {
+    			"type": "text",
+    			"fields": {
+    				"keyword": {
+    					"type": "keyword",
+    					"ignore_above": 256
+    				}
+    			}
+    		},
+    		"estates": {
+    			"type": "text",
+    			"fields": {
+    				"keyword": {
+    					"type": "keyword",
+    					"ignore_above": 256
+    				}
+    			}
+    		},
+    		"fullyQualifiedLabel": {
+    			"type": "text",
+    			"fields": {
+    				"keyword": {
+    					"type": "keyword",
+    					"ignore_above": 256
+    				}
+    			}
+    		},
+    		"hiddenLabel": {
+    			"type": "text",
+    			"fields": {
+    				"keyword": {
+    					"type": "keyword",
+    					"ignore_above": 256
+    				}
+    			}
+    		},
+    		"occupant": {
+    			"properties": {
+    				"label": {
+    					"type": "text",
+    					"fields": {
+    						"keyword": {
+    							"type": "keyword",
+    							"ignore_above": 256
+    						}
+    					}
+    				},
+    				"uri": {
+    					"type": "text",
+    					"fields": {
+    						"keyword": {
+    							"type": "keyword",
+    							"ignore_above": 256
+    						}
+    					}
+    				}
+    			}
+    		},
+    		"notation": {
+    			"type": "text",
+    			"fields": {
+    				"keyword": {
+    					"type": "keyword",
+    					"ignore_above": 256
+    				}
+    			}
+    		},
+    		"top": {
+    			"properties": {
+    				"label": {
+    					"type": "text",
+    					"fields": {
+    						"keyword": {
+    							"type": "keyword",
+    							"ignore_above": 256
+    						}
+    					}
+    				},
+    				"notation": {
+    					"type": "text",
+    					"fields": {
+    						"keyword": {
+    							"type": "keyword",
+    							"ignore_above": 256
+    						}
+    					}
+    				},
+    				"uri": {
+    					"type": "keyword"
+    				}
+    			}
+    		},
+    		"accessPrerequisite": {
+    			"properties": {
+    				"label": {
+    					"type": "text",
+    					"fields": {
+    						"keyword": {
+    							"type": "keyword",
+    							"ignore_above": 256
+    						}
+    					}
+    				},
+    				"uri": {
+    					"type": "keyword"
+    				}
+    			}
+    		},
+    		"basedNear": {
+    			"properties": {
+    				"label": {
+    					"type": "text",
+    					"fields": {
+    						"keyword": {
+    							"type": "keyword",
+    							"ignore_above": 256
+    						}
+    					}
+    				},
+    				"uri": {
+    					"type": "keyword"
+    				}
+    			}
+    		},
+    		"building": {
+    			"properties": {
+    				"label": {
+    					"type": "text",
+    					"fields": {
+    						"keyword": {
+    							"type": "keyword",
+    							"ignore_above": 256
+    						}
+    					}
+    				},
+    				"uri": {
+    					"type": "keyword"
+    				}
+    			}
+    		},
+    		"category": {
+    			"properties": {
+    				"label": {
+    					"type": "text",
+    					"fields": {
+    						"keyword": {
+    							"type": "keyword",
+    							"ignore_above": 256
+    						}
+    					}
+    				},
+    				"uri": {
+    					"type": "keyword"
+    				}
+    			}
+    		},
+    		"contact": {
+    			"properties": {
+    				"email": {
+    					"type": "text",
+    					"fields": {
+    						"keyword": {
+    							"type": "keyword",
+    							"ignore_above": 256
+    						}
+    					}
+    				},
+    				"label": {
+    					"type": "text",
+    					"fields": {
+    						"keyword": {
+    							"type": "keyword",
+    							"ignore_above": 256
+    						}
+    					}
+    				},
+    				"uri": {
+    					"type": "keyword"
+    				}
+    			}
+    		},
+    		"equipmentOf": {
+    			"properties": {
+    				"label": {
+    					"type": "text",
+    					"fields": {
+    						"keyword": {
+    							"type": "keyword",
+    							"ignore_above": 256
+    						}
+    					}
+    				},
+    				"uri": {
+    					"type": "keyword"
+    				}
+    			}
+    		},
+    		"formalOrganisation": {
+    			"properties": {
+    				"label": {
+    					"type": "text",
+    					"fields": {
+    						"keyword": {
+    							"type": "keyword",
+    							"ignore_above": 256
+    						}
+    					}
+    				},
+    				"uri": {
+    					"type": "keyword"
+    				}
+    			}
+    		},
+    		"keyword": {
+    			"type": "text",
+    			"fields": {
+    				"keyword": {
+    					"type": "keyword",
+    					"ignore_above": 256
+    				}
+    			}
+    		},
+    		"oxfordUniversityEquipment": {
+    			"type": "boolean"
+    		},
+    		"page": {
+    			"properties": {
+    				"uri": {
+    					"type": "text",
+    					"index": false
+    				}
+    			}
+    		},
+    		"quantity": {
+    			"type": "long"
+    		},
+    		"query": {
+    			"properties": {
+    				"query_string": {
+    					"properties": {
+    						"query": {
+    							"type": "text",
+    							"fields": {
+    								"keyword": {
+    									"type": "keyword",
+    									"ignore_above": 256
+    								}
+    							}
+    						}
+    					}
+    				}
+    			}
+    		},
+    		"shareability": {
+    			"properties": {
+    				"label": {
+    					"type": "text",
+    					"fields": {
+    						"keyword": {
+    							"type": "keyword",
+    							"ignore_above": 256
+    						}
+    					}
+    				},
+    				"notation": {
+    					"type": "text",
+    					"fields": {
+    						"keyword": {
+    							"type": "keyword",
+    							"ignore_above": 256
+    						}
+    					}
+    				},
+    				"uri": {
+    					"type": "keyword"
+    				}
+    			}
+    		},
+    		"subcategory": {
+    			"properties": {
+    				"label": {
+    					"type": "text",
+    					"fields": {
+    						"keyword": {
+    							"type": "keyword",
+    							"ignore_above": 256
+    						}
+    					}
+    				},
+    				"uri": {
+    					"type": "keyword"
+    				}
+    			}
+    		},
+    		"useRestriction": {
+    			"properties": {
+    				"label": {
+    					"type": "text",
+    					"fields": {
+    						"keyword": {
+    							"type": "keyword",
+    							"ignore_above": 256
+    						}
+    					}
+    				},
+    				"uri": {
+    					"type": "keyword"
+    				}
+    			}
+    		},
+    		"applyTo": {
+    			"properties": {
+    				"uri": {
+    					"type": "keyword"
+    				}
+    			}
+    		},
+    		"catalog": {
+    			"properties": {
+    				"label": {
+    					"type": "text",
+    					"fields": {
+    						"keyword": {
+    							"type": "keyword",
+    							"ignore_above": 256
+    						}
+    					}
+    				},
+    				"uri": {
+    					"type": "keyword"
+    				}
+    			}
+    		},
+    		"course": {
+    			"properties": {
+    				"label": {
+    					"type": "text",
+    					"fields": {
+    						"keyword": {
+    							"type": "keyword",
+    							"ignore_above": 256
+    						}
+    					}
+    				},
+    				"uri": {
+    					"type": "text",
+    					"fields": {
+    						"keyword": {
+    							"type": "keyword",
+    							"ignore_above": 256
+    						}
+    					}
+    				}
+    			}
+    		},
+    		"eligibility": {
+    			"properties": {
+    				"label": {
+    					"type": "text",
+    					"fields": {
+    						"keyword": {
+    							"type": "keyword",
+    							"ignore_above": 256
+    						}
+    					}
+    				},
+    				"uri": {
+    					"type": "keyword"
+    				}
+    			}
+    		},
+    		"offeredByAncestor": {
+    			"properties": {
+    				"label": {
+    					"type": "text",
+    					"fields": {
+    						"keyword": {
+    							"type": "keyword",
+    							"ignore_above": 256
+    						}
+    					}
+    				},
+    				"uri": {
+    					"type": "keyword"
+    				}
+    			}
+    		},
+    		"researchMethod": {
+    			"properties": {
+    				"label": {
+    					"type": "text",
+    					"fields": {
+    						"keyword": {
+    							"type": "keyword",
+    							"ignore_above": 256
+    						}
+    					}
+    				},
+    				"uri": {
+    					"type": "keyword"
+    				}
+    			}
+    		},
+    		"start": {
+    			"properties": {
+    				"label": {
+    					"type": "text",
+    					"index": false
+    				},
+    				"time": {
+    					"type": "date",
+    					"format": "dateOptionalTime"
+    				},
+    				"uri": {
+    					"type": "keyword"
+    				}
+    			}
+    		},
+    		"subject": {
+    			"properties": {
+    				"label": {
+    					"type": "text",
+    					"fields": {
+    						"keyword": {
+    							"type": "keyword",
+    							"ignore_above": 256
+    						}
+    					}
+    				},
+    				"uri": {
+    					"type": "keyword"
+    				},
+                    "conceptScheme": {
+    					"properties": {
+    						"uri": {
+    							"type": "keyword"
+    						}
+    					}
+    				}
+    			}
+    		},
+    		"venue": {
+    			"properties": {
+    				"label": {
+    					"type": "text",
+    					"fields": {
+    						"keyword": {
+    							"type": "keyword",
+    							"ignore_above": 256
+    						}
+    					}
+    				},
+    				"uri": {
+    					"type": "text",
+    					"fields": {
+    						"keyword": {
+    							"type": "keyword",
+    							"ignore_above": 256
+    						}
+    					}
+    				}
+    			}
+    		}
+    	}
+    },
+    "setting": {
+        "index": {
+            "number_of_shards":"5",
+            "number_of_replicas":"1"
+        }
+    }
+}
