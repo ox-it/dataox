@@ -31,7 +31,8 @@ class RecruitOxScraper(Scraper):
 
     site_timezone = pytz.timezone('Europe/London')
 
-    detail_salary_re = re.compile(r'^(Grade|Salary)[^\dA-Z]+(?P<grade>[^:]{,32})[-:][^£]*£? ?(?P<lower>[\d,]+)(?:[^£]*£ ?(?P<upper>[\d,]+)(?:[^£]+£(?P<discretionary>[\d,]+))?)?')
+    old_salary_re = re.compile(r'^(Grade|Salary)[^\dA-Z]+(?P<grade>[^:]{,32})[-:][^£]*£? ?(?P<lower>[\d,]+)(?:[^£]*£ ?(?P<upper>[\d,]+)(?:[^£]+£(?P<discretionary>[\d,]+))?)?')
+    new_salary_re = re.compile(r'^(\d+) - (\d+)')
 
     category_mapping = {'AC': 'academic',
                         'ST': 'support-technical',
@@ -171,17 +172,50 @@ class RecruitOxScraper(Scraper):
         page = self.get_page(vacancy.url)
 
         vacancy.title = self.normalize_space(vacancy_elem.find('shortDescription').text)
-        vacancy.salary = self.normalize_space(vacancy_elem.find('gradeAndSalaryText').text)
+        
+        grade_and_salary_text = self.normalize_space(vacancy_elem.find('gradeAndSalaryText').text)
+        old_salary_match = self.old_salary_re.match(grade_and_salary_text)
+        new_salary_match = self.new_salary_re.match(grade_and_salary_text)
 
-        salary_match = self.detail_salary_re.match(vacancy.salary)
-        if salary_match:
-            salary = salary_match.groupdict()
+        # The salary text matches the old format
+        # e.g. "Grade 7: £33,309 - £40,927 p.a."
+        if old_salary_match:
+            salary = old_salary_match.groupdict()
+            vacancy.salary = grade_and_salary_text
             vacancy.salary_grade = salary.get('grade') or ''
             for k in ('lower', 'upper', 'discretionary'):
                 if salary.get(k):
                     setattr(vacancy, 'salary_' + k, int(salary[k].replace(',', '')))
             vacancy.salary_upper = vacancy.salary_upper or vacancy.salary_lower
+        # The salary text matches the new format
+        # e.g. "33309 - 44706"
+        elif new_salary_match:
+            pay_scale = self.normalize_space(vacancy_elem.xpath('payScale/description')[0].text)
+            pay_scale = pay_scale.title()
+            salary = new_salary_match.groups()
+            vacancy.salary_lower = salary[0]
+            lower_string = "£" + "{:,}".format(int(vacancy.salary_lower))
+            vacancy.salary_upper = salary[1]
+            upper_string = "£" + "{:,}".format(int(vacancy.salary_upper))
+            if pay_scale:
+                vacancy.salary = pay_scale + ': ' + lower_string + ' - ' + upper_string
+            else:
+                vacancy.salary = lower_string + ' - ' + upper_string
+            vacancy.salary_discretionary, vacancy.salary_grade = None, ''
+        # gradeAndSalaryText element is empty
+        elif grade_and_salary_text == '':
+            vacancy.salary = ''
+            vacancy.salary_lower, vacancy.salary_upper = None, None
+            vacancy.salary_discretionary, vacancy.salary_grade = None, ''
+        # The salary matches neither standard format and isn't empty,
+        # so assume it is free text
         else:
+            pay_scale = self.normalize_space(vacancy_elem.xpath('payScale/description')[0].text)
+            pay_scale = pay_scale.title()
+            if pay_scale:
+                vacancy.salary = pay_scale + ': ' + grade_and_salary_text
+            else:
+                vacancy.salary = grade_and_salary_text
             vacancy.salary_lower, vacancy.salary_upper = None, None
             vacancy.salary_discretionary, vacancy.salary_grade = None, ''
 
