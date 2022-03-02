@@ -25,7 +25,7 @@ class CollegeHall(object):
 class Organization(object):
     types = ('oxp:College', 'oxp:Hall', 'oxp:Faculty', 'oxp:Unit',
                             'oxp:Unit', 'oxp:Department', 'oxp:Library',
-                            'oxp:University', 'org:Organization')
+                            'oxp:University', 'org:Organization', 'oxp:Division')
     def widget_templates(self):
         widgets = super(Organization, self).widget_templates()
         for account in self.all.foaf_account:
