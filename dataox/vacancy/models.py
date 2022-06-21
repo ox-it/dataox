@@ -93,14 +93,14 @@ class Vacancy(DirtyFieldsMixin, models.Model):
         search_endpoint = ElasticSearchEndpoint(store_slug, 'organization')
 
         location = self.location.replace('-', ' ').replace('/', ' ')
-        if (department && location):
+        if (department and location):
             query = {'query': {'bool': {'must': {'term': {'ancestorOrganization.uri': department}},
                                         'should': {'query_string': {'query': location}},
                                         'filter': {'term': {'graph.uri': 'https://data.ox.ac.uk/graph/oxpoints/data'}}}}}
-        else if department:
+        elif department:
             query = {'query': {'bool': {'must': {'term': {'ancestorOrganization.uri': department}},
                                         'filter': {'term': {'graph.uri': 'https://data.ox.ac.uk/graph/oxpoints/data'}}}}}
-        else if location:
+        elif location:
             query = {'query': {'bool': {'must': {'query_string': {'query': location}},
                                         'filter': {'term': {'graph.uri': 'https://data.ox.ac.uk/graph/oxpoints/data'}}}}}
         
