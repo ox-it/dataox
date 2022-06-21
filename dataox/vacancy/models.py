@@ -93,16 +93,23 @@ class Vacancy(DirtyFieldsMixin, models.Model):
         search_endpoint = ElasticSearchEndpoint(store_slug, 'organization')
 
         location = self.location.replace('-', ' ').replace('/', ' ')
-        if department:
+        if (department && location):
             query = {'query': {'bool': {'must': {'term': {'ancestorOrganization.uri': department}},
                                         'should': {'query_string': {'query': location}},
                                         'filter': {'term': {'graph.uri': 'https://data.ox.ac.uk/graph/oxpoints/data'}}}}}
-        else:
+        else if department:
+            query = {'query': {'bool': {'must': {'term': {'ancestorOrganization.uri': department}},
+                                        'filter': {'term': {'graph.uri': 'https://data.ox.ac.uk/graph/oxpoints/data'}}}}}
+        else if location:
             query = {'query': {'bool': {'must': {'query_string': {'query': location}},
                                         'filter': {'term': {'graph.uri': 'https://data.ox.ac.uk/graph/oxpoints/data'}}}}}
-
-        results = search_endpoint.query(query)
-        hits = results['hits']['hits']
+        
+        if query:
+            results = search_endpoint.query(query)
+        
+        if results:
+            hits = results['hits']['hits']
+        
         if hits:
             hit = hits[0]['_source']
             self.organizationPart = hit['uri']
@@ -115,21 +122,22 @@ class Vacancy(DirtyFieldsMixin, models.Model):
         else:
             site_uris = []
 
-        # And now find a location
-        search_endpoint = ElasticSearchEndpoint(store_slug, 'spatial-thing')
-        if site_uris:
-            query = {'query': {'bool': {'must': {'query_string': {'query': location}},
-                                        'should': [{'terms': {'uri': site_uris}}],
-                                        'filter': {'term': {'graph.uri': 'https://data.ox.ac.uk/graph/oxpoints/data'}}}}}
-        else:
-            query = {'query': {'bool': {'must': {'query_string': {'query': location}},
-                                        'filter': {'term': {'graph.uri': 'https://data.ox.ac.uk/graph/oxpoints/data'}}}}}
-        results = search_endpoint.query(query)
-        hits = results['hits']['hits']
-        if hits:
-            hit = hits[0]['_source']
-            logger.debug("Matched '%s' to spatial-thing '%s' (%s)", self.location, hit.get('label'), hit['uri'])
-            self.basedNear = hit['uri']
+        # And now find a location if there is one.
+        if location:
+            search_endpoint = ElasticSearchEndpoint(store_slug, 'spatial-thing')
+            if site_uris:
+                query = {'query': {'bool': {'must': {'query_string': {'query': location}},
+                                            'should': [{'terms': {'uri': site_uris}}],
+                                            'filter': {'term': {'graph.uri': 'https://data.ox.ac.uk/graph/oxpoints/data'}}}}}
+            else:
+                query = {'query': {'bool': {'must': {'query_string': {'query': location}},
+                                            'filter': {'term': {'graph.uri': 'https://data.ox.ac.uk/graph/oxpoints/data'}}}}}
+            results = search_endpoint.query(query)
+            hits = results['hits']['hits']
+            if hits:
+                hit = hits[0]['_source']
+                logger.debug("Matched '%s' to spatial-thing '%s' (%s)", self.location, hit.get('label'), hit['uri'])
+                self.basedNear = hit['uri']
 
     def triples(self, base_uri):
         uri = rdflib.URIRef(base_uri + self.vacancy_id)
