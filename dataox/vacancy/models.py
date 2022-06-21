@@ -112,7 +112,8 @@ class Vacancy(DirtyFieldsMixin, models.Model):
         
         if hits:
             hit = hits[0]['_source']
-            self.organizationPart = hit['uri']
+            if location:
+                self.organizationPart = hit['uri']
             try:
                 self.formalOrganization = hit['rootOrganization']['uri']
             except KeyError:
