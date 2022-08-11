@@ -229,12 +229,21 @@ class RecruitOxScraper(Scraper):
         search_endpoint = ElasticSearchEndpoint(self.transform_manager.store.slug, 'organization')
         
         if department_code:
-            results = search_endpoint.query({'query': {'term': {'finance': department_code}}})
-            try:
-                department = results['hits']['hits'][0]['_source']['uri']
-            except (IndexError, KeyError):
-                logger.error("Couldn't find department for code %s", department_code)
-                department = None
+            # We have to insert a special case here for the Department of Biology.
+            # For a while now, new entities haven't been getting imported into Elasticsearch,
+            # and it's too difficult to fix, so we've left it.
+            # Biology is a new department and thus not in Elasticsearch, so the code below this
+            # can't find it, and vacancies don't get associated with it when they should be.
+            # Unfortunately the only way to fix this is to hard code it like this.
+            if department_code == 'CB':
+                department = 'https://data.ox.ac.uk/doc:oxpoints/50814249'
+            else:
+                results = search_endpoint.query({'query': {'term': {'finance': department_code}}})
+                try:
+                    department = results['hits']['hits'][0]['_source']['uri']
+                except (IndexError, KeyError):
+                    logger.error("Couldn't find department for code %s", department_code)
+                    department = None
 
         location =  self.normalize_space(vacancy_elem.find('orgGroupLocationText').text)
         if (location != vacancy.location) or ((department) and (vacancy.organizationPart != department)):
