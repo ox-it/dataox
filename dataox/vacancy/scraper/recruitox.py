@@ -236,7 +236,6 @@ class RecruitOxScraper(Scraper):
             # can't find it, and vacancies don't get associated with it when they should be.
             # Unfortunately the only way to fix this is to hard code it like this.
             if department_code == 'CB':
-                logger.error("Got a vacancy in Biology")
                 department = 'http://oxpoints.oucs.ox.ac.uk/id/50814249'
             else:
                 results = search_endpoint.query({'query': {'term': {'finance': department_code}}})
