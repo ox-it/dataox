@@ -236,6 +236,7 @@ class RecruitOxScraper(Scraper):
             # can't find it, and vacancies don't get associated with it when they should be.
             # Unfortunately the only way to fix this is to hard code it like this.
             if department_code == 'CB':
+                logger.error("Got a vacancy in Biology")
                 department = 'http://oxpoints.oucs.ox.ac.uk/id/50814249'
             else:
                 results = search_endpoint.query({'query': {'term': {'finance': department_code}}})
@@ -250,6 +251,9 @@ class RecruitOxScraper(Scraper):
             vacancy.location = location
             vacancy.update_location_fields(self.transform_manager.store.slug,
                                            self.normalize_space(department))
+
+        if department_code == 'CB':
+            vacancy.organizationPart = 'http://oxpoints.oucs.ox.ac.uk/id/50814249'
 
         vacancy.opening_date = self.get_parsed_date(vacancy_elem.find('externalOpenDateTime').text)
         vacancy.closing_date = self.get_parsed_date(vacancy_elem.find('externalCloseDateTime').text)
