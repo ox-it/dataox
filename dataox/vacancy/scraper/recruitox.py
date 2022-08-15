@@ -239,6 +239,9 @@ class RecruitOxScraper(Scraper):
             # but it was deleted in Oxpoints so they aren't getting associated with Bio.
             if (department_code == 'CB') or (department_code == 'AT'):
                 department = 'http://oxpoints.oucs.ox.ac.uk/id/50814249'
+            # Same for CAMS Oxford Institute
+            elif department_code == 'CN':
+                department = 'http://oxpoints.oucs.ox.ac.uk/id/55019029'
             else:
                 results = search_endpoint.query({'query': {'term': {'finance': department_code}}})
                 try:
@@ -253,8 +256,12 @@ class RecruitOxScraper(Scraper):
             vacancy.update_location_fields(self.transform_manager.store.slug,
                                            self.normalize_space(department))
 
+        # Set organizationPart for Biology and Zoology
         if (department_code == 'CB') or (department_code == 'AT'):
             vacancy.organizationPart = 'http://oxpoints.oucs.ox.ac.uk/id/50814249'
+        # CAMS Oxford Institute
+        elif department_code == 'CN':
+            vacancy.organizationPart = 'http://oxpoints.oucs.ox.ac.uk/id/55019029'
 
         vacancy.opening_date = self.get_parsed_date(vacancy_elem.find('externalOpenDateTime').text)
         vacancy.closing_date = self.get_parsed_date(vacancy_elem.find('externalCloseDateTime').text)
