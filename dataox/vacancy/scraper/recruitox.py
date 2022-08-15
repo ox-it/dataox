@@ -235,7 +235,9 @@ class RecruitOxScraper(Scraper):
             # Biology is a new department and thus not in Elasticsearch, so the code below this
             # can't find it, and vacancies don't get associated with it when they should be.
             # Unfortunately the only way to fix this is to hard code it like this.
-            if department_code == 'CB':
+            # Also adding this for the Zoology department because there are some vacancies hanging over from it,
+            # but it was deleted in Oxpoints so they aren't getting associated with Bio.
+            if (department_code == 'CB') or (department_code == 'AT'):
                 department = 'http://oxpoints.oucs.ox.ac.uk/id/50814249'
             else:
                 results = search_endpoint.query({'query': {'term': {'finance': department_code}}})
@@ -251,7 +253,7 @@ class RecruitOxScraper(Scraper):
             vacancy.update_location_fields(self.transform_manager.store.slug,
                                            self.normalize_space(department))
 
-        if department_code == 'CB':
+        if (department_code == 'CB') or (department_code == 'AT'):
             vacancy.organizationPart = 'http://oxpoints.oucs.ox.ac.uk/id/50814249'
 
         vacancy.opening_date = self.get_parsed_date(vacancy_elem.find('externalOpenDateTime').text)
