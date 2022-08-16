@@ -237,7 +237,8 @@ class RecruitOxScraper(Scraper):
             # Unfortunately the only way to fix this is to hard code it like this.
             # Also adding this for the Zoology department because there are some vacancies hanging over from it,
             # but it was deleted in Oxpoints so they aren't getting associated with Bio.
-            if (department_code == 'CB') or (department_code == 'AT'):
+            # And plants!
+            if (department_code == 'CB') or (department_code == 'AT') or (department_code == 'AP'):
                 department = 'http://oxpoints.oucs.ox.ac.uk/id/50814249'
             # Same for CAMS Oxford Institute
             elif department_code == 'CN':
@@ -256,8 +257,8 @@ class RecruitOxScraper(Scraper):
             vacancy.update_location_fields(self.transform_manager.store.slug,
                                            self.normalize_space(department))
 
-        # Set organizationPart for Biology and Zoology
-        if (department_code == 'CB') or (department_code == 'AT'):
+        # Set organizationPart for Biology, Zoology and Plants Sciences
+        if (department_code == 'CB') or (department_code == 'AT') or (department_code == 'AP'):
             vacancy.organizationPart = 'http://oxpoints.oucs.ox.ac.uk/id/50814249'
         # CAMS Oxford Institute
         elif department_code == 'CN':
