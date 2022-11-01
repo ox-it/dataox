@@ -105,16 +105,13 @@
           <h2 class="hidden">Site Navigation</h2>
           <ul>
             <li><a href="{% url "index" %}">home</a></li>
-            <li><a href="{% url "search" %}">search</a></li>
             <li><a href="{% url "browse" %}">browse by category</a></li>
             <li><a href="{% url "facilities" %}">facilities</a></li>
             <li><a href="{% url "last-issued" %}">departments</a></li>
             <li><a href="{% url "about" %}">about</a></li>
-            <li><a href="{% url "contribute" %}">contribute</a></li>
-            <li><a href="{% url "contact" %}">contact</a></li>
-            </ul>
+          </ul>
             
-            <div class="panel user" >
+          <div class="panel user" >
             {% if user.is_authenticated %}
             <p class="iam">logged in as <span class="realName">{{ user.first_name }} {{ user.last_name }}</span> </p>
             <p class="logInOut">
