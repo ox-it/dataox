@@ -3,6 +3,7 @@
 {% block title %}Vacancies within {{ unit.label }}{% endblock %}
 
 {% block content %}
+  <p id="deprecation-notice">Data.ox is deprecated. It will eventually be turned off so please start planning for this.</p>
   <h1>{% if unit %}{% if all %}All v{% else %}V{% endif %}acancies within {{ unit|node }}{% else %}All vacancies{% endif %}</h1>
   
     <aside class="toolbox">
