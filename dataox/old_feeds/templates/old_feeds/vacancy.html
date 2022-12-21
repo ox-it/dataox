@@ -3,6 +3,7 @@
 {% block title %}Vacancies within {{ unit.label }}{% endblock %}
 
 {% block content %}
+<p id="deprecation-notice" style="font-size: large; color: #000c14; background-color: #ff6a6e; display: block; padding: 7px 10px; margin-bottom: 1em; border: 1px solid #8b3a3c;">Data.ox is deprecated. Advanced notice of its end of life date will be advised in due course via this site and the ITSS mail list.</p>
   <h1>{% if unit %}{% if all %}All v{% else %}V{% endif %}acancies within {{ unit|node }}{% else %}All vacancies{% endif %}</h1>
   
     <aside class="toolbox">
