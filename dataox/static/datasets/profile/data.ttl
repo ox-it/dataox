@@ -31,7 +31,7 @@
     v:sortLabel "Oxford, University of" ;
 
     foaf:logo <https://www.ox.ac.uk/sites/default/themes/custom/oxweb/images/oxweb-logo.gif> ;
-    foaf:homepage <http://www.ox.ac.uk/> ;
+    foaf:homepage <https://www.ox.ac.uk/> ;
 
     foaf:based_near <http://dbpedia.org/resource/Oxford> ;
     pim:nearestAirport <http://transport.data.gov.uk/id/airport/OXF> ;
@@ -39,63 +39,58 @@
 
     oo:sparql <https://data.ox.ac.uk/sparql/> ;
 
-    lyou:events <http://www.ox.ac.uk/events-list> ;
+    lyou:events <https://www.ox.ac.uk/events-list> ;
     lyou:business <https://www.ox.ac.uk/research/innovation-and-partnership> ;
     lyou:depts <https://www.ox.ac.uk/about/departments-a_z> ;
     lyou:about <https://www.ox.ac.uk/about/organisation> ;
     lyou:search <https://search.ox.ac.uk/s/search.html> ;
-    lyou:press <http://www.ox.ac.uk/news-and-events/> ;
-    lyou:news <http://www.ox.ac.uk/news-and-events/> ;
+    lyou:press <https://www.ox.ac.uk/news-and-events/> ;
+    lyou:news <https://www.ox.ac.uk/news-and-events/> ;
     lyou:jobs <https://www.jobs.ox.ac.uk/home/> ;
-    lyou:legal <http://www.ox.ac.uk/legal> ;
-    lyou:contact <http://www.ox.ac.uk/contact-us> ;
+    lyou:legal <https://www.ox.ac.uk/legal> ;
+    lyou:contact <https://www.ox.ac.uk/contact-us> ;
 
     lyou:about-leader <https://www.ox.ac.uk/about/organisation/university-officers/vice-chancellor> ;
-    lyou:about-executive <https://www1.admin.ox.ac.uk/council/> ;
-    lyou:about-strategy <http://www.ox.ac.uk/about/organisation/strategic-plan-2018-23/research> ;
+    lyou:about-strategy <https://www.ox.ac.uk/about/organisation/strategic-plan-2018-23/research> ;
     lyou:research-data-funders-policies <https://researchsupport.admin.ox.ac.uk/> ;
-    lyou:research-data-policy <http://researchdata.ox.ac.uk/university-of-oxford-policy-on-the-management-of-data-supporting-research-outputs/> ;
-    lyou:research-data-management-planning <http://researchdata.ox.ac.uk/home/introduction-to-rdm/> ;
-    lyou:research-data-repository <http://researchdata.ox.ac.uk/home/managing-your-data-at-oxford/storage-and-backup/> ;
+    lyou:research-data-policy <https://researchdata.ox.ac.uk/university-of-oxford-policy-on-the-management-of-data-supporting-research-outputs/> ;
+    lyou:research-data-management-planning <https://researchdata.ox.ac.uk/home/introduction-to-rdm/> ;
+    lyou:research-data-repository <https://researchdata.ox.ac.uk/home/managing-your-data-at-oxford/storage-and-backup/> ;
     lyou:research-data-item-identifier-scheme-homepage <https://www.bodleian.ox.ac.uk/about/policies/doi> ;
     lyou:research-publications-repository <https://ora.ox.ac.uk/> ;
-    lyou:research-data-access <http://researchdata.ox.ac.uk/home/managing-your-data-at-oxford/storage-and-backup/> ;
+    lyou:research-data-access <https://researchdata.ox.ac.uk/home/managing-your-data-at-oxford/storage-and-backup/> ;
     lyou:research-data-repository-long-term <https://ora.ox.ac.uk/> ;
     lyou:about-sites <https://www.ox.ac.uk/visitors/visiting-oxford/how-get-oxford>  ;
     lyou:press-facts <https://www.ox.ac.uk/about/facts-and-figures> ;
 #   lyou:legal-policies
     lyou:legal-data-protection <https://compliance.admin.ox.ac.uk/data-protection-policy/> ;
     lyou:legal-environment <https://www.ox.ac.uk/sites/files/oxford/field/field_document/EMS_P_0001_Policy_2016_%28Signed%29.pdf> ;
-    lyou:legal-equality <http://www.admin.ox.ac.uk/eop/> ; # Kinda (i.e., the bit that deals with equality, not the policy itself)
-    lyou:legal-foi <http://www.admin.ox.ac.uk/councilsec/compliance/foi/> ;
-    lyou:legal-ict <http://www.admin.ox.ac.uk/statutes/regulations/196-052.shtml> ;
-    lyou:legal-website <http://www.ox.ac.uk/legal> ;
-    lyou:legal-regulations <http://www.admin.ox.ac.uk/statutes/> ;
+    lyou:legal-website <https://www.ox.ac.uk/legal> ;
     lyou:contact-staff <https://www.ox.ac.uk/staff> ;
     lyou:ict-support <https://help.it.ox.ac.uk> ;
     lyou:open-data <https://data.ox.ac.uk/> ;
 
-    lyou:research <http://www.ox.ac.uk/research/> ;
+    lyou:research <https://www.ox.ac.uk/research/> ;
     lyou:legal-ethics <https://researchsupport.admin.ox.ac.uk/governance/integrity/policy> ;
 #   lyou:conferences ;
 #   lyou:public-lectures
     lyou:business-incubation <https://innovation.ox.ac.uk> ;
     lyou:business-ktp <https://www.ox.ac.uk/research/innovation-and-partnership/partnerships/second-researcher> ;
-    lyou:academic-depts <http://www.ox.ac.uk/about/departments-a_z> ;
+    lyou:academic-depts <https://www.ox.ac.uk/about/departments-a_z> ;
     lyou:support-depts <https://www.ox.ac.uk/staff/about_the_university/services_az> ;
-    lyou:conference-facilities <http://www.conference-oxford.com/> ;
+    lyou:conference-facilities <https://www.conference-oxford.com/> ;
 
-    lyou:courses <http://www.ox.ac.uk/admissions/> ;
-    lyou:undergraduate <http://www.ox.ac.uk/admissions/undergraduate/> ;
+    lyou:courses <https://www.ox.ac.uk/admissions/> ;
+    lyou:undergraduate <https://www.ox.ac.uk/admissions/undergraduate/> ;
     lyou:undergraduate-courses <https://www.ox.ac.uk/admissions/undergraduate/courses/course-listing> ;
     lyou:undergraduate-courses-entry-requirements <https://www.ox.ac.uk/admissions/undergraduate/courses/admission-requirements/uk-qualifications> ;
 #   lyou:undergraduate-prospectus
-    lyou:postgraduate <http://www.ox.ac.uk/admissions/graduate> ;
-    lyou:postgraduate-taught <http://www.ox.ac.uk/admissions/graduate/courses> ;
+    lyou:postgraduate <https://www.ox.ac.uk/admissions/graduate> ;
+    lyou:postgraduate-taught <https://www.ox.ac.uk/admissions/graduate/courses> ;
 #   lyou:postgraduate-taught-courses
 #   lyou:postgraduate-taught-courses-entry-requirements
 #   lyou:postgraduate-taught-prospectus
-    lyou:postgraduate-research <http://www.ox.ac.uk/admissions/postgraduate_courses/course_guide/about_our_programmes.html#aresearch_degrees> ;
+    lyou:postgraduate-research <https://www.ox.ac.uk/admissions/postgraduate_courses/course_guide/about_our_programmes.html#aresearch_degrees> ;
 #   lyou:postgraduate-research-courses
 #   lyou:postgraduate-research-courses-entry-requirements
 #   lyou:postgraduate-research-prospectus
@@ -103,9 +98,9 @@
 #   lyou:foundation-courses
 #   lyou:foundation-courses-entry-requirements
 #   lyou:foundation-prospectus
-    lyou:opendays <http://www.ox.ac.uk/admissions/undergraduate/open-days-and-visits/independent-visits> ;
+    lyou:opendays <https://www.ox.ac.uk/admissions/undergraduate/open-days-and-visits/independent-visits> ;
     lyou:events-graduation <https://www.ox.ac.uk/students/graduation/> ;
-    lyou:about-parents <http://www.ox.ac.uk/sites/files/oxford/field/field_document/P%26C_guide_2013.pdf> ;
+    lyou:about-parents <https://www.ox.ac.uk/sites/files/oxford/field/field_document/P%26C_guide_2013.pdf> ;
     lyou:international-students <https://www.ox.ac.uk/admissions/graduate/why-oxford/global-collaboration> .
 
 <https://data.ox.ac.uk/graph/equipment/equipment>
