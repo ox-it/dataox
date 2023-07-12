@@ -246,6 +246,9 @@ class RecruitOxScraper(Scraper):
             # And Reuben College
             elif department_code == 'S1':
                 department = 'http://oxpoints.oucs.ox.ac.uk/id/54580042'
+            # Bod Special Collections
+            elif department_code == 'QG':
+                department = 'http://oxpoints.oucs.ox.ac.uk/id/52352555'
             # finance codes without an Oxpoint go in a dummy department so the don't end up where they shouldn't
             elif department_code == 'JB':
                 department = 'http://oxpoints.oucs.ox.ac.uk/id/99999999'
@@ -272,6 +275,9 @@ class RecruitOxScraper(Scraper):
         # And Reuben College
         elif department_code == 'S1':
             vacancy.organizationPart = 'http://oxpoints.oucs.ox.ac.uk/id/54580042'
+        # Bod Special Collections
+        elif department_code == 'QG':
+            vacancy.organizationPart = 'http://oxpoints.oucs.ox.ac.uk/id/52352555'
         # finance codes without an Oxpoint go in a dummy organisationPart so the don't end up where they shouldn't
         elif department_code == 'JB':
             vacancy.organizationPart = 'http://oxpoints.oucs.ox.ac.uk/id/99999999'
