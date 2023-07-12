@@ -243,6 +243,9 @@ class RecruitOxScraper(Scraper):
             # Same for CAMS Oxford Institute
             elif department_code == 'CN':
                 department = 'http://oxpoints.oucs.ox.ac.uk/id/55019029'
+            # And Reuben College
+            elif department_code == 'S1':
+                department = 'http://oxpoints.oucs.ox.ac.uk/id/54580042'
             else:
                 results = search_endpoint.query({'query': {'term': {'finance': department_code}}})
                 try:
@@ -263,6 +266,9 @@ class RecruitOxScraper(Scraper):
         # CAMS Oxford Institute
         elif department_code == 'CN':
             vacancy.organizationPart = 'http://oxpoints.oucs.ox.ac.uk/id/55019029'
+        # And Reuben College
+        elif department_code == 'S1':
+            department = 'http://oxpoints.oucs.ox.ac.uk/id/54580042'
 
         vacancy.opening_date = self.get_parsed_date(vacancy_elem.find('externalOpenDateTime').text)
         vacancy.closing_date = self.get_parsed_date(vacancy_elem.find('externalCloseDateTime').text)
