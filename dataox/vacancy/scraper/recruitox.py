@@ -283,7 +283,7 @@ class RecruitOxScraper(Scraper):
             vacancy.organizationPart = 'http://oxpoints.oucs.ox.ac.uk/id/52352555'
         # Botanic Gardens
         elif department_code == 'GC':
-            department = 'http://oxpoints.oucs.ox.ac.uk/id/23233485'
+            vacancy.organizationPart = 'http://oxpoints.oucs.ox.ac.uk/id/23233485'
         # finance codes without an Oxpoint go in a dummy organisationPart so the don't end up where they shouldn't
         elif department_code == 'JB':
             vacancy.organizationPart = 'http://oxpoints.oucs.ox.ac.uk/id/99999999'

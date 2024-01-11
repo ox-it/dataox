@@ -20,7 +20,6 @@ urlpatterns = [
     url(r'^$', misc_views.SimpleView.as_view(template_name='index'), name='index'),
 
     url(r'^id/.*$', desc_views.IdView.as_view(), name='id'),
-
     url(r'^doc.+$', desc_views.DocView.as_view(), name='doc'),
     url(r'^doc/$', desc_views.DocView.as_view(), name='doc-generic'),
     url(r'^desc/$', desc_views.DescView.as_view(), name='desc'),
@@ -32,6 +31,7 @@ urlpatterns = [
     url(r'^contact/$', misc_views.SimpleView.as_view(template_name='contact'), name='contact'),
     url(r'^legal-and-privacy/$', misc_views.SimpleView.as_view(template_name='legal'), name='legal'),
     url(r'^forbidden/$', misc_views.SimpleView.as_view(template_name='forbidden', context={'status_code': 403}), name='forbidden'),
+    url(r'^replacement-advice/$', misc_views.SimpleView.as_view(template_name='deprecation'), name='deprecation'),
 
     url(r'^explore/$', core_views.ExploreView.as_view(), name='explore'),
     url(r'^explore/resources/$', core_views.ExampleResourceView.as_view(), name='explore-resource'),

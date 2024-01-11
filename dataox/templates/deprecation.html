@@ -1,0 +1,21 @@
+{% extends "base.html" %}
+
+{% block title %}Preparing for data.ox being turned off.{% endblock %}
+
+{% block body_class %}{{ block.super }} legal{% endblock %}
+
+{% block content %}
+  <h1>Deprecation of data.ox.ac.uk</h1>
+
+  <p>Data.ox.ac.uk has been deprecated. This page offers information and advice of how you can replace it.</p>
+  <h2>Oxpoints</h2>
+  <p>Location of data for University buildings can now be found at <a href="https://www.maps.ox.ac.uk">www.maps.ox.ac.uk</a>
+  <h2>Research Equipment</h2>
+  <p>The new Research Equipment site is <a href="https://researchsupport.web.ox.ac.uk/facilities/">https://researchsupport.web.ox.ac.uk/facilities/</a>
+  <h2>Vacancies</h2>
+  <p>Instead of using data.ox.ac.uk we recommend getting XML directly from <a style="text-decoration:underline;"  href="https://my.corehr.com/pls/uoxrecruit/Erq_search_xml_api.build_search_xml?p_internal_external=A&p_company=10">CoreHR</a>. Vacancies can be found  by using the appropriate <a style="text-decoration:underline" href="https://governance.admin.ox.ac.uk/university-organisation-structure">PRAS Unit or Department Code</a>.</p>
+
+  <p>Unit codes are at the following location of the XML heirarchy: <code>currentVacancies &gt; vacancy &gt; managementUnit &gt; code = "YOUR UNIT CODE"</code>
+  <p>Departemnt codes are at the following location of the XML heirarchy: <code>currentVacancies &gt; vacancy &gt; department &gt; code = "YOUR DEPT CODE"</code></p>
+  <p>We recommend that you cache the data as CoreHR's XML is large and therefore can take a while to load.</p> 
+{% endblock %}
